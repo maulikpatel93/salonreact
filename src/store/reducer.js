@@ -12,12 +12,12 @@ import categoryReducer from "../store/slices/categorySlice";
 import serviceReducer from "../store/slices/serviceSlice";
 import taxReducer from "../store/slices/taxSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
-const rootPersistConfig = {
-  key: "root",
-  timeout: 500,
-  storage,
-  // blacklist: ["message", "image", 'isView']
-};
+// const rootPersistConfig = {
+//   key: "root",
+//   timeout: 500,
+//   storage,
+//   // blacklist: ["message", "image", 'isView']
+// };
 
 const reducer = combineReducers({
   auth: persistReducer(

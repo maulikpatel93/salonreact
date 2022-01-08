@@ -40,7 +40,7 @@ export const supplierGridViewApi = createAsyncThunk("supplier/gridview", async (
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -53,7 +53,7 @@ export const supplierOptions = createAsyncThunk("supplier/supplierOptions", asyn
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -66,7 +66,7 @@ export const supplierDetailApi = createAsyncThunk("supplier/detail", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -79,7 +79,7 @@ export const supplierDeleteApi = createAsyncThunk("supplier/delete", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -92,7 +92,7 @@ export const supplierSuggetionListApi = createAsyncThunk("supplier/suggetionlist
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -148,7 +148,7 @@ export const supplierSlice = createSlice({
     },
   },
   extraReducers: {
-    [supplierStoreApi.pending]: (state, action) => {},
+    [supplierStoreApi.pending]: () => {},
     [supplierStoreApi.fulfilled]: (state, action) => {
       if (state.isGridView && state.isGridView.data) {
         state.isGridView.data = [action.payload, ...state.isGridView.data];
@@ -156,19 +156,19 @@ export const supplierSlice = createSlice({
         state.isGridView = { data: [action.payload] };
       }
     },
-    [supplierStoreApi.rejected]: (state, action) => {},
-    [supplierUpdateApi.pending]: (state, action) => {},
+    [supplierStoreApi.rejected]: () => {},
+    [supplierUpdateApi.pending]: () => {},
     [supplierUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       const existingData = state.isGridView.data.find((event) => event.id === id);
       if (existingData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [supplierUpdateApi.rejected]: (state, action) => {},
-    [supplierGridViewApi.pending]: (state, action) => {},
+    [supplierUpdateApi.rejected]: () => {},
+    [supplierGridViewApi.pending]: () => {},
     [supplierGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -176,14 +176,14 @@ export const supplierSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isGridView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isGridView = action.payload;
     },
-    [supplierGridViewApi.rejected]: (state, action) => {
+    [supplierGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
-    [supplierSuggetionListApi.pending]: (state, action) => {},
+    [supplierSuggetionListApi.pending]: () => {},
     [supplierSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -191,31 +191,31 @@ export const supplierSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isSuggetionListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isSuggetionListView = action.payload;
     },
-    [supplierSuggetionListApi.rejected]: (state, action) => {
+    [supplierSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [supplierDetailApi.pending]: (state, action) => {},
+    [supplierDetailApi.pending]: () => {},
     [supplierDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [supplierDetailApi.rejected]: (state, action) => {
+    [supplierDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [supplierDeleteApi.pending]: (state, action) => {},
+    [supplierDeleteApi.pending]: () => {},
     [supplierDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
     },
-    [supplierDeleteApi.rejected]: (state, action) => {},
-    [supplierOptions.pending]: (state, action) => {},
+    [supplierDeleteApi.rejected]: () => {},
+    [supplierOptions.pending]: () => {},
     [supplierOptions.fulfilled]: (state, action) => {
       state.isSupplierOption = action.payload;
     },
-    [supplierOptions.rejected]: (state, action) => {
+    [supplierOptions.rejected]: (state) => {
       state.isSupplierOption = [];
     },
   },

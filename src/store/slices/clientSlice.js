@@ -38,7 +38,7 @@ export const clientListViewApi = createAsyncThunk("client/listview", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -51,7 +51,7 @@ export const clientGridViewApi = createAsyncThunk("client/gridview", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -64,7 +64,7 @@ export const clientDetailApi = createAsyncThunk("client/detail", async (formValu
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -77,7 +77,7 @@ export const clientDeleteApi = createAsyncThunk("client/delete", async (formValu
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -90,7 +90,7 @@ export const clientSuggetionListApi = createAsyncThunk("client/suggetionlist", a
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -160,7 +160,7 @@ export const clientSlice = createSlice({
     },
   },
   extraReducers: {
-    [clientStoreApi.pending]: (state, action) => {},
+    [clientStoreApi.pending]: () => {},
     [clientStoreApi.fulfilled]: (state, action) => {
       if (state.isGridView && state.isGridView.data) {
         state.isGridView.data = [...state.isGridView.data, action.payload];
@@ -173,8 +173,8 @@ export const clientSlice = createSlice({
         state.isListView = { data: [action.payload] };
       }
     },
-    [clientStoreApi.rejected]: (state, action) => {},
-    [clientUpdateApi.pending]: (state, action) => {},
+    [clientStoreApi.rejected]: () => {},
+    [clientUpdateApi.pending]: () => {},
     [clientUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       let isGridView = state.isGridView && state.isGridView.data ? state.isGridView.data : state.isGridView;
@@ -182,18 +182,18 @@ export const clientSlice = createSlice({
       const existingGridData = isGridView ? isGridView.find((event) => event.id === id) : "";
       const existingListData = isListView ? isListView.find((event) => event.id === id) : "";
       if (existingGridData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingGridData[keyName] = changes[keyName];
         });
       }
       if (existingListData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingListData[keyName] = changes[keyName];
         });
       }
     },
-    [clientUpdateApi.rejected]: (state, action) => {},
-    [clientGridViewApi.pending]: (state, action) => {},
+    [clientUpdateApi.rejected]: () => {},
+    [clientGridViewApi.pending]: () => {},
     [clientGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -201,14 +201,14 @@ export const clientSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isGridView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isGridView = action.payload;
     },
-    [clientGridViewApi.rejected]: (state, action) => {
+    [clientGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
-    [clientListViewApi.pending]: (state, action) => {},
+    [clientListViewApi.pending]: () => {},
     [clientListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -216,17 +216,15 @@ export const clientSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isListView = action.payload;
       console.log(state);
     },
-    [clientListViewApi.rejected]: (state, action) => {
+    [clientListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [clientSuggetionListApi.pending]: (state, action) => {
-      // state.isSuggetionListView = [];
-    },
+    [clientSuggetionListApi.pending]: ()=> {},
     [clientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -234,29 +232,27 @@ export const clientSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isSuggetionListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isSuggetionListView = action.payload;
     },
-    [clientSuggetionListApi.rejected]: (state, action) => {
+    [clientSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [clientDetailApi.pending]: (state, action) => {
-      // state.isDetailData = "";
-    },
+    [clientDetailApi.pending]: () => {},
     [clientDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [clientDetailApi.rejected]: (state, action) => {
+    [clientDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [clientDeleteApi.pending]: (state, action) => {},
+    [clientDeleteApi.pending]: () => {},
     [clientDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [clientDeleteApi.rejected]: (state, action) => {},
+    [clientDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

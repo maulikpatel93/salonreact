@@ -38,7 +38,7 @@ export const productListViewApi = createAsyncThunk("product/listview", async (fo
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -51,7 +51,7 @@ export const productDetailApi = createAsyncThunk("product/detail", async (formVa
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -64,7 +64,7 @@ export const productDeleteApi = createAsyncThunk("product/delete", async (formVa
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -77,7 +77,7 @@ export const productSuggetionListApi = createAsyncThunk("product/suggetionlist",
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -137,7 +137,7 @@ export const productSlice = createSlice({
       state.isOpenedDetailModal = "";
     },
     productSort: (state, action) => {
-      let sort = state.isSort ? state.isSort : {};
+      // let sort = state.isSort ? state.isSort : {};
       // state.isSort = Object.assign(sort, action.payload);
       state.isSort = action.payload;
     },
@@ -158,7 +158,7 @@ export const productSlice = createSlice({
     },
   },
   extraReducers: {
-    [productStoreApi.pending]: (state, action) => {},
+    [productStoreApi.pending]: () => {},
     [productStoreApi.fulfilled]: (state, action) => {
       if (state.isListView && state.isListView.data) {
         state.isListView.data = [action.payload, ...state.isListView.data];
@@ -166,19 +166,19 @@ export const productSlice = createSlice({
         state.isListView = { data: [action.payload] };
       }
     },
-    [productStoreApi.rejected]: (state, action) => {},
-    [productUpdateApi.pending]: (state, action) => {},
+    [productStoreApi.rejected]: () => {},
+    [productUpdateApi.pending]: () => {},
     [productUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       const existingData = state.isListView.data.find((event) => event.id === id);
       if (existingData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [productUpdateApi.rejected]: (state, action) => {},
-    [productListViewApi.pending]: (state, action) => {},
+    [productUpdateApi.rejected]: () => {},
+    [productListViewApi.pending]: () => {},
     [productListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -186,14 +186,14 @@ export const productSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isListView = action.payload;
     },
-    [productListViewApi.rejected]: (state, action) => {
+    [productListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [productSuggetionListApi.pending]: (state, action) => {},
+    [productSuggetionListApi.pending]: () => {},
     [productSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -201,26 +201,26 @@ export const productSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isSuggetionListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isSuggetionListView = action.payload;
     },
-    [productSuggetionListApi.rejected]: (state, action) => {
+    [productSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [productDetailApi.pending]: (state, action) => {},
+    [productDetailApi.pending]: () => {},
     [productDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [productDetailApi.rejected]: (state, action) => {
+    [productDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [productDeleteApi.pending]: (state, action) => {},
+    [productDeleteApi.pending]: () => {},
     [productDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [productDeleteApi.rejected]: (state, action) => {},
+    [productDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

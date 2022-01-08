@@ -38,7 +38,7 @@ export const serviceListViewApi = createAsyncThunk("service/listview", async (fo
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -51,7 +51,7 @@ export const serviceDetailApi = createAsyncThunk("service/detail", async (formVa
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -64,7 +64,7 @@ export const serviceDeleteApi = createAsyncThunk("service/delete", async (formVa
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -77,7 +77,7 @@ export const serviceSuggetionListApi = createAsyncThunk("service/suggetionlist",
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -136,7 +136,7 @@ export const serviceSlice = createSlice({
       state.isOpenedDetailModal = "";
     },
     serviceSort: (state, action) => {
-      let sort = state.isSort ? state.isSort : {};
+      // let sort = state.isSort ? state.isSort : {};
       // state.isSort = Object.assign(sort, action.payload);
       state.isSort = action.payload;
     },
@@ -154,7 +154,7 @@ export const serviceSlice = createSlice({
     }
   },
   extraReducers: {
-    [serviceStoreApi.pending]: (state, action) => {},
+    [serviceStoreApi.pending]: () => {},
     [serviceStoreApi.fulfilled]: (state, action) => {
       if (state.isListView && state.isListView.data) {
         state.isListView.data = [action.payload, ...state.isListView.data];
@@ -162,19 +162,19 @@ export const serviceSlice = createSlice({
         state.isListView = { data: [action.payload] };
       }
     },
-    [serviceStoreApi.rejected]: (state, action) => {},
-    [serviceUpdateApi.pending]: (state, action) => {},
+    [serviceStoreApi.rejected]: () => {},
+    [serviceUpdateApi.pending]: () => {},
     [serviceUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       const existingData = state.isListView.data.find((event) => event.id === id);
       if (existingData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [serviceUpdateApi.rejected]: (state, action) => {},
-    [serviceListViewApi.pending]: (state, action) => {},
+    [serviceUpdateApi.rejected]: () => {},
+    [serviceListViewApi.pending]: () => {},
     [serviceListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -182,14 +182,14 @@ export const serviceSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isListView = action.payload;
     },
-    [serviceListViewApi.rejected]: (state, action) => {
+    [serviceListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [serviceSuggetionListApi.pending]: (state, action) => {},
+    [serviceSuggetionListApi.pending]: () => {},
     [serviceSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -197,26 +197,26 @@ export const serviceSlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isSuggetionListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isSuggetionListView = action.payload;
     },
-    [serviceSuggetionListApi.rejected]: (state, action) => {
+    [serviceSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [serviceDetailApi.pending]: (state, action) => {},
+    [serviceDetailApi.pending]: () => {},
     [serviceDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [serviceDetailApi.rejected]: (state, action) => {
+    [serviceDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [serviceDeleteApi.pending]: (state, action) => {},
+    [serviceDeleteApi.pending]: () => {},
     [serviceDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [serviceDeleteApi.rejected]: (state, action) => {},
+    [serviceDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

@@ -1,5 +1,5 @@
-import { FieldProps } from "formik";
 import React from "react";
+import PropTypes from 'prop-types';
 import Select from "react-select";
 
 // interface Option {
@@ -14,7 +14,7 @@ import Select from "react-select";
 //   placeholder?: string;
 // }
 
-export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, label, controlId }) => {
+export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
   const onChange = (option) => {
     if (option) {
       form.setFieldValue(field.name, isMulti ? option.map((item) => item.value) : option.value);
@@ -69,6 +69,16 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
       />
     </>
   );
+};
+
+CustomSelect.propTypes = {
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
+  field: PropTypes.object,
+  form: PropTypes.object,
+  options: PropTypes.object,
+  isMulti: PropTypes.bool,
+  controlId: PropTypes.string
 };
 
 export default CustomSelect;

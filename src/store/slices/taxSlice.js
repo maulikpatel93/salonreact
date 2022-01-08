@@ -14,7 +14,7 @@ export const taxOptions = createAsyncThunk("tax/taxOptions", async (formValues, 
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -29,11 +29,11 @@ export const taxSlice = createSlice({
     reset: () => initialState
   },
   extraReducers: {
-    [taxOptions.pending]: (state, action) => {},
+    [taxOptions.pending]: () => {},
     [taxOptions.fulfilled]: (state, action) => {
       state.isTaxOption = action.payload;
     },
-    [taxOptions.rejected]: (state, action) => {
+    [taxOptions.rejected]: (state) => {
       state.isTaxOption = [];
     },
   },

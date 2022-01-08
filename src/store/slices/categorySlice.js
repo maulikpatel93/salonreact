@@ -40,7 +40,7 @@ export const categoryListViewApi = createAsyncThunk("category/gridview", async (
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -53,7 +53,7 @@ export const categoryOptions = createAsyncThunk("category/categoryOptions", asyn
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -66,7 +66,7 @@ export const categoryDetailApi = createAsyncThunk("category/detail", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -79,7 +79,7 @@ export const categoryDeleteApi = createAsyncThunk("category/delete", async (form
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -92,7 +92,7 @@ export const categoriesuggetionListApi = createAsyncThunk("category/suggetionlis
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue();
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -148,7 +148,7 @@ export const categorySlice = createSlice({
     },
   },
   extraReducers: {
-    [categoryStoreApi.pending]: (state, action) => {},
+    [categoryStoreApi.pending]: () => {},
     [categoryStoreApi.fulfilled]: (state, action) => {
       if (state.isListView && state.isListView.data) {
         state.isListView.data = [action.payload, ...state.isListView.data];
@@ -156,19 +156,19 @@ export const categorySlice = createSlice({
         state.isListView = { data: [action.payload] };
       }
     },
-    [categoryStoreApi.rejected]: (state, action) => {},
-    [categoryUpdateApi.pending]: (state, action) => {},
+    [categoryStoreApi.rejected]: () => {},
+    [categoryUpdateApi.pending]: () => {},
     [categoryUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       const existingData = state.isListView.data.find((event) => event.id === id);
       if (existingData) {
-        Object.keys(changes).map((keyName, i) => {
+        Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [categoryUpdateApi.rejected]: (state, action) => {},
-    [categoryListViewApi.pending]: (state, action) => {},
+    [categoryUpdateApi.rejected]: () => {},
+    [categoryListViewApi.pending]: () => {},
     [categoryListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -176,14 +176,14 @@ export const categorySlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isListView = action.payload;
     },
-    [categoryListViewApi.rejected]: (state, action) => {
+    [categoryListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [categoriesuggetionListApi.pending]: (state, action) => {},
+    [categoriesuggetionListApi.pending]: () => {},
     [categoriesuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -191,31 +191,31 @@ export const categorySlice = createSlice({
       let newviewdata = action.payload && action.payload.data;
       state.isSuggetionListView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        let data = viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isSuggetionListView = action.payload;
     },
-    [categoriesuggetionListApi.rejected]: (state, action) => {
+    [categoriesuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [categoryDetailApi.pending]: (state, action) => {},
+    [categoryDetailApi.pending]: () => {},
     [categoryDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [categoryDetailApi.rejected]: (state, action) => {
+    [categoryDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [categoryDeleteApi.pending]: (state, action) => {},
+    [categoryDeleteApi.pending]: () => {},
     [categoryDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [categoryDeleteApi.rejected]: (state, action) => {},
-    [categoryOptions.pending]: (state, action) => {},
+    [categoryDeleteApi.rejected]: () => {},
+    [categoryOptions.pending]: () => {},
     [categoryOptions.fulfilled]: (state, action) => {
       state.isCategoryOption = action.payload;
     },
-    [categoryOptions.rejected]: (state, action) => {
+    [categoryOptions.rejected]: (state) => {
       state.isCategoryOption = [];
     },
   },

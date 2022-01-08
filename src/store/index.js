@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore } from "redux-persist";
 import rootReducer from "./reducer";
-import { Navigate } from 'react-router-dom';
-import storage from 'redux-persist/lib/storage';
+// import { Navigate } from 'react-router-dom';
+// import storage from 'redux-persist/lib/storage';
 
 const actionMiddleware = (store) => (next) => (action) => {
   // store.dispatch({ type: "client/view/reset" })

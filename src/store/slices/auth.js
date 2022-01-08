@@ -48,10 +48,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   extraReducers: {
-    [register.fulfilled]: (state, action) => {
+    [register.fulfilled]: (state) => {
       state.isLoggedIn = false;
     },
-    [register.rejected]: (state, action) => {
+    [register.rejected]: (state) => {
       state.isLoggedIn = false;
     },
     [login.fulfilled]: (state, action) => {
@@ -60,12 +60,12 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.isInitialized = true;
     },
-    [login.rejected]: (state, action) => {
+    [login.rejected]: (state) => {
       state.isLoggedIn = false;
       state.token = "";
       state.user = null;
     },
-    [logout.fulfilled]: (state, action) => {
+    [logout.fulfilled]: (state) => {
       state.isLoggedIn = false;
       state.token = "";
       state.user = null;

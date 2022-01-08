@@ -1,7 +1,6 @@
-import React from "react";
 import Unauthorized from "./Unauthorized";
 
-const HandleError = (thunkAPI, error, type) => {
+const HandleError = (thunkAPI, error) => {
   if (error.response && error.response.status == 422) {
     const messages = (error.response && error.response.data && error.response.data) || error.message || error.toString();
     return thunkAPI.rejectWithValue({ status: error.response.status, message: messages });

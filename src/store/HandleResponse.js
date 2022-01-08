@@ -1,6 +1,5 @@
-import Unauthorized from "./Unauthorized";
 
-const HandleResponse = (thunkAPI, response, type) => {
+const HandleResponse = (thunkAPI, response) => {
   if (response.status == 200) {
     return thunkAPI.fulfillWithValue(response.data);
   } else {
