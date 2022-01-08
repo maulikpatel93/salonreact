@@ -2,7 +2,6 @@ import axios from "axios";
 import { store } from "../store";
 import config from "../config";
 import authHeader from "./auth-header";
-import { setMessage, clearMessage } from "../store/slices/message";
 
 const API_URL = config.API_URL;
 

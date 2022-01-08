@@ -7,7 +7,6 @@ import GuestGuard from "./../utils/route-guard/GuestGuard";
 // login option 3 routing
 const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 
-const Dashboard = Loadable(lazy(() => import("../pages/dashboard/index")));
 // import { useSelector } from "react-redux";
 // const { isLoggedIn } = useSelector((state) => state.auth);
 
