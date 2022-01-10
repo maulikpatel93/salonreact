@@ -53,7 +53,7 @@ const ProductAddForm = () => {
     description: Yup.string().trim().label(t("description")).required(),
     cost_price: Yup.string().trim().label(t("cost_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
     retail_price: Yup.string().trim().label(t("retail_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-    manage_stock: Yup.mixed().nullable(),
+    manage_stock: Yup.bool().nullable(),
     stock_quantity: Yup.string().when("manage_stock", {
       is: "1",
       then: Yup.string().trim().label(t("stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
@@ -180,7 +180,7 @@ const ProductAddForm = () => {
                             onChange={(e) => {
                               if (e.currentTarget.checked) {
                                 setTimeout(() => {
-                                  formik.setFieldValue("manage_stock", "1", false);
+                                  formik.setFieldValue("manage_stock", 1, false);
                                 }, 100);
                               } else {
                                 setTimeout(() => {

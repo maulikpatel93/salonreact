@@ -57,9 +57,9 @@ const ClientAddForm = () => {
     state: Yup.string().trim().label(t("state")).required(),
     postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
     description: Yup.string().trim().label(t("description")).required(),
-    send_sms_notification: Yup.bool().label(t("send_sms_notification")),
-    send_email_notification: Yup.bool().label(t("send_email_notification")),
-    recieve_marketing_email: Yup.bool().label(t("send_sms_notification")),
+    send_sms_notification: Yup.bool().nullable(),
+    send_email_notification: Yup.bool().nullable(),
+    recieve_marketing_email: Yup.bool().nullable(),
   });
   yupconfig();
 
@@ -102,13 +102,13 @@ const ClientAddForm = () => {
   ];
 
   return (
-    <React.Fragment>
+    <>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleClientSubmit}>
-        {({ handleSubmit, values }) => {
+        {(formik) => {
           return (
             <div className={"drawer client-drawer " + rightDrawerOpened} id="addclient-drawer">
               <div className="drawer-wrp position-relative include-footer">
-                <form noValidate onSubmit={handleSubmit}>
+                <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 pe-3">New Client</h2>
                     <a className="close-drawer cursor-pointer" onClick={handlecloseAddClientForm}>
@@ -120,29 +120,29 @@ const ClientAddForm = () => {
                       <div className="col-md-7">
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="first_name" value={values.first_name} label={t("first_name")} controlId="clientForm-first_name" />
+                            <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="clientForm-first_name" />
                           </div>
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="last_name" value={values.last_name} label={t("last_name")} controlId="clientForm-last_name" />
-                          </div>
-                        </div>
-                        <div className="row gx-2">
-                          <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="phone_number" value={values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
-                          </div>
-                          <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="email" value={values.email} label={t("email")} controlId="clientForm-email" />
+                            <InputField type="text" name="last_name" value={formik.values.last_name} label={t("last_name")} controlId="clientForm-last_name" />
                           </div>
                         </div>
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="date" name="date_of_birth" value={values.date_of_birth} label={t("date_of_birth")} controlId="clientForm-date_of_birth" />
+                            <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
+                          </div>
+                          <div className="col-sm-6 mb-3">
+                            <InputField type="text" name="email" value={formik.values.email} label={t("email")} controlId="clientForm-email" />
+                          </div>
+                        </div>
+                        <div className="row gx-2">
+                          <div className="col-sm-6 mb-3">
+                            <InputField type="date" name="date_of_birth" value={formik.values.date_of_birth} label={t("date_of_birth")} controlId="clientForm-date_of_birth" />
                           </div>
                           <div className="col-sm-6 mb-3">
                             <ReactSelectField name="gender" label={t("gender")} options={genderOptions} placeholder={t("--select--")} controlId="clientForm-gender" />
                           </div>
                         </div>
-                        <MapAddressField name="address" label={t("address")} value={values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
+                        <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
                       </div>
                       <div className="col-md-5 mb-md-0 mb-3">
                         <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="client-addform" controlId="clientForm-profile_photo" />
@@ -151,27 +151,63 @@ const ClientAddForm = () => {
                     <div className="row">
                       <div className="col-md-7">
                         <div className="mb-3">
-                          <InputField type="text" name="street" value={values.street} label={t("street")} controlId="clientForm-street" />
+                          <InputField type="text" name="street" value={formik.values.street} label={t("street")} controlId="clientForm-street" />
                         </div>
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="suburb" value={values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
+                            <InputField type="text" name="suburb" value={formik.values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
                           </div>
                           <div className="col-sm-3 col-6 mb-3">
-                            <InputField type="text" name="state" value={values.state} label={t("state")} controlId="clientForm-state" />
+                            <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
                           </div>
                           <div className="col-sm-3 col-6 mb-3">
-                            <InputField type="text" name="postcode" value={values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
                           </div>
                         </div>
                         <div className="mb-3">
-                          <TextareaField type="text" name="description" value={values.description} label={t("description")} controlId="clientForm-description" />
+                          <TextareaField type="text" name="description" value={formik.values.description} label={t("description")} controlId="clientForm-description" />
                         </div>
                         <div className="mb-3">
                           <label htmlFor="">{t("notification")}</label>
-                          <SwitchField name="send_sms_notification" label={t("send_sms_notification")} controlId="clientForm-send_sms_notification" value="1" />
-                          <SwitchField name="send_email_notification" label={t("send_email_notification")} controlId="clientForm-send_email_notification" value="1" />
-                          <SwitchField name="recieve_marketing_email" label={t("recieve_marketing_email")} controlId="clientForm-recieve_marketing_email" value="1" />
+                          <SwitchField name="send_sms_notification" label={t("send_sms_notification")} controlId="clientForm-send_sms_notification" value="1" 
+                          onChange={(e) => {
+                              if (e.currentTarget.checked) {
+                                setTimeout(() => {
+                                  formik.setFieldValue("send_sms_notification", 1, false);
+                                }, 100);
+                              } else {
+                                setTimeout(() => {
+                                  formik.setFieldValue("send_sms_notification", "", false);
+                                }, 100);
+                              }
+                              formik.handleChange(e);
+                            }}/>
+                          <SwitchField name="send_email_notification" label={t("send_email_notification")} controlId="clientForm-send_email_notification" value="1" 
+                          onChange={(e) => {
+                            if (e.currentTarget.checked) {
+                              setTimeout(() => {
+                                formik.setFieldValue("send_email_notification", 1, false);
+                              }, 100);
+                            } else {
+                              setTimeout(() => {
+                                formik.setFieldValue("send_email_notification", "", false);
+                              }, 100);
+                            }
+                            formik.handleChange(e);
+                          }}/>
+                          <SwitchField name="recieve_marketing_email" label={t("recieve_marketing_email")} controlId="clientForm-recieve_marketing_email" value="1" 
+                          onChange={(e) => {
+                            if (e.currentTarget.checked) {
+                              setTimeout(() => {
+                                formik.setFieldValue("recieve_marketing_email", 1, false);
+                              }, 100);
+                            } else {
+                              setTimeout(() => {
+                                formik.setFieldValue("recieve_marketing_email", "", false);
+                              }, 100);
+                            }
+                            formik.handleChange(e);
+                          }}/>
                         </div>
                       </div>
                     </div>
@@ -190,7 +226,7 @@ const ClientAddForm = () => {
           );
         }}
       </Formik>
-    </React.Fragment>
+      </>
   );
 };
 

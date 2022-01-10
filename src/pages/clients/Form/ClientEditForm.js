@@ -28,22 +28,23 @@ const ClientEditForm = () => {
   // };
 
   const initialValues = {
-    id: detail && detail.id,
-    first_name: detail && detail.first_name,
-    last_name: detail && detail.last_name,
-    email: detail && detail.email,
-    phone_number: detail && detail.phone_number,
-    date_of_birth: detail && detail.date_of_birth,
-    gender: detail && detail.gender,
-    address: detail && detail.address,
-    street: detail && detail.street,
-    suburb: detail && detail.suburb,
-    state: detail && detail.state,
-    postcode: detail && detail.postcode,
-    description: detail && detail.description,
-    send_sms_notification: detail && detail.send_sms_notification,
-    send_email_notification: detail && detail.send_email_notification,
-    recieve_marketing_email: detail && detail.recieve_marketing_email,
+    id: "",
+    first_name: "",
+    last_name: "",
+    profile_photo: "",
+    email: "",
+    phone_number: "",
+    date_of_birth: "",
+    gender: '',
+    address: "",
+    street: "",
+    suburb: "",
+    state: "",
+    postcode: "",
+    description: "",
+    send_sms_notification: "",
+    send_email_notification: "",
+    recieve_marketing_email: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -59,6 +60,9 @@ const ClientEditForm = () => {
     state: Yup.string().trim().label(t("state")).required(),
     postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
     description: Yup.string().trim().label(t("description")).required(),
+    send_sms_notification: Yup.mixed().nullable(),
+    send_email_notification: Yup.bool().nullable(),
+    recieve_marketing_email: Yup.bool().nullable(),
   });
   yupconfig();
 
@@ -102,65 +106,120 @@ const ClientEditForm = () => {
   return (
     <React.Fragment>
       <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleClientSubmit}>
-        {({ handleSubmit, values, status }) => {
+        {(formik) => {
           useEffect(() => {
             if (detail) {
+              const fields = ["id", "first_name", "last_name", "profile_photo", "email", "phone_number", "date_of_birth", "gender", "address", "street", "suburb", "state", "postcode", "description", "send_sms_notification", "send_email_notification", "recieve_marketing_email"];
+              fields.forEach((field) => {
+                formik.setFieldValue(field, detail[field], false);
+              });
               // const checkboxfields = ["send_sms_notification", "send_email_notification", "recieve_marketing_email"];
               // checkboxfields.forEach((field) => setFieldValue(field, detail[field], false));
             }
-          }, [detail, status]);
+          }, [detail]);
           return (
-            <form noValidate onSubmit={handleSubmit} className="px-1">
+            <form noValidate onSubmit={formik.handleSubmit} className="px-1">
               <div className="row gx-2">
                 <div className="col-sm-6 mb-3">
-                  <InputField type="text" name="first_name" value={values.first_name} label={t("first_name")} controlId="clientForm-first_name" />
+                  <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="clientForm-first_name" />
                 </div>
                 <div className="col-sm-6 mb-3">
-                  <InputField type="text" name="last_name" value={values.last_name} label={t("last_name")} controlId="clientForm-last_name" />
+                  <InputField type="text" name="last_name" value={formik.values.last_name} label={t("last_name")} controlId="clientForm-last_name" />
                 </div>
               </div>
               <div className="row gx-2">
                 <div className="col-sm-6 mb-3">
-                  <InputField type="text" name="phone_number" value={values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
+                  <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
                 </div>
                 <div className="col-sm-6 mb-3">
-                  <InputField type="text" name="email" value={values.email} label={t("email")} controlId="clientForm-email" />
+                  <InputField type="text" name="email" value={formik.values.email} label={t("email")} controlId="clientForm-email" />
                 </div>
               </div>
               <div className="row gx-2">
                 <div className="col-sm-6 mb-3">
-                  <InputField type="date" name="date_of_birth" value={values.date_of_birth} label={t("date_of_birth")} controlId="clientForm-date_of_birth" />
+                  <InputField type="date" name="date_of_birth" value={formik.values.date_of_birth} label={t("date_of_birth")} controlId="clientForm-date_of_birth" />
                 </div>
                 <div className="col-sm-6 mb-3">
                   <SelectField name="gender" label={t("gender")} options={genderOptions} placeholder={t("--select--")} controlId="clientForm-gender" />
                 </div>
               </div>
-              <MapAddressField name="address" label={t("address")} value={values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
+              <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
 
               <div className="row gx-2">
                 <div className="mb-3">
-                  <InputField type="text" name="street" value={values.street} label={t("street")} controlId="clientForm-street" />
+                  <InputField type="text" name="street" value={formik.values.street} label={t("street")} controlId="clientForm-street" />
                 </div>
               </div>
               <div className="row gx-2">
                 <div className="col-sm-6 mb-3">
-                  <InputField type="text" name="suburb" value={values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
+                  <InputField type="text" name="suburb" value={formik.values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
                 </div>
                 <div className="col-sm-3 col-6 mb-3">
-                  <InputField type="text" name="state" value={values.state} label={t("state")} controlId="clientForm-state" />
+                  <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
                 </div>
                 <div className="col-sm-3 col-6 mb-3">
-                  <InputField type="text" name="postcode" value={values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                  <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
                 </div>
               </div>
               <div className="mb-3">
-                <TextareaField type="text" name="description" value={values.description} label={t("client_notes")} controlId="clientForm-description" />
+                <TextareaField type="text" name="description" value={formik.values.description} label={t("client_notes")} controlId="clientForm-description" />
               </div>
               <div className="mb-3">
                 <label htmlFor="">{t("notification")}</label>
-                <SwitchField name="send_sms_notification" label={t("send_sms_notification")} controlId="clientForm-send_sms_notification" value="1" />
-                <SwitchField name="send_email_notification" label={t("send_email_notification")} controlId="clientForm-send_email_notification" value="1" />
-                <SwitchField name="recieve_marketing_email" label={t("recieve_marketing_email")} controlId="clientForm-recieve_marketing_email" value="1" />
+                <SwitchField
+                  name="send_sms_notification"
+                  label={t("send_sms_notification")}
+                  controlId="clientForm-send_sms_notification"
+                  value="1"
+                  onChange={(e) => {
+                    if (e.currentTarget.checked) {
+                      setTimeout(() => {
+                        formik.setFieldValue("send_sms_notification", 1, false);
+                      }, 100);
+                    } else {
+                      setTimeout(() => {
+                        formik.setFieldValue("send_sms_notification", "", false);
+                      }, 100);
+                    }
+                    formik.handleChange(e);
+                  }}
+                />
+                <SwitchField
+                  name="send_email_notification"
+                  label={t("send_email_notification")}
+                  controlId="clientForm-send_email_notification"
+                  value="1"
+                  onChange={(e) => {
+                    if (e.currentTarget.checked) {
+                      setTimeout(() => {
+                        formik.setFieldValue("send_email_notification", 1, false);
+                      }, 100);
+                    } else {
+                      setTimeout(() => {
+                        formik.setFieldValue("send_email_notification", "", false);
+                      }, 100);
+                    }
+                    formik.handleChange(e);
+                  }}
+                />
+                <SwitchField
+                  name="recieve_marketing_email"
+                  label={t("recieve_marketing_email")}
+                  controlId="clientForm-recieve_marketing_email"
+                  value="1"
+                  onChange={(e) => {
+                    if (e.currentTarget.checked) {
+                      setTimeout(() => {
+                        formik.setFieldValue("recieve_marketing_email", 1, false);
+                      }, 100);
+                    } else {
+                      setTimeout(() => {
+                        formik.setFieldValue("recieve_marketing_email", "", false);
+                      }, 100);
+                    }
+                    formik.handleChange(e);
+                  }}
+                />
               </div>
               <div className="col-md-12 pe-2">
                 <button type="submit" className="btn w-100 btn-lg" disabled={loading}>

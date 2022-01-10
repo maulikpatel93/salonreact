@@ -13,7 +13,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import "./i18n";
-import NavigationScroll from 'layout/NavigationScroll';
+// import NavigationScroll from 'layout/NavigationScroll';
 import * as serviceWorker from 'serviceWorker';
 // import config from "./config";
 
@@ -25,9 +25,9 @@ ReactDOM.render(
       <PersistGate loading={null} persistor={persister}>
         <BrowserRouter>
           <HelmetProvider>
-            <NavigationScroll>
+            {/* <NavigationScroll> */}
             <App />
-            </NavigationScroll>
+            {/* </NavigationScroll> */}
           </HelmetProvider>
         </BrowserRouter>
       </PersistGate>

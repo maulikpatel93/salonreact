@@ -204,7 +204,7 @@ const ProductEditForm = () => {
                             onChange={(e) => {
                               if(e.currentTarget.checked){
                                 setTimeout(() => {
-                                  formik.setFieldValue('manage_stock', '1', false);
+                                  formik.setFieldValue('manage_stock', 1, false);
                                 }, 100);
                               }else{
                                 setTimeout(() => {

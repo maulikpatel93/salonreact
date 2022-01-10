@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
 import { useField, useFormikContext } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +10,7 @@ import InputMask from "react-input-mask";
 import config from "../../config";
 import { selectImage, removeImage } from "../../store/slices/imageSlice";
 import CustomSelect from "../../component/form/CustomSelect";
-import { Field } from "formik";
-import PropTypes from 'prop-types';
+import { Field } from "formik"
 
 const FloatLabelInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
@@ -30,7 +30,8 @@ const InputField = ({ label, controlId, ...props }) => {
     <>
       <Form.Group className="mb-3" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} />
+        {field.name === 'phone_number' ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
+        
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
       </Form.Group>
     </>
@@ -235,61 +236,52 @@ const DatePickerField = ({ label, controlId, ...props }) => {
 
 FloatLabelInputField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 InputField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 SelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   placeholder: PropTypes.string,
-  options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
-  props: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 ReactSelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
-  options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
-  props: PropTypes.object
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 MapAddressField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 TextareaField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 SwitchField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 InputFieldImage.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   name: PropTypes.string,
-  page: PropTypes.string,
-  props: PropTypes.object,
+  page: PropTypes.string
 };
 
 DatePickerField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string,
-  props: PropTypes.object,
+  controlId: PropTypes.string
 };
 
 export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, SwitchField, InputFieldImage, DatePickerField };
