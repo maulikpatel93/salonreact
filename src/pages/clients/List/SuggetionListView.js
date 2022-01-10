@@ -51,8 +51,7 @@ const SuggetionListView = (props) => {
   );
 };
 SuggetionListView.propTypes = {
-  props: PropTypes.object,
-  view: PropTypes.object,
+  view: PropTypes.array,
   first_name: PropTypes.string,
   last_name: PropTypes.string,
   id: PropTypes.string

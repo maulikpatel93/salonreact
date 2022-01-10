@@ -1,5 +1,6 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -11,7 +12,6 @@ const CategoryListView = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const currentUser = props.currentUser;
   const view = props.view;
   // const view = useSelector((state) => state.category.isView);
 
@@ -73,5 +73,10 @@ const CategoryListView = (props) => {
     </>
   );
 };
-
+CategoryListView.propTypes = {
+  view: PropTypes.object,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  id: PropTypes.string,
+};
 export default CategoryListView;

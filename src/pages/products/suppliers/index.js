@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import config from "../../../config";
 import SupplierGridView from "./SupplierGridView";
-import { openAddSupplierForm, supplierGridViewApi, supplierSuggetionListApi } from "../../../store/slices/supplierSlice";
+import { openAddSupplierForm, supplierGridViewApi } from "../../../store/slices/supplierSlice";
 
 const Suppliers = () => {
   const { t } = useTranslation();

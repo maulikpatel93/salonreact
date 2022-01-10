@@ -105,7 +105,8 @@ const SupplierAddForm = () => {
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseAddSupplierForm}>
                         {t("cancel")}
                       </a>
-                      <button type="submit" className="btn">
+                      <button type="submit" className="btn" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("save")}
                       </button>
                     </div>

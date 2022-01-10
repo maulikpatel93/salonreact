@@ -13,10 +13,10 @@ const ClientListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const view = props.view;
+  const views = props.view;
 
   // const view = useSelector((state) => state.client.isView);
-  const objectData = view && view.data ? view.data : view;
+  const objectData = views && views.data ? views.data : views;
 
   const handleClientDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
@@ -106,8 +106,7 @@ const ClientListView = (props) => {
 };
 
 ClientListView.propTypes = {
-  props: PropTypes.object,
-  view: PropTypes.object,
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
   first_name: PropTypes.string,
   last_name: PropTypes.string,
   id: PropTypes.string,

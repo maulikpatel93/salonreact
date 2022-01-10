@@ -6,14 +6,13 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, MapAddressField, InputFieldImage } from "../../../component/form/Field";
+import { InputField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeEditCategoryForm, categoryUpdateApi } from "../../../store/slices/categorySlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import _ from "lodash";
 
 const CategoryEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -28,11 +27,11 @@ const CategoryEditForm = () => {
     dispatch({ type: "category/detail/rejected" });
   };
   const initialValues = {
-    name: ''
+    name: "",
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(100).label(t("category_name")).required()
+    name: Yup.string().trim().max(100).label(t("category_name")).required(),
   });
   yupconfig();
 
@@ -73,36 +72,37 @@ const CategoryEditForm = () => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
         {(formik) => {
           useEffect(() => {
-            if(detail){
+            if (detail) {
               if (detail.logo) {
                 dispatch(selectImage({ name: detail.logo, size: "", type: "", url: detail.logo_url }));
               }
-              const fields = ['id',"name"];
+              const fields = ["id", "name"];
               fields.forEach((field) => {
                 formik.setFieldValue(field, detail[field], false);
               });
             }
           }, [detail]);
           return (
-            <div className={rightDrawerOpened ? "modal fade show" : "modal fade"} id="edit-category" tabIndex="-1" aria-labelledby="editcategoryModalLabel" aria-hidden="true" style={{ display : rightDrawerOpened ? "block" : "none" }}>
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content ">
-                        <button type="button" className="close me-md-4 me-3 mt-md-4 mt-3" onClick={handleCloseEditCategoryForm}>
-                            <img src={ config.imagepath + "close-icon.svg"} alt=""/>
+            <div className={rightDrawerOpened ? "modal fade show" : "modal fade"} id="edit-category" tabIndex="-1" aria-labelledby="editcategoryModalLabel" aria-hidden="true" style={{ display: rightDrawerOpened ? "block" : "none" }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content ">
+                  <button type="button" className="close me-md-4 me-3 mt-md-4 mt-3" onClick={handleCloseEditCategoryForm}>
+                    <img src={config.imagepath + "close-icon.svg"} alt="" />
+                  </button>
+                  <div className="modal-body p-md-4 p-3">
+                    <h4 className="mb-2">{t("edit_category")}</h4>
+                    <form noValidate onSubmit={formik.handleSubmit}>
+                      <InputField type="text" name="name" value={formik.values.name} label={t("category_name")} controlId="categoryForm-name" />
+                      <div className="text-center">
+                        <button type="submit" className="btn" disabled={loading}>
+                          {loading && <span className="spinner-border spinner-border-sm"></span>}
+                          {t("save")}
                         </button>
-                        <div className="modal-body p-md-4 p-3">
-                            <h4 className="mb-2">{t('edit_category')}</h4>
-                            <form noValidate onSubmit={formik.handleSubmit}>
-                                <InputField type="text" name="name" value={formik.values.name} label={t("category_name")} controlId="categoryForm-name" />
-                                <div className="text-center">
-                                    <button type="submit" className="btn">
-                                      {t("save")}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
+              </div>
             </div>
           );
         }}

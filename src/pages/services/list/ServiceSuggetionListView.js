@@ -1,19 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import { serviceListViewApi, closeServiceSearchList, serviceSearchName } from "../../../store/slices/serviceSlice";
 import { ucfirst } from "../../../helpers/functions";
-// import ReactPaginate from 'react-paginate';
 
 const ServiceSuggetionListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const currentUser = props.currentUser;
   const view = props.view;
-  // const view = useSelector((state) => state.service.isView);
   const objectData = view && view.data ? view.data : view;
 
   const handleSuggestedId = (e) => {
@@ -50,5 +47,7 @@ const ServiceSuggetionListView = (props) => {
     </>
   );
 };
-
+ServiceSuggetionListView.propTypes = {
+  view: PropTypes.array
+};
 export default ServiceSuggetionListView;

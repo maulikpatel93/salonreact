@@ -1,21 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { productManageStock, productDeleteApi, productDetailApi, productSortRemove, openEditProductForm } from "../../../store/slices/productSlice";
+import { productManageStock, productDeleteApi, productDetailApi, openEditProductForm } from "../../../store/slices/productSlice";
 import { supplierOptions } from "../../../store/slices/supplierSlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
-// import ReactPaginate from 'react-paginate';
+
 
 const ProductListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const currentUser = props.currentUser;
   const view = props.view;
 
   // const view = useSelector((state) => state.product.isView);
@@ -55,11 +54,8 @@ const ProductListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let sku = objectData[item].sku;
-          let cost_price = objectData[item].cost_price;
           let retail_price = objectData[item].retail_price;
-          let manage_stock = objectData[item].manage_stock;
           let stock_quantity = objectData[item].stock_quantity;
-          let low_stock_threshold = objectData[item].low_stock_threshold;
           let image_url = objectData[item].image_url;
           let supplier_name = objectData[item].supplier && objectData[item].supplier.name;
           return (
@@ -109,6 +105,12 @@ const ProductListView = (props) => {
         })}
     </>
   );
+};
+
+ProductListView.propTypes = {
+  view: PropTypes.object,
+  name: PropTypes.string,
+  id: ''
 };
 
 export default ProductListView;

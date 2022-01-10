@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
-import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, SwitchField, InputFieldImage, TextareaField, ReactSelectField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
 // import { closeNewSupplierForm } from "../../../store/slices/supplierSlice";
-import { productManageStock, closeAddProductForm, productStoreApi } from "../../../store/slices/productSlice";
+import { closeAddProductForm, productStoreApi } from "../../../store/slices/productSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import CustomSelect from "../../../component/form/CustomSelect";
 
 const ProductAddForm = () => {
   const [loading, setLoading] = useState(false);
   const rightDrawerOpened = useSelector((state) => state.product.isOpenedAddForm);
-  const isProductManageStock = useSelector((state) => state.product.isProductManageStock);
   const isSupplierOption = useSelector((state) => state.supplier.isSupplierOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
 
@@ -39,7 +36,7 @@ const ProductAddForm = () => {
     description: "",
     cost_price: "",
     retail_price: "",
-    manage_stock: '',
+    manage_stock: "",
     stock_quantity: "",
     low_stock_threshold: "",
     tax_id: "",
@@ -56,13 +53,13 @@ const ProductAddForm = () => {
     description: Yup.string().trim().label(t("description")).required(),
     cost_price: Yup.string().trim().label(t("cost_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
     retail_price: Yup.string().trim().label(t("retail_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-    manage_stock:Yup.mixed().nullable(),
+    manage_stock: Yup.mixed().nullable(),
     stock_quantity: Yup.string().when("manage_stock", {
-      is: '1',
+      is: "1",
       then: Yup.string().trim().label(t("stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
     }),
     low_stock_threshold: Yup.string().when("manage_stock", {
-      is: '1',
+      is: "1",
       then: Yup.string().trim().label(t("low_stock_threshold")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
     }),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
@@ -110,7 +107,7 @@ const ProductAddForm = () => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSupplierSubmit}>
         {(formik) => {
           return (
-            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : '') + rightDrawerOpened} id="addproduct-drawer">
+            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addproduct-drawer">
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
@@ -119,7 +116,8 @@ const ProductAddForm = () => {
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseAddProductForm}>
                         {t("cancel")}
                       </a>
-                      <button type="submit" className="btn">
+                      <button type="submit" className="btn" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("save")}
                       </button>
                     </div>
@@ -130,7 +128,7 @@ const ProductAddForm = () => {
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("description")}</h4>
                           <p>{t("add_the_name_and_general_details_of_this_product")}</p>
-                          <InputFieldImage name="image" accept="image/*" label={t("add_product_image")} page="product-form" controlId="productForm-logo" imagname="" imageurl=""/>
+                          <InputFieldImage name="image" accept="image/*" label={t("add_product_image")} page="product-form" controlId="productForm-logo" imagname="" imageurl="" />
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="mb-3">
@@ -162,7 +160,7 @@ const ProductAddForm = () => {
                               <InputField type="text" name="retail_price" value={formik.values.retail_price} label={t("retail_price")} controlId="productForm-retail_price" />
                             </div>
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="productForm-tax_id" isMulti={false}  />
+                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="productForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -178,15 +176,15 @@ const ProductAddForm = () => {
                             name="manage_stock"
                             label={t("manage_stock")}
                             controlId="clientForm-manage_stock"
-                            value={'1'}
+                            value={"1"}
                             onChange={(e) => {
-                              if(e.currentTarget.checked){
+                              if (e.currentTarget.checked) {
                                 setTimeout(() => {
-                                  formik.setFieldValue('manage_stock', '1', false);
+                                  formik.setFieldValue("manage_stock", "1", false);
                                 }, 100);
-                              }else{
+                              } else {
                                 setTimeout(() => {
-                                  formik.setFieldValue('manage_stock', '', false);
+                                  formik.setFieldValue("manage_stock", "", false);
                                 }, 100);
                               }
                               formik.handleChange(e);

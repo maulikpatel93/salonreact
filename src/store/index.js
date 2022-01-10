@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore } from "redux-persist";
-import rootReducer from "./reducer";
+import reducer from "./reducer";
 // import { Navigate } from 'react-router-dom';
 // import storage from 'redux-persist/lib/storage';
 
@@ -18,9 +18,9 @@ const actionMiddleware = (store) => (next) => (action) => {
   // store.dispatch({ type: "client/view/fulfilled" });
   return next(action);
 };
-
+console.log(reducer);
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: reducer,
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

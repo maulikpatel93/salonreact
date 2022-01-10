@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import config from "../../../config";
 import CategoryListView from "./CategoryListView";
-import { openAddCategoryForm, categoryListViewApi, categoriesuggetionListApi } from "../../../store/slices/categorySlice";
+import { openAddCategoryForm, categoryListViewApi } from "../../../store/slices/categorySlice";
 
 const Categories = () => {
   const { t } = useTranslation();

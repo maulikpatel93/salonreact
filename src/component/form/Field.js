@@ -249,14 +249,14 @@ SelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   placeholder: PropTypes.string,
-  options: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   props: PropTypes.object,
 };
 
 ReactSelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
-  options: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   props: PropTypes.object
 };
 

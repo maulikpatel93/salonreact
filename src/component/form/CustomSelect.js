@@ -76,7 +76,7 @@ CustomSelect.propTypes = {
   placeholder: PropTypes.string,
   field: PropTypes.object,
   form: PropTypes.object,
-  options: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   isMulti: PropTypes.bool,
   controlId: PropTypes.string
 };

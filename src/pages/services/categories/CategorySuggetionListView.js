@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import { categoryListViewApi, closecategoriesearchList, categoriesearchName } from "../../../store/slices/categorySlice";
@@ -12,9 +12,7 @@ const CategorySuggetionListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const currentUser = props.currentUser;
   const view = props.view;
-  // const view = useSelector((state) => state.category.isView);
   const objectData = view && view.data ? view.data : view;
 
   const handleSuggestedId = (e) => {
@@ -46,5 +44,7 @@ const CategorySuggetionListView = (props) => {
     </>
   );
 };
-
+CategorySuggetionListView.propTypes = {
+  view: PropTypes.array,
+};
 export default CategorySuggetionListView;

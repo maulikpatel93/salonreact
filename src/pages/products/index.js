@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -10,7 +9,7 @@ import Suppliers from "./suppliers";
 import { openAddProductForm, productTabView, productListViewApi, productSort, productSortRemove, openProductSearchList, closeProductSearchList, productSuggetionListApi, productSearchName } from "../../store/slices/productSlice";
 import { openAddSupplierForm, supplierGridViewApi, openSupplierSearchList, closeSupplierSearchList, supplierSuggetionListApi, supplierSearchName, supplierOptions } from "../../store/slices/supplierSlice";
 import { taxOptions } from "../../store/slices/taxSlice";
-import { selectImage, removeImage } from "../../store/slices/imageSlice";
+import { removeImage } from "../../store/slices/imageSlice";
 import SupplierAddForm from "./suppliers/SupplierAddForm";
 import SupplierEditForm from "./suppliers/SupplierEditForm";
 import SupplierSuggetionListView from "./suppliers/SupplierSuggetionListView";
@@ -22,9 +21,6 @@ import ProductEditForm from "./form/ProductEditForm";
 const Products = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
 
   const tabview = useSelector((state) => state.product.isTabView);
   const ListView = useSelector((state) => state.product.isListView);
@@ -111,7 +107,7 @@ const Products = () => {
     dispatch(closeProductSearchList());
     dispatch(productListViewApi());
   };
-  const handleOnBlurProduct = (e) => {
+  const handleOnBlurProduct = () => {
     setTimeout(() => {
       dispatch(closeProductSearchList());
     }, 100);
@@ -148,7 +144,7 @@ const Products = () => {
     dispatch(closeSupplierSearchList());
     dispatch(supplierGridViewApi());
   };
-  const handleOnBlurSupplier = (e) => {
+  const handleOnBlurSupplier = () => {
     setTimeout(() => {
       dispatch(closeSupplierSearchList());
     }, 100);

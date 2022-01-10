@@ -13,7 +13,6 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import { closeEditSupplierForm, supplierUpdateApi } from "../../../store/slices/supplierSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import _ from "lodash";
 
 const SupplierEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -115,7 +114,8 @@ const SupplierEditForm = () => {
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditSupplierForm}>
                         {t("cancel")}
                       </a>
-                      <button type="submit" className="btn">
+                      <button type="submit" className="btn" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("save")}
                       </button>
                     </div>

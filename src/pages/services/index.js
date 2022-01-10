@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -10,7 +9,7 @@ import Categories from "./categories";
 import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName } from "../../store/slices/serviceSlice";
 import { openAddCategoryForm, categoryListViewApi, openCategorieSearchList, closecategoriesearchList, categoriesuggetionListApi, categoriesearchName, categoryOptions } from "../../store/slices/categorySlice";
 import { taxOptions } from "../../store/slices/taxSlice";
-import { selectImage, removeImage } from "../../store/slices/imageSlice";
+import { removeImage } from "../../store/slices/imageSlice";
 import CategoryAddForm from "./categories/CategoryAddForm";
 import CategoryEditForm from "./categories/CategoryEditForm";
 import CategorySuggetionListView from "./categories/CategorySuggetionListView";
@@ -22,9 +21,6 @@ import ServiceEditForm from "./form/ServiceEditForm";
 const Services = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
 
   const tabview = useSelector((state) => state.service.isTabView);
   const ListView = useSelector((state) => state.service.isListView);
@@ -111,7 +107,7 @@ const Services = () => {
     dispatch(closeServiceSearchList());
     dispatch(serviceListViewApi());
   };
-  const handleOnBlurService = (e) => {
+  const handleOnBlurService = () => {
     setTimeout(() => {
       dispatch(closeServiceSearchList());
     }, 100);
@@ -148,7 +144,7 @@ const Services = () => {
     dispatch(closecategoriesearchList());
     dispatch(categoryListViewApi());
   };
-  const handleOnBlurCategory = (e) => {
+  const handleOnBlurCategory = () => {
     setTimeout(() => {
       dispatch(closecategoriesearchList());
     }, 100);

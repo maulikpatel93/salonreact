@@ -4,22 +4,19 @@ import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
-import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, SwitchField, InputFieldImage, TextareaField, ReactSelectField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
 // import { closeNewSupplierForm } from "../../../store/slices/supplierSlice";
-import { productManageStock, closeEditProductForm, productUpdateApi } from "../../../store/slices/productSlice";
-import { selectImage, removeImage } from "../../../store/slices/imageSlice";
+import { closeEditProductForm, productUpdateApi } from "../../../store/slices/productSlice";
+import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import _ from "lodash";
 
 const ProductEditForm = () => {
   const [loading, setLoading] = useState(false);
   const rightDrawerOpened = useSelector((state) => state.product.isOpenedEditForm);
   const detail = useSelector((state) => state.product.isDetailData);
-  const isProductManageStock = useSelector((state) => state.product.isProductManageStock);
   const isSupplierOption = useSelector((state) => state.supplier.isSupplierOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
 
@@ -143,7 +140,8 @@ const ProductEditForm = () => {
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditSupplierForm}>
                         {t("cancel")}
                       </a>
-                      <button type="submit" className="btn">
+                      <button type="submit" className="btn" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("save")}
                       </button>
                     </div>
