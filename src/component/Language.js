@@ -9,7 +9,7 @@ const Language = () => {
     };
 
     const lang = i18n.language;
-    const langs = i18n.languages;
+    // const langs = i18n.languages;
     
     const checkAvailability = (val) => {
         if(val == lang){

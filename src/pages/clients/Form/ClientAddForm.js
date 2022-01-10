@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
@@ -10,15 +9,13 @@ import yupconfig from "../../../yupconfig";
 import { InputField, MapAddressField, ReactSelectField, TextareaField, SwitchField, InputFieldImage } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
-import { closeAddClientForm, clientStoreApi, clientGridViewApi, clientListViewApi } from "../../../store/slices/clientSlice";
+import { closeAddClientForm, clientStoreApi } from "../../../store/slices/clientSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
-const ClientAddForm = (props) => {
+const ClientAddForm = () => {
   const [loading, setLoading] = useState(false);
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedAddForm);
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -181,7 +178,10 @@ const ClientAddForm = (props) => {
                   </div>
                   <div className="drawer-footer">
                     <div className="col-md-7 pe-2">
-                      <input type="submit" className="btn w-100 btn-lg" value={t("create_client")} />
+                      <button type="submit" className="btn w-100 btn-lg" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
+                        {t("create_client")}
+                      </button>
                     </div>
                   </div>
                 </form>

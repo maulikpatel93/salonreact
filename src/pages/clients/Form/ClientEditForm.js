@@ -1,34 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
+import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, MapAddressField, SelectField, TextareaField, SwitchField, InputFieldImage, DatePickerField } from "../../../component/form/Field";
+import { InputField, MapAddressField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
-import { closeClientDetailModal, clientUpdateApi, clientDetailApi, clientGridViewApi, clientListViewApi } from "../../../store/slices/clientSlice";
-import { removeImage } from "../../../store/slices/imageSlice";
+import { clientUpdateApi, clientDetailApi } from "../../../store/slices/clientSlice";
+// import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import useErrorsRef from "../../../hooks/useErrorsRef";
 
-const ClientEditForm = (props) => {
+const ClientEditForm = () => {
   const [loading, setLoading] = useState(false);
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
+
   const detail = useSelector((state) => state.client.isDetailData);
-  
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
-  const serverErrors = useErrorsRef();
 
-  const handleCloseClientDetailModal = () => {
-    dispatch(closeClientDetailModal());
-  };
+  // const handleCloseClientDetailModal = () => {
+  //   dispatch(closeClientDetailModal());
+  // };
 
   const initialValues = {
     id: detail && detail.id,
@@ -61,23 +58,23 @@ const ClientEditForm = (props) => {
     suburb: Yup.string().trim().label(t("suburb")).required(),
     state: Yup.string().trim().label(t("state")).required(),
     postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
-    description: Yup.string().trim().label(t("description")).required()
+    description: Yup.string().trim().label(t("description")).required(),
   });
   yupconfig();
 
-  const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+  const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting }) => {
     setLoading(true);
     try {
       dispatch(clientUpdateApi(values)).then((action) => {
         console.log(action);
-        if(action.meta.requestStatus == 'fulfilled'){
+        if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           dispatch(clientDetailApi({ id: action.payload.id }));
-          sweatalert({title:t('updated'), text:t('updated_successfully'), icon:"success"});
-        }else if(action.meta.requestStatus == 'rejected'){
+          sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
+        } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if(status == 422){
+          if (status == 422) {
             setErrors(errors);
           }
           setStatus({ success: false });
@@ -105,9 +102,9 @@ const ClientEditForm = (props) => {
   return (
     <React.Fragment>
       <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleClientSubmit}>
-        {({ handleSubmit, setFieldValue, values, status }) => {
+        {({ handleSubmit, values, status }) => {
           useEffect(() => {
-            if(detail){
+            if (detail) {
               // const checkboxfields = ["send_sms_notification", "send_email_notification", "recieve_marketing_email"];
               // checkboxfields.forEach((field) => setFieldValue(field, detail[field], false));
             }
@@ -166,7 +163,10 @@ const ClientEditForm = (props) => {
                 <SwitchField name="recieve_marketing_email" label={t("recieve_marketing_email")} controlId="clientForm-recieve_marketing_email" value="1" />
               </div>
               <div className="col-md-12 pe-2">
-                <input type="submit" className="btn w-100 btn-lg" value={t("update_client")} />
+                <button type="submit" className="btn w-100 btn-lg" disabled={loading}>
+                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                  {t("update_client")}
+                </button>
               </div>
             </form>
           );

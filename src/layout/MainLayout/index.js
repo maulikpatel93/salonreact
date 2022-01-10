@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Helmet } from "react-helmet-async";

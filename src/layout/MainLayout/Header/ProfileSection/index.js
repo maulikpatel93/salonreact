@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import { logout } from "../../../../store/slices/auth";
 import config from "../../../../config";
 
 const ProfileSection = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const dispatch = useDispatch();

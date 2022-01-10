@@ -10,6 +10,7 @@ import config from "../../config";
 import { selectImage, removeImage } from "../../store/slices/imageSlice";
 import CustomSelect from "../../component/form/CustomSelect";
 import { Field } from "formik";
+import PropTypes from 'prop-types';
 
 const FloatLabelInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
@@ -230,6 +231,65 @@ const DatePickerField = ({ label, controlId, ...props }) => {
       </Form.Group>
     </>
   );
+};
+
+FloatLabelInputField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
+};
+
+InputField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
+};
+
+SelectField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  placeholder: PropTypes.string,
+  options: PropTypes.object,
+  props: PropTypes.object,
+};
+
+ReactSelectField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  options: PropTypes.object,
+  props: PropTypes.object
+};
+
+MapAddressField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
+};
+
+TextareaField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
+};
+
+SwitchField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
+};
+
+InputFieldImage.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  name: PropTypes.string,
+  page: PropTypes.string,
+  props: PropTypes.object,
+};
+
+DatePickerField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  props: PropTypes.object,
 };
 
 export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, SwitchField, InputFieldImage, DatePickerField };

@@ -13,7 +13,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import "./i18n";
-import config from "./config";
+// import config from "./config";
 
 import { store, persister } from "./store";
 
@@ -21,7 +21,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persister}>
-        <BrowserRouter basename={config.basename}>
+        <BrowserRouter>
           <HelmetProvider>
             <App />
           </HelmetProvider>

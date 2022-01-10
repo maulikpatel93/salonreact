@@ -1,18 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import { clientGridViewApi, clientListViewApi, closeClientSearchList, clientSearchName } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
-
+import PropTypes from 'prop-types';
 // import ReactPaginate from 'react-paginate';
 
 const SuggetionListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const currentUser = props.currentUser;
   const view = props.view;
   // const view = useSelector((state) => state.client.isView);
   const objectData = view && view.data ? view.data : view;
@@ -34,7 +32,6 @@ const SuggetionListView = (props) => {
           let first_name = objectData[item].first_name;
           let last_name = objectData[item].last_name;
           let email = objectData[item].email;
-          let phone_number = objectData[item].phone_number;
           let profile_photo_url = objectData[item].profile_photo_url;
           return (
             <li className="client-suggetion-li" key={i} data-id={id} data-name={ucfirst(first_name + " " + last_name)}>
@@ -53,5 +50,11 @@ const SuggetionListView = (props) => {
     </>
   );
 };
-
+SuggetionListView.propTypes = {
+  props: PropTypes.object,
+  view: PropTypes.object,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  id: PropTypes.string
+};
 export default SuggetionListView;

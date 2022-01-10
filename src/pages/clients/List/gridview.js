@@ -1,17 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
+import PropTypes from 'prop-types';
 
 const ClientGridView = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const currentUser = props.currentUser;
   const view = props.view;
   // const view = useSelector((state) => state.client.isView);
  
@@ -94,6 +94,15 @@ const ClientGridView = (props) => {
       })}
     </>
   );
+};
+
+ClientGridView.propTypes = {
+  props: PropTypes.object,
+  view: PropTypes.object,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  id: PropTypes.string,
+  tab: PropTypes.string,
 };
 
 export default ClientGridView;

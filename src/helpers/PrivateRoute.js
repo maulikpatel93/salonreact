@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Route } from "react-router-dom";
 
-// export const PrivateRoute = ({ component: Component, ...rest }) => (
+export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
         render={(props) =>

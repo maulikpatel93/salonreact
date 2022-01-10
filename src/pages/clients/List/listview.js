@@ -1,20 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab, clientViewApi, clientSortRemove } from "../../../store/slices/clientSlice";
-
+import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
+import PropTypes from 'prop-types';
 // import ReactPaginate from 'react-paginate';
 
 const ClientListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const currentUser = props.currentUser;
   const view = props.view;
 
   // const view = useSelector((state) => state.client.isView);
@@ -107,4 +105,12 @@ const ClientListView = (props) => {
   );
 };
 
+ClientListView.propTypes = {
+  props: PropTypes.object,
+  view: PropTypes.object,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  id: PropTypes.string,
+  tab: PropTypes.string,
+};
 export default ClientListView;
