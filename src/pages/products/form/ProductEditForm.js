@@ -66,16 +66,17 @@ const ProductEditForm = () => {
     description: Yup.string().trim().label(t("description")).required(),
     cost_price: Yup.string().trim().label(t("cost_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
     retail_price: Yup.string().trim().label(t("retail_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+    manage_stock: Yup.mixed().nullable(),
     stock_quantity: Yup.string()
       .nullable()
       .when("manage_stock", {
-        is: "1",
+        is: 1,
         then: Yup.string().trim().label(t("stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly),
       }),
     low_stock_threshold: Yup.string()
       .nullable()
       .when("manage_stock", {
-        is: "1",
+        is: 1,
         then: Yup.string().trim().label(t("low_stock_threshold")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly),
       }),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
