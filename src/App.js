@@ -1,9 +1,12 @@
 import Routes from "./routes";
+// import ErrorBoundary from './ErrorBoundary';
 
 const App = () => {
   return (
     <>
-      <Routes />
+      {/* <ErrorBoundary> */}
+        <Routes />
+      {/* </ErrorBoundary> */}
     </>
   );
 };

@@ -13,6 +13,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import "./i18n";
+import NavigationScroll from 'layout/NavigationScroll';
+import * as serviceWorker from 'serviceWorker';
 // import config from "./config";
 
 import { store, persister } from "./store";
@@ -23,7 +25,9 @@ ReactDOM.render(
       <PersistGate loading={null} persistor={persister}>
         <BrowserRouter>
           <HelmetProvider>
+            <NavigationScroll>
             <App />
+            </NavigationScroll>
           </HelmetProvider>
         </BrowserRouter>
       </PersistGate>
@@ -36,3 +40,5 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+serviceWorker.register();
+// serviceWorker.unregister();
