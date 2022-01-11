@@ -70,7 +70,6 @@ const ClientEditForm = () => {
     setLoading(true);
     try {
       dispatch(clientUpdateApi(values)).then((action) => {
-        console.log(action);
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           dispatch(clientDetailApi({ id: action.payload.id }));

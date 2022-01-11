@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
-import logout from "../../../../store/slices/authenticateSlice";
 import config from "../../../../config";
 
 const ProfileSection = () => {
@@ -10,7 +8,7 @@ const ProfileSection = () => {
   const currentUser = auth.user;
   const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch({ type: 'auth/authlogout'});
   };
   return (
     <>

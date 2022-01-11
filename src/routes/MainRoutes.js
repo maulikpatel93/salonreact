@@ -6,6 +6,7 @@ import Loadable from "../component/Loadable";
 import AuthGuard from "./../utils/route-guard/AuthGuard";
 
 // dashboard routing
+// const MainLayout = Loadable(lazy(() => import("../layout/MainLayout")));
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
 const Calender = Loadable(lazy(() => import("../pages/calender")));
 const Sales = Loadable(lazy(() => import("../pages/sales")));

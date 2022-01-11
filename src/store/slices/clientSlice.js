@@ -219,7 +219,6 @@ const clientSlice = createSlice({
         viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
       state.isListView = action.payload;
-      console.log(state);
     },
     [clientListViewApi.rejected]: (state) => {
       state.isListView = [];

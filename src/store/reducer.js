@@ -3,7 +3,6 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import authReducer from "./slices/authSlice";
-import authenticateReducer from "./slices/authenticateSlice";
 import messageReducer from "./slices/message";
 import imageReducer from "../store/slices/imageSlice";
 import clientReducer from "../store/slices/clientSlice";
@@ -87,7 +86,6 @@ const reducer = combineReducers({
     },
     categoryReducer,
   ),
-  authenticate: authenticateReducer,
   tax: taxReducer,
   image: imageReducer,
 });

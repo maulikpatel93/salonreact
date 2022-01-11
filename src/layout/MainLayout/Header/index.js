@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import config from "../../../config";
 import ProfileSection from "./ProfileSection";
-
 const Header = () => {
   return (
     <>

@@ -23,15 +23,18 @@ export const login = createAsyncThunk("auth/login", async ({ email, password, re
     const resposedata = await AuthService.login(email, password, remember_me, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "login"))
       .catch((error) => HandleError(thunkAPI, error, "login"));
-    if (resposedata && resposedata.payload && resposedata.payload !== undefined) {
+    if (resposedata && resposedata.payload && resposedata.payload !== undefined && !resposedata.payload.status) {
       const user = await AuthService.getUser({ auth_key: resposedata.payload.auth_key, token: resposedata.payload.token })
         .then((response) => HandleResponse(thunkAPI, response, "getuser"))
         .catch((error) => HandleError(thunkAPI, error, "getuser"));
-      if (user && user.payload && user.payload !== undefined) {
+
+      if (user && user.payload && user.payload !== undefined && !user.payload.status) {
         return thunkAPI.fulfillWithValue({ isLoggedIn: true, user: user.payload, token: resposedata.payload.token });
+      } else {
+        return user;
       }
     }
-    return { isLoggedIn: false, user: null, token: "" };
+    return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     thunkAPI.dispatch(setMessage(message));
@@ -60,6 +63,11 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
+  reducers: {
+    authlogout: () => {
+      return logout();
+    },
+  },
   extraReducers: {
     [register.fulfilled]: (state) => {
       state.isLoggedIn = false;
@@ -86,5 +94,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {} = authSlice.actions;
+export const { authlogout } = authSlice.actions;
 export default authSlice.reducer;

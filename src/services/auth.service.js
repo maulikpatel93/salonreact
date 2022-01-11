@@ -38,7 +38,6 @@ const logout = () => {
 const getUser = (authenticate) => {
   const token = authenticate.token;
   const auth_key = authenticate.auth_key;
-  console.log(auth_key);
   const action = "afterlogin/user";
   return axios.post(
     API_URL + action,
