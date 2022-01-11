@@ -8,7 +8,7 @@ const initialState = {
   url: "",
 };
 
-export const imageSlice = createSlice({
+const imageSlice = createSlice({
   name: "image",
   initialState,
   reducers: {

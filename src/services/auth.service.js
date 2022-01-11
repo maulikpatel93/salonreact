@@ -14,60 +14,40 @@ const register = (username, email, password) => {
 };
 
 const login = (email, password, remember_me) => {
-  return axios
-    .post(API_URL + "login", {
-      action: "login",
-      email,
-      password,
-      remember_me,
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data;
-      }
-    });
+  return axios.post(API_URL + "login", {
+    action: "login",
+    email,
+    password,
+    remember_me,
+  });
 };
 
 const logout = () => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  return axios
-    .post(
-      API_URL + "afterlogin/logout",
-      {
-        action: "logout",
-        auth_key,
-      },
-      { headers: authHeader() },
-    )
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data;
-      }
-    });
-  // localStorage.removeItem("user");
-  // const navigate = useNavigate();
-  // navigate("/login");
+  return axios.post(
+    API_URL + "afterlogin/logout",
+    {
+      action: "logout",
+      auth_key,
+    },
+    { headers: authHeader() },
+  );
 };
 
 const getUser = (authenticate) => {
   const token = authenticate.token;
   const auth_key = authenticate.auth_key;
+  console.log(auth_key);
   const action = "afterlogin/user";
-  return axios
-    .post(
-      API_URL + action,
-      {
-        action: "afterlogin/user",
-        auth_key,
-      },
-      { headers: authHeader({token:token}) },
-    )
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data;
-      }
-    });
+  return axios.post(
+    API_URL + action,
+    {
+      action: "afterlogin/user",
+      auth_key,
+    },
+    { headers: authHeader({ token: token }) },
+  );
 };
 
 const authService = {

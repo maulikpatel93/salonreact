@@ -95,7 +95,7 @@ const initialState = {
   isProductManageStock: 0,
 };
 
-export const productSlice = createSlice({
+const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {

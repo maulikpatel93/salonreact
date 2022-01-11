@@ -9,7 +9,7 @@ export const categoryStoreApi = createAsyncThunk("category/create", async (formv
   try {
     const resposedata = await categoryApiController
       .create(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'create'))
+      .then((response) => HandleResponse(thunkAPI, response, "create"))
       .catch((error) => HandleError(thunkAPI, error, "create"));
     return resposedata;
   } catch (error) {
@@ -22,7 +22,7 @@ export const categoryUpdateApi = createAsyncThunk("category/update", async (form
   try {
     const resposedata = await categoryApiController
       .update(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'update'))
+      .then((response) => HandleResponse(thunkAPI, response, "update"))
       .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
@@ -35,7 +35,7 @@ export const categoryListViewApi = createAsyncThunk("category/gridview", async (
   try {
     const resposedata = await categoryApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'gridview'))
+      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
       .catch((error) => HandleError(thunkAPI, error, "gridview"));
     return resposedata;
   } catch (error) {
@@ -48,7 +48,7 @@ export const categoryOptions = createAsyncThunk("category/categoryOptions", asyn
   try {
     const resposedata = await categoryApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'categoryOptions'))
+      .then((response) => HandleResponse(thunkAPI, response, "categoryOptions"))
       .catch((error) => HandleError(thunkAPI, error, "categoryOptions"));
     return resposedata;
   } catch (error) {
@@ -61,7 +61,7 @@ export const categoryDetailApi = createAsyncThunk("category/detail", async (form
   try {
     const resposedata = await categoryApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'detail'))
+      .then((response) => HandleResponse(thunkAPI, response, "detail"))
       .catch((error) => HandleError(thunkAPI, error, "detail"));
     return resposedata;
   } catch (error) {
@@ -74,7 +74,7 @@ export const categoryDeleteApi = createAsyncThunk("category/delete", async (form
   try {
     const resposedata = await categoryApiController
       .deleted(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'delete'))
+      .then((response) => HandleResponse(thunkAPI, response, "delete"))
       .catch((error) => HandleError(thunkAPI, error, "delete"));
     return resposedata;
   } catch (error) {
@@ -87,7 +87,7 @@ export const categoriesuggetionListApi = createAsyncThunk("category/suggetionlis
   try {
     const resposedata = await categoryApiController
       .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'suggetionlist'))
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
       .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
     return resposedata;
   } catch (error) {
@@ -108,7 +108,7 @@ const initialState = {
   isCategoryOption: [],
 };
 
-export const categorySlice = createSlice({
+const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {

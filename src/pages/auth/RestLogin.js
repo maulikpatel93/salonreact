@@ -11,7 +11,7 @@ import yupconfig from "../../yupconfig";
 import { FloatLabelInputField } from "../../component/form/Field";
 
 //============================|| API JWT - LOGIN ||============================//
-import { login } from "../../store/slices/auth";
+import { login } from "../../store/slices/authSlice";
 import { clearMessage } from "../../store/slices/message";
 
 const RestLogin = () => {

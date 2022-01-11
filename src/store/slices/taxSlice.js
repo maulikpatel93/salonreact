@@ -22,7 +22,7 @@ const initialState = {
   isTaxOption: [],
 };
 
-export const taxSlice = createSlice({
+const taxSlice = createSlice({
   name: "tax",
   initialState,
   reducers: {

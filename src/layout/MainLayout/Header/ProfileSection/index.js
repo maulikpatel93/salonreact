@@ -1,19 +1,16 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 
-// import logout from "../../../../store/slices/auth";
+import logout from "../../../../store/slices/authenticateSlice";
 import config from "../../../../config";
 
 const ProfileSection = () => {
-  // const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const dispatch = useDispatch();
-  console.log(dispatch);
   const handleLogout = () => {
-    // dispatch(logout());
+    dispatch(logout());
   };
   return (
     <>

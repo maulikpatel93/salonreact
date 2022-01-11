@@ -94,7 +94,7 @@ const initialState = {
   isSearchName: ""
 };
 
-export const serviceSlice = createSlice({
+const serviceSlice = createSlice({
   name: "service",
   initialState,
   reducers: {

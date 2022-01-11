@@ -108,7 +108,7 @@ const initialState = {
   isSupplierOption: [],
 };
 
-export const supplierSlice = createSlice({
+const supplierSlice = createSlice({
   name: "supplier",
   initialState,
   reducers: {
