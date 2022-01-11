@@ -163,12 +163,12 @@ export const clientSlice = createSlice({
     [clientStoreApi.pending]: () => {},
     [clientStoreApi.fulfilled]: (state, action) => {
       if (state.isGridView && state.isGridView.data) {
-        state.isGridView.data = [...state.isGridView.data, action.payload];
+        state.isGridView.data = [action.payload, ...state.isGridView.data];
       } else {
         state.isGridView = { data: [action.payload] };
       }
       if (state.isListView && state.isListView.data) {
-        state.isListView.data = [...state.isListView.data, action.payload];
+        state.isListView.data = [action.payload, ...state.isListView.data];
       } else {
         state.isListView = { data: [action.payload] };
       }

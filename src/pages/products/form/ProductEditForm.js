@@ -127,7 +127,11 @@ const ProductEditForm = () => {
             if(detail){
               const fields = ['id',"name", "sku", "description", "cost_price", "retail_price", "manage_stock", "stock_quantity", "low_stock_threshold", "tax_id", "supplier_id"];
               fields.forEach((field) => {
-                formik.setFieldValue(field, detail[field], false);
+                if (["manage_stock"].includes(field)) {
+                  formik.setFieldValue(field, parseInt(detail[field]), false);
+                } else {
+                  formik.setFieldValue(field, detail[field], false);
+                }
               });
             }
           }, [detail]);
@@ -215,7 +219,6 @@ const ProductEditForm = () => {
                               formik.handleChange(e);
                             }}
                           />
-                          {console.log(formik.values.manage_stock)}
                           <div className="row" style={{ display: formik.values.manage_stock == "" || formik.values.manage_stock == 0 ? "none" : "" }}>
                             <div className="mb-3 col-md-6">
                               <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity != null ? formik.values.stock_quantity : ""} label={t("stock_quantity")} controlId="productForm-stock_quantity"   />

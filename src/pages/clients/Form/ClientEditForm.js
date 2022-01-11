@@ -35,7 +35,7 @@ const ClientEditForm = () => {
     email: "",
     phone_number: "",
     date_of_birth: "",
-    gender: '',
+    gender: "",
     address: "",
     street: "",
     suburb: "",
@@ -61,8 +61,8 @@ const ClientEditForm = () => {
     postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
     description: Yup.string().trim().label(t("description")).required(),
     send_sms_notification: Yup.mixed().nullable(),
-    send_email_notification: Yup.bool().nullable(),
-    recieve_marketing_email: Yup.bool().nullable(),
+    send_email_notification: Yup.mixed().nullable(),
+    recieve_marketing_email: Yup.mixed().nullable(),
   });
   yupconfig();
 
@@ -111,7 +111,11 @@ const ClientEditForm = () => {
             if (detail) {
               const fields = ["id", "first_name", "last_name", "profile_photo", "email", "phone_number", "date_of_birth", "gender", "address", "street", "suburb", "state", "postcode", "description", "send_sms_notification", "send_email_notification", "recieve_marketing_email"];
               fields.forEach((field) => {
-                formik.setFieldValue(field, detail[field], false);
+                if (["send_sms_notification", "send_email_notification", "recieve_marketing_email"].includes(field)) {
+                  formik.setFieldValue(field, parseInt(detail[field]), false);
+                } else {
+                  formik.setFieldValue(field, detail[field], false);
+                }
               });
               // const checkboxfields = ["send_sms_notification", "send_email_notification", "recieve_marketing_email"];
               // checkboxfields.forEach((field) => setFieldValue(field, detail[field], false));
