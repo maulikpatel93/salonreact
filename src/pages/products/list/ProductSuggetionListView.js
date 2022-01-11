@@ -49,9 +49,8 @@ const ProductSuggetionListView = (props) => {
 };
 
 ProductSuggetionListView.propTypes = {
-  view: PropTypes.object,
-  name: PropTypes.string,
-  id: ''
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
+  name: PropTypes.string
 };
 
 

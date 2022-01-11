@@ -51,7 +51,7 @@ const SuggetionListView = (props) => {
   );
 };
 SuggetionListView.propTypes = {
-  view: PropTypes.array,
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
   first_name: PropTypes.string,
   last_name: PropTypes.string,
   id: PropTypes.string

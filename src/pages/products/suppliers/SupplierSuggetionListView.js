@@ -51,6 +51,6 @@ const SupplierSuggetionListView = (props) => {
   );
 };
 SupplierSuggetionListView.propTypes = {
-  view: PropTypes.object
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
 };
 export default SupplierSuggetionListView;

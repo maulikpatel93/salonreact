@@ -45,6 +45,6 @@ const CategorySuggetionListView = (props) => {
   );
 };
 CategorySuggetionListView.propTypes = {
-  view: PropTypes.array,
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
 };
 export default CategorySuggetionListView;

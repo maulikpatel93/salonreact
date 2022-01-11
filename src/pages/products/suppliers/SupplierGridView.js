@@ -95,11 +95,11 @@ const SupplierGridView = (props) => {
   );
 };
 SupplierGridView.propTypes = {
-  view: PropTypes.object,
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
   name: PropTypes.string,
   first_name: PropTypes.string,
   last_name: PropTypes.string,
-  id: "",
+  id: PropTypes.string,
 };
 
 export default SupplierGridView;
