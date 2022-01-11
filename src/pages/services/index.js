@@ -252,7 +252,7 @@ const Services = () => {
         </div>
 
         <div className="container">
-          <div className={"tab-content " + (tabview && tabview == "service" ? "px-lg-4" : "list-view-content")}>
+          <div className={"tab-content list-view-content"}>
             <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
               {ListView.length > 0 || ListView.data ? (
                 <section>
@@ -272,11 +272,20 @@ const Services = () => {
                               </a>
                             </th>
                             <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
-                                {t("sku")}
+                              <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
+                                {t("duration")}
                                 <span className="down-up-arrow">
                                   <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
                                   <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
+                                </span>
+                              </a>
+                            </th>
+                            <th>
+                              <a className="service-header cursor-pointer" onClick={() => sorting({ price: sort.price == "asc" ? "desc" : "asc" })}>
+                                {t("price")}
+                                <span className="down-up-arrow">
+                                  <i className={"fal fa-angle-up" + (sort.price == "asc" ? " text-dark" : "")}></i>
+                                  <i className={"fal fa-angle-down" + (sort.price == "desc" ? " text-dark" : "")}></i>
                                 </span>
                               </a>
                             </th>
@@ -289,24 +298,7 @@ const Services = () => {
                                 </span>
                               </a>
                             </th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
-                                {t("stock")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
-                                {t("retail_price")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
+                            <th>{t("add_on_service")}</th>
                             <th>
                               <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
                             </th>

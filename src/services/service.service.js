@@ -80,7 +80,7 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && values.id ? false : true, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,image,sku,description,cost_price,retail_price,stock_quantity", // first_name,last_name,email
+    field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     supplier_field: 'name', //business_name,owner_name
     tax_field: 'name', //business_name,owner_name
@@ -113,7 +113,7 @@ const suggetionlist = (values) => {
     salon_id: auth.user.salon_id,
     pagination: true, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,image,sku,description,cost_price,retail_price,stock_quantity", // first_name,last_name,email
+    field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
   };
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });

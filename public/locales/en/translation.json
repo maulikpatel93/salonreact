@@ -186,5 +186,6 @@
     "senior": "Senior",
     "duration": "Duration",
     "padding_time": "Padding Time",
-    "padding_time_note": "Padding time can be added for preparation or clean-up and it will block out the additional time in your calendar."
+    "padding_time_note": "Padding time can be added for preparation or clean-up and it will block out the additional time in your calendar.",
+    "add_on_service": "Add on Services"
 }

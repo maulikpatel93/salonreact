@@ -15,10 +15,8 @@ import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 const ServiceListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const view = props.view;
-
-  // const view = useSelector((state) => state.service.isView);
-  const objectData = view && view.data ? view.data : view;
+  const views = props.view;
+  const objectData = views && views.data ? views.data : views;
 
   const handleServiceDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
@@ -53,30 +51,19 @@ const ServiceListView = (props) => {
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
-          let sku = objectData[item].sku;
-          let retail_price = objectData[item].retail_price;
-          let stock_quantity = objectData[item].stock_quantity;
-          let image_url = objectData[item].image_url;
-          let supplier_name = objectData[item].supplier && objectData[item].supplier.name;
+          let duration = objectData[item].duration;
+          let price = '';
+          let category_name = objectData[item].category && objectData[item].category.name;
+          let add_on_service = '';
           return (
             <tr className="service-view-tr" key={i} data-id={id}>
-              <td className="pe-0" width="60px">
-                {image_url ? (
-                  <div className="user">
-                    <a data-fancybox="" data-src={image_url}>
-                      <img src={image_url} alt="" className="rounded-circle wh-40" />
-                    </a>
-                  </div>
-                ) : (
-                  <div className="user-initial">{name.charAt(0)}</div>
-                )}
-              </td>
+              <td>{i+1}</td>
               <td>{ucfirst(name)}
               </td>
-              <td>{sku}</td>
-              <td>{supplier_name}</td>
-              <td>{stock_quantity}</td>
-              <td>{retail_price}</td>
+              <td>{duration}</td>
+              <td>{price}</td>
+              <td>{category_name}</td>
+              <td>{add_on_service}</td>
               <td className="ps-0 text-end" width="60px">
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
@@ -107,8 +94,8 @@ const ServiceListView = (props) => {
   );
 };
 ServiceListView.propTypes = {
-  view: PropTypes.string,
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
   name: PropTypes.string,
-  id: "",
+  id: PropTypes.string,
 };
 export default ServiceListView;

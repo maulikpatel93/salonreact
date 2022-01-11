@@ -27,16 +27,13 @@ const ServiceSuggetionListView = (props) => {
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
-          let sku = objectData[item].sku;
-          let image_url = objectData[item].image_url;
-          let supplier_name = objectData[item].supplier && objectData[item].supplier.name;
           return (
             <li className="service-suggetion-li" key={i} data-id={id} data-name={ucfirst(name)}>
               <a className="d-flex cursor-pointer" onClick={handleSuggestedId}>
-                <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{name.charAt(0)}</div>}</div>
+                <div className="user-img me-2">{<div className="user-initial">{name.charAt(0)}</div>}</div>
                 <div className="user-id">
-                  <span className="user-name">{ucfirst(name) +' - '+sku}</span>
-                  <span className="user-id">{ucfirst(supplier_name)}</span>
+                  <span className="user-name">{ucfirst(name)}</span>
+                  {/* <span className="user-id">{ucfirst(supplier_name)}</span> */}
                 </div>
               </a>
             </li>
@@ -48,6 +45,6 @@ const ServiceSuggetionListView = (props) => {
   );
 };
 ServiceSuggetionListView.propTypes = {
-  view: PropTypes.array
+  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
 };
 export default ServiceSuggetionListView;
