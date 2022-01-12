@@ -5,14 +5,14 @@ const Sidebar = () => {
   return (
     <aside className="sidenav-bar">
       <div className="sidenav-logo py-4 text-center">
-        <Link to="../dashboard.html">
+        <Link to={config.basePath + "/dashboard"}>
           <img src={config.imagepath + "logo-small.png"} alt="" />
         </Link>
       </div>
       <div className="sidemenu">
         <ul className="list-unstyled p-0 m-0 text-center">
           <li>
-            <Link to="/dashboard" className="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+            <Link to={config.basePath + "/dashboard"} className="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
               <span className="icon">
                 <img src={config.imagepath + "dashboard.png"} alt="" />
               </span>
@@ -20,7 +20,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/calender" data-bs-toggle="tooltip" data-bs-placement="right" title="Calendar">
+            <Link to={config.basePath + "/calender"} data-bs-toggle="tooltip" data-bs-placement="right" title="Calendar">
               <span className="icon">
                 <img src={config.imagepath + "caleder.png"} alt="" />
               </span>
@@ -28,7 +28,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/sales" data-bs-toggle="tooltip" data-bs-placement="right" title="Sales">
+            <Link to={config.basePath + "/sales"} data-bs-toggle="tooltip" data-bs-placement="right" title="Sales">
               <span className="icon">
                 <img src={config.imagepath + "sales.png"} alt="" />
               </span>
@@ -36,7 +36,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/vouchers" data-bs-toggle="tooltip" data-bs-placement="right" title="Vouchers">
+            <Link to={config.basePath + "/vouchers"} data-bs-toggle="tooltip" data-bs-placement="right" title="Vouchers">
               <span className="icon">
                 <img src={config.imagepath + "Vouchers.png"} alt="" />
               </span>
@@ -44,7 +44,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/subscriptions" data-bs-toggle="tooltip" data-bs-placement="right" title="Subscriptions">
+            <Link to={config.basePath + "/subscriptions"} data-bs-toggle="tooltip" data-bs-placement="right" title="Subscriptions">
               <span className="icon">
                 <img src={config.imagepath + "refresh.png"} alt="" />
               </span>
@@ -52,7 +52,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/clients" data-bs-toggle="tooltip" data-bs-placement="right" title="Clients">
+            <Link to={config.basePath + "/clients"} data-bs-toggle="tooltip" data-bs-placement="right" title="Clients">
               <span className="icon">
                 <img src={config.imagepath + "user.png"} alt="" />
               </span>
@@ -60,7 +60,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/staff" data-bs-toggle="tooltip" data-bs-placement="right" title="Staff">
+            <Link to={config.basePath + "/staff"} data-bs-toggle="tooltip" data-bs-placement="right" title="Staff">
               <span className="icon">
                 <img src={config.imagepath + "staff.png"} alt="" />
               </span>
@@ -68,7 +68,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/services" data-bs-toggle="tooltip" data-bs-placement="right" title="Services">
+            <Link to={config.basePath + "/services"} data-bs-toggle="tooltip" data-bs-placement="right" title="Services">
               <span className="icon">
                 <img src={config.imagepath + "Services.png"} alt="" />
               </span>
@@ -76,7 +76,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/products" data-bs-toggle="tooltip" data-bs-placement="right" title="Products">
+            <Link to={config.basePath + "/products"} data-bs-toggle="tooltip" data-bs-placement="right" title="Products">
               <span className="icon">
                 <img src={config.imagepath + "product.png"} alt="" />
               </span>
@@ -84,7 +84,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/reports" data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
+            <Link to={config.basePath + "/reports"} data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
               <span className="icon">
                 <img src={config.imagepath + "Reports.png"} alt="" />
               </span>
@@ -92,7 +92,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/marketing" data-bs-toggle="tooltip" data-bs-placement="right" title="Marketing">
+            <Link to={config.basePath + "/marketing"} data-bs-toggle="tooltip" data-bs-placement="right" title="Marketing">
               <span className="icon">
                 <img src={config.imagepath + "Marketing.png"} alt="" />
               </span>
@@ -100,7 +100,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/account" data-bs-toggle="tooltip" data-bs-placement="right" title="Account Setup">
+            <Link to={config.basePath + "/account"} data-bs-toggle="tooltip" data-bs-placement="right" title="Account Setup">
               <span className="icon">
                 {" "}
                 <img src={config.imagepath + "setting.png"} alt="" />

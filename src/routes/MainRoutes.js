@@ -4,6 +4,7 @@ import { lazy } from "react";
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../component/Loadable";
 import AuthGuard from "./../utils/route-guard/AuthGuard";
+import config from "./../config";
 
 // dashboard routing
 // const MainLayout = Loadable(lazy(() => import("../layout/MainLayout")));
@@ -19,9 +20,10 @@ const Products = Loadable(lazy(() => import("../pages/products")));
 const Reports = Loadable(lazy(() => import("../pages/reports")));
 const Marketing = Loadable(lazy(() => import("../pages/marketing")));
 const Account = Loadable(lazy(() => import("../pages/account")));
+const NoMatch = Loadable(lazy(() => import("../pages/errors/NoMatch")));
 
 const MainRoutes = {
-  path: "/",
+  path: config.basePath + "/",
   element: (
     <AuthGuard>
       <MainLayout />
@@ -29,53 +31,54 @@ const MainRoutes = {
   ),
   children: [
     {
-      path: "/dashboard",
+      path: config.basePath + "/dashboard",
       element: <Dashboard />,
     },
     {
-      path: "/calender",
+      path: config.basePath + "/calender",
       element: <Calender />,
     },
     {
-      path: "/sales",
+      path: config.basePath + "/sales",
       element: <Sales />,
     },
     {
-      path: "/vouchers",
+      path: config.basePath + "/vouchers",
       element: <Vouchers />,
     },
     {
-      path: "/subscriptions",
+      path: config.basePath + "/subscriptions",
       element: <Subscriptions />,
     },
     {
-      path: "/clients",
+      path: config.basePath + "/clients",
       element: <Clients />,
     },
     {
-      path: "/staff",
+      path: config.basePath + "/staff",
       element: <Staff />,
     },
     {
-      path: "/services",
+      path: config.basePath + "/services",
       element: <Services />,
     },
     {
-      path: "/products",
+      path: config.basePath + "/products",
       element: <Products />,
     },
     {
-      path: "/reports",
+      path: config.basePath + "/reports",
       element: <Reports />,
     },
     {
-      path: "/marketing",
+      path: config.basePath + "/marketing",
       element: <Marketing />,
     },
     {
-      path: "/account",
+      path: config.basePath + "/account",
       element: <Account />,
     },
+    { path: "*", element: <NoMatch /> },
   ],
 };
 

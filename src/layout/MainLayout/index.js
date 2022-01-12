@@ -4,13 +4,13 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Helmet } from "react-helmet-async";
 import Fancybox from "../../component/fancybox.js";
-// import config from "../../config";
+import config from "../../config";
 // ==============================|| MAIN LAYOUT ||============================== //
 const MainLayout = () => {
   return (
     <>
       <Helmet>
-        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href={config.baseUrl + "/css/style.css"} />
       </Helmet>
       <Fancybox />
       <main>

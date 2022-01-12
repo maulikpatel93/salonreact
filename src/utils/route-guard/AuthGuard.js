@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import PropTypes from "prop-types";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import config from "../../config";
 //-----------------------|| AUTH GUARD ||-----------------------//
 
 /**
@@ -9,18 +10,18 @@ import { Navigate } from 'react-router-dom';
  * @param {PropTypes.node} children children element/node
  */
 const AuthGuard = ({ children }) => {
-    const account = useSelector((state) => state.auth);
-    const { isLoggedIn } = account;
+  const account = useSelector((state) => state.auth);
+  const { isLoggedIn } = account;
 
-    if (!isLoggedIn) {
-        return <Navigate to="/login" />;
-    }
+  if (!isLoggedIn) {
+    return <Navigate to={config.basename} />;
+  }
 
-    return children;
+  return children;
 };
 
 AuthGuard.propTypes = {
-    children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default AuthGuard;

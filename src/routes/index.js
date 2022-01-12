@@ -9,6 +9,6 @@ import config from "../config";
 
 export default function ThemeRoutes() {
   // return useRoutes([{ path: "/", element: <Navigate to={config.defaultPath} /> }, AuthenticationRoutes, LoginRoutes, MainRoutes], config.basename);
-  return useRoutes([{ path: "/", element: <Navigate to={config.defaultPath} /> }, AuthenticationRoutes, MainRoutes]);
+  return useRoutes([{ path: config.basePath + "/", element: <Navigate to={config.defaultPath} /> }, AuthenticationRoutes, MainRoutes]);
   // return useRoutes([{ path: "/", element: <Navigate to={config.defaultPath} /> }, AuthenticationRoutes], config.basename);
 }

@@ -14,15 +14,18 @@ import Backend from "i18next-xhr-backend";
 //     translation: translationDE
 //   }
 // };
+const Languages = ['en', 'de'];
 i18n
   .use(Backend)
   .use(detector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     backend: {
-      loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,
+      loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
+      // loadPath: (lng) => {console.log(lng)}
     },
     load: "unspecific",
+    whitelist: Languages,
     debug: true,
     fallbackLng: "en", // use en if detected lng is not available
     // keySeparator: false, // we do not use keys in form messages.welcome

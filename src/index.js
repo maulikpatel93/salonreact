@@ -14,7 +14,7 @@ import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import "./i18n";
 // import NavigationScroll from 'layout/NavigationScroll';
-import * as serviceWorker from 'serviceWorker';
+import * as serviceWorker from './serviceWorker';
 // import config from "./config";
 
 import { store, persister } from "./store";
@@ -23,10 +23,10 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persister}>
-        <BrowserRouter>
+        <BrowserRouter forceRefresh={true}>
           <HelmetProvider>
             {/* <NavigationScroll> */}
-            <App />
+            <App /> 
             {/* </NavigationScroll> */}
           </HelmetProvider>
         </BrowserRouter>
@@ -40,5 +40,5 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-serviceWorker.register();
-// serviceWorker.unregister();
+// serviceWorker.register();
+serviceWorker.unregister();

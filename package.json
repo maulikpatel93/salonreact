@@ -1,5 +1,6 @@
 {
     "name": "my-app",
+    "homepage": "https://dddemo.net/php/2022/salonapp",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -49,8 +50,7 @@
     },
     "postinstall": {
         "bootstrap/dist/css/bootstrap.min.css": "link public/css/bootstrap.min.css",
-        "bootstrap/dist/js/bootstrap.bundle.min.js": "link public/js/bootstrap.bundle.min.js",
-        "jquery/dist/jquery.min.js": "link public/js/jquery.min.js"
+        "bootstrap/dist/js/bootstrap.bundle.min.js": "link public/js/bootstrap.bundle.min.js"
     },
     "eslintConfig": {
         "extends": [
