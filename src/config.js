@@ -7,7 +7,7 @@ const config = {
   logopath: "/php/2022/salonapp/images/logo.png",
   imagepath: "/php/2022/salonapp/images/",
   defaultPath: "/php/2022/salonapp/dashboard",
-  API_URL: 'http://127.0.0.1:8000/api/v1/',
+  API_URL: 'https://dddemo.net/php/2022/salon/public/api/v1/',
   phone_number_pattern: /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/,
   phone_number_334_error: "phone_number_334_error",
   google_api_key: "AIzaSyDtEOPPr627_yGNQJaZaBLFrKUF_GVNpvw",
