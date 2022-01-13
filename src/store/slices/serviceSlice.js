@@ -7,8 +7,8 @@ export const serviceStoreApi = createAsyncThunk("service/create", async (formval
   try {
     const resposedata = await serviceApiController
       .create(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'create'))
-      .catch((error) => HandleError(thunkAPI, error, 'create'));
+      .then((response) => HandleResponse(thunkAPI, response, "create"))
+      .catch((error) => HandleError(thunkAPI, error, "create"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -20,8 +20,8 @@ export const serviceUpdateApi = createAsyncThunk("service/update", async (formva
   try {
     const resposedata = await serviceApiController
       .update(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'update'))
-      .catch((error) => HandleError(thunkAPI, error, 'update'));
+      .then((response) => HandleResponse(thunkAPI, response, "update"))
+      .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -33,8 +33,8 @@ export const serviceListViewApi = createAsyncThunk("service/listview", async (fo
   try {
     const resposedata = await serviceApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'listview'))
-      .catch((error) => HandleError(thunkAPI, error, 'listview'));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -46,8 +46,8 @@ export const serviceDetailApi = createAsyncThunk("service/detail", async (formVa
   try {
     const resposedata = await serviceApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'detail'))
-      .catch((error) => HandleError(thunkAPI, error, 'detail'));
+      .then((response) => HandleResponse(thunkAPI, response, "detail"))
+      .catch((error) => HandleError(thunkAPI, error, "detail"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -59,8 +59,8 @@ export const serviceDeleteApi = createAsyncThunk("service/delete", async (formVa
   try {
     const resposedata = await serviceApiController
       .deleted(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'delete'))
-      .catch((error) => HandleError(thunkAPI, error, 'delete'));
+      .then((response) => HandleResponse(thunkAPI, response, "delete"))
+      .catch((error) => HandleError(thunkAPI, error, "delete"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -72,8 +72,21 @@ export const serviceSuggetionListApi = createAsyncThunk("service/suggetionlist",
   try {
     const resposedata = await serviceApiController
       .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'suggetionlist'))
-      .catch((error) => HandleError(thunkAPI, error, 'suggetionlist'));
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
+      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const addonservices = createAsyncThunk("service/addonservices", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await serviceApiController
+      .addonservices(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "addonservices"))
+      .catch((error) => HandleError(thunkAPI, error, "addonservices"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -91,7 +104,8 @@ const initialState = {
   isTabView: "service",
   isSort: "",
   isSearchList: "",
-  isSearchName: ""
+  isSearchName: "",
+  isAddonservices:[]
 };
 
 const serviceSlice = createSlice({
@@ -151,7 +165,7 @@ const serviceSlice = createSlice({
     },
     serviceSearchName: (state, action) => {
       state.isSearchName = action.payload;
-    }
+    },
   },
   extraReducers: {
     [serviceStoreApi.pending]: () => {},
@@ -217,6 +231,13 @@ const serviceSlice = createSlice({
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
     [serviceDeleteApi.rejected]: () => {},
+    [addonservices.pending]: () => {},
+    [addonservices.fulfilled]: (state, action) => {
+      state.isAddonservices = action.payload;
+    },
+    [addonservices.rejected]: (state) => {
+      state.isAddonservices = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function

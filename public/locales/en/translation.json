@@ -187,5 +187,11 @@
     "duration": "Duration",
     "padding_time": "Padding Time",
     "padding_time_note": "Padding time can be added for preparation or clean-up and it will block out the additional time in your calendar.",
-    "add_on_service": "Add on Services"
+    "add_on_service": "Add on Services",
+    "minute": "Minute",
+    "online_bookings": "Online bookings",
+    "online_bookings_note_service": "Choose if this service can be booked online",
+    "service_booked_online": "Service booked online",
+    "deposit_booked_online": "Deposit booked online",
+    "deposit_booked_price": "Deposit booked price"
 }

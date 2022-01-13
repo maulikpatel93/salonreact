@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore } from "redux-persist";
 import reducer from "./reducer";
+// import logger from 'redux-logger';
 // import { Navigate } from 'react-router-dom';
 // import storage from 'redux-persist/lib/storage';
 
@@ -15,10 +16,13 @@ const actionMiddleware = (store) => (next) => (action) => {
     if (action.type == "auth/logout/fulfilled") {
       persistStore(store).purge();
     }
+    // console.log(action);
   }
   // store.dispatch({ type: "client/view/fulfilled" });
   return next(action);
 };
+
+
 const store = configureStore({
   reducer: reducer,
   devTools: true,
@@ -28,7 +32,7 @@ const store = configureStore({
       //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       // }
       serializableCheck: false,
-    }).concat(actionMiddleware),
+    }).concat([actionMiddleware]),
 });
 
 const persister = persistStore(store);

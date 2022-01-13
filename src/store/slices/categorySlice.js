@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/too
 import categoryApiController from "../../services/category.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
-
 export const usersAdapter = createEntityAdapter();
 
 export const categoryStoreApi = createAsyncThunk("category/create", async (formvalues, thunkAPI) => {

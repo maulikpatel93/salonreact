@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import config from "../../config";
 import Categories from "./categories";
 
-import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName } from "../../store/slices/serviceSlice";
+import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName, addonservices } from "../../store/slices/serviceSlice";
 import { openAddCategoryForm, categoryListViewApi, openCategorieSearchList, closecategoriesearchList, categoriesuggetionListApi, categoriesearchName, categoryOptions } from "../../store/slices/categorySlice";
 import { taxOptions } from "../../store/slices/taxSlice";
 import { removeImage } from "../../store/slices/imageSlice";
@@ -56,6 +56,7 @@ const Services = () => {
     dispatch(openAddServiceForm());
     dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
     dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(addonservices());
   };
 
   const handleOpenAddCategoryForm = () => {

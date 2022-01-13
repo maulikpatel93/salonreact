@@ -119,11 +119,30 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const addonservices = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/categories/view?page=${page}&q=${q}` : `afterlogin/categories/view?q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    id: values && values.id ? values.id : "",
+    field: values && values.id ? "" : "name", // first_name,last_name,email
+    salon_field: false, //business_name,owner_name
+  };
+  return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
+};
+
 const serviceApiController = {
   create,
   update,
   view,
   deleted,
   suggetionlist,
+  addonservices
 };
 export default serviceApiController;
