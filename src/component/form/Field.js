@@ -77,6 +77,17 @@ const SelectField = ({ label, controlId, options, ...props }) => {
     </>
   );
 };
+const CheckboxField = ({ label, controlId, ...props }) => {
+  const [field ] = useField(props);
+  const checked = field.value === 1 ? true : "";
+  return (
+    <>
+      <Form.Group className="mb-3" controlId={controlId}>
+        <Form.Check {...field} {...props} label={label} type="checkbox" id={controlId} checked={checked} />
+      </Form.Group>
+    </>
+  );
+};
 
 const SwitchField = ({ label, controlId, ...props }) => {
   const [field ] = useField(props);
@@ -267,6 +278,11 @@ TextareaField.propTypes = {
   controlId: PropTypes.string
 };
 
+CheckboxField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string
+};
+
 SwitchField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string
@@ -284,4 +300,4 @@ DatePickerField.propTypes = {
   controlId: PropTypes.string
 };
 
-export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, SwitchField, InputFieldImage, DatePickerField };
+export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, SwitchField, InputFieldImage, DatePickerField };

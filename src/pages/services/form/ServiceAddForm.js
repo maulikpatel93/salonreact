@@ -8,7 +8,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField, ReactSelectField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
-
+import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeAddServiceForm, serviceStoreApi } from "../../../store/slices/serviceSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
@@ -19,6 +19,7 @@ const ServiceAddForm = () => {
   const rightDrawerOpened = useSelector((state) => state.service.isOpenedAddForm);
   const isCategoryOption = useSelector((state) => state.category.isCategoryOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
+  const isAddonservices = useSelector((state) => state.service.isAddonservices);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -51,9 +52,9 @@ const ServiceAddForm = () => {
     duration: "",
     padding_time: "",
     tax_id: "",
-    service_booked_online:"",
-    deposit_booked_online:"",
-    deposit_booked_price:""
+    service_booked_online: "",
+    deposit_booked_online: "",
+    deposit_booked_price: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -254,7 +255,7 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-12">
-                            <SwitchField
+                              <SwitchField
                                 name="service_booked_online"
                                 label={t("service_booked_online")}
                                 controlId="serviceForm-service_booked_online"
@@ -299,6 +300,58 @@ const ServiceAddForm = () => {
                               </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                      <hr className="drawer-category-hr"></hr>
+                      <div className="row mx-0 addstaff-member pb-0">
+                        <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
+                          <h4 className="fw-semibold mb-2">{t("add_on_services")}</h4>
+                          <p>{t("add_on_services_note")}</p>
+                        </div>
+                        <div className="col-md-6 pe-md-0 service mt-0 pt-0">
+                          <ul className="list-unstyled mb-0 p-0 m-0">
+                            <li className="pt-3 mt-0 all-staff">
+                              <div className="checkbox">
+                                <input type="checkbox" />
+                                <label>{t("all_services")}</label>
+                              </div>
+                              <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                {isAddonservices &&
+                                  Object.keys(isAddonservices).map((item, i) => {
+                                    console.log(isAddonservices[item]);
+                                    let category_id = isAddonservices[item].id;
+                                    let category_name = isAddonservices[item].name;
+                                    let addonservicesData = isAddonservices[item].services;
+                                    return (
+                                      <li className="pt-3 pb-3" key={i} data-id={category_id}>
+                                        <div className="checkbox">
+                                          <input type="checkbox" />
+                                          <label>
+                                            <b>{ucfirst(category_name)}</b>
+                                          </label>
+                                        </div>
+                                        <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                          {addonservicesData &&
+                                            Object.keys(addonservicesData).map((itemservice, j) => {
+                                              let service_id = addonservicesData[itemservice].id;
+                                              let service_name = addonservicesData[itemservice].name;
+                                              return (
+                                                <li className="pt-3 pb-3" key={j} data-id={service_id}>
+                                                  <div className="checkbox">
+                                                    <input type="checkbox" />
+                                                    <label>{ucfirst(service_name)}</label>
+                                                  </div>
+                                                </li>
+                                              );
+                                            })}
+                                        </ul>
+                                      </li>
+                                    );
+                                  })}
+                                {isAddonservices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                              </ul>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>

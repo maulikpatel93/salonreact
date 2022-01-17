@@ -124,17 +124,12 @@ const addonservices = (values) => {
   const auth_key = auth.user.auth_key;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  let q = values && values.q ? values.q : "";
-  const action = page ? `afterlogin/services/view?page=${page}&q=${q}` : `afterlogin/services/view?q=${q}`;
+  let isNotId = values && values.isNotId ? values.isNotId : "";
+  const action = page ? `afterlogin/services/addonservices?page=${page}&isNotId=${isNotId}` : `afterlogin/services/addonservices?isNotId=${isNotId}`;
   const data = {
     auth_key: auth_key,
     action: action,
-    salon_id: auth.user.salon_id,
-    id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,isServiceChecked", // first_name,last_name,email
-    salon_field: false, //business_name,owner_name
-    serviceprice_field: false,
-    addOnService_field: false,
+    salon_id: auth.user.salon_id
   };
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };

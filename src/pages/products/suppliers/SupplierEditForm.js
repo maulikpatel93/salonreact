@@ -27,17 +27,17 @@ const SupplierEditForm = () => {
     dispatch({ type: "supplier/detail/rejected" });
   };
   const initialValues = {
-    name: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    website: '',
-    address: '',
-    street: '',
-    suburb: '',
-    state: '',
-    postcode: '',
+    name: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    website: "",
+    address: "",
+    street: "",
+    suburb: "",
+    state: "",
+    postcode: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -48,12 +48,12 @@ const SupplierEditForm = () => {
     // logo: Yup.string().trim().label(t("logo")),
     email: Yup.string().trim().max(100).email().label(t("email")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("phone_number")).required(),
-    website: Yup.string().trim().url().label(t("website")).required(),
-    address: Yup.string().trim().label(t("address")).required(),
-    street: Yup.string().trim().label(t("street")).required(),
-    suburb: Yup.string().trim().label(t("suburb")).required(),
-    state: Yup.string().trim().label(t("state")).required(),
-    postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
+    website: Yup.string().trim().url().label(t("website")),
+    address: Yup.string().trim().label(t("address")),
+    street: Yup.string().trim().label(t("street")),
+    suburb: Yup.string().trim().label(t("suburb")),
+    state: Yup.string().trim().label(t("state")),
+    postcode: Yup.string().trim().max(12).label(t("postcode")),
   });
   yupconfig();
 
@@ -94,22 +94,22 @@ const SupplierEditForm = () => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSupplierSubmit}>
         {(formik) => {
           useEffect(() => {
-            if(detail){
+            if (detail) {
               if (detail.logo) {
                 dispatch(selectImage({ name: detail.logo, size: "", type: "", url: detail.logo_url }));
               }
-              const fields = ['id',"name", "first_name", "last_name", "email", "phone_number", "website", "address", "street", "suburb", "state", "postcode"];
+              const fields = ["id", "name", "first_name", "last_name", "email", "phone_number", "website", "address", "street", "suburb", "state", "postcode"];
               fields.forEach((field) => {
-                formik.setFieldValue(field, detail[field], false);
+                formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
               });
             }
           }, [detail]);
           return (
-            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : '') + rightDrawerOpened} id="editsuppliers-drawer">
+            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="editsuppliers-drawer">
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t('edit_supplier')}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("edit_supplier")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditSupplierForm}>
                         {t("cancel")}

@@ -50,12 +50,12 @@ const SupplierAddForm = () => {
     // logo: Yup.string().trim().label(t("logo")),
     email: Yup.string().trim().max(100).email().label(t("email")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("phone_number")).required(),
-    website: Yup.string().trim().url().label(t("website")).required(),
-    address: Yup.string().trim().label(t("address")).required(),
-    street: Yup.string().trim().label(t("street")).required(),
-    suburb: Yup.string().trim().label(t("suburb")).required(),
-    state: Yup.string().trim().label(t("state")).required(),
-    postcode: Yup.string().trim().max(12).label(t("postcode")).required()
+    website: Yup.string().trim().url().label(t("website")),
+    address: Yup.string().trim().label(t("address")),
+    street: Yup.string().trim().label(t("street")),
+    suburb: Yup.string().trim().label(t("suburb")),
+    state: Yup.string().trim().label(t("state")),
+    postcode: Yup.string().trim().max(12).label(t("postcode"))
   });
   yupconfig();
 

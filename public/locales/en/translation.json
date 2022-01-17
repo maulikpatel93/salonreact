@@ -193,5 +193,8 @@
     "online_bookings_note_service": "Choose if this service can be booked online",
     "service_booked_online": "Service booked online",
     "deposit_booked_online": "Deposit booked online",
-    "deposit_booked_price": "Deposit booked price"
+    "deposit_booked_price": "Deposit booked price",
+    "add_on_services": "Add-on Services",
+    "add_on_services_note": "Select which service you would like to offer as add-ons when this service is booked.",
+    "all_services": "All Services"
 }

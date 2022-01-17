@@ -52,14 +52,14 @@ const ClientEditForm = () => {
     last_name: Yup.string().trim().max(50).label(t("last_name")).required(),
     email: Yup.string().trim().max(100).email().label(t("email")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("phone_number")).required(),
-    date_of_birth: Yup.string().trim().label(t("date_of_birth")).required(),
+    date_of_birth: Yup.string().trim().label(t("date_of_birth")),
     gender: Yup.string().trim().label(t("gender")).required().nullable(),
-    address: Yup.string().trim().label(t("address")).required(),
-    street: Yup.string().trim().label(t("street")).required(),
-    suburb: Yup.string().trim().label(t("suburb")).required(),
-    state: Yup.string().trim().label(t("state")).required(),
-    postcode: Yup.string().trim().max(12).label(t("postcode")).required(),
-    description: Yup.string().trim().label(t("description")).required(),
+    address: Yup.string().trim().label(t("address")),
+    street: Yup.string().trim().label(t("street")),
+    suburb: Yup.string().trim().label(t("suburb")),
+    state: Yup.string().trim().label(t("state")),
+    postcode: Yup.string().trim().max(12).label(t("postcode")),
+    description: Yup.string().trim().label(t("description")),
     send_sms_notification: Yup.mixed().nullable(),
     send_email_notification: Yup.mixed().nullable(),
     recieve_marketing_email: Yup.mixed().nullable(),
@@ -113,7 +113,7 @@ const ClientEditForm = () => {
                 if (["send_sms_notification", "send_email_notification", "recieve_marketing_email"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);
                 } else {
-                  formik.setFieldValue(field, detail[field], false);
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
                 }
               });
               // const checkboxfields = ["send_sms_notification", "send_email_notification", "recieve_marketing_email"];
