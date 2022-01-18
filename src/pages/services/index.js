@@ -257,7 +257,7 @@ const Services = () => {
             <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
               {ListView.length > 0 || ListView.data ? (
                   <div className="table-responsive services-table-shadow" id="scrollableListView">
-                    {/* <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>}> */}
+                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? 'auto' : 'inherit' }}>
                       <table className="table bg-white">
                         <thead>
                           <tr>
@@ -316,7 +316,7 @@ const Services = () => {
                           </button>
                         </div>
                       )}
-                    {/* </InfiniteScroll> */}
+                    </InfiniteScroll>
                   </div>
               ) : (
                 <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">

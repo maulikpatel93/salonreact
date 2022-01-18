@@ -18,6 +18,8 @@ const SuggetionListView = (props) => {
   const handleSuggestedId = (e) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
+
+    console.log(suggetionid+' '+suggetionname);
     dispatch(clientSearchName(suggetionname));
     dispatch(closeClientSearchList());
     dispatch(clientGridViewApi({ id: suggetionid, result:"result_array" }));

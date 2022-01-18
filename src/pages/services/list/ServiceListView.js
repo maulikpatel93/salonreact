@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { serviceManageStock, serviceDeleteApi, serviceDetailApi, openEditServiceForm } from "../../../store/slices/serviceSlice";
-import { supplierOptions } from "../../../store/slices/supplierSlice";
+import { serviceDeleteApi, serviceDetailApi, openEditServiceForm } from "../../../store/slices/serviceSlice";
+import { categoryOptions } from "../../../store/slices/categorySlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 // import ReactPaginate from 'react-paginate';
@@ -38,8 +38,7 @@ const ServiceListView = (props) => {
           }else{
             dispatch(removeImage());
           }
-          dispatch(serviceManageStock(detail && detail.manage_stock));
-          dispatch(supplierOptions({ option: { valueField: "id", labelField: "name" } }));
+          dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
           dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
       }
     });

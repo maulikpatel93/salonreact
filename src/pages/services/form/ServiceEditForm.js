@@ -5,10 +5,11 @@ import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import yupconfig from "../../../yupconfig";
-import { InputField, SwitchField, InputFieldImage, TextareaField, ReactSelectField } from "../../../component/form/Field";
+import { InputField, SwitchField, TextareaField, ReactSelectField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
+import { decimalOnly } from "../../../component/form/Validation";
+import { ucfirst } from "helpers/functions";
 
-// import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeEditServiceForm, serviceUpdateApi } from "../../../store/slices/serviceSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
@@ -19,6 +20,7 @@ const ServiceEditForm = () => {
   const detail = useSelector((state) => state.service.isDetailData);
   const isCategoryOption = useSelector((state) => state.category.isCategoryOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
+  const isAddonServices = useSelector((state) => state.service.isAddonServices);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -29,57 +31,62 @@ const ServiceEditForm = () => {
     dispatch({ type: "service/detail/rejected" });
     dispatch(removeImage());
   };
-  // const initialValues = {
-  //   id: detail && detail.id,
-  //   name: detail && detail.name,
-  //   sku: detail && detail.sku,
-  //   description: detail && detail.description,
-  //   cost_price: detail && detail.cost_price ? detail.cost_price : '',
-  //   retail_price: detail && detail.retail_price ? detail && detail.retail_price : '',
-  //   manage_stock: '',
-  //   stock_quantity: detail && detail.stock_quantity ? detail.stock_quantity : '',
-  //   low_stock_threshold: detail && detail.low_stock_threshold ? detail.low_stock_threshold : '',
-  //   tax_id: detail && detail.tax_id,
-  //   category_id: detail && detail.category_id,
-  // };
+
   const initialValues = {
-    id: "",
     name: "",
-    sku: "",
-    description: "",
-    cost_price: "",
-    retail_price: "",
-    manage_stock: "",
-    stock_quantity: "",
-    low_stock_threshold: "",
-    tax_id: "",
     category_id: "",
+    description: "",
+    service_price: {
+      general: {
+        price: "",
+        add_on_price: "",
+      },
+      junior: {
+        price: "",
+        add_on_price: "",
+      },
+      senior: {
+        price: "",
+        add_on_price: "",
+      },
+    },
+    duration: "",
+    padding_time: "",
+    tax_id: "",
+    service_booked_online: "",
+    deposit_booked_online: "",
+    deposit_booked_price: "",
   };
 
-  const digitOnly = (value) => /^\d+$/.test(value);
-  const decimalOnly = (value) => /^\d{1,6}(\.\d{1,2})?$/.test(value);
-
   const validationSchema = Yup.object().shape({
-    image: Yup.mixed(),
     name: Yup.string().max(100).label(t("service_name")).trim().required(),
-    sku: Yup.string().trim().label(t("sku")).required(),
-    description: Yup.string().trim().label(t("description")).required(),
-    cost_price: Yup.string().trim().label(t("cost_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-    retail_price: Yup.string().trim().label(t("retail_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-    stock_quantity: Yup.string()
-      .nullable()
-      .when("manage_stock", {
-        is: "1",
-        then: Yup.string().trim().label(t("stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly),
-      }),
-    low_stock_threshold: Yup.string()
-      .nullable()
-      .when("manage_stock", {
-        is: "1",
-        then: Yup.string().trim().label(t("low_stock_threshold")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly),
-      }),
-    tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
     category_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("category")).required())),
+    description: Yup.string().trim().label(t("description")).required(),
+    duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("duration")).required())),
+    padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("padding_time")).required())),
+    tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
+    service_price: Yup.object().shape({
+      general: Yup.object().shape({
+        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+      }),
+      junior: Yup.object().shape({
+        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+      }),
+      senior: Yup.object().shape({
+        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+      }),
+    }),
+    service_booked_online: Yup.mixed().nullable(),
+    deposit_booked_online: Yup.mixed().nullable(),
+    deposit_booked_price: Yup.string()
+      .nullable()
+      .when("deposit_booked_online", {
+        is: 1,
+        then: Yup.string().trim().label(t("deposit_booked_price")).required().test("Digits only", t("The_field_should_have_digits_only"), decimalOnly),
+      }),
   });
   yupconfig();
 
@@ -117,21 +124,48 @@ const ServiceEditForm = () => {
 
   const categoryOptionsData = isCategoryOption;
   const taxOptionsData = isTaxOption;
+  const durationOptionsData = [
+    { value: "30", label: "30 " + t("minute") },
+    { value: "50", label: "50 " + t("minute") },
+    { value: "60", label: "60 " + t("minute") },
+  ];
+  const paddingtimeOptionsData = [
+    { value: "30", label: "30 " + t("minute") },
+    { value: "50", label: "50 " + t("minute") },
+    { value: "60", label: "60 " + t("minute") },
+  ];
 
+  const service_price = [
+    { name: "General", price: "", add_on_price: "" },
+    { name: "Junior", price: "", add_on_price: "" },
+    { name: "Senior", price: "", add_on_price: "" },
+  ];
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
         {(formik) => {
           useEffect(() => {
-            if(detail){
-              const fields = ['id',"name", "sku", "description", "cost_price", "retail_price", "manage_stock", "stock_quantity", "low_stock_threshold", "tax_id", "category_id"];
+            if (detail) {
+              const fields = ["id", "name", "category_id", "tax_id", "description", "duration", "padding_time", "service_booked_online", "deposit_booked_online", "deposit_booked_price", "tax_id", "category_id"];
               fields.forEach((field) => {
-                formik.setFieldValue(field, detail[field], false);
+                if (["service_booked_online", "deposit_booked_online"].includes(field)) {
+                  formik.setFieldValue(field, parseInt(detail[field]), false);
+                } else {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                }
+              });
+              let service_price = detail.serviceprice;
+              service_price.forEach((service_price) => {
+                let name = service_price.name.toLowerCase();
+                let price = service_price.price ? service_price.price : "";
+                let add_on_price = service_price.add_on_price ? service_price.add_on_price : "";
+                formik.setFieldValue("service_price[" + name + "][price]", price, false);
+                formik.setFieldValue("service_price[" + name + "][add_on_price]", add_on_price, false);
               });
             }
           }, [detail]);
           return (
-            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : '') + rightDrawerOpened} id="editservice-drawer">
+            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="editservice-drawer">
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
@@ -151,21 +185,17 @@ const ServiceEditForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("description")}</h4>
-                          <p>{t("add_the_name_and_general_details_of_this_service")}</p>
-                          <InputFieldImage name="image" accept="image/*" label={t("add_service_image")} page="service-form" controlId="serviceForm-logo" imagname="" imageurl="" />
+                          <p>{t("add_the_name_and_description_of_this_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="mb-3">
-                            <InputField type="text" name="name" value={formik.values.name} label={t("service_name")} controlId="serviceForm-name"  />
+                            <InputField type="text" name="name" value={formik.values.name} label={t("service_name")} controlId="serviceForm-name" />
                           </div>
                           <div className="mb-3">
-                            <InputField type="text" name="sku" value={formik.values.sku} label={t("sku")} controlId="serviceForm-sku"  />
+                            <ReactSelectField name="category_id" placeholder={t("search_option")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false} />
                           </div>
                           <div className="mb-3">
-                            <ReactSelectField name="category_id" placeholder={t("search_option")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false}  />
-                          </div>
-                          <div className="mb-3">
-                            <TextareaField name="description" value={formik.values.description} label={t("description")} controlId="serviceForm-description"  />
+                            <TextareaField name="description" value={formik.values.description} label={t("description")} controlId="serviceForm-description" />
                           </div>
                         </div>
                       </div>
@@ -173,18 +203,94 @@ const ServiceEditForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("price")}</h4>
-                          <p>{t("add_the_pricing_details_of_this_service")}</p>
+                          <p className="text-sm">{t("price_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
-                            <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="cost_price" value={formik.values.cost_price} label={t("cost_price")} controlId="serviceForm-cost_price"  />
+                            <div className="col-md-3 mb-2 col-4"></div>
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">{t("price")}</div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("add_on_price")}</div>
+                          </div>
+                          {service_price &&
+                            Object.keys(service_price).map((item, i) => {
+                              let service_price_name = service_price[item].name.toLowerCase();
+                              return (
+                                <div className="row" key={i}>
+                                  <div className="col-md-3 mb-2 col-4">
+                                    <label htmlFor="">{ucfirst(service_price_name)}</label>
+                                  </div>
+                                  <div className="col-lg-3 col-md-4 col-4 mb-2">
+                                    <InputField type="text" name={"service_price[" + service_price_name + "][price]"} value={formik.values.service_price[service_price_name].price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-price"} />
+                                  </div>
+                                  <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
+                                    <InputField type="text" name={"service_price[" + service_price_name + "][add_on_price]"} value={formik.values.service_price[service_price_name].add_on_price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-add_on_price"} />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          {/* <div className="row align-items-end1">
+                            <div className="col-md-3 mb-2 col-4">
+                              <label htmlFor="">General</label>
                             </div>
-                            <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="retail_price" value={formik.values.retail_price} label={t("retail_price")} controlId="serviceForm-retail_price"  />
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">
+                              <InputField type="text" name="service_price[general][price]" value={formik.values.service_price.general.price} placeholder="$" label={""} controlId="serviceForm-general-price" />
                             </div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
+                              <InputField type="text" name="service_price[general][add_on_price]" value={formik.values.service_price.general.add_on_price} placeholder="$" label={""} controlId="serviceForm-general-add_on_price" />
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-md-3 col-4 mb-2">
+                              <label htmlFor="">Junior</label>
+                            </div>
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">
+                              <InputField type="text" name="service_price[junior][price]" value={formik.values.service_price.junior.price} placeholder="$" label={""} controlId="serviceForm-junior-price" />
+                            </div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
+                              <InputField type="text" name="service_price[junior][add_on_price]" value={formik.values.service_price.junior.add_on_price} placeholder="$" label={""} controlId="serviceForm-junior-add_on_price" />
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-md-3 mb-2 col-4">
+                              <label htmlFor="">Senior</label>
+                            </div>
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">
+                              <InputField type="text" name="service_price[senior][price]" value={formik.values.service_price.senior.price} placeholder="$" label={""} controlId="serviceForm-senior-price" />
+                            </div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
+                              <InputField type="text" name="service_price[senior][add_on_price]" value={formik.values.service_price.senior.add_on_price} placeholder="$" label={""} controlId="serviceForm-senior-add_on_price" />
+                            </div>
+                          </div> */}
+                        </div>
+                      </div>
+                      <hr className="drawer-category-hr"></hr>
+                      <div className="row mx-0">
+                        <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
+                          <h4 className="fw-semibold mb-2">{t("duration")}</h4>
+                          <p>{t("how_long_is_this_service")}</p>
+                        </div>
+                        <div className="col-md-6 pe-md-0">
+                          <div className="row">
+                            <div className="col-auto">
+                              <ReactSelectField name="duration" placeholder={t("search_option")} value={formik.values.duration} options={durationOptionsData} label={t("duration")} controlId="serviceForm-duration" isMulti={false} />
+                            </div>
+                            <div className="col-auto">
+                              <ReactSelectField name="padding_time" placeholder={t("search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("padding_time")} controlId="serviceForm-padding_time" isMulti={false} />
+                            </div>
+                          </div>
+                          <p>{t("padding_time_note")}</p>
+                        </div>
+                      </div>
+                      <hr className="drawer-category-hr"></hr>
+                      <div className="row mx-0">
+                        <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
+                          <h4 className="fw-semibold mb-2">{t("tax")}</h4>
+                          <p>{t("set_the_tax_rate")}</p>
+                        </div>
+                        <div className="col-md-6 pe-md-0">
+                          <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="serviceForm-tax_id" isMulti={false}  />
+                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -192,36 +298,125 @@ const ServiceEditForm = () => {
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("inventory")}</h4>
-                          <p>{t("manage_stock_levels_of_this_service")}</p>
+                          <h4 className="fw-semibold mb-2">{t("online_bookings")}</h4>
+                          <p>{t("online_bookings_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
-                          <SwitchField
-                            name="manage_stock"
-                            label={t("manage_stock")}
-                            controlId="clientForm-manage_stock"
-                            value='1'
-                            onChange={(e) => {
-                              if(e.currentTarget.checked){
-                                setTimeout(() => {
-                                  formik.setFieldValue('manage_stock', '1', false);
-                                }, 100);
-                              }else{
-                                setTimeout(() => {
-                                  formik.setFieldValue('manage_stock', '', false);
-                                }, 100);
-                              }
-                              formik.handleChange(e);
-                            }}
-                          />
-                          <div className="row" style={{ display: formik.values.manage_stock == "" || formik.values.manage_stock == 0 ? "none" : "" }}>
-                            <div className="mb-3 col-md-6">
-                              <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity != null ? formik.values.stock_quantity : ""} label={t("stock_quantity")} controlId="serviceForm-stock_quantity"   />
+                          <div className="row">
+                            <div className="col-md-12">
+                              <SwitchField
+                                name="service_booked_online"
+                                label={t("service_booked_online")}
+                                controlId="serviceForm-service_booked_online"
+                                value={"1"}
+                                onChange={(e) => {
+                                  if (e.currentTarget.checked) {
+                                    setTimeout(() => {
+                                      formik.setFieldValue("service_booked_online", 1, false);
+                                    }, 100);
+                                  } else {
+                                    setTimeout(() => {
+                                      formik.setFieldValue("service_booked_online", "", false);
+                                    }, 100);
+                                  }
+                                  formik.handleChange(e);
+                                }}
+                              />
                             </div>
-                            <div className="mb-3 col-md-6">
-                              <InputField type="text" name="low_stock_threshold" value={formik.values.stock_quantity != null ? formik.values.low_stock_threshold : ""} label={t("low_stock_threshold")} controlId="serviceForm-low_stock_threshold"  />
+                            <div className="col-md-12">
+                              <SwitchField
+                                name="deposit_booked_online"
+                                label={t("deposit_booked_online")}
+                                controlId="serviceForm-deposit_booked_online"
+                                value={"1"}
+                                onChange={(e) => {
+                                  if (e.currentTarget.checked) {
+                                    setTimeout(() => {
+                                      formik.setFieldValue("deposit_booked_online", 1, false);
+                                    }, 100);
+                                  } else {
+                                    setTimeout(() => {
+                                      formik.setFieldValue("deposit_booked_online", "", false);
+                                    }, 100);
+                                  }
+                                  formik.handleChange(e);
+                                }}
+                              />
+                              <div className="row" style={{ display: formik.values.deposit_booked_online == "" || formik.values.deposit_booked_online == 0 ? "none" : "" }}>
+                                <div className="mb-3 col-md-6">
+                                  <InputField type="text" name="deposit_booked_price" value={formik.values.deposit_booked_price} label={t("deposit_booked_price")} controlId="serviceForm-deposit_booked_price" />
+                                </div>
+                              </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                      <hr className="drawer-category-hr"></hr>
+                      <div className="row mx-0 addstaff-member pb-0">
+                        <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
+                          <h4 className="fw-semibold mb-2">{t("add_on_services")}</h4>
+                          <p>{t("add_on_services_note")}</p>
+                        </div>
+                        <div className="col-md-6 pe-md-0 service mt-0 pt-0">
+                          <ul className="list-unstyled mb-0 p-0 m-0">
+                            <li className="pt-3 mt-0 all-staff">
+                              <div className="checkbox">
+                                <input
+                                  type="checkbox"
+                                  value={"1"}
+                                  name="all_services"
+                                  onChange={(e) => {
+                                    if (e.currentTarget.checked) {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("all_services", 1, false);
+                                      }, 100);
+                                    } else {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("all_services", "", false);
+                                      }, 100);
+                                    }
+                                    formik.handleChange(e);
+                                  }}
+                                />
+                                <label>{t("all_services")}</label>
+                              </div>
+                              <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                {isAddonServices &&
+                                  Object.keys(isAddonServices).map((item, i) => {
+                                    console.log(isAddonServices[item]);
+                                    let category_id = isAddonServices[item].id;
+                                    let category_name = isAddonServices[item].name;
+                                    let addonservicesData = isAddonServices[item].services;
+                                    return (
+                                      <li className="pt-3 pb-3" key={i} data-id={category_id}>
+                                        <div className="checkbox">
+                                          <input type="checkbox" />
+                                          <label>
+                                            <b>{ucfirst(category_name)}</b>
+                                          </label>
+                                        </div>
+                                        <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                          {addonservicesData &&
+                                            Object.keys(addonservicesData).map((itemservice, j) => {
+                                              let service_id = addonservicesData[itemservice].id;
+                                              let service_name = addonservicesData[itemservice].name;
+                                              return (
+                                                <li className="pt-3 pb-3" key={j} data-id={service_id}>
+                                                  <div className="checkbox">
+                                                    <input type="checkbox" name="add_on_services[service][]" value={service_id} />
+                                                    <label>{ucfirst(service_name)}</label>
+                                                  </div>
+                                                </li>
+                                              );
+                                            })}
+                                        </ul>
+                                      </li>
+                                    );
+                                  })}
+                                {isAddonServices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                              </ul>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>

@@ -19,7 +19,7 @@ const ServiceAddForm = () => {
   const rightDrawerOpened = useSelector((state) => state.service.isOpenedAddForm);
   const isCategoryOption = useSelector((state) => state.category.isCategoryOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
-  const isAddonservices = useSelector((state) => state.service.isAddonservices);
+  const isAddonServices = useSelector((state) => state.service.isAddonServices);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const ServiceAddForm = () => {
     name: "",
     category_id: "",
     description: "",
-    price: {
+    service_price: {
       general: {
         price: "",
         add_on_price: "",
@@ -64,7 +64,7 @@ const ServiceAddForm = () => {
     duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("duration")).required())),
     padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("padding_time")).required())),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
-    price: Yup.object().shape({
+    service_price: Yup.object().shape({
       general: Yup.object().shape({
         price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
         add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
@@ -133,6 +133,11 @@ const ServiceAddForm = () => {
     { value: "50", label: "50 " + t("minute") },
     { value: "60", label: "60 " + t("minute") },
   ];
+  const service_price = [
+    { name: "General", price: "", add_on_price: "" },
+    { name: "Junior", price: "", add_on_price: "" },
+    { name: "Senior", price: "", add_on_price: "" },
+  ];
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
@@ -179,15 +184,37 @@ const ServiceAddForm = () => {
                           <p className="text-sm">{t("price_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
-                          <div className="row align-items-end1">
+                        <div className="row">
+                            <div className="col-md-3 mb-2 col-4"></div>
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">{t("price")}</div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("add_on_price")}</div>
+                          </div>
+                          {service_price &&
+                            Object.keys(service_price).map((item, i) => {
+                              let service_price_name = service_price[item].name.toLowerCase();
+                              return (
+                                <div className="row" key={i}>
+                                  <div className="col-md-3 mb-2 col-4">
+                                    <label htmlFor="">{ucfirst(service_price_name)}</label>
+                                  </div>
+                                  <div className="col-lg-3 col-md-4 col-4 mb-2">
+                                    <InputField type="text" name={"service_price[" + service_price_name + "][price]"} value={formik.values.service_price[service_price_name].price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-price"} />
+                                  </div>
+                                  <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
+                                    <InputField type="text" name={"service_price[" + service_price_name + "][add_on_price]"} value={formik.values.service_price[service_price_name].add_on_price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-add_on_price"} />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          {/* <div className="row align-items-end1">
                             <div className="col-md-3 mb-2 col-4">
                               <label htmlFor="">General</label>
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="price[general][price]" value={formik.values.price.general.price} placeholder="$" label={""} controlId="serviceForm-general-price" />
+                              <InputField type="text" name="service_price[general][price]" value={formik.values.service_price.general.price} placeholder="$" label={""} controlId="serviceForm-general-price" />
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="price[general][add_on_price]" value={formik.values.price.general.add_on_price} placeholder="$" label={""} controlId="serviceForm-general-add_on_price" />
+                              <InputField type="text" name="service_price[general][add_on_price]" value={formik.values.service_price.general.add_on_price} placeholder="$" label={""} controlId="serviceForm-general-add_on_price" />
                             </div>
                           </div>
                           <div className="row">
@@ -195,10 +222,10 @@ const ServiceAddForm = () => {
                               <label htmlFor="">Junior</label>
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="price[junior][price]" value={formik.values.price.junior.price} placeholder="$" label={""} controlId="serviceForm-junior-price" />
+                              <InputField type="text" name="service_price[junior][price]" value={formik.values.service_price.junior.price} placeholder="$" label={""} controlId="serviceForm-junior-price" />
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="price[junior][add_on_price]" value={formik.values.price.junior.add_on_price} placeholder="$" label={""} controlId="serviceForm-junior-add_on_price" />
+                              <InputField type="text" name="service_price[junior][add_on_price]" value={formik.values.service_price.junior.add_on_price} placeholder="$" label={""} controlId="serviceForm-junior-add_on_price" />
                             </div>
                           </div>
                           <div className="row">
@@ -206,12 +233,12 @@ const ServiceAddForm = () => {
                               <label htmlFor="">Senior</label>
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="price[senior][price]" value={formik.values.price.senior.price} placeholder="$" label={""} controlId="serviceForm-senior-price" />
+                              <InputField type="text" name="service_price[senior][price]" value={formik.values.service_price.senior.price} placeholder="$" label={""} controlId="serviceForm-senior-price" />
                             </div>
                             <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="price[senior][add_on_price]" value={formik.values.price.senior.add_on_price} placeholder="$" label={""} controlId="serviceForm-senior-add_on_price" />
+                              <InputField type="text" name="service_price[senior][add_on_price]" value={formik.values.service_price.senior.add_on_price} placeholder="$" label={""} controlId="serviceForm-senior-add_on_price" />
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <hr className="drawer-category-hr"></hr>
@@ -315,14 +342,15 @@ const ServiceAddForm = () => {
                                 <input
                                   type="checkbox"
                                   value={"1"}
+                                  name="all_services"
                                   onChange={(e) => {
                                     if (e.currentTarget.checked) {
                                       setTimeout(() => {
-                                        formik.setFieldValue("service_booked_online", 1, false);
+                                        formik.setFieldValue("all_services", 1, false);
                                       }, 100);
                                     } else {
                                       setTimeout(() => {
-                                        formik.setFieldValue("service_booked_online", "", false);
+                                        formik.setFieldValue("all_services", "", false);
                                       }, 100);
                                     }
                                     formik.handleChange(e);
@@ -331,12 +359,12 @@ const ServiceAddForm = () => {
                                 <label>{t("all_services")}</label>
                               </div>
                               <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
-                                {isAddonservices &&
-                                  Object.keys(isAddonservices).map((item, i) => {
-                                    console.log(isAddonservices[item]);
-                                    let category_id = isAddonservices[item].id;
-                                    let category_name = isAddonservices[item].name;
-                                    let addonservicesData = isAddonservices[item].services;
+                                {isAddonServices &&
+                                  Object.keys(isAddonServices).map((item, i) => {
+                                    console.log(isAddonServices[item]);
+                                    let category_id = isAddonServices[item].id;
+                                    let category_name = isAddonServices[item].name;
+                                    let addonservicesData = isAddonServices[item].services;
                                     return (
                                       <li className="pt-3 pb-3" key={i} data-id={category_id}>
                                         <div className="checkbox">
@@ -363,7 +391,7 @@ const ServiceAddForm = () => {
                                       </li>
                                     );
                                   })}
-                                {isAddonservices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                                {isAddonServices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
                               </ul>
                             </li>
                           </ul>

@@ -105,7 +105,7 @@ const initialState = {
   isSort: "",
   isSearchList: "",
   isSearchName: "",
-  isAddonservices:[]
+  isAddonServices:[]
 };
 
 const serviceSlice = createSlice({
@@ -233,13 +233,13 @@ const serviceSlice = createSlice({
     [serviceDeleteApi.rejected]: () => {},
     [addonservices.pending]: () => {},
     [addonservices.fulfilled]: (state, action) => {
-      state.isAddonservices = action.payload;
+      state.isAddonServices = action.payload;
     },
     [addonservices.rejected]: (state) => {
-      state.isAddonservices = [];
+      state.isAddonServices = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, serviceTabView, openAddServiceForm, closeAddServiceForm, openEditServiceForm, closeEditServiceForm, serviceTabGridView, openServiceDetailModal, closeServiceDetailModal, serviceDetailTab, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSearchName, serviceManageStock } = serviceSlice.actions;
+export const { reset, serviceTabView, openAddServiceForm, closeAddServiceForm, openEditServiceForm, closeEditServiceForm, serviceTabGridView, openServiceDetailModal, closeServiceDetailModal, serviceDetailTab, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSearchName } = serviceSlice.actions;
 export default serviceSlice.reducer;
