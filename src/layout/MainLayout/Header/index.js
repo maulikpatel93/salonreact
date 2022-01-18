@@ -1,8 +1,17 @@
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { ucfirst } from "helpers/functions";
+import { Link, useLocation } from "react-router-dom";
 import config from "../../../config";
 import ProfileSection from "./ProfileSection";
+import { useTranslation } from "react-i18next";
 const Header = () => {
+  const { t } = useTranslation();
+  const location = useLocation();
+  const document_title = location.pathname.slice(1);
+  useEffect(() => {
+    document.title = document_title; 
+  },[document_title]);
   return (
     <>
       <header>
@@ -11,7 +20,7 @@ const Header = () => {
             <Link to="javascript:void(0)" className="mobile-menu-icon pe-2 d-lg-none">
               <img src={config.imagepath + "favicon.png"} alt="" />
             </Link>
-            <h2 className="page-title mb-0">Dashboard</h2>
+            <h2 className="page-title mb-0">{ucfirst(t(document_title))}</h2>
           </div>
           <div className="rigt-col d-flex align-items-center">
             <div className="search">

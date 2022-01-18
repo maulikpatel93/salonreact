@@ -196,5 +196,16 @@
     "deposit_booked_price": "Deposit booked price",
     "add_on_services": "Add-on Services",
     "add_on_services_note": "Select which service you would like to offer as add-ons when this service is booked.",
-    "all_services": "All Services"
+    "all_services": "All Services",
+    "Dashboard": "Dashboard",
+    "Calendar": "Calendar",
+    "Sales": "Sales",
+    "Vouchers": "Vouchers",
+    "Subscriptions": "Subscriptions",
+    "Clients": "Clients",
+    "Staff": "Staff",
+    "Services": "Services",
+    "Products": "Products",
+    "Marketing": "Marketing",
+    "Account_Setup": "Account Setup"
 }

@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import config from "../../../config";
-
+import { useTranslation } from "react-i18next";
 const Sidebar = () => {
+  const { t } = useTranslation();
   return (
     <aside className="sidenav-bar">
       <div className="sidenav-logo py-4 text-center">
@@ -12,101 +13,101 @@ const Sidebar = () => {
       <div className="sidemenu">
         <ul className="list-unstyled p-0 m-0 text-center">
           <li>
-            <Link to={config.basePath + "/dashboard"} className="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+            <NavLink to={config.basePath + "/dashboard"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Dashboard')}>
               <span className="icon">
                 <img src={config.imagepath + "dashboard.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Dashboard</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Dashboard')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/calender"} data-bs-toggle="tooltip" data-bs-placement="right" title="Calendar">
+            <NavLink to={config.basePath + "/calender"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Calendar')}>
               <span className="icon">
                 <img src={config.imagepath + "caleder.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Calendar</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Calendar')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/sales"} data-bs-toggle="tooltip" data-bs-placement="right" title="Sales">
+            <NavLink to={config.basePath + "/sales"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Sales')}>
               <span className="icon">
                 <img src={config.imagepath + "sales.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Sales</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Sales')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/vouchers"} data-bs-toggle="tooltip" data-bs-placement="right" title="Vouchers">
+            <NavLink to={config.basePath + "/vouchers"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Vouchers')}>
               <span className="icon">
                 <img src={config.imagepath + "Vouchers.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Vouchers</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Vouchers')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/subscriptions"} data-bs-toggle="tooltip" data-bs-placement="right" title="Subscriptions">
+            <NavLink to={config.basePath + "/subscriptions"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Subscriptions')}>
               <span className="icon">
                 <img src={config.imagepath + "refresh.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Subscriptions</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Subscriptions')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/clients"} data-bs-toggle="tooltip" data-bs-placement="right" title="Clients">
+            <NavLink to={config.basePath + "/clients"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Clients')}>
               <span className="icon">
                 <img src={config.imagepath + "user.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Clients</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Clients')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/staff"} data-bs-toggle="tooltip" data-bs-placement="right" title="Staff">
+            <NavLink to={config.basePath + "/staff"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Staff')}>
               <span className="icon">
                 <img src={config.imagepath + "staff.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Staff</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Staff')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/services"} data-bs-toggle="tooltip" data-bs-placement="right" title="Services">
+            <NavLink to={config.basePath + "/services"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Services')}>
               <span className="icon">
                 <img src={config.imagepath + "Services.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Services</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Services')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/products"} data-bs-toggle="tooltip" data-bs-placement="right" title="Products">
+            <NavLink to={config.basePath + "/products"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Products')}>
               <span className="icon">
                 <img src={config.imagepath + "product.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Products</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Products')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/reports"} data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
+            <NavLink to={config.basePath + "/reports"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Reports')}>
               <span className="icon">
                 <img src={config.imagepath + "Reports.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Reports</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Reports')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/marketing"} data-bs-toggle="tooltip" data-bs-placement="right" title="Marketing">
+            <NavLink to={config.basePath + "/marketing"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Marketing')}>
               <span className="icon">
                 <img src={config.imagepath + "Marketing.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Marketing</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Marketing')}</span>
+            </NavLink>
           </li>
           <li>
-            <Link to={config.basePath + "/account"} data-bs-toggle="tooltip" data-bs-placement="right" title="Account Setup">
+            <NavLink to={config.basePath + "/account"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Account_Setup')}>
               <span className="icon">
                 {" "}
                 <img src={config.imagepath + "setting.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">Account Setup</span>
-            </Link>
+              <span className="d-lg-none ps-3">{t('Account_Setup')}</span>
+            </NavLink>
           </li>
         </ul>
       </div>

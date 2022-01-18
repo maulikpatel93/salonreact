@@ -312,7 +312,22 @@ const ServiceAddForm = () => {
                           <ul className="list-unstyled mb-0 p-0 m-0">
                             <li className="pt-3 mt-0 all-staff">
                               <div className="checkbox">
-                                <input type="checkbox" />
+                                <input
+                                  type="checkbox"
+                                  value={"1"}
+                                  onChange={(e) => {
+                                    if (e.currentTarget.checked) {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("service_booked_online", 1, false);
+                                      }, 100);
+                                    } else {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("service_booked_online", "", false);
+                                      }, 100);
+                                    }
+                                    formik.handleChange(e);
+                                  }}
+                                />
                                 <label>{t("all_services")}</label>
                               </div>
                               <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
@@ -338,7 +353,7 @@ const ServiceAddForm = () => {
                                               return (
                                                 <li className="pt-3 pb-3" key={j} data-id={service_id}>
                                                   <div className="checkbox">
-                                                    <input type="checkbox" />
+                                                    <input type="checkbox" name="add_on_services[service][]" value={service_id} />
                                                     <label>{ucfirst(service_name)}</label>
                                                   </div>
                                                 </li>
