@@ -257,7 +257,7 @@ const Products = () => {
               {ListView.length > 0 || ListView.data ? (
                 <section>
                   <div className="table-responsive services-table-shadow" id="scrollableListView">
-                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? 'auto' : 'inherit' }}>
                       <table className="table bg-white">
                         <thead>
                           <tr>

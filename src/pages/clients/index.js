@@ -203,7 +203,7 @@ const Clients = () => {
           </div>
           <div className={"tab-pane" + (tabview && tabview == "list" ? " show active" : "")} id="listview">
             <div className="table-responsive bg-white" id="scrollableListView">
-              <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+              <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? 'auto' : 'inherit' }}>
                 <table className="table mb-0">
                   <thead className="position-sticky">
                     <tr>
