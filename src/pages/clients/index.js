@@ -77,11 +77,7 @@ const Clients = () => {
     dispatch(clientSearchName(q));
     if (q && q.length > 0) {
       dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q })).then((action) => {
-        if (action.meta.requestStatus == "rejected") {
-          // dispatch(closeClientSearchList());
-        }
-      });
+      dispatch(clientSuggetionListApi({ q: q }));
     } else {
       dispatch(clientGridViewApi());
       dispatch(clientListViewApi());
@@ -96,7 +92,7 @@ const Clients = () => {
   const handleOnBlur = () => {
     setTimeout(() => {
       dispatch(closeClientSearchList());
-    }, 100);
+    }, 200);
   };
 
   return (
