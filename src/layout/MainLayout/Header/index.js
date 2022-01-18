@@ -8,7 +8,9 @@ import { useTranslation } from "react-i18next";
 const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const document_title = location.pathname.slice(1);
+  // const lastItem = location.pathname.substring(thePath.lastIndexOf('/') + 1)
+  const lastSegment = location.pathname.split("/").pop();
+  const document_title = lastSegment;
   useEffect(() => {
     document.title = document_title; 
   },[document_title]);
