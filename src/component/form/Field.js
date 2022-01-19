@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useField, useFormikContext } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import InputMask from "react-input-mask";
 import config from "../../config";
 import { selectImage, removeImage } from "../../store/slices/imageSlice";
 import CustomSelect from "../../component/form/CustomSelect";
-import { Field } from "formik"
+import { Field } from "formik";
 
 const FloatLabelInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
@@ -30,8 +30,8 @@ const InputField = ({ label, controlId, ...props }) => {
     <>
       <Form.Group className="mb-3" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        {field.name === 'phone_number' ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
-        
+        {field.name === "phone_number" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
+
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
       </Form.Group>
     </>
@@ -78,7 +78,7 @@ const SelectField = ({ label, controlId, options, ...props }) => {
   );
 };
 const CheckboxField = ({ label, controlId, ...props }) => {
-  const [field ] = useField(props);
+  const [field] = useField(props);
   const checked = field.value === 1 ? true : "";
   return (
     <>
@@ -89,8 +89,24 @@ const CheckboxField = ({ label, controlId, ...props }) => {
   );
 };
 
+const InputCheckbox = ({ label, controlId, isServiceChecked, ...props }) => {
+  const [field] = useField(props);
+  const { setFieldValue } = useFormikContext();
+  useEffect(() => {
+    setFieldValue(field.name, isServiceChecked ? props.value : "", false);
+  }, [isServiceChecked]);
+  return (
+    <>
+      <input {...field} {...props} type="checkbox" id={controlId} defaultChecked={isServiceChecked} />
+      <label htmlFor={controlId} className="">
+        {label}
+      </label>
+    </>
+  );
+};
+
 const SwitchField = ({ label, controlId, ...props }) => {
-  const [field ] = useField(props);
+  const [field] = useField(props);
   const checked = field.value === 1 ? true : "";
   return (
     <>
@@ -247,57 +263,66 @@ const DatePickerField = ({ label, controlId, ...props }) => {
 
 FloatLabelInputField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 InputField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 SelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   placeholder: PropTypes.string,
-  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 ReactSelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
-  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 MapAddressField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 TextareaField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 CheckboxField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
+  className: PropTypes.string,
+};
+
+InputCheckbox.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+  className: PropTypes.string,
+  isServiceChecked: PropTypes.bool,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 SwitchField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 InputFieldImage.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   name: PropTypes.string,
-  page: PropTypes.string
+  page: PropTypes.string,
 };
 
 DatePickerField.propTypes = {
   label: PropTypes.string,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
-export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, SwitchField, InputFieldImage, DatePickerField };
+export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, InputCheckbox, SwitchField, InputFieldImage, DatePickerField };

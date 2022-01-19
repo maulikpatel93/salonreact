@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { serviceDeleteApi, serviceDetailApi, openEditServiceForm } from "../../../store/slices/serviceSlice";
+import { serviceDeleteApi, serviceDetailApi, openEditServiceForm, addonservices } from "../../../store/slices/serviceSlice";
 import { categoryOptions } from "../../../store/slices/categorySlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
@@ -30,16 +30,17 @@ const ServiceListView = (props) => {
   const handleServiceEditForm = (e) => {
     const id = e.currentTarget.closest(".service-view-tr").dataset.id;
     dispatch(openEditServiceForm());
-    dispatch(serviceDetailApi({ id })).then(action => {
-      if(action.meta.requestStatus == 'fulfilled'){
-          const detail = action.payload;
-          if (detail.image) {
-            dispatch(selectImage({ name: detail.image, size: "", type: "", url: detail.image_url }));
-          }else{
-            dispatch(removeImage());
-          }
-          dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
-          dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(serviceDetailApi({ id })).then((action) => {
+      if (action.meta.requestStatus == "fulfilled") {
+        const detail = action.payload;
+        if (detail.image) {
+          dispatch(selectImage({ name: detail.image, size: "", type: "", url: detail.image_url }));
+        } else {
+          dispatch(removeImage());
+        }
+        dispatch(addonservices({ isNotId: id }));
+        dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
+        dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
       }
     });
   };
@@ -51,14 +52,13 @@ const ServiceListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let duration = objectData[item].duration;
-          let price = '';
+          let price = "";
           let category_name = objectData[item].category && objectData[item].category.name;
-          let add_on_service = '';
+          let add_on_service = "";
           return (
             <tr className="service-view-tr" key={i} data-id={id}>
-              <td>{i+1}</td>
-              <td>{ucfirst(name)}
-              </td>
+              <td>{i + 1}</td>
+              <td>{ucfirst(name)}</td>
               <td>{duration}</td>
               <td>{price}</td>
               <td>{category_name}</td>
@@ -93,7 +93,7 @@ const ServiceListView = (props) => {
   );
 };
 ServiceListView.propTypes = {
-  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
+  view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   name: PropTypes.string,
   id: PropTypes.string,
 };

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import yupconfig from "../../../yupconfig";
-import { InputField, TextareaField, ReactSelectField, SwitchField } from "../../../component/form/Field";
+import { InputField, TextareaField, ReactSelectField, SwitchField, InputCheckbox } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
@@ -55,6 +55,7 @@ const ServiceAddForm = () => {
     service_booked_online: "",
     deposit_booked_online: "",
     deposit_booked_price: "",
+    add_on_services: [],
   };
 
   const validationSchema = Yup.object().shape({
@@ -86,6 +87,7 @@ const ServiceAddForm = () => {
         is: 1,
         then: Yup.string().trim().label(t("deposit_booked_price")).required().test("Digits only", t("The_field_should_have_digits_only"), decimalOnly),
       }),
+    add_on_services: Yup.array(),
   });
   yupconfig();
 
@@ -184,7 +186,7 @@ const ServiceAddForm = () => {
                           <p className="text-sm">{t("price_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
-                        <div className="row">
+                          <div className="row">
                             <div className="col-md-3 mb-2 col-4"></div>
                             <div className="col-lg-3 col-md-4 col-4 mb-2">{t("price")}</div>
                             <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("add_on_price")}</div>
@@ -339,10 +341,11 @@ const ServiceAddForm = () => {
                           <ul className="list-unstyled mb-0 p-0 m-0">
                             <li className="pt-3 mt-0 all-staff">
                               <div className="checkbox">
-                                <input
-                                  type="checkbox"
+                                <InputCheckbox
                                   value={"1"}
                                   name="all_services"
+                                  label={t("all_services")}
+                                  controlId="serviceForm-all_services"
                                   onChange={(e) => {
                                     if (e.currentTarget.checked) {
                                       setTimeout(() => {
@@ -356,12 +359,10 @@ const ServiceAddForm = () => {
                                     formik.handleChange(e);
                                   }}
                                 />
-                                <label>{t("all_services")}</label>
                               </div>
                               <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                 {isAddonServices &&
                                   Object.keys(isAddonServices).map((item, i) => {
-                                    console.log(isAddonServices[item]);
                                     let category_id = isAddonServices[item].id;
                                     let category_name = isAddonServices[item].name;
                                     let addonservicesData = isAddonServices[item].services;
@@ -381,8 +382,24 @@ const ServiceAddForm = () => {
                                               return (
                                                 <li className="pt-3 pb-3" key={j} data-id={service_id}>
                                                   <div className="checkbox">
-                                                    <input type="checkbox" name="add_on_services[service][]" value={service_id} />
-                                                    <label>{ucfirst(service_name)}</label>
+                                                    <InputCheckbox
+                                                      name={"add_on_services[" + j + "]"}
+                                                      value={service_id}
+                                                      label={ucfirst(service_name)}
+                                                      controlId={"add_on_services-" + j}
+                                                      onChange={(e) => {
+                                                        if (e.currentTarget.checked) {
+                                                          setTimeout(() => {
+                                                            formik.setFieldValue("add_on_services[" + j + "]", service_id, false);
+                                                          }, 100);
+                                                        } else {
+                                                          setTimeout(() => {
+                                                            formik.setFieldValue("add_on_services[" + j + "]", "", false);
+                                                          }, 100);
+                                                        }
+                                                        formik.handleChange(e);
+                                                      }}
+                                                    />
                                                   </div>
                                                 </li>
                                               );
