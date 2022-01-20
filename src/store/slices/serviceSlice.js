@@ -105,7 +105,7 @@ const initialState = {
   isSort: "",
   isSearchList: "",
   isSearchName: "",
-  isAddonServices:[]
+  isAddonServices: [],
 };
 
 const serviceSlice = createSlice({
@@ -165,6 +165,17 @@ const serviceSlice = createSlice({
     },
     serviceSearchName: (state, action) => {
       state.isSearchName = action.payload;
+    },
+    addonservicesAction: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isAddonServices.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      }
+      console.log(changes);
+      state.isAddonServices = action.payload;
     },
   },
   extraReducers: {
@@ -241,5 +252,5 @@ const serviceSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, serviceTabView, openAddServiceForm, closeAddServiceForm, openEditServiceForm, closeEditServiceForm, serviceTabGridView, openServiceDetailModal, closeServiceDetailModal, serviceDetailTab, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSearchName } = serviceSlice.actions;
+export const { reset, serviceTabView, openAddServiceForm, closeAddServiceForm, openEditServiceForm, closeEditServiceForm, serviceTabGridView, openServiceDetailModal, closeServiceDetailModal, serviceDetailTab, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSearchName, addonservicesAction } = serviceSlice.actions;
 export default serviceSlice.reducer;

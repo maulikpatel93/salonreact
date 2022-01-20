@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
 import yupconfig from "../../../yupconfig";
-import { InputField, TextareaField, ReactSelectField, SwitchField, InputCheckbox } from "../../../component/form/Field";
+import { InputField, TextareaField, ReactSelectField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
-import { closeAddServiceForm, serviceStoreApi } from "../../../store/slices/serviceSlice";
+import { closeAddServiceForm, serviceStoreApi, addonservicesAction } from "../../../store/slices/serviceSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -144,6 +144,23 @@ const ServiceAddForm = () => {
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
         {(formik) => {
+          useEffect(() => {
+            if (isAddonServices) {
+              Object.keys(isAddonServices).map((item) => {
+                let addonservicesData = isAddonServices[item].services;
+                // console.log(!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true));
+                if (addonservicesData) {
+                  Object.keys(addonservicesData).map((itemservice, j) => {
+                    let service_id = addonservicesData[itemservice].id;
+                    let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
+                    // let service_name = addonservicesData[itemservice].name;
+                    // console.log(service_name + " " + addonservicesData[itemservice]?.isServiceChecked || false);
+                    formik.setFieldValue("add_on_services[" + j + "]", isServiceChecked ? service_id : "", false);
+                  });
+                }
+              });
+            }
+          }, [isAddonServices]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addservice-drawer">
               <div className="drawer-wrp position-relative">
@@ -208,39 +225,6 @@ const ServiceAddForm = () => {
                                 </div>
                               );
                             })}
-                          {/* <div className="row align-items-end1">
-                            <div className="col-md-3 mb-2 col-4">
-                              <label htmlFor="">General</label>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="service_price[general][price]" value={formik.values.service_price.general.price} placeholder="$" label={""} controlId="serviceForm-general-price" />
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="service_price[general][add_on_price]" value={formik.values.service_price.general.add_on_price} placeholder="$" label={""} controlId="serviceForm-general-add_on_price" />
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-3 col-4 mb-2">
-                              <label htmlFor="">Junior</label>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="service_price[junior][price]" value={formik.values.service_price.junior.price} placeholder="$" label={""} controlId="serviceForm-junior-price" />
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="service_price[junior][add_on_price]" value={formik.values.service_price.junior.add_on_price} placeholder="$" label={""} controlId="serviceForm-junior-add_on_price" />
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-3 mb-2 col-4">
-                              <label htmlFor="">Senior</label>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 mb-2">
-                              <InputField type="text" name="service_price[senior][price]" value={formik.values.service_price.senior.price} placeholder="$" label={""} controlId="serviceForm-senior-price" />
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                              <InputField type="text" name="service_price[senior][add_on_price]" value={formik.values.service_price.senior.add_on_price} placeholder="$" label={""} controlId="serviceForm-senior-add_on_price" />
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                       <hr className="drawer-category-hr"></hr>
@@ -341,24 +325,30 @@ const ServiceAddForm = () => {
                           <ul className="list-unstyled mb-0 p-0 m-0">
                             <li className="pt-3 mt-0 all-staff">
                               <div className="checkbox">
-                                <InputCheckbox
-                                  value={"1"}
-                                  name="all_services"
-                                  label={t("all_services")}
-                                  controlId="serviceForm-all_services"
+                                <input
+                                  type="checkbox"
+                                  checked={formik.values.add_on_all === 1}
+                                  value="1"
+                                  name="add_on_all"
                                   onChange={(e) => {
-                                    if (e.currentTarget.checked) {
-                                      setTimeout(() => {
-                                        formik.setFieldValue("all_services", 1, false);
-                                      }, 100);
+                                    const { checked } = e.target;
+                                    if (checked) {
+                                      formik.setFieldValue("add_on_all", 1);
                                     } else {
-                                      setTimeout(() => {
-                                        formik.setFieldValue("all_services", "", false);
-                                      }, 100);
+                                      formik.setFieldValue("add_on_all", 0);
                                     }
-                                    formik.handleChange(e);
+                                    if (isAddonServices) {
+                                      Object.keys(isAddonServices).map((item) => {
+                                        let addonservicesData = isAddonServices[item].services;
+                                        let tempUser = addonservicesData.map((itemservice) => {
+                                          return { ...itemservice, isServiceChecked: checked };
+                                        });
+                                        dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
+                                      });
+                                    }
                                   }}
                                 />
+                                <label>{t("all_services")}</label>
                               </div>
                               <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                 {isAddonServices &&
@@ -369,37 +359,46 @@ const ServiceAddForm = () => {
                                     return (
                                       <li className="pt-3 pb-3" key={i} data-id={category_id}>
                                         <div className="checkbox">
-                                          <input type="checkbox" />
-                                          <label>
-                                            <b>{ucfirst(category_name)}</b>
-                                          </label>
+                                          <input
+                                            type="checkbox"
+                                            checked={!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true)}
+                                            value={category_id}
+                                            name={"add_on_category[" + i + "]"}
+                                            onChange={(e) => {
+                                              const { checked } = e.target;
+                                              let tempUser = addonservicesData.map((itemservice) => {
+                                                return { ...itemservice, isServiceChecked: checked };
+                                              });
+                                              dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
+                                            }}
+                                          />
+                                          <label>{ucfirst(category_name)}</label>
                                         </div>
                                         <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                           {addonservicesData &&
                                             Object.keys(addonservicesData).map((itemservice, j) => {
                                               let service_id = addonservicesData[itemservice].id;
                                               let service_name = addonservicesData[itemservice].name;
+                                              // let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                                               return (
                                                 <li className="pt-3 pb-3" key={j} data-id={service_id}>
                                                   <div className="checkbox">
-                                                    <InputCheckbox
-                                                      name={"add_on_services[" + j + "]"}
+                                                    <input
+                                                      type="checkbox"
                                                       value={service_id}
-                                                      label={ucfirst(service_name)}
-                                                      controlId={"add_on_services-" + j}
+                                                      // checked={formik.values.add_on_services[j] === service_id}
+                                                      checked={addonservicesData[itemservice]?.isServiceChecked || false}
+                                                      id={"add_on_services-" + j}
+                                                      name={"add_on_services[" + j + "]"}
                                                       onChange={(e) => {
-                                                        if (e.currentTarget.checked) {
-                                                          setTimeout(() => {
-                                                            formik.setFieldValue("add_on_services[" + j + "]", service_id, false);
-                                                          }, 100);
-                                                        } else {
-                                                          setTimeout(() => {
-                                                            formik.setFieldValue("add_on_services[" + j + "]", "", false);
-                                                          }, 100);
-                                                        }
-                                                        formik.handleChange(e);
+                                                        const { value, checked } = e.target;
+                                                        let tempUser = addonservicesData.map((itemservice) => {
+                                                          return parseInt(itemservice.id) === parseInt(value) ? { ...itemservice, isServiceChecked: checked } : itemservice;
+                                                        });
+                                                        dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
                                                       }}
                                                     />
+                                                    <label>{ucfirst(service_name)}</label>
                                                   </div>
                                                 </li>
                                               );

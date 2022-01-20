@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useField, useFormikContext } from "formik";
@@ -89,15 +89,11 @@ const CheckboxField = ({ label, controlId, ...props }) => {
   );
 };
 
-const InputCheckbox = ({ label, controlId, isServiceChecked, ...props }) => {
+const InputCheckbox = ({ label, controlId, ...props }) => {
   const [field] = useField(props);
-  const { setFieldValue } = useFormikContext();
-  useEffect(() => {
-    setFieldValue(field.name, isServiceChecked ? props.value : "", false);
-  }, [isServiceChecked]);
   return (
     <>
-      <input {...field} {...props} type="checkbox" id={controlId} defaultChecked={isServiceChecked} />
+      <input {...field} {...props} type="checkbox" id={controlId}  />
       <label htmlFor={controlId} className="">
         {label}
       </label>
