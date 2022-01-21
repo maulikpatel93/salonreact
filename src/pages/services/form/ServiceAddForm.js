@@ -150,12 +150,12 @@ const ServiceAddForm = () => {
                 let addonservicesData = isAddonServices[item].services;
                 // console.log(!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true));
                 if (addonservicesData) {
-                  Object.keys(addonservicesData).map((itemservice, j) => {
+                  Object.keys(addonservicesData).map((itemservice) => {
                     let service_id = addonservicesData[itemservice].id;
                     let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                     // let service_name = addonservicesData[itemservice].name;
                     // console.log(service_name + " " + addonservicesData[itemservice]?.isServiceChecked || false);
-                    formik.setFieldValue("add_on_services[" + j + "]", isServiceChecked ? service_id : "", false);
+                    formik.setFieldValue("add_on_services["+item+"][" + itemservice + "]", isServiceChecked ? service_id : "", false);
                   });
                 }
               });
@@ -343,7 +343,7 @@ const ServiceAddForm = () => {
                                         let tempUser = addonservicesData.map((itemservice) => {
                                           return { ...itemservice, isServiceChecked: checked };
                                         });
-                                        dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
+                                        dispatch(addonservicesAction({ ...isAddonServices[item], services: tempUser }));
                                       });
                                     }
                                   }}
@@ -352,50 +352,50 @@ const ServiceAddForm = () => {
                               </div>
                               <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                 {isAddonServices &&
-                                  Object.keys(isAddonServices).map((item, i) => {
+                                  Object.keys(isAddonServices).map((item) => {
                                     let category_id = isAddonServices[item].id;
                                     let category_name = isAddonServices[item].name;
                                     let addonservicesData = isAddonServices[item].services;
                                     return (
-                                      <li className="pt-3 pb-3" key={i} data-id={category_id}>
+                                      <li className="pt-3 pb-3" key={item} data-id={category_id}>
                                         <div className="checkbox">
                                           <input
                                             type="checkbox"
                                             checked={!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true)}
                                             value={category_id}
-                                            name={"add_on_category[" + i + "]"}
+                                            name={"add_on_category[" + item + "]"}
                                             onChange={(e) => {
                                               const { checked } = e.target;
                                               let tempUser = addonservicesData.map((itemservice) => {
                                                 return { ...itemservice, isServiceChecked: checked };
                                               });
-                                              dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
+                                              dispatch(addonservicesAction({ ...isAddonServices[item], services: tempUser }));
                                             }}
                                           />
                                           <label>{ucfirst(category_name)}</label>
                                         </div>
                                         <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                           {addonservicesData &&
-                                            Object.keys(addonservicesData).map((itemservice, j) => {
+                                            Object.keys(addonservicesData).map((itemservice) => {
                                               let service_id = addonservicesData[itemservice].id;
                                               let service_name = addonservicesData[itemservice].name;
                                               // let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                                               return (
-                                                <li className="pt-3 pb-3" key={j} data-id={service_id}>
+                                                <li className="pt-3 pb-3" key={itemservice} data-id={service_id}>
                                                   <div className="checkbox">
                                                     <input
                                                       type="checkbox"
                                                       value={service_id}
                                                       // checked={formik.values.add_on_services[j] === service_id}
                                                       checked={addonservicesData[itemservice]?.isServiceChecked || false}
-                                                      id={"add_on_services-" + j}
-                                                      name={"add_on_services[" + j + "]"}
+                                                      id={"add_on_services_"+item+"_" + itemservice}
+                                                      name={"add_on_services["+item+"][" + itemservice + "]"}
                                                       onChange={(e) => {
                                                         const { value, checked } = e.target;
                                                         let tempUser = addonservicesData.map((itemservice) => {
                                                           return parseInt(itemservice.id) === parseInt(value) ? { ...itemservice, isServiceChecked: checked } : itemservice;
                                                         });
-                                                        dispatch(addonservicesAction([{ ...isAddonServices[item], services: tempUser }]));
+                                                        dispatch(addonservicesAction({ ...isAddonServices[item], services: tempUser }));
                                                       }}
                                                     />
                                                     <label>{ucfirst(service_name)}</label>

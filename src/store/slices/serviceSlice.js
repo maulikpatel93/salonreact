@@ -174,8 +174,8 @@ const serviceSlice = createSlice({
           existingData[keyName] = changes[keyName];
         });
       }
-      console.log(changes);
-      state.isAddonServices = action.payload;
+      // console.log(changes);
+      // state.isAddonServices = action.payload;
     },
   },
   extraReducers: {
