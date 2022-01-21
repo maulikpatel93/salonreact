@@ -36,14 +36,15 @@ const CategoryListView = (props) => {
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
+          let totalServices = objectData[item].totalServices;
           return (
             <tr className="category-view-tr" key={i} data-id={id}>
               <td>{ucfirst(name)}</td>
-              {/* <td>
+              <td>
                 <a href="#" className="color-wine">
-                  4
+                  {totalServices}
                 </a>
-              </td> */}
+              </td>
               <td style={{ textAlign: 'right', width: '8%' }}>
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">

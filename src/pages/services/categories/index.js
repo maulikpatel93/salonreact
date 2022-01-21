@@ -38,7 +38,7 @@ const Categories = () => {
                 <thead>
                   <tr>
                     <th>{t('category')}</th>
-                    <th>Count</th>
+                    <th>{t('count')}</th>
                     <th></th>
                   </tr>
                 </thead>
