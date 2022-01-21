@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import config from "../../config";
 import Categories from "./categories";
 
-import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName, addonservices } from "../../store/slices/serviceSlice";
+import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName, addonservices, addonstaff } from "../../store/slices/serviceSlice";
 import { openAddCategoryForm, categoryListViewApi, openCategorieSearchList, closecategoriesearchList, categoriesuggetionListApi, categoriesearchName, categoryOptions } from "../../store/slices/categorySlice";
 import { taxOptions } from "../../store/slices/taxSlice";
 import { removeImage } from "../../store/slices/imageSlice";
@@ -56,6 +56,7 @@ const Services = () => {
     dispatch(openAddServiceForm());
     dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
     dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(addonstaff());
     dispatch(addonservices());
   };
 
@@ -256,68 +257,74 @@ const Services = () => {
           <div className={"tab-content list-view-content"}>
             <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
               {ListView.length > 0 || ListView.data ? (
-                  <div className="table-responsive services-table-shadow" id="scrollableListView">
-                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? 'auto' : 'inherit' }}>
-                      <table className="table bg-white">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                {t("service_name")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
-                                {t("duration")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ price: sort.price == "asc" ? "desc" : "asc" })}>
-                                {t("price")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.price == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.price == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th>
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
-                                {t("category")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th>{t("add_on_service")}</th>
-                            <th>
-                              <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="services-table-data">
-                          <ServiceListView view={ListView} />
-                        </tbody>
-                      </table>
+                <div className="table-responsive services-table-shadow" id="scrollableListView">
+                  <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                    <table className="table bg-white">
+                      <thead>
+                        <tr>
+                          <th rowSpan="2" className="service_table_header"></th>
+                          <th rowSpan="2" className="service_table_header">
+                            <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                              {t("service_name")}
+                              <span className="down-up-arrow">
+                                <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                              </span>
+                            </a>
+                          </th>
+                          <th rowSpan="2" className="service_table_header">
+                            <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
+                              {t("duration")}
+                              <span className="down-up-arrow">
+                                <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
+                                <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
+                              </span>
+                            </a>
+                          </th>
+                          <th colSpan="3" className="p-2 text-center">
+                            {t("price")}
+                          </th>
+                          <th rowSpan="2" className="service_table_header">
+                            {t("category")}
+                            {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
+                              {t("category")}
+                              <span className="down-up-arrow">
+                                <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
+                                <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
+                              </span>
+                            </a> */}
+                          </th>
+                          <th rowSpan="2">{t("add_on_service")}</th>
+                          <th rowSpan="2" className="service_table_header">
+                            <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th scope="col" className="p-2">
+                            {t("general")}
+                          </th>
+                          <th scope="col" className="p-2">
+                            {t("junior")}
+                          </th>
+                          <th scope="col" className="p-2">
+                            {t("senior")}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="services-table-data">
+                        <ServiceListView view={ListView} />
+                      </tbody>
+                    </table>
 
-                      {!isFetching && ListView.next_page_url && (
-                        <div className="col-2 m-auto p-3">
-                          <button onClick={loadMoreItems} className="btn btn-primary">
-                            {t("more")}
-                          </button>
-                        </div>
-                      )}
-                    </InfiniteScroll>
-                  </div>
+                    {!isFetching && ListView.next_page_url && (
+                      <div className="col-2 m-auto p-3">
+                        <button onClick={loadMoreItems} className="btn btn-primary">
+                          {t("more")}
+                        </button>
+                      </div>
+                    )}
+                  </InfiniteScroll>
+                </div>
               ) : (
                 <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
                   <div className="complete-box-wrp text-center ">

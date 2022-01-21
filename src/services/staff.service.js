@@ -29,6 +29,7 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
+    console.log(values);
     if (["service_price"].includes(value) && values[value] && typeof values[value] === "object") {
       formData.append(value, JSON.stringify(values[value]));
     } else {
@@ -49,7 +50,7 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : "";
+  const result = values && values.result ? values.result : '';
   let sortstring = "";
   if (sort) {
     let sortArray = [];
@@ -60,14 +61,14 @@ const view = (values) => {
           sortSubArray[subindex] = `sort[${key}][${subkey}]=${sort[key][subkey]}`;
         });
       }
-      if (key != "category") {
+      if(key != 'supplier'){
         sortArray[index] = `sort[${key}]=${sort[key]}`;
       }
     });
     if (sortSubArray.length > 0) {
       let jsubsort = sortSubArray.join("&");
       sortstring = jsubsort;
-    }
+    } 
     if (sortArray.length > 0) {
       let jsort = sortArray.join("&");
       sortstring = jsort;
@@ -82,9 +83,8 @@ const view = (values) => {
     id: values && values.id ? values.id : "",
     field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
-    supplier_field: "name", //business_name,owner_name
-    tax_field: "name", //business_name,owner_name
-    addOnService_field: "name", //business_name,owner_name
+    supplier_field: 'name', //business_name,owner_name
+    tax_field: 'name', //business_name,owner_name
     result: result, //business_name,owner_name
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
@@ -130,33 +130,17 @@ const addonservices = (values) => {
   const data = {
     auth_key: auth_key,
     action: action,
-    salon_id: auth.user.salon_id,
+    salon_id: auth.user.salon_id
   };
-  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
+  return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
-const addonstaff = (values) => {
-  const auth = store.getState().auth;
-  const auth_key = auth.user.auth_key;
-  const page = values && values.page;
-  const next_page_url = values && values.next_page_url;
-  let service_id = values && values.service_id ? values.service_id : "";
-  const action = page ? `afterlogin/services/addonstaff?page=${page}&service_id=${service_id}` : `afterlogin/services/addonstaff?service_id=${service_id}`;
-  const data = {
-    auth_key: auth_key,
-    action: action,
-    salon_id: auth.user.salon_id,
-  };
-  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
-};
-
-const serviceApiController = {
+const staffApiController = {
   create,
   update,
   view,
   deleted,
   suggetionlist,
-  addonservices,
-  addonstaff,
+  addonservices
 };
-export default serviceApiController;
+export default staffApiController;

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { serviceDeleteApi, serviceDetailApi, openEditServiceForm, addonservices } from "../../../store/slices/serviceSlice";
+import { serviceDeleteApi, serviceDetailApi, openEditServiceForm, addonservices, addonstaff } from "../../../store/slices/serviceSlice";
 import { categoryOptions } from "../../../store/slices/categorySlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
@@ -39,6 +39,7 @@ const ServiceListView = (props) => {
           dispatch(removeImage());
         }
         dispatch(addonservices({ isNotId: id }));
+        dispatch(addonstaff({ service_id: id }));
         dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));
         dispatch(taxOptions({ option: { valueField: "id", labelField: "name" } }));
       }
@@ -52,17 +53,23 @@ const ServiceListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let duration = objectData[item].duration;
-          let price = "";
+          let serviceprice = objectData[item].serviceprice;
           let category_name = objectData[item].category && objectData[item].category.name;
-          let add_on_service = "";
-          return (
+          let add_on_service = objectData[item].addonservices;
+          return ( 
             <tr className="service-view-tr" key={i} data-id={id}>
               <td>{i + 1}</td>
               <td>{ucfirst(name)}</td>
               <td>{duration}</td>
-              <td>{price}</td>
+              {serviceprice && Object.keys(serviceprice).map((sp) => {
+                  let price = serviceprice[sp].price;
+                  return <td key={sp}>{"$ "+price}</td>;
+                })}
               <td>{category_name}</td>
-              <td>{add_on_service}</td>
+              <td>{add_on_service && Object.keys(add_on_service).map((sp) => {
+                  let name = add_on_service[sp].name;
+                  return <a key={sp} className="btn btn-sm btn-outline-primary cursor-auto me-1 mb-1">{name}</a>;
+                })}</td>
               <td className="ps-0 text-end" width="60px">
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">

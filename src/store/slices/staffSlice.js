@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import serviceApiController from "../../services/service.service";
+import staffApiController from "../../services/staff.staff";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 
-export const serviceStoreApi = createAsyncThunk("service/create", async (formvalues, thunkAPI) => {
+export const staffStoreApi = createAsyncThunk("staff/create", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .create(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "create"))
       .catch((error) => HandleError(thunkAPI, error, "create"));
@@ -16,9 +16,9 @@ export const serviceStoreApi = createAsyncThunk("service/create", async (formval
   }
 });
 
-export const serviceUpdateApi = createAsyncThunk("service/update", async (formvalues, thunkAPI) => {
+export const staffUpdateApi = createAsyncThunk("staff/update", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .update(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "update"))
       .catch((error) => HandleError(thunkAPI, error, "update"));
@@ -29,9 +29,9 @@ export const serviceUpdateApi = createAsyncThunk("service/update", async (formva
   }
 });
 
-export const serviceListViewApi = createAsyncThunk("service/listview", async (formValues, thunkAPI) => {
+export const staffListViewApi = createAsyncThunk("staff/listview", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "listview"))
       .catch((error) => HandleError(thunkAPI, error, "listview"));
@@ -42,9 +42,9 @@ export const serviceListViewApi = createAsyncThunk("service/listview", async (fo
   }
 });
 
-export const serviceDetailApi = createAsyncThunk("service/detail", async (formValues, thunkAPI) => {
+export const staffDetailApi = createAsyncThunk("staff/detail", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "detail"))
       .catch((error) => HandleError(thunkAPI, error, "detail"));
@@ -55,9 +55,9 @@ export const serviceDetailApi = createAsyncThunk("service/detail", async (formVa
   }
 });
 
-export const serviceDeleteApi = createAsyncThunk("service/delete", async (formValues, thunkAPI) => {
+export const staffDeleteApi = createAsyncThunk("staff/delete", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .deleted(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "delete"))
       .catch((error) => HandleError(thunkAPI, error, "delete"));
@@ -68,9 +68,9 @@ export const serviceDeleteApi = createAsyncThunk("service/delete", async (formVa
   }
 });
 
-export const serviceSuggetionListApi = createAsyncThunk("service/suggetionlist", async (formValues, thunkAPI) => {
+export const staffSuggetionListApi = createAsyncThunk("staff/suggetionlist", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
+    const resposedata = await staffApiController
       .suggetionlist(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
       .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
@@ -81,25 +81,12 @@ export const serviceSuggetionListApi = createAsyncThunk("service/suggetionlist",
   }
 });
 
-export const addonservices = createAsyncThunk("service/addonservices", async (formValues, thunkAPI) => {
+export const addonstaffs = createAsyncThunk("staff/addonstaffs", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await serviceApiController
-      .addonservices(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "addonservices"))
-      .catch((error) => HandleError(thunkAPI, error, "addonservices"));
-    return resposedata;
-  } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const addonstaff = createAsyncThunk("service/addonstaff", async (formValues, thunkAPI) => {
-  try {
-    const resposedata = await serviceApiController
-      .addonstaff(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "addonstaff"))
-      .catch((error) => HandleError(thunkAPI, error, "addonstaff"));
+    const resposedata = await staffApiController
+      .addonstaffs(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "addonstaffs"))
+      .catch((error) => HandleError(thunkAPI, error, "addonstaffs"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -111,132 +98,124 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isOpenedDetailModal: "",
-  isListView: [],
+  isGridView: [],
   isSuggetionListView: [],
   isDetailData: "",
-  isTabView: "service",
+  isTabView: "staff",
   isSort: "",
   isSearchList: "",
   isSearchName: "",
-  isAddonServices: [],
-  isAddonStaff: [],
+  isAddonStaffs: [],
 };
 
-const serviceSlice = createSlice({
-  name: "service",
+const staffSlice = createSlice({
+  name: "staff",
   initialState,
   reducers: {
     reset: () => initialState,
-    serviceTabView: (state, action) => {
+    staffTabView: (state, action) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "";
       state.isTabView = action.payload;
     },
-    openAddServiceForm: (state = initialState) => {
+    openAddStaffForm: (state = initialState) => {
       state.isOpenedAddForm = "open";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "";
     },
-    closeAddServiceForm: (state = initialState) => {
+    closeAddStaffForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "";
     },
-    openEditServiceForm: (state = initialState) => {
+    openEditStaffForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "open";
       state.isOpenedDetailModal = "";
     },
-    closeEditServiceForm: (state = initialState) => {
+    closeEditStaffForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "";
     },
-    openServiceDetailModal: (state = initialState) => {
+    openStaffDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "open";
     },
-    closeServiceDetailModal: (state = initialState) => {
+    closeStaffDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
       state.isOpenedDetailModal = "";
     },
-    serviceSort: (state, action) => {
+    staffSort: (state, action) => {
       // let sort = state.isSort ? state.isSort : {};
       // state.isSort = Object.assign(sort, action.payload);
       state.isSort = action.payload;
     },
-    serviceSortRemove: (state) => {
+    staffSortRemove: (state) => {
       state.isSort = "";
     },
-    openServiceSearchList: (state) => {
+    openStaffSearchList: (state) => {
       state.isSearchList = "open";
     },
-    closeServiceSearchList: (state) => {
+    closeStaffSearchList: (state) => {
       state.isSearchList = "";
     },
-    serviceSearchName: (state, action) => {
+    staffSearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
-    addonservicesAction: (state, action) => {
+    addonstaffsAction: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isAddonServices.find((event) => event.id === id);
+      const existingData = state.isAddonStaffs.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
-    },
-    addonstaffAction: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isAddonStaff.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
+      // console.log(changes);
+      // state.isAddonStaffs = action.payload;
     },
   },
   extraReducers: {
-    [serviceStoreApi.pending]: () => {},
-    [serviceStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
+    [staffStoreApi.pending]: () => {},
+    [staffStoreApi.fulfilled]: (state, action) => {
+      if (state.isGridView && state.isGridView.data) {
+        state.isGridView.data = [action.payload, ...state.isGridView.data];
       } else {
-        state.isListView = { data: [action.payload] };
+        state.isGridView = { data: [action.payload] };
       }
     },
-    [serviceStoreApi.rejected]: () => {},
-    [serviceUpdateApi.pending]: () => {},
-    [serviceUpdateApi.fulfilled]: (state, action) => {
+    [staffStoreApi.rejected]: () => {},
+    [staffUpdateApi.pending]: () => {},
+    [staffUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
+      const existingData = state.isGridView.data.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [serviceUpdateApi.rejected]: () => {},
-    [serviceListViewApi.pending]: () => {},
-    [serviceListViewApi.fulfilled]: (state, action) => {
-      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+    [staffUpdateApi.rejected]: () => {},
+    [staffListViewApi.pending]: () => {},
+    [staffListViewApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-      let viewdata = state.isListView && state.isListView.data;
+      let viewdata = state.isGridView && state.isGridView.data;
       let newviewdata = action.payload && action.payload.data;
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
     },
-    [serviceListViewApi.rejected]: (state) => {
-      state.isListView = [];
+    [staffListViewApi.rejected]: (state) => {
+      state.isGridView = [];
     },
-    [serviceSuggetionListApi.pending]: () => {},
-    [serviceSuggetionListApi.fulfilled]: (state, action) => {
+    [staffSuggetionListApi.pending]: () => {},
+    [staffSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
@@ -247,38 +226,31 @@ const serviceSlice = createSlice({
       }
       state.isSuggetionListView = action.payload;
     },
-    [serviceSuggetionListApi.rejected]: (state) => {
+    [staffSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [serviceDetailApi.pending]: () => {},
-    [serviceDetailApi.fulfilled]: (state, action) => {
+    [staffDetailApi.pending]: () => {},
+    [staffDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [serviceDetailApi.rejected]: (state) => {
+    [staffDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [serviceDeleteApi.pending]: () => {},
-    [serviceDeleteApi.fulfilled]: (state, action) => {
+    [staffDeleteApi.pending]: () => {},
+    [staffDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
+      state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
     },
-    [serviceDeleteApi.rejected]: () => {},
-    [addonservices.pending]: () => {},
-    [addonservices.fulfilled]: (state, action) => {
-      state.isAddonServices = action.payload;
+    [staffDeleteApi.rejected]: () => {},
+    [addonstaffs.pending]: () => {},
+    [addonstaffs.fulfilled]: (state, action) => {
+      state.isAddonStaffs = action.payload;
     },
-    [addonservices.rejected]: (state) => {
-      state.isAddonServices = [];
-    },
-    [addonstaff.pending]: () => {},
-    [addonstaff.fulfilled]: (state, action) => {
-      state.isAddonStaff = action.payload;
-    },
-    [addonstaff.rejected]: (state) => {
-      state.isAddonStaff = [];
+    [addonstaffs.rejected]: (state) => {
+      state.isAddonStaffs = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, serviceTabView, openAddServiceForm, closeAddServiceForm, openEditServiceForm, closeEditServiceForm, serviceTabGridView, openServiceDetailModal, closeServiceDetailModal, serviceDetailTab, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSearchName, addonservicesAction, addonstaffAction } = serviceSlice.actions;
-export default serviceSlice.reducer;
+export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonstaffsAction } = staffSlice.actions;
+export default staffSlice.reducer;

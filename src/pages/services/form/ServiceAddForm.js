@@ -10,7 +10,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
-import { closeAddServiceForm, serviceStoreApi, addonservicesAction } from "../../../store/slices/serviceSlice";
+import { closeAddServiceForm, serviceStoreApi, addonservicesAction, addonstaffAction } from "../../../store/slices/serviceSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -20,6 +20,7 @@ const ServiceAddForm = () => {
   const isCategoryOption = useSelector((state) => state.category.isCategoryOption);
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
   const isAddonServices = useSelector((state) => state.service.isAddonServices);
+  const isAddonStaff = useSelector((state) => state.service.isAddonStaff);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -56,6 +57,9 @@ const ServiceAddForm = () => {
     deposit_booked_online: "",
     deposit_booked_price: "",
     add_on_services: [],
+    add_on_category: [],
+    add_on_price_tier: [],
+    add_on_staff: [],
   };
 
   const validationSchema = Yup.object().shape({
@@ -88,6 +92,7 @@ const ServiceAddForm = () => {
         then: Yup.string().trim().label(t("deposit_booked_price")).required().test("Digits only", t("The_field_should_have_digits_only"), decimalOnly),
       }),
     add_on_services: Yup.array(),
+    add_on_staff: Yup.array(),
   });
   yupconfig();
 
@@ -145,6 +150,18 @@ const ServiceAddForm = () => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
         {(formik) => {
           useEffect(() => {
+            if (isAddonStaff) {
+              Object.keys(isAddonStaff).map((item) => {
+                let addonstaffData = isAddonStaff[item].staff;
+                if (addonstaffData) {
+                  Object.keys(addonstaffData).map((itemstaff) => {
+                    let service_id = addonstaffData[itemstaff].id;
+                    let isStaffChecked = addonstaffData[itemstaff].isStaffChecked;
+                    formik.setFieldValue("add_on_staff[" + item + "][" + itemstaff + "]", isStaffChecked ? service_id : "", false);
+                  });
+                }
+              });
+            }
             if (isAddonServices) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
@@ -155,12 +172,12 @@ const ServiceAddForm = () => {
                     let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                     // let service_name = addonservicesData[itemservice].name;
                     // console.log(service_name + " " + addonservicesData[itemservice]?.isServiceChecked || false);
-                    formik.setFieldValue("add_on_services["+item+"][" + itemservice + "]", isServiceChecked ? service_id : "", false);
+                    formik.setFieldValue("add_on_services[" + item + "][" + itemservice + "]", isServiceChecked ? service_id : "", false);
                   });
                 }
               });
             }
-          }, [isAddonServices]);
+          }, [isAddonStaff, isAddonServices]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addservice-drawer">
               <div className="drawer-wrp position-relative">
@@ -318,12 +335,112 @@ const ServiceAddForm = () => {
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0 addstaff-member pb-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
+                          <h4 className="fw-semibold mb-2">{t("Staff")}</h4>
+                          <p>{t("add_on_staff_note")}</p>
+                        </div>
+                        <div className="col-md-6 pe-md-0 service mt-0 pt-0">
+                          <ul className="list-unstyled mb-0 p-0 m-0">
+                            <li className="pt-3 pb-0 mt-0 all-staff">
+                              <div className="checkbox">
+                                <input
+                                  type="checkbox"
+                                  checked={formik.values.add_on_allstaff === 1}
+                                  value="1"
+                                  name="add_on_allstaff"
+                                  onChange={(e) => {
+                                    const { checked } = e.target;
+                                    if (checked) {
+                                      formik.setFieldValue("add_on_allstaff", 1);
+                                    } else {
+                                      formik.setFieldValue("add_on_allstaff", 0);
+                                    }
+                                    if (isAddonStaff) {
+                                      Object.keys(isAddonStaff).map((item) => {
+                                        let addonstaffData = isAddonStaff[item].staff;
+                                        let tempUser = addonstaffData.map((itemstaff) => {
+                                          return { ...itemstaff, isStaffChecked: checked };
+                                        });
+                                        dispatch(addonstaffAction({ ...isAddonStaff[item], staff: tempUser }));
+                                      });
+                                    }
+                                  }}
+                                />
+                                <label>{t("all_staff")}</label>
+                              </div>
+                              <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                {isAddonStaff &&
+                                  Object.keys(isAddonStaff).map((item) => {
+                                    let price_tier_id = isAddonStaff[item].id;
+                                    let price_tier_name = isAddonStaff[item].name;
+                                    let addonstaffData = isAddonStaff[item].staff;
+                                    return (
+                                      <li className="pt-3 pb-3" key={item} data-id={price_tier_id}>
+                                        <div className="checkbox">
+                                          <input
+                                            type="checkbox"
+                                            checked={!addonstaffData.some((itemstaff) => itemstaff?.isStaffChecked !== true)}
+                                            value={price_tier_id}
+                                            name={"add_on_price_tier[" + item + "]"}
+                                            onChange={(e) => {
+                                              const { checked } = e.target;
+                                              let tempUser = addonstaffData.map((itemstaff) => {
+                                                return { ...itemstaff, isStaffChecked: checked };
+                                              });
+                                              dispatch(addonstaffAction({ ...isAddonStaff[item], staff: tempUser }));
+                                            }}
+                                          />
+                                          <label>
+                                            <b>{ucfirst(price_tier_name)}</b>
+                                          </label>
+                                        </div>
+                                        <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                                          {addonstaffData &&
+                                            Object.keys(addonstaffData).map((itemstaff) => {
+                                              let staff_id = addonstaffData[itemstaff].id;
+                                              let staff_first_name = addonstaffData[itemstaff].first_name;
+                                              let staff_last_name = addonstaffData[itemstaff].last_name;
+                                              // let isStaffChecked = addonstaffData[itemstaff].isStaffChecked;
+                                              return (
+                                                <li className="pt-3 pb-3" key={itemstaff} data-id={staff_id}>
+                                                  <div className="checkbox">
+                                                    <input
+                                                      type="checkbox"
+                                                      value={staff_id}
+                                                      checked={addonstaffData[itemstaff]?.isStaffChecked || false}
+                                                      id={"add_on_staff_" + item + "_" + itemstaff}
+                                                      name={"add_on_staff[" + item + "][" + itemstaff + "]"}
+                                                      onChange={(e) => {
+                                                        const { value, checked } = e.target;
+                                                        let tempUser = addonstaffData.map((itemstaff) => {
+                                                          return parseInt(itemstaff.id) === parseInt(value) ? { ...itemstaff, isStaffChecked: checked } : itemstaff;
+                                                        });
+                                                        dispatch(addonstaffAction({ ...isAddonStaff[item], staff: tempUser }));
+                                                      }}
+                                                    />
+                                                    <label>{ucfirst(staff_first_name + " " + staff_last_name)}</label>
+                                                  </div>
+                                                </li>
+                                              );
+                                            })}
+                                        </ul>
+                                      </li>
+                                    );
+                                  })}
+                                {isAddonStaff.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                              </ul>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <hr className="drawer-category-hr"></hr>
+                      <div className="row mx-0 addstaff-member pb-0">
+                        <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("add_on_services")}</h4>
                           <p>{t("add_on_services_note")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0 service mt-0 pt-0">
                           <ul className="list-unstyled mb-0 p-0 m-0">
-                            <li className="pt-3 mt-0 all-staff">
+                            <li className="pt-3 pb-0 mt-0 all-staff">
                               <div className="checkbox">
                                 <input
                                   type="checkbox"
@@ -372,7 +489,9 @@ const ServiceAddForm = () => {
                                               dispatch(addonservicesAction({ ...isAddonServices[item], services: tempUser }));
                                             }}
                                           />
-                                          <label>{ucfirst(category_name)}</label>
+                                          <label>
+                                            <b>{ucfirst(category_name)}</b>
+                                          </label>
                                         </div>
                                         <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                           {addonservicesData &&
@@ -388,8 +507,8 @@ const ServiceAddForm = () => {
                                                       value={service_id}
                                                       // checked={formik.values.add_on_services[j] === service_id}
                                                       checked={addonservicesData[itemservice]?.isServiceChecked || false}
-                                                      id={"add_on_services_"+item+"_" + itemservice}
-                                                      name={"add_on_services["+item+"][" + itemservice + "]"}
+                                                      id={"add_on_services_" + item + "_" + itemservice}
+                                                      name={"add_on_services[" + item + "][" + itemservice + "]"}
                                                       onChange={(e) => {
                                                         const { value, checked } = e.target;
                                                         let tempUser = addonservicesData.map((itemservice) => {

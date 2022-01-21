@@ -196,7 +196,9 @@
     "deposit_booked_price": "Deposit booked price",
     "add_on_services": "Add-on Services",
     "add_on_services_note": "Select which service you would like to offer as add-ons when this service is booked.",
+    "add_on_staff_note": "Choose which staff members are able to perform this service.",
     "all_services": "All Services",
+    "all_staff": "All Staff",
     "Dashboard": "Dashboard",
     "Calendar": "Calendar",
     "Sales": "Sales",
@@ -207,5 +209,8 @@
     "Services": "Services",
     "Products": "Products",
     "Marketing": "Marketing",
-    "Account_Setup": "Account Setup"
+    "Account_Setup": "Account Setup",
+    "Roster": "Roster",
+    "Price_Tiers": "Price Tiers",
+    "Staff_Access": "Staff Access"
 }

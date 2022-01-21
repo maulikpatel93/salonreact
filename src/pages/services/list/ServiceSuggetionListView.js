@@ -27,13 +27,14 @@ const ServiceSuggetionListView = (props) => {
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
+          let category_name = objectData[item].category ? objectData[item].category.name : "";
           return (
             <li className="service-suggetion-li" key={i} data-id={id} data-name={ucfirst(name)}>
               <a className="d-flex cursor-pointer" onClick={handleSuggestedId}>
-                <div className="user-img me-2">{<div className="user-initial">{name.charAt(0)}</div>}</div>
+                {/* <div className="user-img me-2">{<div className="user-initial">{name.charAt(0)}</div>}</div> */}
                 <div className="user-id">
                   <span className="user-name">{ucfirst(name)}</span>
-                  {/* <span className="user-id">{ucfirst(supplier_name)}</span> */}
+                  <span className="user-id">{ucfirst(category_name)}</span>
                 </div>
               </a>
             </li>

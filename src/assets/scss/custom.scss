@@ -20,6 +20,11 @@
     border-color: $primary;
 }
 
+.btn.btn-outline-primary {
+    background: none;
+    color: $primary;
+}
+
 .btn.btn-primary-outline.active {
     color: $primary;
 }
@@ -148,4 +153,8 @@ header {
     .table-responsive {
         overflow: visible;
     }
+}
+
+.service_table_header {
+    vertical-align: middle;
 }
