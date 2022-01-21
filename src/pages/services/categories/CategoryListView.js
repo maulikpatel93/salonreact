@@ -39,11 +39,11 @@ const CategoryListView = (props) => {
           return (
             <tr className="category-view-tr" key={i} data-id={id}>
               <td>{ucfirst(name)}</td>
-              <td>
+              {/* <td>
                 <a href="#" className="color-wine">
                   4
                 </a>
-              </td>
+              </td> */}
               <td style={{ textAlign: 'right', width: '8%' }}>
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">

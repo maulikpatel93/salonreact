@@ -37,7 +37,7 @@ const Categories = () => {
               <table className="table table-striped bg-white categorie-table">
                 <thead>
                   <tr>
-                    <th>Category</th>
+                    <th>{t('category')}</th>
                     <th>Count</th>
                     <th></th>
                   </tr>
