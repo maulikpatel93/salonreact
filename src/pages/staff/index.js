@@ -1,20 +1,20 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useTranslation } from "react-i18next";
 // import InfiniteScroll from "react-infinite-scroll-component";
 
-import config from "../../config";
+// import config from "../../config";
 
 const Staff = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   // const dispatch = useDispatch();
 
-  const tabview = useSelector((state) => state.staff.isTabView);
-  const GridView = useSelector((state) => state.staff.isListView);
+  // const tabview = useSelector((state) => state.staff.isTabView);
+  // const GridView = useSelector((state) => state.staff.isListView);
   return (
     <>
       <div className="page-content">
-        <section className="staff-section common-tab">
+        {/* <section className="staff-section common-tab">
           <ul className="nav nav-tabs mb-4" role="tablist">
             <li className="nav-item">
               <a href="#0" className={"nav-link " + (tabview && tabview == "staff" ? " active" : "")} id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button" role="tab" aria-controls="staff" aria-selected="true">
@@ -60,7 +60,7 @@ const Staff = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   );
