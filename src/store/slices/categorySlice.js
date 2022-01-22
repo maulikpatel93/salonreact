@@ -82,7 +82,7 @@ export const categoryDeleteApi = createAsyncThunk("category/delete", async (form
   }
 });
 
-export const categoriesuggetionListApi = createAsyncThunk("category/suggetionlist", async (formValues, thunkAPI) => {
+export const categorySuggetionListApi = createAsyncThunk("category/suggetionlist", async (formValues, thunkAPI) => {
   try {
     const resposedata = await categoryApiController
       .suggetionlist(formValues, thunkAPI)
@@ -136,13 +136,13 @@ const categorySlice = createSlice({
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
     },
-    openCategorieSearchList: (state) => {
+    openCategorySearchList: (state) => {
       state.isSearchList = "open";
     },
-    closecategoriesearchList: (state) => {
+    closeCategorysearchList: (state) => {
       state.isSearchList = "";
     },
-    categoriesearchName: (state, action) => {
+    categorySearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
   },
@@ -182,8 +182,8 @@ const categorySlice = createSlice({
     [categoryListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [categoriesuggetionListApi.pending]: () => {},
-    [categoriesuggetionListApi.fulfilled]: (state, action) => {
+    [categorySuggetionListApi.pending]: () => {},
+    [categorySuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
@@ -194,7 +194,7 @@ const categorySlice = createSlice({
       }
       state.isSuggetionListView = action.payload;
     },
-    [categoriesuggetionListApi.rejected]: (state) => {
+    [categorySuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
     [categoryDetailApi.pending]: () => {},
@@ -220,5 +220,5 @@ const categorySlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddCategoryForm, closeAddCategoryForm, openEditCategoryForm, closeEditCategoryForm, openCategoryDetailModal, closeCategoryDetailModal, openCategorieSearchList, closecategoriesearchList, categoriesearchName } = categorySlice.actions;
+export const { reset, openAddCategoryForm, closeAddCategoryForm, openEditCategoryForm, closeEditCategoryForm, openCategoryDetailModal, closeCategoryDetailModal, openCategorySearchList, closeCategorysearchList, categorySearchName } = categorySlice.actions;
 export default categorySlice.reducer;

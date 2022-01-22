@@ -51,9 +51,17 @@ const Clients = () => {
   };
 
   const [isFetching, setIsFetching] = useState(false);
-  const loadMoreItems = () => {
+  const loadMoreItemsGrid = () => {
     setIsFetching(true);
     dispatch(clientGridViewApi({ next_page_url: GridView.next_page_url }));
+    //mocking an API call
+    setTimeout(() => {
+      setIsFetching(false);
+    }, 2000);
+  };
+
+  const loadMoreItemsList = () => {
+    setIsFetching(true);
     dispatch(clientListViewApi({ next_page_url: ListView.next_page_url }));
     //mocking an API call
     setTimeout(() => {
@@ -81,6 +89,7 @@ const Clients = () => {
     } else {
       dispatch(clientGridViewApi());
       dispatch(clientListViewApi());
+      dispatch(closeClientSearchList());
     }
   };
   const handleCloseSearch = () => {
@@ -90,14 +99,14 @@ const Clients = () => {
     dispatch(clientListViewApi());
   };
   const handleOnBlur = () => {
-    setTimeout(() => {
-      dispatch(closeClientSearchList());
-    }, 200);
+    // setTimeout(() => {
+    //   dispatch(closeClientSearchList());
+    // }, 200);
   };
 
   return (
     <>
-      <div className="page-content bg-pink service" id="page-content">
+      <div className="page-content bg-pink service" id={"page-content-" + tabview}>
         <div className="row bg-white align-items-center sticky-top">
           <div className="common-tab col-md-4 col-4 order-1">
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">
@@ -171,68 +180,73 @@ const Clients = () => {
         <div className="tab-content list-view-content">
           <div className={"tab-pane" + (tabview && tabview == "grid" ? " show active" : "")} id="all">
             <div className="" id="scrollableGridView">
-              <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content" hasMore={GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
-                <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
-                  <div className="tabs-image">
-                    <img src={config.imagepath + "tabs-image.png"} alt="" />
-                  </div>
-                  <div className="image-content">
-                    <h5>
-                      <i className="fal fa-plus me-2"></i> {t("add_new")}
-                    </h5>
-                  </div>
-                </a>
-                {/* <a className="box-image-cover client-detail cursor-pointer">
-                <div className="tabs-image user-initial mx-auto">jd</div>
-                <div className="image-content">
-                  <h5 className="fw-semibold mb-1">Wella</h5>
-                  <h5 className="mb-0 fw-normal">William Wella</h5>
-                </div>
-              </a> */}
-                <ClientGridView currentUser={currentUser} view={GridView} />
-
-                {!isFetching && GridView.next_page_url && (
-                  <div className="col-2 m-auto text-center">
-                    <button onClick={loadMoreItems} className="btn btn-primary">
-                      {t("more")}
-                    </button>
-                  </div>
-                )}
-              </InfiniteScroll>
+              {tabview && tabview == "grid" && (
+                <>
+                  <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={tabview && tabview == "grid" && GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                    <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
+                      <div className="tabs-image">
+                        <img src={config.imagepath + "tabs-image.png"} alt="" />
+                      </div>
+                      <div className="image-content">
+                        <h5>
+                          <i className="fal fa-plus me-2"></i> {t("add_new")}
+                        </h5>
+                      </div>
+                    </a>
+                    <ClientGridView currentUser={currentUser} view={GridView} />
+                    {!isFetching && GridView.next_page_url && (
+                      <div className="box-image-cover">
+                        <div className="tabs-image">
+                          <img src={config.imagepath + "tabs-image.png"} alt="" />
+                        </div>
+                        <div className="image-content">
+                          <button onClick={loadMoreItemsGrid} className="btn btn-primary">
+                            {t("more")}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </InfiniteScroll>
+                </>
+              )}
             </div>
           </div>
           <div className={"tab-pane" + (tabview && tabview == "list" ? " show active" : "")} id="listview">
             <div className="table-responsive bg-white" id="scrollableListView">
-              <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? 'auto' : 'inherit' }}>
-                <table className="table mb-0">
-                  <thead className="position-sticky">
-                    <tr>
-                      <th></th>
-                      <th>
-                        <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
-                          {t("name")}
-                        </a>
-                        <span className="down-up-arrow">
-                          <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
-                          <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
-                        </span>
-                      </th>
-                      <th>{t("phone")}</th>
-                      <th colSpan="2">{t("email")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ClientListView currentUser={currentUser} view={ListView} />
-                  </tbody>
-                </table>
-                {!isFetching && GridView.next_page_url && (
-                  <div className="col-2 m-auto p-3">
-                    <button onClick={loadMoreItems} className="btn btn-primary">
-                      {t("more")}
-                    </button>
-                  </div>
-                )}
-              </InfiniteScroll>
+              {tabview && tabview == "list" && (
+                <>
+                  <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-list" hasMore={tabview && tabview == "list" && ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                    <table className="table mb-0">
+                      <thead className="position-sticky">
+                        <tr>
+                          <th></th>
+                          <th>
+                            <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
+                              {t("name")}
+                            </a>
+                            <span className="down-up-arrow">
+                              <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
+                              <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
+                            </span>
+                          </th>
+                          <th>{t("phone")}</th>
+                          <th colSpan="2">{t("email")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ClientListView currentUser={currentUser} view={ListView} />
+                      </tbody>
+                    </table>
+                    {!isFetching && ListView.next_page_url && (
+                      <div className="col-2 m-auto p-3">
+                        <button onClick={loadMoreItemsList} className="btn btn-primary">
+                          {t("more")}
+                        </button>
+                      </div>
+                    )}
+                  </InfiniteScroll>
+                </>
+              )}
             </div>
           </div>
         </div>

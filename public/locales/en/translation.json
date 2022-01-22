@@ -94,6 +94,7 @@
     "are_you_sure_delete_client": "Are you sure want to delete this client?",
     "are_you_sure_delete_supplier": "Are you sure want to delete this supplier?",
     "are_you_sure_delete_product": "Are you sure want to delete this product?",
+    "are_you_sure_delete_pricetier": "Are you sure want to delete this price tier?",
     "yes_delete_it": "Yes, delete it!",
     "appointments": "Appointments",
     "appointment": "Appointment",
@@ -212,5 +213,13 @@
     "Account_Setup": "Account Setup",
     "Roster": "Roster",
     "Price_Tiers": "Price Tiers",
-    "Staff_Access": "Staff Access"
+    "Staff_Access": "Staff Access",
+    "staff": "Staff",
+    "count": "Count",
+    "add_staff": "Add Staff",
+    "add_price_tier": "Add Price Tier",
+    "price_tier_name": "Price tier Name",
+    "Add": "Add",
+    "price_tier_listing_note": "Create price tiers based on the skill level of your staff.",
+    "Reports": "Reports"
 }

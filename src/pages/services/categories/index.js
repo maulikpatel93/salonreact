@@ -16,6 +16,7 @@ const Categories = () => {
 
   const ListView = useSelector((state) => state.category.isListView);
   const fetchDataGrid = () => {
+    console.log(ListView.next_page_url);
     dispatch(categoryListViewApi({ next_page_url: ListView.next_page_url }));
   };
   const [isFetching, setIsFetching] = useState(false);
@@ -25,20 +26,20 @@ const Categories = () => {
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);
-    }, 2000);
+    }, 1000);
   };
 
   return (
     <>
       {ListView.length > 0 || ListView.data ? (
         <section className="services-table">
-          <div className="services-table-shadow">
+          <div className="services-table-shadow" id="scrollableGridView">
             <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-category" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
               <table className="table table-striped bg-white categorie-table">
                 <thead>
                   <tr>
-                    <th>{t('category')}</th>
-                    <th>{t('count')}</th>
+                    <th>{t("category")}</th>
+                    <th>{t("count")}</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -46,7 +47,6 @@ const Categories = () => {
                   <CategoryListView currentUser={currentUser} view={ListView} />
                 </tbody>
               </table>
-
               {!isFetching && ListView.next_page_url && (
                 <div className="col-2 m-auto text-center">
                   <button onClick={loadMoreItems} className="btn btn-primary m-4">

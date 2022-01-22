@@ -25,13 +25,13 @@ const Suppliers = () => {
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);
-    }, 2000);
+    }, 1000);
   };
 
   return (
     <>
       {GridView.length > 0 || GridView.data ? (
-        <div className="row">
+        <div className="" id="scrollableGridView">
           <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-supplier" hasMore={GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
             <a className="box-image-cover cursor-pointer" onClick={() => dispatch(openAddSupplierForm())}>
               <div className="tabs-image">

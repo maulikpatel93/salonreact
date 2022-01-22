@@ -12,6 +12,8 @@ import categoryReducer from "../store/slices/categorySlice";
 import serviceReducer from "../store/slices/serviceSlice";
 import taxReducer from "../store/slices/taxSlice";
 import socketReducer from "../store/slices/socketSlice";
+import staffReducer from "../store/slices/staffSlice";
+import pricetierReducer from "../store/slices/pricetierSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -86,6 +88,28 @@ const reducer = combineReducers({
       whitelist:['isTabView']
     },
     categoryReducer,
+  ),
+  staff: persistReducer(
+    {
+      key: "staff",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist:['isTabView']
+    },
+    staffReducer,
+  ),
+  pricetier: persistReducer(
+    {
+      key: "pricetier",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist:['isTabView']
+    },
+    pricetierReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
-import { categoryListViewApi, closecategoriesearchList, categoriesearchName } from "../../../store/slices/categorySlice";
+import { categoryListViewApi, closeCategorysearchList, categorySearchName } from "../../../store/slices/categorySlice";
 import { ucfirst } from "../../../helpers/functions";
 
 // import ReactPaginate from 'react-paginate';
@@ -18,8 +18,8 @@ const CategorySuggetionListView = (props) => {
   const handleSuggestedId = (e) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
-    dispatch(categoriesearchName(suggetionname));
-    dispatch(closecategoriesearchList());
+    dispatch(categorySearchName(suggetionname));
+    dispatch(closeCategorysearchList());
     dispatch(categoryListViewApi({ id: suggetionid, result:"result_array" }));
   };
 

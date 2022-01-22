@@ -7,7 +7,7 @@ import config from "../../config";
 import Categories from "./categories";
 
 import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName, addonservices, addonstaff } from "../../store/slices/serviceSlice";
-import { openAddCategoryForm, categoryListViewApi, openCategorieSearchList, closecategoriesearchList, categoriesuggetionListApi, categoriesearchName, categoryOptions } from "../../store/slices/categorySlice";
+import { openAddCategoryForm, categoryListViewApi, openCategorySearchList, closeCategorysearchList, categorySuggetionListApi, categorySearchName, categoryOptions } from "../../store/slices/categorySlice";
 import { taxOptions } from "../../store/slices/taxSlice";
 import { removeImage } from "../../store/slices/imageSlice";
 import CategoryAddForm from "./categories/CategoryAddForm";
@@ -66,6 +66,7 @@ const Services = () => {
   };
 
   const fetchDataList = () => {
+    console.log("hello");
     dispatch(serviceListViewApi({ next_page_url: ListView.next_page_url }));
   };
   //Service search
@@ -97,11 +98,12 @@ const Services = () => {
       dispatch(openServiceSearchList());
       dispatch(serviceSuggetionListApi({ q: q })).then((action) => {
         if (action.meta.requestStatus == "rejected") {
-          // dispatch(closecategoriesearchList());
+          // dispatch(closeCategorysearchList());
         }
       });
     } else {
       dispatch(serviceListViewApi());
+      dispatch(closeServiceSearchList());
     }
   };
   const handleCloseSearchService = () => {
@@ -110,46 +112,47 @@ const Services = () => {
     dispatch(serviceListViewApi());
   };
   const handleOnBlurService = () => {
-    setTimeout(() => {
-      dispatch(closeServiceSearchList());
-    }, 100);
+    // setTimeout(() => {
+    //   dispatch(closeServiceSearchList());
+    // }, 100);
   };
 
   //Category search
   const fetchDataSuggetionListCategory = () => {
-    dispatch(categoriesuggetionListApi({ next_page_url: isSuggetionViewCategory.next_page_url, q: isSearchNameCategory }));
+    dispatch(categorySuggetionListApi({ next_page_url: isSuggetionViewCategory.next_page_url, q: isSearchNameCategory }));
   };
 
   const handleClickSearchCategory = (e) => {
     let q = e.currentTarget.value;
     if (q && q.length > 0) {
-      dispatch(openCategorieSearchList());
-      dispatch(categoriesuggetionListApi({ q: q }));
+      dispatch(openCategorySearchList());
+      dispatch(categorySuggetionListApi({ q: q }));
     }
   };
   const handleKeyUpSearchCategory = (e) => {
     let q = e.currentTarget.value;
-    dispatch(categoriesearchName(q));
+    dispatch(categorySearchName(q));
     if (q && q.length > 0) {
-      dispatch(openCategorieSearchList());
-      dispatch(categoriesuggetionListApi({ q: q })).then((action) => {
+      dispatch(openCategorySearchList());
+      dispatch(categorySuggetionListApi({ q: q })).then((action) => {
         if (action.meta.requestStatus == "rejected") {
-          // dispatch(closecategoriesearchList());
+          // dispatch(closeCategorysearchList());
         }
       });
     } else {
       dispatch(categoryListViewApi());
+      dispatch(closeCategorysearchList());
     }
   };
   const handleCloseSearchCategory = () => {
-    dispatch(categoriesearchName(""));
-    dispatch(closecategoriesearchList());
+    dispatch(categorySearchName(""));
+    dispatch(closeCategorysearchList());
     dispatch(categoryListViewApi());
   };
   const handleOnBlurCategory = () => {
-    setTimeout(() => {
-      dispatch(closecategoriesearchList());
-    }, 100);
+    // setTimeout(() => {
+    //   dispatch(closeCategorysearchList());
+    // }, 100);
   };
 
   const sorting = (props) => {
@@ -159,7 +162,7 @@ const Services = () => {
 
   return (
     <>
-      <div className={"page-content bg-pink service page-content-" + tabview}>
+      <div className="page-content bg-pink service" id={"page-content-" + tabview}>
         <div className="row bg-white align-items-center sticky-top">
           <div className="common-tab col-md-4 col-7 order-1">
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">
@@ -190,7 +193,7 @@ const Services = () => {
                   </>
                 ) : (
                   <>
-                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameCategory} onInput={(e) => dispatch(categoriesearchName(e.target.value))} onClick={handleClickSearchCategory} onKeyUp={handleKeyUpSearchCategory} onBlur={handleOnBlurCategory} />
+                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameCategory} onInput={(e) => dispatch(categorySearchName(e.target.value))} onClick={handleClickSearchCategory} onKeyUp={handleKeyUpSearchCategory} onBlur={handleOnBlurCategory} />
                     <a className="close cursor-pointer" style={{ display: isSearchNameCategory ? "block" : "none" }} onClick={handleCloseSearchCategory}>
                       <i className="fal fa-times"></i>
                     </a>
@@ -253,96 +256,98 @@ const Services = () => {
           </div>
         </div>
 
-        <div className="container">
-          <div className={"tab-content list-view-content"}>
-            <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
-              {ListView.length > 0 || ListView.data ? (
-                <div className="table-responsive services-table-shadow" id="scrollableListView">
-                  <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                    <table className="table bg-white">
-                      <thead>
-                        <tr>
-                          <th rowSpan="2" className="service_table_header"></th>
-                          <th rowSpan="2" className="service_table_header">
-                            <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                              {t("service_name")}
-                              <span className="down-up-arrow">
-                                <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                              </span>
-                            </a>
-                          </th>
-                          <th rowSpan="2" className="service_table_header">
-                            <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
-                              {t("duration")}
-                              <span className="down-up-arrow">
-                                <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
-                                <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
-                              </span>
-                            </a>
-                          </th>
-                          <th colSpan="3" className="p-2 text-center">
-                            {t("price")}
-                          </th>
-                          <th rowSpan="2" className="service_table_header">
-                            {t("category")}
-                            {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
+        <div className={"tab-content list-view-content"}>
+          <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
+            {tabview && tabview == "service" && (
+              <>
+                {ListView.length > 0 || ListView.data ? (
+                  <div className="table-responsive services-table-shadow" id="scrollableServiceListView">
+                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="scrollableServiceListView" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                      <table className="table bg-white">
+                        <thead>
+                          <tr>
+                            <th rowSpan="2" className="service_table_header"></th>
+                            <th rowSpan="2" className="service_table_header">
+                              <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                                {t("service_name")}
+                                <span className="down-up-arrow">
+                                  <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                  <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                                </span>
+                              </a>
+                            </th>
+                            <th rowSpan="2" className="service_table_header">
+                              <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
+                                {t("duration")}
+                                <span className="down-up-arrow">
+                                  <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
+                                  <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
+                                </span>
+                              </a>
+                            </th>
+                            <th colSpan="3" className="p-2 text-center">
+                              {t("price")}
+                            </th>
+                            <th rowSpan="2" className="service_table_header">
                               {t("category")}
-                              <span className="down-up-arrow">
-                                <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
-                                <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
-                              </span>
-                            </a> */}
-                          </th>
-                          <th rowSpan="2">{t("add_on_service")}</th>
-                          <th rowSpan="2" className="service_table_header">
-                            <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
-                          </th>
-                        </tr>
-                        <tr>
-                          <th scope="col" className="p-2">
-                            {t("general")}
-                          </th>
-                          <th scope="col" className="p-2">
-                            {t("junior")}
-                          </th>
-                          <th scope="col" className="p-2">
-                            {t("senior")}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="services-table-data">
-                        <ServiceListView view={ListView} />
-                      </tbody>
-                    </table>
+                              {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
+                            {t("category")}
+                            <span className="down-up-arrow">
+                              <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
+                              <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
+                            </span>
+                          </a> */}
+                            </th>
+                            <th rowSpan="2">{t("add_on_service")}</th>
+                            <th rowSpan="2" className="service_table_header">
+                              <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
+                            </th>
+                          </tr>
+                          <tr>
+                            <th scope="col" className="p-2">
+                              {t("general")}
+                            </th>
+                            <th scope="col" className="p-2">
+                              {t("junior")}
+                            </th>
+                            <th scope="col" className="p-2">
+                              {t("senior")}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="services-table-data">
+                          <ServiceListView view={ListView} />
+                        </tbody>
+                      </table>
 
-                    {!isFetching && ListView.next_page_url && (
-                      <div className="col-2 m-auto p-3">
-                        <button onClick={loadMoreItems} className="btn btn-primary">
-                          {t("more")}
-                        </button>
-                      </div>
-                    )}
-                  </InfiniteScroll>
-                </div>
-              ) : (
-                <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                  <div className="complete-box-wrp text-center ">
-                    <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-                    <h4 className="mb-2 fw-semibold">
-                      {t("no_services_have_been_created_yet")}
-                      <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
-                        {t("please_create_one")}
-                      </a>
-                      .
-                    </h4>
+                      {!isFetching && ListView.next_page_url && (
+                        <div className="col-2 m-auto p-3">
+                          <button onClick={loadMoreItems} className="btn btn-primary">
+                            {t("more")}
+                          </button>
+                        </div>
+                      )}
+                    </InfiniteScroll>
                   </div>
-                </div>
-              )}
-            </div>
-            <div className={"tab-pane" + (tabview && tabview == "category" ? " show active" : "")} id="categories" role="tabpanel" aria-labelledby="categories-tab">
-              <Categories />
-            </div>
+                ) : (
+                  <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                    <div className="complete-box-wrp text-center ">
+                      <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                      <h4 className="mb-2 fw-semibold">
+                        {t("no_services_have_been_created_yet")}
+                        <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
+                          {t("please_create_one")}
+                        </a>
+                        .
+                      </h4>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+          <div className={"tab-pane" + (tabview && tabview == "category" ? " show active" : "")} id="categories" role="tabpanel" aria-labelledby="categories-tab">
+            {tabview && tabview == "category" && <Categories />}
           </div>
         </div>
         {categoryIsOpenedAddForm ? <CategoryAddForm /> : ""}

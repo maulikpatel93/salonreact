@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import staffApiController from "../../services/staff.staff";
+import staffApiController from "../../services/staff.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 
@@ -29,12 +29,12 @@ export const staffUpdateApi = createAsyncThunk("staff/update", async (formvalues
   }
 });
 
-export const staffListViewApi = createAsyncThunk("staff/listview", async (formValues, thunkAPI) => {
+export const staffGridViewApi = createAsyncThunk("staff/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await staffApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "listview"))
-      .catch((error) => HandleError(thunkAPI, error, "listview"));
+      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
+      .catch((error) => HandleError(thunkAPI, error, "gridview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -199,8 +199,8 @@ const staffSlice = createSlice({
       }
     },
     [staffUpdateApi.rejected]: () => {},
-    [staffListViewApi.pending]: () => {},
-    [staffListViewApi.fulfilled]: (state, action) => {
+    [staffGridViewApi.pending]: () => {},
+    [staffGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isGridView && state.isGridView.data;
@@ -211,7 +211,7 @@ const staffSlice = createSlice({
       }
       state.isGridView = action.payload;
     },
-    [staffListViewApi.rejected]: (state) => {
+    [staffGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
     [staffSuggetionListApi.pending]: () => {},

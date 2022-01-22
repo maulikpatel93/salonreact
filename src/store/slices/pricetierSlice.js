@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import categoryApiController from "../../services/category.service";
+import pricetierApiController from "../../services/pricetier.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 export const usersAdapter = createEntityAdapter();
 
-export const categoryStoreApi = createAsyncThunk("category/create", async (formvalues, thunkAPI) => {
+export const pricetierStoreApi = createAsyncThunk("pricetier/create", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .create(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "create"))
       .catch((error) => HandleError(thunkAPI, error, "create"));
@@ -17,9 +17,9 @@ export const categoryStoreApi = createAsyncThunk("category/create", async (formv
   }
 });
 
-export const categoryUpdateApi = createAsyncThunk("category/update", async (formvalues, thunkAPI) => {
+export const pricetierUpdateApi = createAsyncThunk("pricetier/update", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .update(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "update"))
       .catch((error) => HandleError(thunkAPI, error, "update"));
@@ -30,9 +30,9 @@ export const categoryUpdateApi = createAsyncThunk("category/update", async (form
   }
 });
 
-export const categoryListViewApi = createAsyncThunk("category/gridview", async (formValues, thunkAPI) => {
+export const pricetierGridViewApi = createAsyncThunk("pricetier/gridview", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "gridview"))
       .catch((error) => HandleError(thunkAPI, error, "gridview"));
@@ -43,12 +43,12 @@ export const categoryListViewApi = createAsyncThunk("category/gridview", async (
   }
 });
 
-export const categoryOptions = createAsyncThunk("category/categoryOptions", async (formValues, thunkAPI) => {
+export const pricetierOptions = createAsyncThunk("pricetier/pricetierOptions", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "categoryOptions"))
-      .catch((error) => HandleError(thunkAPI, error, "categoryOptions"));
+      .then((response) => HandleResponse(thunkAPI, response, "pricetierOptions"))
+      .catch((error) => HandleError(thunkAPI, error, "pricetierOptions"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -56,9 +56,9 @@ export const categoryOptions = createAsyncThunk("category/categoryOptions", asyn
   }
 });
 
-export const categoryDetailApi = createAsyncThunk("category/detail", async (formValues, thunkAPI) => {
+export const pricetierDetailApi = createAsyncThunk("pricetier/detail", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "detail"))
       .catch((error) => HandleError(thunkAPI, error, "detail"));
@@ -69,25 +69,12 @@ export const categoryDetailApi = createAsyncThunk("category/detail", async (form
   }
 });
 
-export const categoryDeleteApi = createAsyncThunk("category/delete", async (formValues, thunkAPI) => {
+export const pricetierDeleteApi = createAsyncThunk("pricetier/delete", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await categoryApiController
+    const resposedata = await pricetierApiController
       .deleted(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "delete"))
       .catch((error) => HandleError(thunkAPI, error, "delete"));
-    return resposedata;
-  } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const categoriesuggetionListApi = createAsyncThunk("category/suggetionlist", async (formValues, thunkAPI) => {
-  try {
-    const resposedata = await categoryApiController
-      .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
-      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -99,126 +86,110 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isOpenedDetailModal: "",
-  isListView: [],
-  isSuggetionListView: [],
+  isGridView: [],
   isDetailData: "",
   isSearchList: "",
   isSearchName: "",
-  isCategoryOption: [],
+  isPriceTierOption: [],
 };
 
-const categorySlice = createSlice({
-  name: "category",
+const pricetierSlice = createSlice({
+  name: "pricetier",
   initialState,
   reducers: {
     reset: () => initialState,
-    openAddCategoryForm: (state = initialState) => {
+    openAddPriceTierForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "open";
     },
-    closeAddCategoryForm: (state = initialState) => {
+    closeAddPriceTierForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
     },
-    openEditCategoryForm: (state = initialState) => {
+    openEditPriceTierForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "open";
     },
-    closeEditCategoryForm: (state = initialState) => {
+    closeEditPriceTierForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
     },
-    openCategoryDetailModal: (state = initialState) => {
+    openPriceTierDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "open";
     },
-    closeCategoryDetailModal: (state = initialState) => {
+    closePriceTierDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
     },
-    openCategorieSearchList: (state) => {
+    openPriceTierSearchList: (state) => {
       state.isSearchList = "open";
     },
-    closecategoriesearchList: (state) => {
+    closePriceTiersearchList: (state) => {
       state.isSearchList = "";
     },
-    categoriesearchName: (state, action) => {
+    priceTierSearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
   },
   extraReducers: {
-    [categoryStoreApi.pending]: () => {},
-    [categoryStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
+    [pricetierStoreApi.pending]: () => {},
+    [pricetierStoreApi.fulfilled]: (state, action) => {
+      if (state.isGridView && state.isGridView.data) {
+        state.isGridView.data = [action.payload, ...state.isGridView.data];
       } else {
-        state.isListView = { data: [action.payload] };
+        state.isGridView = { data: [action.payload] };
       }
     },
-    [categoryStoreApi.rejected]: () => {},
-    [categoryUpdateApi.pending]: () => {},
-    [categoryUpdateApi.fulfilled]: (state, action) => {
+    [pricetierStoreApi.rejected]: () => {},
+    [pricetierUpdateApi.pending]: () => {},
+    [pricetierUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
+      const existingData = state.isGridView.data.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [categoryUpdateApi.rejected]: () => {},
-    [categoryListViewApi.pending]: () => {},
-    [categoryListViewApi.fulfilled]: (state, action) => {
-      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+    [pricetierUpdateApi.rejected]: () => {},
+    [pricetierGridViewApi.pending]: () => {},
+    [pricetierGridViewApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-      let viewdata = state.isListView && state.isListView.data;
+      let viewdata = state.isGridView && state.isGridView.data;
       let newviewdata = action.payload && action.payload.data;
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
     },
-    [categoryListViewApi.rejected]: (state) => {
-      state.isListView = [];
+    [pricetierGridViewApi.rejected]: (state) => {
+      state.isGridView = [];
     },
-    [categoriesuggetionListApi.pending]: () => {},
-    [categoriesuggetionListApi.fulfilled]: (state, action) => {
-      let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
-      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-      let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
-      let newviewdata = action.payload && action.payload.data;
-      state.isSuggetionListView = action.payload;
-      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
-      }
-      state.isSuggetionListView = action.payload;
-    },
-    [categoriesuggetionListApi.rejected]: (state) => {
-      state.isSuggetionListView = [];
-    },
-    [categoryDetailApi.pending]: () => {},
-    [categoryDetailApi.fulfilled]: (state, action) => {
+    [pricetierDetailApi.pending]: () => {},
+    [pricetierDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [categoryDetailApi.rejected]: (state) => {
+    [pricetierDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [categoryDeleteApi.pending]: () => {},
-    [categoryDeleteApi.fulfilled]: (state, action) => {
+    [pricetierDeleteApi.pending]: () => {},
+    [pricetierDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
+      state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
     },
-    [categoryDeleteApi.rejected]: () => {},
-    [categoryOptions.pending]: () => {},
-    [categoryOptions.fulfilled]: (state, action) => {
-      state.isCategoryOption = action.payload;
+    [pricetierDeleteApi.rejected]: () => {},
+    [pricetierOptions.pending]: () => {},
+    [pricetierOptions.fulfilled]: (state, action) => {
+      state.isPriceTierOption = action.payload;
     },
-    [categoryOptions.rejected]: (state) => {
-      state.isCategoryOption = [];
+    [pricetierOptions.rejected]: (state) => {
+      state.isPriceTierOption = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddCategoryForm, closeAddCategoryForm, openEditCategoryForm, closeEditCategoryForm, openCategoryDetailModal, closeCategoryDetailModal, openCategorieSearchList, closecategoriesearchList, categoriesearchName } = categorySlice.actions;
-export default categorySlice.reducer;
+export const { reset, openAddPriceTierForm, closeAddPriceTierForm, openEditPriceTierForm, closeEditPriceTierForm, openPriceTierDetailModal, closePriceTierDetailModal, openPriceTierSearchList, closePriceTiersearchList, priceTierSearchName } = pricetierSlice.actions;
+export default pricetierSlice.reducer;

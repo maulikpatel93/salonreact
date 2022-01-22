@@ -16,7 +16,7 @@ const create = (values) => {
       formData.append(value, values[value]);
     }
   }
-  const action = "afterlogin/services/store";
+  const action = "afterlogin/staff/store";
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("role_id", 6);
@@ -36,7 +36,7 @@ const update = (values) => {
       formData.append(value, values[value]);
     }
   }
-  const action = "afterlogin/services/update/" + values.id;
+  const action = "afterlogin/staff/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("role_id", 6);
@@ -74,17 +74,16 @@ const view = (values) => {
       sortstring = jsort;
     }
   }
-  const action = page ? `afterlogin/services/view?page=${page}&${sortstring}` : `afterlogin/services/view?${sortstring}`;
+  const action = page ? `afterlogin/staff/view?page=${page}&${sortstring}` : `afterlogin/staff/view?${sortstring}`;
   const data = {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
     pagination: values && values.id ? false : true, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
+    field: values && values.id ? "" : "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
-    supplier_field: 'name', //business_name,owner_name
-    tax_field: 'name', //business_name,owner_name
+    price_tier_field: 'name', //business_name,owner_name
     result: result, //business_name,owner_name
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
@@ -93,7 +92,7 @@ const view = (values) => {
 const deleted = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const action = `afterlogin/services/delete/${values.id}`;
+  const action = `afterlogin/staff/delete/${values.id}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -107,26 +106,26 @@ const suggetionlist = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   let q = values && values.q ? values.q : "";
-  const action = page ? `afterlogin/services/view?page=${page}&q=${q}` : `afterlogin/services/view?q=${q}`;
+  const action = page ? `afterlogin/staff/view?page=${page}&q=${q}` : `afterlogin/staff/view?q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
     pagination: true, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
+    field: values && values.id ? "" : "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
   };
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
-const addonservices = (values) => {
+const addonstaff = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   let isNotId = values && values.isNotId ? values.isNotId : "";
-  const action = page ? `afterlogin/services/addonservices?page=${page}&isNotId=${isNotId}` : `afterlogin/services/addonservices?isNotId=${isNotId}`;
+  const action = page ? `afterlogin/staff/addonstaff?page=${page}&isNotId=${isNotId}` : `afterlogin/staff/addonstaff?isNotId=${isNotId}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -141,6 +140,6 @@ const staffApiController = {
   view,
   deleted,
   suggetionlist,
-  addonservices
+  addonstaff
 };
 export default staffApiController;
