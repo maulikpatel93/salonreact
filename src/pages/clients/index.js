@@ -138,7 +138,7 @@ const Clients = () => {
             </div>
           </div>
           <div className="col-md-4 col-8 text-end ps-0 mb-md-0 mb-2 order-3">
-            <span className="list-view-lable me-1">{t("display_as")}</span>
+            <span className="list-view-lable me-1">{t("display_as")}:</span>
             <ul className="nav nav-tabs mb-0 d-inline-block list-view-tab border-0 me-xl-3" role="tablist">
               <li className="nav-item d-inline-block">
                 <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "grid" ? " active" : "")} id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" onClick={() => dispatch(clientTabGridView())}>

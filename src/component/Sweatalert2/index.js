@@ -25,7 +25,8 @@ const swalError = (props) => {
 };
 
 const swalConfirm = (btn, props) => {
-  if (btn.getAttribute('confirmOK') == "1") {
+  if (btn.getAttribute("confirmOK") == "1") {
+    btn.setAttribute("confirmOK", "0");
     return true;
   }
   Swal.fire({
@@ -38,10 +39,10 @@ const swalConfirm = (btn, props) => {
     confirmButtonText: props.confirmButtonText,
   }).then((result) => {
     if (result.value) {
-      btn.setAttribute('confirmOK', '1');
+      btn.setAttribute("confirmOK", "1");
       btn.click();
     } else if (result.dismiss === Swal.DismissReason.cancel) {
-      btn.setAttribute('confirmOK', '0');
+      btn.setAttribute("confirmOK", "0");
     }
   });
   return false;

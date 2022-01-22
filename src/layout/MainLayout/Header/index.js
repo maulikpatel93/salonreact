@@ -22,7 +22,7 @@ const Header = () => {
             <Link to="javascript:void(0)" className="mobile-menu-icon pe-2 d-lg-none">
               <img src={config.imagepath + "favicon.png"} alt="" />
             </Link>
-            <h2 className="page-title mb-0">{ucfirst(t(document_title))}</h2>
+            <h3 className="page-title mb-0 fw-semibold">{ucfirst(t(document_title))}</h3>
           </div>
           <div className="rigt-col d-flex align-items-center">
             <div className="search">
