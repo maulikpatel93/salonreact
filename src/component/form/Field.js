@@ -16,7 +16,7 @@ const FloatLabelInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <FloatingLabel controlId={controlId} label={label} className="mb-3">
+      <FloatingLabel controlId={controlId} label={label} className="">
         <Form.Control {...field} {...props} isInvalid={!!meta.error} />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
       </FloatingLabel>
@@ -28,7 +28,7 @@ const InputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         {field.name === "phone_number" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
 
@@ -42,7 +42,7 @@ const TextareaField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <Form.Control as="textarea" rows={3} {...field} {...props} isInvalid={!!meta.error} />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
@@ -64,7 +64,7 @@ const SelectField = ({ label, controlId, options, ...props }) => {
     });
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <Form.Control as="select" {...field} {...props} isInvalid={!!meta.error}>
           <option key="0" value="">
@@ -82,7 +82,7 @@ const CheckboxField = ({ label, controlId, ...props }) => {
   const checked = field.value === 1 ? true : "";
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Check {...field} {...props} label={label} type="checkbox" id={controlId} checked={checked} />
       </Form.Group>
     </>
@@ -106,7 +106,7 @@ const SwitchField = ({ label, controlId, ...props }) => {
   const checked = field.value === 1 ? true : "";
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Check {...field} {...props} label={label} type="switch" id={controlId} checked={checked} />
       </Form.Group>
     </>
@@ -137,10 +137,28 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
   };
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         {page === "client-addform" ? (
           <div className="insert-photo d-flex flex-column justify-content-center align-items-center ms-md-auto">
-            <img src={image && image.selected ? image.url : config.imagepath + "addphoto-box.png"} alt="" className="mb-3" />
+            <img src={image && image.selected ? image.url : config.imagepath + "addphoto-box.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
+            <button type="button" className={image && image.selected ? "d-none" : "btn btn-sm position-relative"}>
+              <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} />
+              {label}
+            </button>
+            <button type="button" className={image && image.selected ? "btn btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
+              {t("remove")}
+            </button>
+            <Form.Control.Feedback type="invalid" className={image && image.selected ? "d-none" : "d-block"}>
+              {meta.error}
+            </Form.Control.Feedback>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {page === "staff-addform" ? (
+          <div className="input-file position-relative ms-md-auto d-flex align-content-center flex-wrap justify-content-center">
+            <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
             <button type="button" className={image && image.selected ? "d-none" : "btn btn-sm position-relative"}>
               <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} />
               {label}
@@ -160,7 +178,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
           <>
             <div className="input-file position-relative d-flex align-content-center flex-wrap justify-content-center ms-lg-5">
               <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} className={image && image.selected ? "input-photo d-none" : "input-photo"} />
-              <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className="mb-3" />
+              <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
               <span className={"cursor-pointer " + (image && image.selected ? "d-block" : "d-none")} onClick={removeSelectedImage}>
                 {t("remove")}
               </span>
@@ -174,7 +192,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
           </>
         ) : (
           // <div className="insert-photo d-flex flex-column justify-content-center align-items-center ms-md-auto">
-          //   <img src={image && image.selected ? image.url : config.imagepath + "addphoto-box.png"} alt="" className="mb-3" />
+          //   <img src={image && image.selected ? image.url : config.imagepath + "addphoto-box.png"} alt="" className="" />
           //   <button type="button" className={image && image.selected ? "d-none" : "btn btn-sm position-relative"}>
           //     <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} />
           //     {label}
@@ -216,7 +234,7 @@ const ReactSelectField = ({ label, controlId, options, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <Field {...field} {...props} options={options} component={CustomSelect} isInvalid={!!meta.error} className={"custom-select " + (meta.touched && meta.error ? "is-invalid" : "")} />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
@@ -230,7 +248,7 @@ const MapAddressField = ({ label, controlId, ...props }) => {
 
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <InputGroup hasValidation>
           <InputGroup.Text id="inputGroupPrepend" className="bg-white text-secondary">
@@ -248,7 +266,7 @@ const DatePickerField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Group className="mb-3" controlId={controlId}>
+      <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <Form.Control {...field} {...props} isInvalid={!!meta.error} />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>

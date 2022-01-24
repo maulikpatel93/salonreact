@@ -217,9 +217,22 @@
     "staff": "Staff",
     "count": "Count",
     "add_staff": "Add Staff",
+    "Price_Tier": "Price Tier",
     "add_price_tier": "Add Price Tier",
     "price_tier_name": "Price tier Name",
     "Add": "Add",
     "price_tier_listing_note": "Create price tiers based on the skill level of your staff.",
-    "Reports": "Reports"
+    "Reports": "Reports",
+    "New_Staff_Member": "New Staff Member",
+    "Edit_Staff_Member": "Edit Staff Member",
+    "Details": "Details",
+    "Add_your_staff_member’s_details": "Add your staff member’s details.",
+    "Working_Hours": "Working Hours",
+    "Set_the_availability_for_this_staff_member": "Set the availability for this staff member.",
+    "addonservice_staff_note": "Select which services this staff member is able to perform.",
+    "Allow_calendar_bookings": "Allow calendar bookings",
+    "Create_Staff_Member": "Create Staff Member",
+    "Update_Staff_Member": "Update Staff Member",
+    "Charge_for_services_based_on_level_of_experience": "Charge for services based on level of experience"
+
 }

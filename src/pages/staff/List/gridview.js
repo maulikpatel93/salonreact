@@ -5,8 +5,11 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { staffDeleteApi, openStaffDetailModal, staffDetailApi, staffDetailTab } from "../../../store/slices/staffSlice";
+import { staffDeleteApi, openEditStaffForm, staffDetailApi, addonservices } from "../../../store/slices/staffSlice";
+import { pricetierOptions } from "../../../store/slices/pricetierSlice";
+
 import PropTypes from "prop-types";
+import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 
 const StaffGridView = (props) => {
   const dispatch = useDispatch();
@@ -24,13 +27,21 @@ const StaffGridView = (props) => {
       dispatch(staffDeleteApi({ id: props.id }));
     }
   };
-  const handleStaffDetailModal = (e, props) => {
+  const handleStaffEditForm = (e) => {
     const id = e.currentTarget.closest(".box-image-cover").dataset.id;
-    dispatch(openStaffDetailModal());
-    dispatch(staffDetailApi({ id }));
-    if (props && props.tab == "staffdetail") {
-      dispatch(staffDetailTab("staffdetail"));
-    }
+    dispatch(openEditStaffForm());
+    dispatch(staffDetailApi({ id })).then((action) => {
+      if (action.meta.requestStatus == "fulfilled") {
+        const detail = action.payload;
+        if (detail.profile_photo) {
+          dispatch(selectImage({ name: detail.profile_photo, size: "", type: "", url: detail.profile_photo_url }));
+        } else {
+          dispatch(removeImage());
+        }
+        dispatch(addonservices({ staff_id: id }));
+        dispatch(pricetierOptions({ option: { valueField: "id", labelField: "name" } }));
+      }
+    });
   };
   return (
     <>
@@ -50,7 +61,7 @@ const StaffGridView = (props) => {
                 <div className="dropdown-menu dropdown-box dropdown-menu-end" style={{ minWidth: "116px" }} aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
                   <ul className="p-0 m-0 list-unstyled">
                     <li>
-                      <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleStaffDetailModal(e, { tab: "staffdetail" })}>
+                      <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleStaffEditForm(e, { tab: "staffdetail" })}>
                         <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
                         {t("edit")}
                       </a>
@@ -64,7 +75,7 @@ const StaffGridView = (props) => {
                   </ul>
                 </div>
               </div>
-              <a className="staff-detail cursor-pointer" onClick={handleStaffDetailModal}>
+              <a className="staff-detail cursor-pointer" onClick={handleStaffEditForm}>
                 {profile_photo_url ? (
                   <div className="tabs-image">
                     <img src={profile_photo_url} alt="" className="rounded-circle wh-118" />

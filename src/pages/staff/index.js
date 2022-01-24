@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import { staffTabView, staffGridViewApi } from "../../store/slices/staffSlice";
-import { pricetierGridViewApi } from "../../store/slices/pricetierSlice";
+import { staffTabView, staffGridViewApi, openAddStaffForm, addonservices } from "../../store/slices/staffSlice";
+import { pricetierGridViewApi, pricetierOptions } from "../../store/slices/pricetierSlice";
 
 import PriceTier from "./PriceTier";
 import config from "../../config";
 import StaffGridView from "./List/gridview";
+import StaffAddForm from "./form/StaffAddForm";
+import StaffEditForm from "./form/StaffEditForm";
 
 const Staff = () => {
   const { t } = useTranslation();
@@ -19,11 +21,19 @@ const Staff = () => {
 
   const tabview = useSelector((state) => state.staff.isTabView);
   const GridView = useSelector((state) => state.staff.isGridView);
+  const isOpenedAddForm = useSelector((state) => state.staff.isOpenedAddForm);
+  const isOpenedEditForm = useSelector((state) => state.staff.isOpenedEditForm);
 
   useEffect(() => {
     dispatch(staffGridViewApi());
     dispatch(pricetierGridViewApi());
   }, [dispatch]);
+
+  const handleopenAddStaffForm = () => {
+    dispatch(openAddStaffForm());
+    dispatch(pricetierOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(addonservices());
+  };
 
   const fetchDataGrid = () => {
     console.log("staff");
@@ -76,7 +86,7 @@ const Staff = () => {
                 {tabview && tabview == "staff" && (
                   <>
                     <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
-                      <a className="box-image-cover cursor-pointer" id="addstaff-member-link">
+                      <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={handleopenAddStaffForm}>
                         <div className="tabs-image">
                           <img src={config.imagepath + "tabs-image.png"} alt="" />
                         </div>
@@ -113,6 +123,8 @@ const Staff = () => {
               <h3>add clearfix to tab-content (see the css)</h3>
             </div>
           </div>
+          {isOpenedAddForm && <StaffAddForm />}
+          {isOpenedEditForm && <StaffEditForm />}
         </section>
       </div>
     </>

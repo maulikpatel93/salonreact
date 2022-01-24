@@ -81,12 +81,12 @@ export const staffSuggetionListApi = createAsyncThunk("staff/suggetionlist", asy
   }
 });
 
-export const addonstaffs = createAsyncThunk("staff/addonstaffs", async (formValues, thunkAPI) => {
+export const addonservices = createAsyncThunk("staff/addonservices", async (formValues, thunkAPI) => {
   try {
     const resposedata = await staffApiController
-      .addonstaffs(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "addonstaffs"))
-      .catch((error) => HandleError(thunkAPI, error, "addonstaffs"));
+      .addonservices(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "addonservices"))
+      .catch((error) => HandleError(thunkAPI, error, "addonservices"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -105,7 +105,7 @@ const initialState = {
   isSort: "",
   isSearchList: "",
   isSearchName: "",
-  isAddonStaffs: [],
+  isAddonServices: [],
 };
 
 const staffSlice = createSlice({
@@ -166,16 +166,16 @@ const staffSlice = createSlice({
     staffSearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
-    addonstaffsAction: (state, action) => {
+    addonserviceAction: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isAddonStaffs.find((event) => event.id === id);
+      const existingData = state.isAddonServices.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
       // console.log(changes);
-      // state.isAddonStaffs = action.payload;
+      // state.isAddonServices = action.payload;
     },
   },
   extraReducers: {
@@ -242,15 +242,15 @@ const staffSlice = createSlice({
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
     },
     [staffDeleteApi.rejected]: () => {},
-    [addonstaffs.pending]: () => {},
-    [addonstaffs.fulfilled]: (state, action) => {
-      state.isAddonStaffs = action.payload;
+    [addonservices.pending]: () => {},
+    [addonservices.fulfilled]: (state, action) => {
+      state.isAddonServices = action.payload;
     },
-    [addonstaffs.rejected]: (state) => {
-      state.isAddonStaffs = [];
+    [addonservices.rejected]: (state) => {
+      state.isAddonServices = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonstaffsAction } = staffSlice.actions;
+export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction } = staffSlice.actions;
 export default staffSlice.reducer;

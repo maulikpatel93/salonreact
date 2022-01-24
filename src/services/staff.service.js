@@ -10,16 +10,12 @@ const create = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    if (["service_price"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, JSON.stringify(values[value]));
-    } else {
-      formData.append(value, values[value]);
-    }
+    formData.append(value, values[value]);
   }
   const action = "afterlogin/staff/store";
   formData.append("auth_key", auth_key);
   formData.append("action", action);
-  formData.append("role_id", 6);
+  formData.append("role_id", 5);
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
@@ -29,17 +25,12 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    console.log(values);
-    if (["service_price"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, JSON.stringify(values[value]));
-    } else {
-      formData.append(value, values[value]);
-    }
+    formData.append(value, values[value]);
   }
   const action = "afterlogin/staff/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
-  formData.append("role_id", 6);
+  formData.append("role_id", 5);
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
@@ -119,13 +110,13 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
-const addonstaff = (values) => {
+const addonservices = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  let isNotId = values && values.isNotId ? values.isNotId : "";
-  const action = page ? `afterlogin/staff/addonstaff?page=${page}&isNotId=${isNotId}` : `afterlogin/staff/addonstaff?isNotId=${isNotId}`;
+  let staff_id = values && values.staff_id ? values.staff_id : "";
+  const action = page ? `afterlogin/staff/addonservices?page=${page}&staff_id=${staff_id}` : `afterlogin/staff/addonservices?staff_id=${staff_id}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -140,6 +131,6 @@ const staffApiController = {
   view,
   deleted,
   suggetionlist,
-  addonstaff
+  addonservices
 };
 export default staffApiController;
