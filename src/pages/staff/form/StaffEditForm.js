@@ -277,7 +277,6 @@ const StaffEditForm = () => {
                             workinghoursData.map((item, i) => {
                               let days = item.days;
                               let break_time = item.break_time;
-
                               console.log(break_time);
                               return (
                                 <li key={i}>
@@ -297,12 +296,20 @@ const StaffEditForm = () => {
                                     break_time.map((breakitem, j) => {
                                       return (
                                         <div key={j} className="add-break-time w-100 d-flex align-items-center mt-md-3 mt-2" id={`working_hours-break_time-${j}`}>
-                                          <label htmlFor={`staffForm-break_title-${item}`}>
+                                          {/* <label htmlFor={`staffForm-break_title-${item}`}>
                                             <InputField type="text" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_title]`} value={formik.values.working_hours[i].break_time[j].break_title} label={""} controlId={`staffForm-break_title-${i}-${j}`} />
                                           </label>
                                           <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_start_time]`} value={formik.values.working_hours[i].break_time[j].break_start_time} label={""} controlId={`staffForm-break_start_time-${i}-${j}`} />
                                           <span className="mx-2">to</span>
-                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_end_time]`} value={formik.values.working_hours[i].break_time[j].break_end_time} label={""} controlId={`staffForm-break_end_time-${i}-${j}`} />
+                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_end_time]`} value={formik.values.working_hours[i].break_time[j].break_end_time} label={""} controlId={`staffForm-break_end_time-${i}-${j}`} /> */}
+
+                                          <label htmlFor={`staffForm-break_title-${item}`}>
+                                            <InputField type="text" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_title]`} value={''} label={""} controlId={`staffForm-break_title-${i}-${j}`} />
+                                          </label>
+                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_start_time]`} value={''} label={""} controlId={`staffForm-break_start_time-${i}-${j}`} />
+                                          <span className="mx-2">to</span>
+                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_end_time]`} value={''} label={""} controlId={`staffForm-break_end_time-${i}-${j}`} />
+
                                           <a className="close-breaktime ps-xxl-4 ps-2">
                                             <img src={config.imagepath + "close-icon.svg"} alt="" />
                                           </a>
