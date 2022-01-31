@@ -195,6 +195,16 @@ const staffSlice = createSlice({
         });
       }
     },
+    removeBreakTime: (state, action) => {
+      const { days, ...changes } = action.payload;
+      const existingData = state.isWorkingHours.find((event) => event.days === days);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      }
+    },
+    
   },
   extraReducers: {
     [staffStoreApi.pending]: () => {},
@@ -270,5 +280,5 @@ const staffSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction, addBreakTime } = staffSlice.actions;
+export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction, addBreakTime, removeBreakTime } = staffSlice.actions;
 export default staffSlice.reducer;

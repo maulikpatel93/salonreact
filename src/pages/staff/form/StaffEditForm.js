@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 // import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
-import { closeEditStaffForm, staffUpdateApi, addonserviceAction, addBreakTime } from "../../../store/slices/staffSlice";
+import { closeEditStaffForm, staffUpdateApi, addonserviceAction, addBreakTime, removeBreakTime } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -310,7 +310,7 @@ const StaffEditForm = () => {
                                           <span className="mx-2">to</span>
                                           <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_end_time]`} value={''} label={""} controlId={`staffForm-break_end_time-${i}-${j}`} />
 
-                                          <a className="close-breaktime ps-xxl-4 ps-2">
+                                          <a className="close-breaktime ps-xxl-4 ps-2" onClick={() => dispatch(removeBreakTime())}>
                                             <img src={config.imagepath + "close-icon.svg"} alt="" />
                                           </a>
                                         </div>
