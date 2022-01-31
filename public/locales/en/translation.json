@@ -233,6 +233,14 @@
     "Allow_calendar_bookings": "Allow calendar bookings",
     "Create_Staff_Member": "Create Staff Member",
     "Update_Staff_Member": "Update Staff Member",
-    "Charge_for_services_based_on_level_of_experience": "Charge for services based on level of experience"
+    "Charge_for_services_based_on_level_of_experience": "Charge for services based on level of experience",
+    "Break": "Break",
+    "days": "days",
+    "start_time": "start_time",
+    "end_time": "end_time",
+    "break_time": "break_time",
+    "break_title": "break_title",
+    "break_start_time": "break_start_time",
+    "break_end_time": "break_end_time"
 
 }

@@ -25,7 +25,11 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    formData.append(value, values[value]);
+    if (["working_hours"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
+    }else{
+      formData.append(value, values[value]);
+    }
   }
   const action = "afterlogin/staff/update/" + values.id;
   formData.append("auth_key", auth_key);

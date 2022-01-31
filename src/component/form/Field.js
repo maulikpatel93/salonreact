@@ -93,7 +93,7 @@ const InputCheckbox = ({ label, controlId, ...props }) => {
   const [field] = useField(props);
   return (
     <>
-      <input {...field} {...props} type="checkbox" id={controlId}  />
+      <input {...field} {...props} type="checkbox" id={controlId} />
       <label htmlFor={controlId} className="">
         {label}
       </label>
@@ -156,20 +156,22 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
           ""
         )}
 
-        {page === "staff-addform" ? (
-          <div className="input-file position-relative ms-md-auto d-flex align-content-center flex-wrap justify-content-center">
-            <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
-            <button type="button" className={image && image.selected ? "d-none" : "btn btn-sm position-relative"}>
-              <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} />
-              {label}
-            </button>
-            <button type="button" className={image && image.selected ? "btn btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
-              {t("remove")}
-            </button>
-            <Form.Control.Feedback type="invalid" className={image && image.selected ? "d-none" : "d-block"}>
-              {meta.error}
-            </Form.Control.Feedback>
-          </div>
+        {page === "staff-form" ? (
+          <>
+            <div className="input-file position-relative ms-md-auto d-flex align-content-center flex-wrap justify-content-center">
+              <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} className={image && image.selected ? "input-photo d-none" : "input-photo"} />
+              <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
+              <span className={"cursor-pointer " + (image && image.selected ? "d-block" : "d-none")} onClick={removeSelectedImage}>
+                {t("remove")}
+              </span>
+              <span className={"cursor-pointer " + (image && image.selected ? "d-none" : "d-block")}>{label}</span>
+            </div>
+            <div className="d-flex align-content-center flex-wrap justify-content-center ms-lg-5">
+              <Form.Control.Feedback type="invalid" className={image && image.selected ? "d-none" : "d-block"}>
+                {meta.error}
+              </Form.Control.Feedback>
+            </div>
+          </>
         ) : (
           ""
         )}

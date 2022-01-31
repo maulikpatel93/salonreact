@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 // import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
-import { closeEditStaffForm, staffUpdateApi, addonserviceAction } from "../../../store/slices/staffSlice";
+import { closeEditStaffForm, staffUpdateApi, addonserviceAction, addBreakTime } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -22,6 +22,7 @@ const StaffEditForm = () => {
   const detail = useSelector((state) => state.staff.isDetailData);
   const isPriceTierOption = useSelector((state) => state.pricetier.isPriceTierOption);
   const isAddonServices = useSelector((state) => state.staff.isAddonServices);
+  const isWorkingHours = useSelector((state) => state.staff.isWorkingHours);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -33,7 +34,6 @@ const StaffEditForm = () => {
   const initialValues = {
     first_name: "",
     last_name: "",
-    profile_photo: "",
     email: "",
     phone_number: "",
     address: "",
@@ -44,6 +44,27 @@ const StaffEditForm = () => {
     price_tier_id: "",
     add_on_services: [],
     add_on_category: [],
+    working_hours: [
+      { days: "Sunday", start_time: "", end_time: "", break_time: [] },
+      { days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { days: "Saturday", start_time: "", end_time: "", break_time: [] },
+    ],
+    // working_hours: {
+    //   days: "",
+    //   start_time: "",
+    //   end_time: "",
+    //   break_time: [
+    //     {
+    //       break_title: "",
+    //       break_start_time: "",
+    //       break_end_time: "",
+    //     },
+    //   ],
+    // },
   };
 
   const validationSchema = Yup.object().shape({
@@ -60,6 +81,20 @@ const StaffEditForm = () => {
     description: Yup.string().trim().label(t("description")),
     price_tier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Price_Tier")).required())),
     add_on_services: Yup.array(),
+    working_hours: Yup.array().of(
+      Yup.object().shape({
+        days: Yup.string().trim().label(t("days")).required(),
+        start_time: Yup.string().trim().label(t("start_time")),
+        end_time: Yup.string().trim().label(t("end_time")),
+        break_time: Yup.array().of(
+          Yup.object().shape({
+            break_title: Yup.string().trim().label(t("break_title")),
+            break_start_time: Yup.string().trim().label(t("break_start_time")),
+            break_end_time: Yup.string().trim().label(t("break_end_time")),
+          }),
+        ),
+      }),
+    ),
   });
   yupconfig();
 
@@ -96,22 +131,15 @@ const StaffEditForm = () => {
   };
 
   const PriceTierOptionsData = isPriceTierOption;
-  const working_hours = [
-    { days: "Sunday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Monday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Tuesday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Wednesday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Thursday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Friday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-    { days: "Saturday", start_time: "", end_time: "", break_time: [{ break_title: "", break_start_time: "", break_end_time: "" }] },
-  ];
+  const workinghoursData = isWorkingHours;
+  
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
         {(formik) => {
           useEffect(() => {
             if (detail) {
-              const fields = ["id", 'price_tier_id',"first_name", "last_name", "email", "phone_number", "address", "street", "suburb", "state", "postcode", "calendar_booking"];
+              const fields = ["id", "price_tier_id", "first_name", "last_name", "email", "phone_number", "address", "street", "suburb", "state", "postcode", "calendar_booking"];
               fields.forEach((field) => {
                 if (["calendar_booking"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);
@@ -119,6 +147,29 @@ const StaffEditForm = () => {
                   formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
                 }
               });
+              const staffworkinghours = detail.staffworkinghours;
+              if (staffworkinghours) {
+                staffworkinghours.map((item, i) => {
+                  let days = item.days;
+                  let start_time = item.start_time;
+                  let end_time = item.end_time;
+                  let break_time = item.break_time;
+                  formik.setFieldValue(`working_hours[${i}][days]`, days ? days : "", false);
+                  formik.setFieldValue(`working_hours[${i}][start_time]`, start_time ? start_time : "", false);
+                  formik.setFieldValue(`working_hours[${i}][end_time]`, end_time ? end_time : "", false);
+                  // console.log(!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true));
+                  if (break_time) {
+                    break_time.map((breakitem, j) => {
+                      let break_title = breakitem.break_title;
+                      let break_start_time = breakitem.break_start_time;
+                      let break_end_time = breakitem.break_end_time;
+                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_title]`, break_title ? break_title : "", false);
+                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_start_time]`, break_start_time ? break_start_time : "", false);
+                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_end_time]`, break_start_time ? break_end_time : "", false);
+                    });
+                  }
+                });
+              }
             }
             if (isAddonServices) {
               Object.keys(isAddonServices).map((item) => {
@@ -136,6 +187,7 @@ const StaffEditForm = () => {
               });
             }
           }, [detail, isAddonServices]);
+
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 addstaff-member " : "") + rightDrawerOpened} id="addstaff-member-drawer">
               <div className="drawer-wrp position-relative">
@@ -161,7 +213,7 @@ const StaffEditForm = () => {
                             </div>
                           </div>
                           <div className="col-md-6 mb-3">
-                            <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="staff-addform" controlId="staffForm-profile_photo" imagname="" imageurl="" />
+                            <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="staff-form" controlId="staffForm-profile_photo" imagname="" imageurl="" />
                           </div>
                         </div>
                         <div className="row gx-2">
@@ -221,15 +273,42 @@ const StaffEditForm = () => {
                         <h3 className="mb-2">{t("Working_Hours")}</h3>
                         <h6 className="subtitle">{t("Set_the_availability_for_this_staff_member")}</h6>
                         <ul className="list-unstyled mb-0 p-0">
-                          {working_hours &&
-                            Object.keys(working_hours).map((item) => {
-                              let days = working_hours[item].days.toLowerCase();
+                          {workinghoursData &&
+                            workinghoursData.map((item, i) => {
+                              let days = item.days;
+                              let break_time = item.break_time;
+
+                              console.log(break_time);
                               return (
-                                <li key={item}>
-                                  <label htmlFor="">{ucfirst(days)}</label>
-                                  <InputField type="text" placeholder="--/--" name={`start_time[${item}]`} value={""} label={""} controlId={`staffForm-start_time-${item}`} />
+                                <li key={i}>
+                                  {/* <label htmlFor="">{ucfirst(days)}</label> */}
+                                  <label htmlFor="">{days}</label>
+                                  <div className="d-none">
+                                    <InputField type="hidden" name={`working_hours[${i}][days]`} value={formik.values.working_hours[i].days} label={""} controlId={`staffForm-days-${i}`} className="" />
+                                  </div>
+                                  <InputField type="time" placeholder="--/--" name={`working_hours[${i}][start_time]`} value={formik.values.working_hours[i].start_time} label={""} controlId={`staffForm-start_time-${i}`} />
                                   <span className="mx-2">to</span>
-                                  <InputField type="text" placeholder="--/--" name={`end_time[${item}]`} value={""} label={""} controlId={`staffForm-end_time-${item}`} />
+                                  <InputField type="time" placeholder="--/--" name={`working_hours[${i}][end_time]`} value={formik.values.working_hours[i].end_time} label={""} controlId={`staffForm-end_time-${i}`} className="me-xxl-4 me-2" />
+                                  <a id={`addbreak-link-${i}`} className="cursor-pointer h6 mb-0 color-wine text-decoration-none" onClick={() => dispatch(addBreakTime({ ...isWorkingHours[i], break_time: [...isWorkingHours[i].break_time, { break_title: "Lunch", break_start_time: "02:00", break_end_time: "03:00" }] }))}>
+                                    <i className="fal fa-plus pe-1 small"></i>
+                                    {t("Break")}
+                                  </a>
+                                  {break_time &&
+                                    break_time.map((breakitem, j) => {
+                                      return (
+                                        <div key={j} className="add-break-time w-100 d-flex align-items-center mt-md-3 mt-2" id={`working_hours-break_time-${j}`}>
+                                          <label htmlFor={`staffForm-break_title-${item}`}>
+                                            <InputField type="text" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_title]`} value={formik.values.working_hours[i].break_time[j].break_title} label={""} controlId={`staffForm-break_title-${i}-${j}`} />
+                                          </label>
+                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_start_time]`} value={formik.values.working_hours[i].break_time[j].break_start_time} label={""} controlId={`staffForm-break_start_time-${i}-${j}`} />
+                                          <span className="mx-2">to</span>
+                                          <InputField type="time" placeholder="--/--" name={`working_hours[${i}][break_time][${j}][break_end_time]`} value={formik.values.working_hours[i].break_time[j].break_end_time} label={""} controlId={`staffForm-break_end_time-${i}-${j}`} />
+                                          <a className="close-breaktime ps-xxl-4 ps-2">
+                                            <img src={config.imagepath + "close-icon.svg"} alt="" />
+                                          </a>
+                                        </div>
+                                      );
+                                    })}
                                 </li>
                               );
                             })}

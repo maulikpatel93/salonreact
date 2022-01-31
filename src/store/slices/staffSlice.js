@@ -106,6 +106,15 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isAddonServices: [],
+  isWorkingHours: [
+    { days: "Sunday", start_time: "", end_time: "", break_time: [] },
+    { days: "Monday", start_time: "", end_time: "", break_time: [] },
+    { days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+    { days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+    { days: "Thursday", start_time: "", end_time: "", break_time: [] },
+    { days: "Friday", start_time: "", end_time: "", break_time: [] },
+    { days: "Saturday", start_time: "", end_time: "", break_time: [] },
+  ],
 };
 
 const staffSlice = createSlice({
@@ -176,6 +185,15 @@ const staffSlice = createSlice({
       }
       // console.log(changes);
       // state.isAddonServices = action.payload;
+    },
+    addBreakTime: (state, action) => {
+      const { days, ...changes } = action.payload;
+      const existingData = state.isWorkingHours.find((event) => event.days === days);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      }
     },
   },
   extraReducers: {
@@ -252,5 +270,5 @@ const staffSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction } = staffSlice.actions;
+export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction, addBreakTime } = staffSlice.actions;
 export default staffSlice.reducer;
