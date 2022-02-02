@@ -30,12 +30,12 @@ export const rosterUpdateApi = createAsyncThunk("roster/update", async (formvalu
   }
 });
 
-export const rosterGridViewApi = createAsyncThunk("roster/gridview", async (formValues, thunkAPI) => {
+export const rosterListViewApi = createAsyncThunk("roster/listview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await rosterApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
-      .catch((error) => HandleError(thunkAPI, error, "gridview"));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -84,7 +84,8 @@ export const rosterDeleteApi = createAsyncThunk("roster/delete", async (formValu
 
 const initialState = {
   isOpenedAddForm: "",
-  isOpenedEditForm: ""
+  isOpenedEditForm: "",
+  isListView: [],
 };
 
 const rosterSlice = createSlice({
@@ -112,24 +113,38 @@ const rosterSlice = createSlice({
   extraReducers: {
     [rosterStoreApi.pending]: () => {},
     [rosterStoreApi.fulfilled]: (state, action) => {
-      if (state.isGridView && state.isGridView.data) {
-        state.isGridView.data = [action.payload, ...state.isGridView.data];
+      if (state.isListView && state.isListView.data) {
+        state.isListView.data = [action.payload, ...state.isListView.data];
       } else {
-        state.isGridView = { data: [action.payload] };
+        state.isListView = { data: [action.payload] };
       }
     },
     [rosterStoreApi.rejected]: () => {},
     [rosterUpdateApi.pending]: () => {},
     [rosterUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isGridView.data.find((event) => event.id === id);
+      const existingData = state.isListView.data.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [rosterUpdateApi.rejected]: () => {}
+    [rosterUpdateApi.rejected]: () => {},
+    [rosterListViewApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isListView && state.isListView.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isListView = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isListView = action.payload;
+    },
+    [rosterListViewApi.rejected]: (state) => {
+      state.isListView = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function

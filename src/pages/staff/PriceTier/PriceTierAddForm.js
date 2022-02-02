@@ -34,7 +34,7 @@ const PriceTierAddForm = () => {
   });
   yupconfig();
 
-  const handlecategoriesubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+  const handlePriceTierSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
       dispatch(pricetierStoreApi(values)).then((action) => {
@@ -67,7 +67,7 @@ const PriceTierAddForm = () => {
 
   return (
     <React.Fragment>
-      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
+      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlePriceTierSubmit}>
         {(formik) => {
           return (
             <div className={rightDrawerOpened ? "modal fade show" : "modal fade"} id="add-pricetier" tabIndex="-1" aria-labelledby="addpricetierModalLabel" aria-hidden="true" style={{ display: rightDrawerOpened ? "block" : "none" }}>

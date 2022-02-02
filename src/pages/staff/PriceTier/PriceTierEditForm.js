@@ -36,7 +36,7 @@ const PriceTierEditForm = () => {
   });
   yupconfig();
 
-  const handlecategoriesubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+  const handlePriceTierSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
       dispatch(pricetierUpdateApi(values)).then((action) => {
@@ -69,7 +69,7 @@ const PriceTierEditForm = () => {
 
   return (
     <React.Fragment>
-      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
+      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlePriceTierSubmit}>
         {(formik) => {
           useEffect(() => {
             if (detail) {

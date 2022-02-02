@@ -242,6 +242,7 @@
     "break_title": "break_title",
     "break_start_time": "break_start_time",
     "break_end_time": "break_end_time",
-    "All_Staff": "All Staff"
-
+    "All_Staff": "All Staff",
+    "Update": "Update",
+    "Set_start_and_end_time": "Set start and end time"
 }

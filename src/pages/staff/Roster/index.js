@@ -1,22 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // import InfiniteScroll from "react-infinite-scroll-component";
 
 import config from "../../../config";
 import { staffOptions } from "../../../store/slices/staffSlice";
-// import { openAddPriceTierForm, pricetierGridViewApi } from "../../../store/slices/rosterSlice";
+import { ucfirst } from "helpers/functions";
+import { rosterListViewApi } from "../../../store/slices/rosterSlice";
+import Moment from "react-moment";
+import AddTimeForm from "./AddTimeForm";
 
 const Roster = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-//   const auth = useSelector((state) => state.auth);
-//   const currentUser = auth.user;
+  let [addTime, setAddTime] = useState(false);
 
   useEffect(() => {
-    dispatch(staffOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(staffOptions({ dropdown: true }));
+    dispatch(rosterListViewApi());
   }, []);
+  //   const auth = useSelector((state) => state.auth);
+  //   const currentUser = auth.user;
+  const isStaffOption = useSelector((state) => state.staff.isStaffOption);
+  const rosterListview = useSelector((state) => state.roster.isListView);
+  console.log(rosterListview);
+  let curr = new Date();
+  let week = [];
+  for (let i = 1; i <= 7; i++) {
+    let first = curr.getDate() - curr.getDay() + i;
+    let date = new Date(curr.setDate(first)).toISOString().slice(0, 10); //2022-11-01 format
+    //     let day = new Date(curr.setDate(first));
+    //     let day = date.toLocaleString("en-Us", { weekday: "short", day: "numeric", year: "numeric", month: "short" });
+    week.push(date);
+  }
+
   return (
     <>
       <div className="row justify-content-between">
@@ -27,16 +45,23 @@ const Roster = () => {
             </button>
             <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
               <ul className="p-0 m-0 list-unstyled">
-                <li>
-                  <a className="d-flex align-items-center">
-                    <div className="user-img me-2">
-                      <img src="assets/images/Avatar.png" alt="" />
-                    </div>
-                    <div className="user-id">
-                      <span className="user-name">Whitney Blessing</span>
-                    </div>
-                  </a>
-                </li>
+                {isStaffOption &&
+                  Object.keys(isStaffOption).map((item, i) => {
+                    let id = isStaffOption[item].id;
+                    let first_name = isStaffOption[item].first_name;
+                    let last_name = isStaffOption[item].last_name;
+                    let image_url = isStaffOption[item].profile_photo_url;
+                    return (
+                      <li key={i} data-id={id}>
+                        <a className="d-flex align-items-center cursor-pointer" onClick={() => console.log(id)}>
+                          <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
+                          <div className="user-id">
+                            <span className="user-name">{ucfirst(first_name) + " " + ucfirst(last_name)}</span>
+                          </div>
+                        </a>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </div>
@@ -48,191 +73,60 @@ const Roster = () => {
           <thead className="thead-dark">
             <tr>
               <th>Staff Member</th>
-              <th></th>
-              <th>Tues 11 Oct</th>
-              <th>Tues 12 Oct</th>
-              <th>Wed 13 Oct</th>
-              <th>Thurs 14 Oct</th>
-              <th>Fri 15 Oct</th>
-              <th>Sat 16 Oct</th>
-              <th>Sun 17 Oct</th>
+              {week &&
+                week.map((item, i) => (
+                  <th key={i}>
+                    <Moment format="ddd DD MMM">{item}</Moment>
+                  </th>
+                ))}
             </tr>
           </thead>
           <tbody className="body-cover">
-            <tr>
-              <td>Amanda Jones</td>
-              <td align="center">
-                <a className="updated-time show">9:00am - 5:00pm</a>
-                <a className="add-time" style={{ display: "none" }}>
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-                <a className="away-text" style={{ display: "none" }}>
-                  Away
-                </a>
-                <div className="updatetime-popup" style={{ display: "none" }}>
-                  <a className="close">
-                    <img src={config.imagepath + "close-icon.png"} alt="" />
-                  </a>
-                  <div className="p-md-4 p-3">
-                    <h6 className="fw-semibold text-start mb-3">Set start and end time</h6>
-                    <div className="d-flex align-items-center">
-                      <input type="text" className="start-time form-control" />
-                      <span className="px-md-2 px-1">to</span>
-                      <input type="text" className="start-time form-control" />
-                      <input type="submit" className="btn ms-md-3 ms-1" />
-                    </div>
-                  </div>
-                  <div className="popup-footer d-flex text-center">
-                    <a id="mark-away" className="col-6">
-                      Mark as Away
-                    </a>
-                    <a id="mark-not-away" style={{ display: "none" }} className="col-6">
-                      Mark as Not Away
-                    </a>
-                    <a id="removetime" className="col-6" data-bs-toggle="modal" data-bs-target="#removetimemodal">
-                      Remove Shift
-                    </a>
-                  </div>
-                </div>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-                <div className="addtime-popup" style={{ display: "none" }}>
-                  <a className="close">
-                    <img src={config.imagepath + "close-icon.svg"} alt="" />
-                  </a>
-                  <div className="p-md-4 p-3">
-                    <h6 className="fw-semibold text-start mb-3">Set start and end time</h6>
-                    <div className="d-flex align-items-center">
-                      <input type="text" className="start-time form-control" />
-                      <span className="px-md-2 px-1">to</span>
-                      <input type="text" className="start-time form-control" />
-                      <input type="submit" className="btn ms-md-3 ms-1" />
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>John Doe</td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-              <td align="center">
-                <a className="updated-time" style={{ display: "none" }}>
-                  9:00am - 5:00pm
-                </a>
-                <a className="add-time">
-                  <img src={config.imagepath + "plus-gray.png"} alt="" />
-                </a>
-              </td>
-            </tr>
+            {rosterListview &&
+              Object.keys(rosterListview).map((item, i) => {
+                let id = rosterListview[item].id;
+                let first_name = rosterListview[item].first_name;
+                let last_name = rosterListview[item].last_name;
+                let rosterfield = rosterListview[item].rosterfield;
+
+                //     let image_url = isStaffOption[item].profile_photo_url;
+                return (
+                  <tr key={i} data-id={id}>
+                    <td>{ucfirst(first_name) + " " + ucfirst(last_name)}</td>
+                    {week &&
+                      week.map((date, j) => {
+                        let rosterdata = rosterfield && rosterfield.filter((item) => item.date === date);
+                        
+                        // console.log(i);
+                        return (
+                          <td align="center" key={id + j}>
+                            {rosterdata.length > 0 ? (
+                              <a className="updated-time show">9:00am - 5:00pm</a>
+                            ) : (
+                              <a className="add-time cursor-pointer" data-id={id + "-" + j} onClick={(e) => setAddTime(e.currentTarget.getAttribute("data-id"))}>
+                                <img src={config.imagepath + "plus-gray.png"} alt="" />
+                              </a>
+                            )}
+
+                            {addTime === id + "-" + j ? (
+                              <div className="addtime-popup" style={{ display: addTime === id + "-" + j ? "block" : "none" }}>
+                                <a className="close cursor-pointer" onClick={() => setAddTime(false)}>
+                                  <img src={config.imagepath + "close-icon.svg"} alt="" />
+                                </a>
+                                <AddTimeForm staff_id={id} date={date} />
+                              </div>
+                            ) : (
+                              ""
+                            )}
+
+                            {/* <AddTime date={day} index={i} staff_id={id} />
+                            <UpdateTime date={day} index={i} staff_id={id} /> */}
+                          </td>
+                        );
+                      })}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
         <div className="modal fade" id="removetimemodal" tabIndex="-1" aria-labelledby="removetimeModalLabel" aria-hidden="true">
