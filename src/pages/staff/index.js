@@ -7,6 +7,7 @@ import { staffTabView, staffGridViewApi, openAddStaffForm, addonservices } from 
 import { pricetierGridViewApi, pricetierOptions } from "../../store/slices/pricetierSlice";
 
 import PriceTier from "./PriceTier";
+import Roster from "./Roster";
 import config from "../../config";
 import StaffGridView from "./List/gridview";
 import StaffAddForm from "./form/StaffAddForm";
@@ -114,7 +115,9 @@ const Staff = () => {
                 )}
               </div>
             </div>
-            <div className={"tab-pane" + (tabview && tabview == "roster" ? " show active" : "")} id="roster"></div>
+            <div className={"tab-pane" + (tabview && tabview == "roster" ? " show active" : "")} id="roster">
+              {tabview && tabview == "roster" && <Roster />}
+            </div>
             <div className={"tab-pane" + (tabview && tabview == "price_tier" ? " show active" : "")} id="pricetiers">
               <h5 className="fw-semibold">{t("price_tier_listing_note")}</h5>
               {tabview && tabview == "price_tier" && <PriceTier />}

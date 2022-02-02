@@ -94,6 +94,19 @@ export const addonservices = createAsyncThunk("staff/addonservices", async (form
   }
 });
 
+export const staffOptions = createAsyncThunk("staff/staffOptions", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await staffApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, 'staffOptions'))
+      .catch((error) => HandleError(thunkAPI, error, 'staffOptions'));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -106,15 +119,7 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isAddonServices: [],
-  isWorkingHours: [
-    { days: "Sunday", start_time: "", end_time: "", break_time: [] },
-    { days: "Monday", start_time: "", end_time: "", break_time: [] },
-    { days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-    { days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-    { days: "Thursday", start_time: "", end_time: "", break_time: [] },
-    { days: "Friday", start_time: "", end_time: "", break_time: [] },
-    { days: "Saturday", start_time: "", end_time: "", break_time: [] },
-  ],
+  isStaffOption: [],
 };
 
 const staffSlice = createSlice({
@@ -185,26 +190,7 @@ const staffSlice = createSlice({
       }
       // console.log(changes);
       // state.isAddonServices = action.payload;
-    },
-    addBreakTime: (state, action) => {
-      const { days, ...changes } = action.payload;
-      const existingData = state.isWorkingHours.find((event) => event.days === days);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
-    },
-    removeBreakTime: (state, action) => {
-      const { days, ...changes } = action.payload;
-      const existingData = state.isWorkingHours.find((event) => event.days === days);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
-    },
-    
+    }
   },
   extraReducers: {
     [staffStoreApi.pending]: () => {},
@@ -277,8 +263,15 @@ const staffSlice = createSlice({
     [addonservices.rejected]: (state) => {
       state.isAddonServices = [];
     },
+    [staffOptions.pending]: () => {},
+    [staffOptions.fulfilled]: (state, action) => {
+      state.isStaffOption = action.payload;
+    },
+    [staffOptions.rejected]: (state) => {
+      state.isStaffOption = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction, addBreakTime, removeBreakTime } = staffSlice.actions;
+export const { reset, staffTabView, openAddStaffForm, closeAddStaffForm, openEditStaffForm, closeEditStaffForm, staffTabGridView, openStaffDetailModal, closeStaffDetailModal, staffDetailTab, staffSort, staffSortRemove, openStaffSearchList, closeStaffSearchList, staffSearchName, addonserviceAction } = staffSlice.actions;
 export default staffSlice.reducer;
