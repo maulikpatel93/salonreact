@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { rosterListViewApi, rosterStoreApi, closeAddRosterForm, closeEditRosterForm } from "../../../store/slices/rosterSlice";
+import { rosterListViewApi, rosterStoreApi, closeAddRosterForm, closeEditRosterForm, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 import PropTypes from "prop-types";
 
@@ -19,13 +19,13 @@ const AddTimeForm = (props) => {
 
   const staff_id = props.staff_id;
   const date = props.date;
-  
+
   const initialValues = {
     staff_id: "",
     date: "",
     start_time: "",
     end_time: "",
-    away: ""
+    away: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -42,6 +42,7 @@ const AddTimeForm = (props) => {
       dispatch(rosterStoreApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           dispatch(rosterListViewApi());
+          dispatch(resetStaffFilter());
           dispatch(closeAddRosterForm());
           dispatch(closeEditRosterForm());
           setStatus({ success: true });

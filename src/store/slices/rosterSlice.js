@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import { checkobject } from "helpers/functions";
 import rosterApiController from "../../services/roster.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
@@ -87,6 +88,7 @@ const initialState = {
   isOpenedEditForm: "",
   isDeleteModal: "",
   isListView: [],
+  isStaffFilter: "",
 };
 
 const rosterSlice = createSlice({
@@ -116,6 +118,12 @@ const rosterSlice = createSlice({
     closeDeleteModal: (state) => {
       state.isDeleteModal = "";
     },
+    staffFilter: (state, action) => {
+      state.isStaffFilter = action.payload;
+    },
+    resetStaffFilter: (state) => {
+      state.isStaffFilter = "";
+    },
   },
   extraReducers: {
     [rosterStoreApi.pending]: () => {},
@@ -139,15 +147,20 @@ const rosterSlice = createSlice({
     },
     [rosterUpdateApi.rejected]: () => {},
     [rosterListViewApi.fulfilled]: (state, action) => {
-      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
-      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-      let viewdata = state.isListView && state.isListView.data;
-      let newviewdata = action.payload && action.payload.data;
-      state.isListView = action.payload;
-      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+      console.log(checkobject(action.payload));
+      if (checkobject(action.payload) === true) {
+        state.isListView = [action.payload];
+      } else {
+        let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+        let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+        let viewdata = state.isListView && state.isListView.data;
+        let newviewdata = action.payload && action.payload.data;
+        state.isListView = action.payload;
+        if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+          viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        }
+        state.isListView = action.payload;
       }
-      state.isListView = action.payload;
     },
     [rosterListViewApi.rejected]: (state) => {
       state.isListView = [];
@@ -158,5 +171,5 @@ const rosterSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddRosterForm, closeAddRosterForm, openEditRosterForm, closeEditRosterForm, openDeleteModal, closeDeleteModal } = rosterSlice.actions;
+export const { reset, openAddRosterForm, closeAddRosterForm, openEditRosterForm, closeEditRosterForm, openDeleteModal, closeDeleteModal, staffFilter, resetStaffFilter } = rosterSlice.actions;
 export default rosterSlice.reducer;

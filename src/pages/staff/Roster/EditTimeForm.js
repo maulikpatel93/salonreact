@@ -7,7 +7,7 @@ import { Formik, Field } from "formik";
 // import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { rosterListViewApi, rosterUpdateApi, closeAddRosterForm, closeEditRosterForm, openDeleteModal } from "../../../store/slices/rosterSlice";
+import { rosterListViewApi, rosterUpdateApi, closeAddRosterForm, closeEditRosterForm, openDeleteModal, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 import PropTypes from "prop-types";
 
@@ -21,7 +21,7 @@ const EditTimeForm = (props) => {
   const staff_id = props.staff_id;
   const date = props.date;
   const roster = props.roster;
- 
+
   const initialValues = {
     staff_id: "",
     date: "",
@@ -37,13 +37,13 @@ const EditTimeForm = (props) => {
     end_time: Yup.string().trim().label(t("end_time")).required(),
   });
   yupconfig();
-
   const handleRosterSubmit = (values, { setErrors, setStatus, setSubmitting }) => {
     setLoading(true);
     try {
       dispatch(rosterUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           dispatch(rosterListViewApi());
+          dispatch(resetStaffFilter());
           dispatch(closeAddRosterForm());
           dispatch(closeEditRosterForm());
           setStatus({ success: true });
@@ -90,7 +90,7 @@ const EditTimeForm = (props) => {
                 <h6 className="fw-semibold text-start mb-3">{t("Set_start_and_end_time")}</h6>
                 <Field type="hidden" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " form-control"} name="staff_id" onChange={formik.handleChange} />
                 <Field type="hidden" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " form-control"} name="date" onChange={formik.handleChange} />
-                <Field type="hidden" className="form-control" name="away" onChange={formik.handleChange}/>
+                <Field type="hidden" className="form-control" name="away" onChange={formik.handleChange} />
                 <div className="d-flex align-items-center">
                   <Field type="time" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " start-time form-control"} name="start_time" onChange={formik.handleChange} />
                   <span className="px-md-2 px-1">to</span>
@@ -103,11 +103,11 @@ const EditTimeForm = (props) => {
               </div>
               <div className="popup-footer d-flex text-center">
                 {roster.away === "0" ? (
-                  <button type="submit" id="mark-away" className="col-6 bg-transparent border-1" onClick={() => formik.setFieldValue('away', '1')}>
+                  <button type="submit" id="mark-away" className="col-6 bg-transparent border-1" onClick={() => formik.setFieldValue("away", "1")}>
                     {t("Mark_as_Away")}
                   </button>
                 ) : (
-                  <button type="submit" id="mark-not-away" className="col-6 bg-transparent border-1" onClick={() => formik.setFieldValue('away', '0')}>
+                  <button type="submit" id="mark-not-away" className="col-6 bg-transparent border-1" onClick={() => formik.setFieldValue("away", "0")}>
                     {t("Mark_as_Not_Away")}
                   </button>
                 )}

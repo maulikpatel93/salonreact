@@ -38,7 +38,7 @@ const update = (values) => {
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
 
-const view = () => {
+const view = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
 
@@ -49,7 +49,7 @@ const view = () => {
     action: action,
     salon_id: auth.user.salon_id,
     pagination: false, //true or false
-    id: "",
+    id: values && values.id ? values.id : "",
     field: "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     price_tier_field: "name", //business_name,owner_name

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { staffOptions } from "../../../store/slices/staffSlice";
 import { ucfirst } from "helpers/functions";
-import { rosterListViewApi, openAddRosterForm, openEditRosterForm, closeAddRosterForm, closeEditRosterForm, closeDeleteModal, rosterDeleteApi } from "../../../store/slices/rosterSlice";
+import { rosterListViewApi, openAddRosterForm, openEditRosterForm, closeAddRosterForm, closeEditRosterForm, closeDeleteModal, rosterDeleteApi, staffFilter, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import Moment from "react-moment";
 import AddTimeForm from "./AddTimeForm";
 import EditTimeForm from "./EditTimeForm";
@@ -15,17 +15,23 @@ const Roster = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(staffOptions({ dropdown: true }));
-    dispatch(rosterListViewApi());
-  }, []);
-  //   const auth = useSelector((state) => state.auth);
-  //   const currentUser = auth.user;
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const rosterListview = useSelector((state) => state.roster.isListView);
   const addTime = useSelector((state) => state.roster.isOpenedAddForm);
   const updateTime = useSelector((state) => state.roster.isOpenedEditForm);
   const isDeleteModal = useSelector((state) => state.roster.isDeleteModal);
+  const isStaffFilter = useSelector((state) => state.roster.isStaffFilter);
+  useEffect(() => {
+    dispatch(staffOptions({ dropdown: true }));
+    if (isStaffFilter) {
+      dispatch(rosterListViewApi({ id: isStaffFilter.id }));
+    } else {
+      dispatch(rosterListViewApi());
+    }
+    //dispatch(resetStaffFilter());
+  }, []);
+  //   const auth = useSelector((state) => state.auth);
+  //   const currentUser = auth.user;
 
   let curr = new Date();
   let week = [];
@@ -38,8 +44,8 @@ const Roster = () => {
   }
 
   const handleRosterDelete = (e) => {
-    const props = JSON.parse(e.currentTarget.dataset.obj);
-    dispatch(rosterDeleteApi({ id: props.id })).then((action) => {
+    const obj = JSON.parse(e.currentTarget.dataset.obj);
+    dispatch(rosterDeleteApi({ id: obj.id })).then((action) => {
       if (action.meta.requestStatus == "fulfilled") {
         dispatch(closeAddRosterForm());
         dispatch(closeEditRosterForm());
@@ -61,29 +67,47 @@ const Roster = () => {
       <div className="row justify-content-between">
         <div className="col-xl-2 col-md-5">
           <div className="dropdown staff-dropdown">
-            <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              {t("All_Staff")}
-            </button>
-            <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
-              <ul className="p-0 m-0 list-unstyled">
-                {isStaffOption &&
-                  Object.keys(isStaffOption).map((item, i) => {
-                    let id = isStaffOption[item].id;
-                    let first_name = isStaffOption[item].first_name;
-                    let last_name = isStaffOption[item].last_name;
-                    let image_url = isStaffOption[item].profile_photo_url;
-                    return (
-                      <li key={i} data-id={id}>
-                        <a className="d-flex align-items-center cursor-pointer" onClick={() => console.log(id)}>
-                          <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
-                          <div className="user-id">
-                            <span className="user-name">{ucfirst(first_name) + " " + ucfirst(last_name)}</span>
-                          </div>
-                        </a>
-                      </li>
-                    );
-                  })}
-              </ul>
+            <div className="btn-group w-100">
+              <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                {isStaffFilter ? isStaffFilter.name : t("All_Staff")}
+              </button>
+              <span
+                className="btn btn-primary"
+                onClick={() => {
+                  dispatch(resetStaffFilter());
+                  dispatch(rosterListViewApi());
+                }}
+              >
+                x
+              </span>
+              <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
+                <ul className="p-0 m-0 list-unstyled">
+                  {isStaffOption &&
+                    Object.keys(isStaffOption).map((item, i) => {
+                      let id = isStaffOption[item].id;
+                      let first_name = isStaffOption[item].first_name;
+                      let last_name = isStaffOption[item].last_name;
+                      let image_url = isStaffOption[item].profile_photo_url;
+                      let name = ucfirst(first_name) + " " + ucfirst(last_name);
+                      return (
+                        <li key={i} data-id={id}>
+                          <a
+                            className="d-flex align-items-center cursor-pointer"
+                            onClick={() => {
+                              dispatch(staffFilter({ id, name }));
+                              dispatch(rosterListViewApi({ id }));
+                            }}
+                          >
+                            <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
+                            <div className="user-id">
+                              <span className="user-name">{name}</span>
+                            </div>
+                          </a>
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -93,7 +117,7 @@ const Roster = () => {
         <table className="table table-bordered bg-white mb-0">
           <thead className="thead-dark">
             <tr>
-              <th>Staff Member</th>
+              <th>{t("Staff_Member")}</th>
               {week &&
                 week.map((item, i) => (
                   <th key={i}>
@@ -193,15 +217,15 @@ const Roster = () => {
               <div className="modal-content ">
                 <div className="modal-body text-center p-md-4 p-3">
                   <img src={config.imagepath + "warning-red.png"} className="mb-lg-3 mb-2" alt="" />
-                  <h5>Are you sure?</h5>
-                  <h6>You are about to remove a shift that repeats weekly. Removing this shift will update Amanda’s ongoing working hours.</h6>
+                  <h5>{t("Are_you_sure")}</h5>
+                  <h6>{t("roster_delete_note")}</h6>
                 </div>
                 <div className="modal-footer p-md-4 p-3 justify-content-center border-0">
                   <button type="button" className="btn btn-outline" onClick={() => dispatch(closeDeleteModal())}>
-                    Cancel
+                    {t("Cancel")}
                   </button>
                   <button type="button" className="btn" data-obj={isDeleteModal} onClick={(e) => handleRosterDelete(e)}>
-                    Yes, Remove This Shift
+                    {t("Remove_This_Shift")}
                   </button>
                 </div>
               </div>

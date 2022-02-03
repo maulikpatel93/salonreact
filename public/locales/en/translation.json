@@ -138,6 +138,7 @@
     "edit_product": "Edit Product",
     "edit_supplier": "Edit Supplier",
     "cancel": "Cancel",
+    "Cancel": "Cancel",
     "save": "Save",
     "add_the_name_of_the_supplier": "Add the name of the supplier.",
     "supplier_name": "Supplier Name",
@@ -248,5 +249,9 @@
     "Mark_as_Away": "Mark as Away",
     "Mark_as_Not_Away": "Mark as Not Away",
     "Remove_Shift": "Remove Shift",
-    "AWAY": "AWAY"
+    "AWAY": "AWAY",
+    "Staff_Member": "Staff Member",
+    "Are_you_sure": "Are you sure?",
+    "roster_delete_note": "You are about to remove a shift that repeats weekly. Removing this shift will update Amanda’s ongoing working hours.",
+    "Remove_This_Shift": "Yes, Remove This Shift"
 }

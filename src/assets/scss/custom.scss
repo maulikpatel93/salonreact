@@ -175,3 +175,7 @@ header {
     height: 100px;
     object-fit: contain;
 }
+
+.table> :not(:first-child) {
+    border-top: none;
+}
