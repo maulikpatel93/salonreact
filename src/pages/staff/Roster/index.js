@@ -221,10 +221,10 @@ const Roster = () => {
                   <h6>{t("roster_delete_note")}</h6>
                 </div>
                 <div className="modal-footer p-md-4 p-3 justify-content-center border-0">
-                  <button type="button" className="btn btn-outline" onClick={() => dispatch(closeDeleteModal())}>
+                  <button type="button" className="btn btn-outline-primary" onClick={() => dispatch(closeDeleteModal())}>
                     {t("Cancel")}
                   </button>
-                  <button type="button" className="btn" data-obj={isDeleteModal} onClick={(e) => handleRosterDelete(e)}>
+                  <button type="button" className="btn btn-primary" data-obj={isDeleteModal} onClick={(e) => handleRosterDelete(e)}>
                     {t("Remove_This_Shift")}
                   </button>
                 </div>

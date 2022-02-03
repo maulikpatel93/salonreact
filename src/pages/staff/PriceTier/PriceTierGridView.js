@@ -36,6 +36,7 @@ const PriceTierGridView = (props) => {
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
+          let totalStaff = objectData[item].totalStaff;
           return (
             <div className="box-image-cover" key={i} data-id={id}>
               <div className="dropdown d-inline-block setting-dropdown">
@@ -65,6 +66,7 @@ const PriceTierGridView = (props) => {
                 </div>
                 <div className="image-content">
                   <h5 className="fw-semibold mb-1">{ucfirst(name)}</h5>
+                  <h5 className="mb-1 fw-normal"><i className="fas fa-user me-1"></i> {totalStaff}</h5>
                 </div>
               </a>
             </div>

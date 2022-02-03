@@ -47,7 +47,7 @@ const AddTimeForm = (props) => {
           dispatch(closeEditRosterForm());
           setStatus({ success: true });
           resetForm();
-          sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -88,7 +88,7 @@ const AddTimeForm = (props) => {
                   <Field type="time" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " start-time form-control"} name="start_time" onChange={formik.handleChange} />
                   <span className="px-md-2 px-1">to</span>
                   <Field type="time" className={(formik.errors && formik.errors.end_time ? "is-invalid" : "") + " end-time form-control"} name="end_time" onChange={formik.handleChange} />
-                  <button type="submit" className="btn ms-md-3 ms-1" disabled={loading}>
+                  <button type="submit" className="btn btn-primary ms-md-3 ms-1" disabled={loading}>
                     {loading && <span className="spinner-border spinner-border-sm"></span>}
                     {t("Update")}
                   </button>
