@@ -225,11 +225,11 @@ const Clients = () => {
                             <th>
                               <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
                                 {t("name")}
+                                <span className="down-up-arrow">
+                                  <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
+                                  <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
+                                </span>
                               </a>
-                              <span className="down-up-arrow">
-                                <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
-                                <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
-                              </span>
                             </th>
                             <th>{t("phone")}</th>
                             <th colSpan="2">{t("email")}</th>

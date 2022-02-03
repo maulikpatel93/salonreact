@@ -300,7 +300,7 @@ const Services = () => {
                             </span>
                           </a> */}
                               </th>
-                              <th rowSpan="2">{t("add_on_service")}</th>
+                              <th rowSpan="2" className="service_table_header">{t("add_on_service")}</th>
                               <th rowSpan="2" className="service_table_header"></th>
                             </tr>
                             <tr>
