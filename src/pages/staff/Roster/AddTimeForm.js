@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
-import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { rosterStoreApi } from "../../../store/slices/rosterSlice";
+import { rosterListViewApi, rosterStoreApi, closeAddRosterForm, closeEditRosterForm } from "../../../store/slices/rosterSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
+import PropTypes from "prop-types";
 
 const AddTimeForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,9 @@ const AddTimeForm = (props) => {
     try {
       dispatch(rosterStoreApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
+          dispatch(rosterListViewApi());
+          dispatch(closeAddRosterForm());
+          dispatch(closeEditRosterForm());
           setStatus({ success: true });
           resetForm();
           sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
@@ -96,6 +99,12 @@ const AddTimeForm = (props) => {
       </Formik>
     </React.Fragment>
   );
+};
+
+AddTimeForm.propTypes = {
+  // roster: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  staff_id: PropTypes.number,
+  date: PropTypes.string,
 };
 
 export default AddTimeForm;

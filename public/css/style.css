@@ -12,7 +12,7 @@ html {
 
 body {
     overflow: hidden;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     color: #374151;
     margin: 0;
     padding: 0;
@@ -70,7 +70,7 @@ h4,
 
 h5,
 .h5 {
-    font-size: 20px
+    font-size: 20px;
 }
 
 h6,
@@ -89,7 +89,7 @@ p {
 }
 
 p:nth-last-child(1) {
-    margin-bottom: 0
+    margin-bottom: 0;
 }
 
 ul li,
@@ -104,17 +104,17 @@ ol li {
 .text-white h4,
 .text-white h5,
 .text-white h6 {
-    color: #fff
+    color: #fff;
 }
 
 ::-moz-selection {
     color: #fff;
-    background: #8C1C4D;
+    background: #8c1c4d;
 }
 
 ::selection {
     color: #fff;
-    background: #8C1C4D;
+    background: #8c1c4d;
 }
 
 img {
@@ -123,7 +123,7 @@ img {
 }
 
 .fw-semibold {
-    font-weight: 600!important
+    font-weight: 600 !important;
 }
 
 
@@ -131,37 +131,32 @@ img {
 
 input.form-control::-webkit-input-placeholder,
 textarea.form-control::-webkit-input-placeholder {
-    color: #9CA3AF;
-    ;
-    opacity: 1
+    color: #9ca3af;
+    opacity: 1;
 }
 
 input.form-control::-moz-placeholder,
 textarea.form-control::-moz-placeholder {
-    color: #9CA3AF;
-    ;
-    opacity: 1
+    color: #9ca3af;
+    opacity: 1;
 }
 
 input.form-control:-ms-input-placeholder,
 textarea.form-control:-ms-input-placeholder {
-    color: #9CA3AF;
-    ;
-    opacity: 1
+    color: #9ca3af;
+    opacity: 1;
 }
 
 input.form-control::-ms-input-placeholder,
 textarea.form-control::-ms-input-placeholder {
-    color: #9CA3AF;
-    ;
-    opacity: 1
+    color: #9ca3af;
+    opacity: 1;
 }
 
 input.form-control::placeholder,
 textarea.form-control::placeholder {
-    color: #9CA3AF;
-    ;
-    opacity: 1
+    color: #9ca3af;
+    opacity: 1;
 }
 
 :focus {
@@ -173,11 +168,11 @@ body .btn {
     font-size: 16px;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 6px;
-    background-color: #8C1C4D;
+    background-color: #8c1c4d;
     color: #fff;
     line-height: normal;
     padding: 9px 13px;
-    border: 1px solid #8C1C4D;
+    border: 1px solid #8c1c4d;
 }
 
 .btn i {
@@ -187,7 +182,7 @@ body .btn {
 
 .btn:hover {
     background-color: transparent;
-    color: #8C1C4D;
+    color: #8c1c4d;
 }
 
 .btn-secondary {
@@ -197,15 +192,15 @@ body .btn {
     color: #374151;
     padding: 8px 15px;
     line-height: normal;
-    background-color: #EEEEEE;
+    background-color: #eeeeee;
     text-decoration: none;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
 }
 
 .btn-secondary:hover {
     color: #fff;
-    background-color: #8C1C4D;
+    background-color: #8c1c4d;
 }
 
 body .btn-lg {
@@ -223,7 +218,7 @@ body .btn-lg {
 }
 
 a {
-    color: #27A2F8;
+    color: #27a2f8;
     line-height: normal;
     background-color: transparent;
     display: inline-block;
@@ -233,7 +228,7 @@ a {
 
 a:hover {
     text-decoration: none;
-    color: #8C1C4D;
+    color: #8c1c4d;
 }
 
 a:visited,
@@ -256,19 +251,19 @@ a:active {
 }
 
 .font-weight-light {
-    font-weight: 300!important
+    font-weight: 300 !important;
 }
 
 .font-weight-medium {
-    font-weight: 500!important
+    font-weight: 500 !important;
 }
 
 .font-weight-semibold {
-    font-weight: 600!important
+    font-weight: 600 !important;
 }
 
 .font-weight-black {
-    font-weight: 900!important
+    font-weight: 900 !important;
 }
 
 .btn.focus,
@@ -277,34 +272,34 @@ a:active {
 }
 
 body .color-wine {
-    color: #8C1C4D;
+    color: #8c1c4d;
 }
 
 .bg-pink {
-    background-color: #F4EEEB !important;
+    background-color: #f4eeeb !important;
 }
 
 .btn.btn-outline {
     background-color: #fff;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
     color: #374151;
 }
 
 .btn.btn-outline:hover {
     color: #fff;
-    background-color: #8C1C4D;
-    border-color: #8C1C4D;
+    background-color: #8c1c4d;
+    border-color: #8c1c4d;
 }
 
 .btn-sm {
     font-size: 12px !important;
     padding: 5px 8px !important;
-    border-radius: 4px!important;
+    border-radius: 4px !important;
 }
 
 .alert {
-    background-color: #FFFBD7;
+    background-color: #fffbd7;
     border-radius: 4px;
     padding: 20px;
     font-size: 15px;
@@ -313,15 +308,15 @@ body .color-wine {
 
 .alert a {
     text-decoration: underline;
-    color: #8C1C4D;
+    color: #8c1c4d;
     font-size: 15px;
     line-height: normal;
     vertical-align: baseline;
 }
 
 .info {
-    color: #3B82F6;
-    font-family: 'Inter', sans-serif;
+    color: #3b82f6;
+    font-family: "Inter", sans-serif;
 }
 
 .btn-dark {
@@ -346,8 +341,8 @@ body .color-wine {
 label {
     font-weight: 500;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    color: #6B7280;
+    font-family: "Inter", sans-serif;
+    color: #6b7280;
     margin-bottom: 8px;
 }
 
@@ -361,9 +356,9 @@ textarea.form-control {
     line-height: 1.3;
     font-size: 14px;
     color: #374151;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
     border-radius: 4px;
     padding: 8px;
 }
@@ -378,13 +373,13 @@ textarea.form-control {
 
 .form-control:hover,
 .dropdown-toggle:hover {
-    border-color: #9CA3AF;
+    border-color: #9ca3af;
     box-shadow: 0 0 0 3px #e5e7eb;
 }
 
 .form-control:focus,
 .dropdown-toggle:focus {
-    border-color: #5048E5;
+    border-color: #5048e5;
     box-shadow: 0 0 0 3px #e5e7eb;
 }
 
@@ -424,7 +419,7 @@ input::-webkit-calendar-picker-indicator {
 
 .form-switch .form-check-input {
     border: 0;
-    background-color: #D1D5DB;
+    background-color: #d1d5db;
     background-image: url(../images/switch-btn.png);
     width: 32px;
     height: 20px;
@@ -436,13 +431,13 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .form-switch .form-check-input:checked {
-    background-color: #8C1C4D;
+    background-color: #8c1c4d;
     background-position: 90% center;
     background-image: url(../images/switch-btn.png);
 }
 
 .form-switch span {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     line-height: normal;
 }
 
@@ -459,14 +454,14 @@ input.input-photo {
 }
 
 .input-file span {
-    color: #8C1C4D;
+    color: #8c1c4d;
     font-size: 13px;
     width: 100%;
     margin: 8px 0;
 }
 
 .input-file {
-    background-color: #F4EEEB;
+    background-color: #f4eeeb;
     height: 160px;
     width: 160px;
     text-align: center;
@@ -490,7 +485,7 @@ input.input-photo {
 .checkbox label {
     font-size: 18px;
     color: #374151;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     font-weight: normal;
     margin-bottom: 0;
     line-height: 1.2;
@@ -506,7 +501,7 @@ input.input-photo {
     height: 20px;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 4px;
-    border: 1px solid #D1D5DB;
+    border: 1px solid #d1d5db;
     background-image: url(../images/check.png);
     content: "";
     background-repeat: no-repeat;
@@ -514,17 +509,17 @@ input.input-photo {
 }
 
 .checkbox input[type="checkbox"]:checked+label:before {
-    background-color: #8C1C4D;
-    border-color: #8C1C4D;
+    background-color: #8c1c4d;
+    border-color: #8c1c4d;
 }
 
 .user-initial {
-    background-color: #5048E5;
+    background-color: #5048e5;
     height: 32px;
     width: 32px;
     color: #fff;
     text-transform: uppercase;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     text-align: center;
     font-size: 12px;
     line-height: 32px;
@@ -537,23 +532,23 @@ input.input-photo {
     border-radius: 2px;
     text-decoration: none;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     color: #374151;
 }
 
 .dropdown-box ul li a:hover {
-    background-color: #F9FAFB;
+    background-color: #f9fafb;
     color: #374151;
 }
 
 .dropdown-box ul li a:focus,
 .dropdown-box ul li a.select {
-    background-color: #F0F3FF;
+    background-color: #f0f3ff;
 }
 
 .dropdown-box span {
     font-size: 12px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     display: block;
     line-height: 16px;
 }
@@ -563,7 +558,7 @@ input.input-photo {
 }
 
 .dropdown-box .user-id {
-    color: #6B7280;
+    color: #6b7280;
 }
 
 .dropdown-box {
@@ -579,11 +574,11 @@ input.input-photo {
 .dropdown-toggle {
     border-radius: 4px;
     padding: 8px 25px 8px 8px;
-    border: 1px solid #E0E0E0;
+    border: 1px solid #e0e0e0;
     background-color: #fff;
     font-size: 16px;
     color: #374151;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     text-align: left;
     position: relative;
 }
@@ -613,18 +608,18 @@ input.input-photo {
 }
 
 .error label {
-    color: #EF4444;
+    color: #ef4444;
 }
 
 .error .form-control {
-    border-color: #E11D48;
+    border-color: #e11d48;
     box-shadow: 0 0 0 3px rgb(225 29 72 / 20%);
 }
 
 .error-txt {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
-    color: #EF4444;
+    color: #ef4444;
     position: relative;
     display: block;
     margin: 8px 0;
@@ -632,25 +627,25 @@ input.input-photo {
 
 .error-txt:before {
     content: "\f071";
-    font-family: 'Font Awesome 5 Pro';
+    font-family: "Font Awesome 5 Pro";
     font-size: 14px;
     font-weight: bold;
     padding-right: 10px;
 }
 
 .focus label {
-    color: #5048E5;
+    color: #5048e5;
 }
 
 .focus .form-control {
-    border-color: #5048E5;
+    border-color: #5048e5;
     box-shadow: 0 0 0 3px rgb(80 72 229 / 20%);
 }
 
 .focus-txt {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
-    color: #5048E5;
+    color: #5048e5;
     position: relative;
     display: block;
     margin: 8px 0;
@@ -658,25 +653,25 @@ input.input-photo {
 
 .focus-txt:before {
     content: "\f06a";
-    font-family: 'Font Awesome 5 Pro';
+    font-family: "Font Awesome 5 Pro";
     font-size: 14px;
     font-weight: bold;
     padding-right: 10px;
 }
 
 .success label {
-    color: #0D9488;
+    color: #0d9488;
 }
 
 .success .form-control {
-    border-color: #0D9488;
+    border-color: #0d9488;
     box-shadow: 0 0 0 3px rgb(80 72 229 / 20%);
 }
 
 .success-txt {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
-    color: #0D9488;
+    color: #0d9488;
     position: relative;
     display: block;
     margin: 8px 0;
@@ -684,7 +679,7 @@ input.input-photo {
 
 .success-txt:before {
     content: "\f00c";
-    font-family: 'Font Awesome 5 Pro';
+    font-family: "Font Awesome 5 Pro";
     font-size: 14px;
     padding-right: 10px;
 }
@@ -692,7 +687,7 @@ input.input-photo {
 .custom-tab {
     display: inline-block;
     border-radius: 6px;
-    border: 1px solid #EEEEEE;
+    border: 1px solid #eeeeee;
     background-color: #eee;
     padding: 2px;
 }
@@ -710,10 +705,10 @@ input.input-photo {
 
 .custom-tab .list-group-item.active {
     background-color: #fff;
-    color: #8C1C4D;
+    color: #8c1c4d;
 }
 
-.table>:not(caption)>*>* {
+.table> :not(caption)>*>* {
     padding: 20px;
 }
 
@@ -744,15 +739,15 @@ tr {
 }
 
 .badge.paid {
-    background-color: #CCFBF1;
-    color: #0D9488;
+    background-color: #ccfbf1;
+    color: #0d9488;
 }
 
 .accordion-item {
     background-color: #fff;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
     border-radius: 6px;
-    border: 1px solid #D4D4D4 !important;
+    border: 1px solid #d4d4d4 !important;
     overflow: hidden;
 }
 
@@ -765,12 +760,12 @@ tr {
 .accordion-button:not(.collapsed) {
     background-color: transparent;
     box-shadow: none;
-    border-bottom: 1px solid #CACACA;
+    border-bottom: 1px solid #cacaca;
 }
 
 .accordion-body ul li {
     padding: 15px 30px;
-    border-bottom: 0.75px solid #CACACA;
+    border-bottom: 0.75px solid #cacaca;
     font-size: 18px;
 }
 
@@ -826,7 +821,7 @@ tr {
     position: fixed;
     height: 100%;
     left: 0;
-    background: linear-gradient(180deg, #8F807D 0%, #393332 100%);
+    background: linear-gradient(180deg, #8f807d 0%, #393332 100%);
 }
 
 .sidemenu {
@@ -895,17 +890,17 @@ header .user-profile-icon .user-status {
     box-shadow: 0px 0px 0px 2px #ffffff;
     height: 7.5px;
     width: 7.5px;
-    background-color: #D4D4D8;
+    background-color: #d4d4d8;
     border-radius: 100%;
     bottom: 0;
 }
 
 header .user-profile-icon .user-status.online {
-    background-color: #4ADE80;
+    background-color: #4ade80;
 }
 
 header .user-profile-icon .user-status.offline {
-    background-color: #F43F5E;
+    background-color: #f43f5e;
 }
 
 header .search .search-wrapper form {
@@ -947,7 +942,7 @@ header .search .search-wrapper form {
 }
 
 .search .input-group i {
-    color: #9CA3AF;
+    color: #9ca3af;
 }
 
 .search .search-result {
@@ -969,11 +964,11 @@ header .search .search-wrapper form {
     position: absolute;
     right: calc(100% - 22px);
     top: 0;
-    -webkit-transition: all .25s;
-    -moz-transition: all .25s;
-    -ms-transition: all .25s;
-    -o-transition: all .25s;
-    transition: all .25s;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -ms-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s;
     opacity: 0;
     visibility: hidden;
 }
@@ -1016,7 +1011,7 @@ header .search .search-wrapper.open {
 }
 
 .date .icon {
-    color: #D4D4D4;
+    color: #d4d4d4;
     padding: 6px 15px;
 }
 
@@ -1029,7 +1024,7 @@ header .search .search-wrapper.open {
 .date .input-group-text {
     background-color: transparent;
     border-color: #d4d4d4;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     text-transform: capitalize;
     border-radius: 6px;
 }
@@ -1038,8 +1033,8 @@ header .search .search-wrapper.open {
     box-shadow: none;
     border-color: #d4d4d4;
     font-size: 16px;
-    color: #8C1C4D;
-    font-family: 'Source Sans Pro', sans-serif;
+    color: #8c1c4d;
+    font-family: "Source Sans Pro", sans-serif;
     text-align: center;
 }
 
@@ -1058,11 +1053,11 @@ header .search .search-wrapper.open {
     z-index: 9;
     opacity: 0;
     visibility: hidden;
-    -webkit-transition: all .6s;
-    -moz-transition: all .6s;
-    -ms-transition: all .6s;
-    -o-transition: all .6s;
-    transition: all .6s;
+    -webkit-transition: all 0.6s;
+    -moz-transition: all 0.6s;
+    -ms-transition: all 0.6s;
+    -o-transition: all 0.6s;
+    transition: all 0.6s;
     overflow: hidden;
 }
 
@@ -1106,7 +1101,7 @@ header .search .search-wrapper.open {
 
 .drawer-body::-webkit-scrollbar-thumb,
 .content-wrp::-webkit-scrollbar-thumb {
-    background-color: #9CA3AF;
+    background-color: #9ca3af;
 }
 
 .drawer-footer {
@@ -1136,11 +1131,11 @@ header .search .search-wrapper.open {
     z-index: 9;
     opacity: 0;
     visibility: hidden;
-    -webkit-transition: all .6s;
-    -moz-transition: all .6s;
-    -ms-transition: all .6s;
-    -o-transition: all .6s;
-    transition: all .6s;
+    -webkit-transition: all 0.6s;
+    -moz-transition: all 0.6s;
+    -ms-transition: all 0.6s;
+    -o-transition: all 0.6s;
+    transition: all 0.6s;
     overflow: hidden;
 }
 
@@ -1180,11 +1175,11 @@ header .search .search-wrapper.open {
 }
 
 .user-box .user-initial {
-    color: #8C1C4D;
+    color: #8c1c4d;
     font-weight: 300;
     font-size: 30px;
-    font-family: 'Source Sans Pro', sans-serif;
-    background-color: #F4EEEB;
+    font-family: "Source Sans Pro", sans-serif;
+    background-color: #f4eeeb;
     height: 60px;
     width: 60px;
     line-height: 60px;
@@ -1199,7 +1194,7 @@ header .search .search-wrapper.open {
     width: 450px;
     margin: 0 auto;
     border-radius: 100%;
-    background-color: #F9F6F4;
+    background-color: #f9f6f4;
     padding: 30px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1213,13 +1208,13 @@ header .search .search-wrapper.open {
 }
 
 .drawer-body .left-col {
-    background-color: #FAFAFA;
+    background-color: #fafafa;
 }
 
 .product-box {
     padding: 25px 50px 25px 25px;
     border-radius: 6px;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #e5e5e5;
     position: relative;
     margin-top: 30px;
     cursor: pointer;
@@ -1227,7 +1222,7 @@ header .search .search-wrapper.open {
 
 .product-box .close {
     position: absolute;
-    color: #EF0000;
+    color: #ef0000;
     right: 15px;
     top: 15px;
     line-height: 1;
@@ -1257,7 +1252,7 @@ header .search .search-wrapper.open {
     font-size: 16px;
     color: #000;
     border-radius: 5px !important;
-    background-color: #D4D4D4;
+    background-color: #d4d4d4;
     display: inline-block;
     padding: 5px 5px;
     min-width: 38px;
@@ -1356,7 +1351,7 @@ header .search .search-wrapper.open {
 
 .left-col .search .search-input:focus,
 .left-col .search .search-input:hover {
-    border-color: #5048E5;
+    border-color: #5048e5;
     box-shadow: 0 0 0 3px #e5e7eb;
 }
 
@@ -1364,7 +1359,7 @@ header .search .search-wrapper.open {
     padding: 13px 30px 13px 60px;
     font-size: 23px;
     font-weight: 300;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     color: #999;
 }
 
@@ -1389,8 +1384,7 @@ header .search .search-wrapper.open {
 .right-col .search-result li span {
     font-size: 14px;
     color: #999;
-    ;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 .user-id .close {
@@ -1428,11 +1422,11 @@ header .search .search-wrapper.open {
     top: 0;
     z-index: 1;
     background-color: #fff;
-    -webkit-transition: all .25s;
-    -moz-transition: all .25s;
-    -ms-transition: all .25s;
-    -o-transition: all .25s;
-    transition: all .25s;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -ms-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s;
     margin-top: -1px;
 }
 
@@ -1512,7 +1506,7 @@ header .search .search-wrapper.open {
 .voucher-preview {
     width: 40%;
     padding: 30px 40px;
-    background-color: #FAFAFA;
+    background-color: #fafafa;
 }
 
 .voucher-avilable .complete-box {
@@ -1527,39 +1521,39 @@ header .search .search-wrapper.open {
 .voucher-form label,
 .voucher-form .form-switch span {
     font-size: 16px;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 .voucher-form p {
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 4px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
     padding: 20px;
     font-size: 13px;
 }
 
 .voucher-form select {
-    color: #6B7280;
+    color: #6b7280;
 }
 
 .voucher-preview-inner h1 {
     font-size: 50px;
     color: #000000;
     font-weight: bold;
-    font-family: 'Abhaya Libre', serif;
+    font-family: "Abhaya Libre", serif;
 }
 
 .voucher-preview-inner h2 {
     color: #000000;
     font-weight: bold;
-    font-family: 'Abhaya Libre', serif;
+    font-family: "Abhaya Libre", serif;
     font-size: 40px;
     line-height: 1;
 }
 
 .voucher-preview-inner p {
     font-size: 20px;
-    font-family: 'Abhaya Libre', serif;
+    font-family: "Abhaya Libre", serif;
     line-height: 1.4;
     margin-bottom: 20px;
 }
@@ -1571,7 +1565,7 @@ header .search .search-wrapper.open {
 }
 
 .voucher-preview-inner .h4 {
-    font-family: 'Abhaya Libre', serif;
+    font-family: "Abhaya Libre", serif;
     font-weight: 600;
 }
 
@@ -1579,7 +1573,7 @@ header .search .search-wrapper.open {
     font-size: 13px;
     line-height: 20px;
     color: rgba(0, 0, 0, 0.8);
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 .voucher-preview-inner .desc p:last-child {
@@ -1588,14 +1582,14 @@ header .search .search-wrapper.open {
 
 .voucher-action {
     border-radius: 6px;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #e5e5e5;
 }
 
 .voucher-action .edit,
 .voucher-action .sell,
 .voucher-action .edit,
 .voucher-action .delete {
-    background-color: #BB5876;
+    background-color: #bb5876;
     box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
     border-radius: 4px;
     font-size: 12px;
@@ -1605,13 +1599,13 @@ header .search .search-wrapper.open {
 }
 
 .voucher-action .delete {
-    background-color: #E70046;
+    background-color: #e70046;
 }
 
 .voucher-action .edit:hover,
 .voucher-action .sell:hover,
 .voucher-action .delete:hover {
-    background-color: #828DF8;
+    background-color: #828df8;
 }
 
 
@@ -1633,7 +1627,7 @@ header .search .search-wrapper.open {
 }
 
 .common-tab .nav-tabs li a.active {
-    border-bottom: 3px solid #3A3432;
+    border-bottom: 3px solid #3a3432;
     font-weight: 600;
 }
 
@@ -1644,8 +1638,8 @@ header .search .search-wrapper.open {
     margin: 0 15px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
-    background: #FFFFFF;
-    border: 1px solid #D4D4D4;
+    background: #ffffff;
+    border: 1px solid #d4d4d4;
     text-align: center;
     margin-bottom: 30px;
     text-decoration: none;
@@ -1674,9 +1668,9 @@ header .search .search-wrapper.open {
 
 .box-image-cover .user-initial {
     font-weight: 300;
-    color: #8C1C4D;
+    color: #8c1c4d;
     text-transform: uppercase;
-    background-color: #F9F6F4;
+    background-color: #f9f6f4;
     font-size: 30px;
     height: 118px;
     width: 118px;
@@ -1741,7 +1735,7 @@ header .search .search-wrapper.open {
     position: absolute;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
     border-radius: 6px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     background-color: #fff;
     z-index: 1;
     width: 370px;
@@ -1767,7 +1761,7 @@ header .search .search-wrapper.open {
     margin-bottom: 105px;
     border-radius: 6px;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
 }
 
 #roster table .updated-time {
@@ -1776,20 +1770,22 @@ header .search .search-wrapper.open {
     font-size: inherit;
 }
 
-#roster .updatetime-popup .popup-footer a {
+#roster .updatetime-popup .popup-footer button {
     font-weight: 600;
     font-size: 16px;
     text-decoration: none;
     color: #374151;
     padding: 17px 15px;
+    background: transparent;
+    border: 1px;
 }
 
 #roster .updatetime-popup .popup-footer {
-    border-top: 1px solid #CACACA;
+    border-top: 1px solid #cacaca;
 }
 
-#roster .updatetime-popup .popup-footer a:not(:last-child) {
-    border-right: 1px solid #CACACA;
+#roster .updatetime-popup .popup-footer button:not(:last-child) {
+    border-right: 1px solid #cacaca;
 }
 
 .away-text {
@@ -1800,7 +1796,7 @@ header .search .search-wrapper.open {
 }
 
 #removetimemodal h6 {
-    color: #6B7280;
+    color: #6b7280;
     margin-bottom: 0;
 }
 
@@ -1888,7 +1884,7 @@ header .search .search-wrapper.open {
 .addstaff-member .working-hrs label {
     color: #999;
     font-size: 18px;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     margin: 0 5px 0 0;
     min-width: 135px;
 }
@@ -1948,7 +1944,7 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box {
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
     padding: 30px 15px;
@@ -1963,7 +1959,7 @@ header .search .search-wrapper.open {
 }
 
 #product .table-responsive {
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     box-sizing: border-box;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
     border-radius: 6px;
@@ -1973,12 +1969,12 @@ header .search .search-wrapper.open {
 /* service page */
 
 .service .common-tab .nav-tabs li a.active {
-    color: #8C1C4D;
-    border-color: #8C1C4D;
+    color: #8c1c4d;
+    border-color: #8c1c4d;
 }
 
 .service .complete-box a {
-    color: #8C1C4D;
+    color: #8c1c4d;
     font-size: inherit;
 }
 
@@ -1994,14 +1990,14 @@ header .search .search-wrapper.open {
 }
 
 .service .drawer-header .close.btn {
-    background-color: #F4EEEB;
-    border-color: #F4EEEB;
-    color: #3A3432;
+    background-color: #f4eeeb;
+    border-color: #f4eeeb;
+    color: #3a3432;
 }
 
 .service .drawer-header .close.btn:hover {
-    border-color: #8C1C4D;
-    background-color: #8C1C4D;
+    border-color: #8c1c4d;
+    background-color: #8c1c4d;
     color: #fff;
 }
 
@@ -2024,10 +2020,10 @@ header .search .search-wrapper.open {
 }
 
 .add-form form label {
-    color: #3A3432;
+    color: #3a3432;
     font-size: 16px;
     font-weight: 400;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 .setting-dropdown .dropdown-toggle {
@@ -2046,16 +2042,16 @@ header .search .search-wrapper.open {
 
 .setting-dropdown .dropdown-toggle:hover,
 .setting-dropdown .dropdown-toggle.show {
-    background-color: #F2F3F4;
+    background-color: #f2f3f4;
 }
 
 .setting-dropdown .dropdown-box ul li a {
     font-size: 13px;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 .setting-dropdown .dropdown-box {
-    border: 1px solid #A2A7AE;
+    border: 1px solid #a2a7ae;
 }
 
 .setting-dropdown li a img {
@@ -2064,7 +2060,7 @@ header .search .search-wrapper.open {
 
 .search-radius.search .input-group .search-input {
     border-color: #fff;
-    background-color: #F6F6F6;
+    background-color: #f6f6f6;
     border-radius: 40px !important;
     box-shadow: 0 0 0 3px #ffffff;
     font-size: 16px;
@@ -2078,7 +2074,7 @@ header .search .search-wrapper.open {
 .services-table-shadow {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
 }
 
 .services-table thead.thead-dark th,
@@ -2128,7 +2124,7 @@ tbody td {
 
 .services-table-data tr:first-child {
     position: relative;
-    border-top: 2px solid #EEEEEE;
+    border-top: 2px solid #eeeeee;
 }
 
 .services-table-data tr {
@@ -2139,8 +2135,8 @@ tbody td {
     content: "\f0c9";
     position: absolute;
     left: 24px;
-    font-family: 'Font Awesome 5 Pro';
-    color: #CACACA;
+    font-family: "Font Awesome 5 Pro";
+    color: #cacaca;
     font-size: 16px;
     line-height: 1.3;
 }
@@ -2155,7 +2151,7 @@ tbody td {
 }
 
 .down-up-arrow i {
-    color: #9CA3AF;
+    color: #9ca3af;
     position: absolute;
     left: 0;
     font-weight: 400;
@@ -2175,15 +2171,15 @@ tbody td {
 }
 
 #add-category form label {
-    color: #3A3432;
-    font-family: 'Source Sans Pro', sans-serif;
+    color: #3a3432;
+    font-family: "Source Sans Pro", sans-serif;
     font-size: 16px;
 }
 
 #add-category .modal-content {
     box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
 }
 
 
@@ -2235,7 +2231,7 @@ table .pro-title {
 
 .service.list-page .add-new-btn:before {
     content: "\f067";
-    font-family: 'Font Awesome 5 Pro';
+    font-family: "Font Awesome 5 Pro";
     position: absolute;
     left: 15px;
     top: 50%;
@@ -2285,7 +2281,7 @@ table .pro-title {
 
 .client-detaildrawer .left-menu {
     padding: 30px 25px;
-    border-right: 1px solid #D4D4D4;
+    border-right: 1px solid #d4d4d4;
 }
 
 .client-detaildrawer .content {
@@ -2325,7 +2321,7 @@ table .pro-title {
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
     border-radius: 6px;
     padding: 15px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     margin-bottom: 15px;
     color: #374151;
 }
@@ -2351,21 +2347,21 @@ table .pro-title {
 }
 
 .client-editappoinment .cancel {
-    background-color: #EF0000;
-    border-color: #EF0000;
+    background-color: #ef0000;
+    border-color: #ef0000;
 }
 
 .client-editappoinment .cancel:hover {
-    color: #EF0000;
+    color: #ef0000;
     background-color: transparent;
 }
 
 .client-detaildrawer .user-initial {
-    background-color: #F4EEEB;
-    color: #8C1C4D;
+    background-color: #f4eeeb;
+    color: #8c1c4d;
     font-weight: 300;
     font-size: 30px;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     height: 60px;
     width: 60px;
     line-height: 60px;
@@ -2385,16 +2381,16 @@ table .pro-title {
 }
 
 .client-detaildrawer .sell-gift-voucher:hover {
-    background-color: #828DF8;
-    border-color: #828DF8;
+    background-color: #828df8;
+    border-color: #828df8;
 }
 
 .client-detaildrawer span.active {
     font-weight: 600;
     font-size: 14px;
-    color: #0D9488;
+    color: #0d9488;
     border-radius: 4px;
-    background-color: #CCFBF1;
+    background-color: #ccfbf1;
     padding: 2px 6px;
     line-height: 16px;
 }
@@ -2410,7 +2406,7 @@ table .pro-title {
 }
 
 .remove {
-    color: #F43F5E;
+    color: #f43f5e;
     font-size: 12px;
     text-decoration: none;
 }
@@ -2431,9 +2427,9 @@ table .pro-title {
 }
 
 .addphoto-drawer .btn.disabled {
-    background-color: #F3F4F6;
-    color: #9CA3AF;
-    border-color: #F3F4F6;
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    border-color: #f3f4f6;
     pointer-events: none;
 }
 
@@ -2448,8 +2444,8 @@ table .pro-title {
     line-height: 40px;
     font-weight: 300;
     font-size: 18px;
-    color: #8C1C4D;
-    background-color: #F9F6F4;
+    color: #8c1c4d;
+    background-color: #f9f6f4;
 }
 
 #listview table .user {
@@ -2478,7 +2474,7 @@ table .pro-title {
 #listview .table-responsive {
     box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
     border-radius: 6px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     margin: 0 auto;
     max-width: 1100px;
 }
@@ -2508,8 +2504,8 @@ table .pro-title {
 .client-screen-3 .btn.btn-outline:hover,
 .client-screen-two .btn.btn-outline:hover {
     color: #fff;
-    background-color: #8C1C4D;
-    border-color: #8C1C4D;
+    background-color: #8c1c4d;
+    border-color: #8c1c4d;
 }
 
 .client-screen-3 #listview .table-responsive {
@@ -2577,7 +2573,7 @@ table .pro-title {
 }
 
 .client-screen-two .user-list {
-    background-color: #F3F4F6;
+    background-color: #f3f4f6;
     height: calc(100% - 54px);
 }
 
@@ -2595,7 +2591,7 @@ table .pro-title {
 
 .client-screen-two .user-list li a .user-name {
     color: #374151;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     display: block;
     font-size: 14px;
     margin: 0 0 4px;
@@ -2604,9 +2600,9 @@ table .pro-title {
 .client-screen-two .user-list li a .user-phone,
 .client-screen-two .user-list li a .user-id {
     font-size: 12px;
-    color: #6B7280;
+    color: #6b7280;
     display: block;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     margin: 0 0 2px;
 }
 
@@ -2637,7 +2633,7 @@ table .pro-title {
 .client-drawer#addclient-drawer .insert-photo {
     width: 266px;
     height: 266px;
-    background-color: #F4EEEB;
+    background-color: #f4eeeb;
     border-radius: 100%;
     text-align: center;
 }
@@ -2654,9 +2650,9 @@ table .pro-title {
 }
 
 .client-drawer#addclient-drawer .insert-photo .btn:hover {
-    background-color: #828DF8;
+    background-color: #828df8;
     color: #fff;
-    border-color: #828DF8;
+    border-color: #828df8;
 }
 
 .client-drawer#addclient-drawer .insert-photo img {
@@ -2932,11 +2928,11 @@ table .pro-title {
     .sidenav-bar {
         width: 280px;
         left: -280px;
-        -webkit-transition: all .25s;
-        -moz-transition: all .25s;
-        -ms-transition: all .25s;
-        -o-transition: all .25s;
-        transition: all .25s;
+        -webkit-transition: all 0.25s;
+        -moz-transition: all 0.25s;
+        -ms-transition: all 0.25s;
+        -o-transition: all 0.25s;
+        transition: all 0.25s;
     }
     .sidenav-bar.open {
         left: 0;
@@ -2948,7 +2944,7 @@ table .pro-title {
         width: 100%;
         margin-left: 0;
     }
-    .table>:not(caption)>*>* {
+    .table> :not(caption)>*>* {
         padding: 10px;
     }
     tbody,
@@ -3033,7 +3029,7 @@ table .pro-title {
     #roster .add-time img {
         max-width: 12px;
     }
-    #roster .updatetime-popup .popup-footer a {
+    #roster .updatetime-popup .popup-footer button {
         padding: 10px;
     }
     #roster table {
@@ -3161,7 +3157,7 @@ table .pro-title {
     .sale-comlete-data li span,
     .sale-comlete-data li p,
     .box-image-cover .image-content h5,
-    #roster .updatetime-popup .popup-footer a,
+    #roster .updatetime-popup .popup-footer button,
     .search-radius.search .input-group .search-input {
         font-size: 14px;
     }
@@ -3415,7 +3411,7 @@ table .pro-title {
     .client-detaildrawer .left-menu {
         border-right: 0;
         padding: 20px;
-        border-bottom: 1px solid #D4D4D4;
+        border-bottom: 1px solid #d4d4d4;
     }
     .client-detaildrawer .user-initial {
         height: 50px;
@@ -3501,7 +3497,7 @@ table .pro-title {
         font-size: 14px;
     }
     .service .search-wrp {
-        border-top: 1px solid #EEE;
+        border-top: 1px solid #eee;
     }
     #product table {
         width: 700px;

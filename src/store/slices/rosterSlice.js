@@ -85,6 +85,7 @@ export const rosterDeleteApi = createAsyncThunk("roster/delete", async (formValu
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
+  isDeleteModal: "",
   isListView: [],
 };
 
@@ -93,42 +94,48 @@ const rosterSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    openAddRosterForm: (state = initialState) => {
+    openAddRosterForm: (state = initialState, action) => {
       state.isOpenedEditForm = "";
-      state.isOpenedAddForm = "open";
+      state.isOpenedAddForm = action.payload;
     },
     closeAddRosterForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
     },
-    openEditRosterForm: (state = initialState) => {
+    openEditRosterForm: (state = initialState, action) => {
       state.isOpenedAddForm = "";
-      state.isOpenedEditForm = "open";
+      state.isOpenedEditForm = action.payload;
     },
     closeEditRosterForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
-    }
+    },
+    openDeleteModal: (state, action) => {
+      state.isDeleteModal = action.payload;
+    },
+    closeDeleteModal: (state) => {
+      state.isDeleteModal = "";
+    },
   },
   extraReducers: {
     [rosterStoreApi.pending]: () => {},
-    [rosterStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
-      } else {
-        state.isListView = { data: [action.payload] };
-      }
+    [rosterStoreApi.fulfilled]: () => {
+      // if (state.isListView && state.isListView.data) {
+      //   state.isListView.data = [action.payload, ...state.isListView.data];
+      // } else {
+      //   state.isListView = { data: [action.payload] };
+      // }
     },
     [rosterStoreApi.rejected]: () => {},
     [rosterUpdateApi.pending]: () => {},
-    [rosterUpdateApi.fulfilled]: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
+    [rosterUpdateApi.fulfilled]: () => {
+      // const { id, ...changes } = action.payload;
+      // const existingData = state.isListView.data.find((event) => event.id === id);
+      // if (existingData) {
+      //   Object.keys(changes).map((keyName) => {
+      //     existingData[keyName] = changes[keyName];
+      //   });
+      // }
     },
     [rosterUpdateApi.rejected]: () => {},
     [rosterListViewApi.fulfilled]: (state, action) => {
@@ -145,8 +152,11 @@ const rosterSlice = createSlice({
     [rosterListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
+    [rosterDeleteApi.pending]: () => {},
+    [rosterDeleteApi.fulfilled]: () => {},
+    [rosterDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddRosterForm, closeAddRosterForm, openEditRosterForm, closeEditRosterForm } = rosterSlice.actions;
+export const { reset, openAddRosterForm, closeAddRosterForm, openEditRosterForm, closeEditRosterForm, openDeleteModal, closeDeleteModal } = rosterSlice.actions;
 export default rosterSlice.reducer;

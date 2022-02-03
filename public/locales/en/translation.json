@@ -244,5 +244,9 @@
     "break_end_time": "break_end_time",
     "All_Staff": "All Staff",
     "Update": "Update",
-    "Set_start_and_end_time": "Set start and end time"
+    "Set_start_and_end_time": "Set start and end time",
+    "Mark_as_Away": "Mark as Away",
+    "Mark_as_Not_Away": "Mark as Not Away",
+    "Remove_Shift": "Remove Shift",
+    "AWAY": "AWAY"
 }

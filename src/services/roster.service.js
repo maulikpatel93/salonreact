@@ -38,13 +38,12 @@ const update = (values) => {
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
 
-const view = (values) => {
+const view = () => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const sort = values && values.sort;
-  const page = values && values.page;
-  const next_page_url = values && values.next_page_url;
-  const action = page ? `afterlogin/staff/view?page=${page}` : `afterlogin/staff/view`;
+
+  const action = `afterlogin/staff/view`;
+
   const data = {
     auth_key: auth_key,
     action: action,
@@ -54,11 +53,10 @@ const view = (values) => {
     field: "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     price_tier_field: "name", //business_name,owner_name
-    result: result, //business_name,owner_name
     staff_working_hours_field: false,
     staff_service_field: false,
   };
-  return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
+  return axios.post(API_URL + action, data, { headers: authHeader() });
 };
 
 const deleted = (values) => {
