@@ -2159,11 +2159,11 @@ tbody td {
 }
 
 .down-up-arrow .fa-angle-up {
-    top: -2px;
+    top: -1px;
 }
 
 .down-up-arrow .fa-angle-down {
-    bottom: -2px;
+    bottom: -1px;
 }
 
 .services-table-data .dropdown-box {
