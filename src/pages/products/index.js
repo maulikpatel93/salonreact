@@ -17,6 +17,7 @@ import ProductSuggetionListView from "./list/ProductSuggetionListView";
 import ProductListView from "./list/ProductListView";
 import ProductAddForm from "./form/ProductAddForm";
 import ProductEditForm from "./form/ProductEditForm";
+import PaginationLoader from "component/PaginationLoader";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -199,7 +200,7 @@ const Products = () => {
               </div>
               {tabview && tabview == "product" ? (
                 <div className={"search-result dropdown-box " + isSearchListProduct} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewProduct.data && isSuggetionViewProduct.data.length ? isSuggetionViewProduct.data.length : "0"} next={fetchDataSuggetionListProduct} scrollableTarget="search-content" hasMore={isSuggetionViewProduct.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewProduct.data && isSuggetionViewProduct.data.length ? isSuggetionViewProduct.data.length : "0"} next={fetchDataSuggetionListProduct} scrollableTarget="search-content" hasMore={isSuggetionViewProduct.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <ProductSuggetionListView view={isSuggetionViewProduct} />
                     </ul>
@@ -207,7 +208,7 @@ const Products = () => {
                 </div>
               ) : (
                 <div className={"search-result dropdown-box " + isSearchListSupplier} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewSupplier.data && isSuggetionViewSupplier.data.length ? isSuggetionViewSupplier.data.length : "0"} next={fetchDataSuggetionListSupplier} scrollableTarget="search-content" hasMore={isSuggetionViewSupplier.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewSupplier.data && isSuggetionViewSupplier.data.length ? isSuggetionViewSupplier.data.length : "0"} next={fetchDataSuggetionListSupplier} scrollableTarget="search-content" hasMore={isSuggetionViewSupplier.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <SupplierSuggetionListView view={isSuggetionViewSupplier} />
                     </ul>
@@ -219,12 +220,12 @@ const Products = () => {
           <div className="col-md-4 text-end col-5 ps-0 order-md-3 order-2">
             <div className="tab-content p-0 d-inline-block">
               <div className={tabview && tabview == "product" ? "active" : ""} style={{ display: tabview && tabview == "product" ? "block" : "none" }}>
-                <a className="add-service btn me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddProductForm}>
+                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddProductForm}>
                   {t("new_product")}
                 </a>
               </div>
               <div className={tabview && tabview == "supplier" ? "active" : ""} style={{ display: tabview && tabview == "supplier" ? "block" : "none" }}>
-                <a className="add-service btn me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddSupplierForm}>
+                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddSupplierForm}>
                   {t("new_supplier")}
                 </a>
               </div>
@@ -260,68 +261,68 @@ const Products = () => {
                 <>
                   {ListView.length > 0 || ListView.data ? (
                     <section>
-                      <div className="table-responsive services-table-shadow" id="scrollableListView">
-                        <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                          <table className="table bg-white">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th>
-                                  <a className="product-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                    {t("product_name")}
-                                    <span className="down-up-arrow">
-                                      <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                      <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                                    </span>
-                                  </a>
-                                </th>
-                                <th>
-                                  <a className="product-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
-                                    {t("sku")}
-                                    <span className="down-up-arrow">
-                                      <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
-                                      <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
-                                    </span>
-                                  </a>
-                                </th>
-                                <th>
-                                  <a className="product-header cursor-pointer" onClick={() => sorting({ supplier: { name: sort && sort.supplier && sort.supplier.name == "asc" ? "desc" : "asc" } })}>
-                                    {t("supplier")}
-                                    <span className="down-up-arrow">
-                                      <i className={"fal fa-angle-up" + (sort && sort.supplier && sort.supplier.name == "asc" ? " text-dark" : "")}></i>
-                                      <i className={"fal fa-angle-down" + (sort && sort.supplier && sort.supplier.name == "desc" ? " text-dark" : "")}></i>
-                                    </span>
-                                  </a>
-                                </th>
-                                <th>
-                                  <a className="product-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
-                                    {t("stock")}
-                                    <span className="down-up-arrow">
-                                      <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
-                                      <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
-                                    </span>
-                                  </a>
-                                </th>
-                                <th>
-                                  <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
-                                    {t("retail_price")}
-                                    <span className="down-up-arrow">
-                                      <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
-                                      <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
-                                    </span>
-                                  </a>
-                                </th>
-                                <th>
-                                  <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="services-table-data">
-                              <ProductListView view={ListView} />
-                            </tbody>
-                          </table>
+                      <div className="" id="scrollableListView">
+                        <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                          <div className="table-responsive bg-white table-shadow">
+                            <table className="table mb-0">
+                              <thead>
+                                <tr>
+                                  <th></th>
+                                  <th>
+                                    <a className="product-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                                      {t("product_name")}
+                                      <span className="down-up-arrow">
+                                        <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                        <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                                      </span>
+                                    </a>
+                                  </th>
+                                  <th>
+                                    <a className="product-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
+                                      {t("sku")}
+                                      <span className="down-up-arrow">
+                                        <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
+                                        <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
+                                      </span>
+                                    </a>
+                                  </th>
+                                  <th>
+                                    <a className="product-header cursor-pointer" onClick={() => sorting({ supplier: { name: sort && sort.supplier && sort.supplier.name == "asc" ? "desc" : "asc" } })}>
+                                      {t("supplier")}
+                                      <span className="down-up-arrow">
+                                        <i className={"fal fa-angle-up" + (sort && sort.supplier && sort.supplier.name == "asc" ? " text-dark" : "")}></i>
+                                        <i className={"fal fa-angle-down" + (sort && sort.supplier && sort.supplier.name == "desc" ? " text-dark" : "")}></i>
+                                      </span>
+                                    </a>
+                                  </th>
+                                  <th>
+                                    <a className="product-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
+                                      {t("stock")}
+                                      <span className="down-up-arrow">
+                                        <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
+                                        <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
+                                      </span>
+                                    </a>
+                                  </th>
+                                  <th>
+                                    <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
+                                      {t("retail_price")}
+                                      <span className="down-up-arrow">
+                                        <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
+                                        <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
+                                      </span>
+                                    </a>
+                                  </th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody className="services-table-data">
+                                <ProductListView view={ListView} />
+                              </tbody>
+                            </table>
+                          </div>
                           {!isFetching && ListView.next_page_url && (
-                            <div className="col-2 m-auto p-3">
+                            <div className="col-2 m-auto p-3 text-center">
                               <button onClick={loadMoreItems} className="btn btn-primary">
                                 {t("more")}
                               </button>

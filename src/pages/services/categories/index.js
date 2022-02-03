@@ -6,6 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import config from "../../../config";
 import CategoryListView from "./CategoryListView";
 import { openAddCategoryForm, categoryListViewApi } from "../../../store/slices/categorySlice";
+import PaginationLoader from "component/PaginationLoader";
 
 const Categories = () => {
   const { t } = useTranslation();
@@ -33,20 +34,22 @@ const Categories = () => {
     <>
       {ListView.length > 0 || ListView.data ? (
         <section className="services-table">
-          <div className="services-table-shadow" id="scrollableGridView">
-            <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-category" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
-              <table className="table table-striped bg-white categorie-table">
-                <thead>
-                  <tr>
-                    <th>{t("category")}</th>
-                    <th>{t("count")}</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody className="services-table-data">
-                  <CategoryListView currentUser={currentUser} view={ListView} />
-                </tbody>
-              </table>
+          <div className="" id="scrollableGridView">
+            <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-category" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />}>
+              <div className="table-responsive bg-white table-shadow">
+                <table className="table categorie-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>{t("category")}</th>
+                      <th>{t("count")}</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody className="services-table-data">
+                    <CategoryListView currentUser={currentUser} view={ListView} />
+                  </tbody>
+                </table>
+              </div>
               {!isFetching && ListView.next_page_url && (
                 <div className="col-2 m-auto text-center">
                   <button onClick={loadMoreItems} className="btn btn-primary m-4">

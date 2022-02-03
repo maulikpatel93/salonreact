@@ -93,8 +93,8 @@ const CategoryEditForm = () => {
                     <h4 className="mb-2">{t("edit_category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
                       <InputField type="text" name="name" value={formik.values.name} label={t("category_name")} controlId="categoryForm-name" />
-                      <div className="text-center">
-                        <button type="submit" className="btn" disabled={loading}>
+                      <div className="text-center mt-3">
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}
                           {t("save")}
                         </button>

@@ -10,6 +10,7 @@ import ClientDetailModal from "./Detail";
 import ClientGridView from "./List/gridview";
 import ClientListView from "./List/listview";
 import SuggetionListView from "./List/SuggetionListView";
+import PaginationLoader from "component/PaginationLoader";
 
 const Clients = () => {
   const { t } = useTranslation();
@@ -129,7 +130,7 @@ const Clients = () => {
                 </a>
               </div>
               <div className={"search-result dropdown-box " + isSearchList} id="search-content">
-                <InfiniteScroll className="" dataLength={SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                <InfiniteScroll className="" dataLength={SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
                   <ul className="p-0 m-0 list-unstyled">
                     <SuggetionListView view={SuggetionView} />
                   </ul>
@@ -151,7 +152,7 @@ const Clients = () => {
                 </a>
               </li>
             </ul>
-            <a id="addclient-drawer-link" className="add-new-btn btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
+            <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
               {t("new_client")}
             </a>
             <div className="dropdown d-inline-block setting-dropdown">
@@ -182,7 +183,7 @@ const Clients = () => {
             <div className="" id="scrollableGridView">
               {tabview && tabview == "grid" && (
                 <>
-                  <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={tabview && tabview == "grid" && GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                  <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={tabview && tabview == "grid" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
                       <div className="tabs-image">
                         <img src={config.imagepath + "tabs-image.png"} alt="" />
@@ -212,33 +213,35 @@ const Clients = () => {
             </div>
           </div>
           <div className={"tab-pane" + (tabview && tabview == "list" ? " show active" : "")} id="listview">
-            <div className="table-responsive bg-white" id="scrollableListView">
+            <div className="" id="scrollableListView">
               {tabview && tabview == "list" && (
                 <>
-                  <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-list" hasMore={tabview && tabview == "list" && ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                    <table className="table mb-0">
-                      <thead className="position-sticky">
-                        <tr>
-                          <th></th>
-                          <th>
-                            <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
-                              {t("name")}
-                            </a>
-                            <span className="down-up-arrow">
-                              <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
-                              <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
-                            </span>
-                          </th>
-                          <th>{t("phone")}</th>
-                          <th colSpan="2">{t("email")}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <ClientListView currentUser={currentUser} view={ListView} />
-                      </tbody>
-                    </table>
+                  <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-list" hasMore={tabview && tabview == "list" && ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                    <div className="table-responsive bg-white">
+                      <table className="table mb-0">
+                        <thead className="position-sticky">
+                          <tr>
+                            <th></th>
+                            <th>
+                              <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
+                                {t("name")}
+                              </a>
+                              <span className="down-up-arrow">
+                                <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
+                                <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
+                              </span>
+                            </th>
+                            <th>{t("phone")}</th>
+                            <th colSpan="2">{t("email")}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ClientListView currentUser={currentUser} view={ListView} />
+                        </tbody>
+                      </table>
+                    </div>
                     {!isFetching && ListView.next_page_url && (
-                      <div className="col-2 m-auto p-3">
+                      <div className="col-2 m-auto p-3 text-center">
                         <button onClick={loadMoreItemsList} className="btn btn-primary">
                           {t("more")}
                         </button>

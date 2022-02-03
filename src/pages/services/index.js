@@ -17,6 +17,7 @@ import ServiceSuggetionListView from "./list/ServiceSuggetionListView";
 import ServiceListView from "./list/ServiceListView";
 import ServiceAddForm from "./form/ServiceAddForm";
 import ServiceEditForm from "./form/ServiceEditForm";
+import PaginationLoader from "component/PaginationLoader";
 
 const Services = () => {
   const { t } = useTranslation();
@@ -202,7 +203,7 @@ const Services = () => {
               </div>
               {tabview && tabview == "service" ? (
                 <div className={"search-result dropdown-box " + isSearchListService} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewService.data && isSuggetionViewService.data.length ? isSuggetionViewService.data.length : "0"} next={fetchDataSuggetionListService} scrollableTarget="search-content" hasMore={isSuggetionViewService.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewService.data && isSuggetionViewService.data.length ? isSuggetionViewService.data.length : "0"} next={fetchDataSuggetionListService} scrollableTarget="search-content" hasMore={isSuggetionViewService.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <ServiceSuggetionListView view={isSuggetionViewService} />
                     </ul>
@@ -210,7 +211,7 @@ const Services = () => {
                 </div>
               ) : (
                 <div className={"search-result dropdown-box " + isSearchListCategory} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewCategory.data && isSuggetionViewCategory.data.length ? isSuggetionViewCategory.data.length : "0"} next={fetchDataSuggetionListCategory} scrollableTarget="search-content" hasMore={isSuggetionViewCategory.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewCategory.data && isSuggetionViewCategory.data.length ? isSuggetionViewCategory.data.length : "0"} next={fetchDataSuggetionListCategory} scrollableTarget="search-content" hasMore={isSuggetionViewCategory.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <CategorySuggetionListView view={isSuggetionViewCategory} />
                     </ul>
@@ -222,12 +223,12 @@ const Services = () => {
           <div className="col-md-4 text-end col-5 ps-0 order-md-3 order-2">
             <div className="tab-content p-0 d-inline-block">
               <div className={tabview && tabview == "service" ? "active" : ""} style={{ display: tabview && tabview == "service" ? "block" : "none" }}>
-                <a className="add-service btn me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddServiceForm}>
+                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddServiceForm}>
                   {t("new_service")}
                 </a>
               </div>
               <div className={tabview && tabview == "category" ? "active" : ""} style={{ display: tabview && tabview == "category" ? "block" : "none" }}>
-                <a className="add-service btn me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddCategoryForm}>
+                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddCategoryForm}>
                   {t("new_category")}
                 </a>
               </div>
@@ -261,67 +262,66 @@ const Services = () => {
             {tabview && tabview == "service" && (
               <>
                 {ListView.length > 0 || ListView.data ? (
-                  <div className="table-responsive services-table-shadow" id="scrollableServiceListView">
-                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="scrollableServiceListView" hasMore={ListView.next_page_url ? true : false} loader={<h4>loading...</h4>} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                      <table className="table bg-white">
-                        <thead>
-                          <tr>
-                            <th rowSpan="2" className="service_table_header"></th>
-                            <th rowSpan="2" className="service_table_header">
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                {t("service_name")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th rowSpan="2" className="service_table_header">
-                              <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
-                                {t("duration")}
-                                <span className="down-up-arrow">
-                                  <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
-                                  <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
-                                </span>
-                              </a>
-                            </th>
-                            <th colSpan="3" className="p-2 text-center">
-                              {t("price")}
-                            </th>
-                            <th rowSpan="2" className="service_table_header">
-                              {t("category")}
-                              {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
+                  <div className="" id="scrollableServiceListView">
+                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                      <div className="table-responsive bg-white table-shadow">
+                        <table className="table mb-0">
+                          <thead>
+                            <tr>
+                              <th rowSpan="2" className="service_table_header"></th>
+                              <th rowSpan="2" className="service_table_header">
+                                <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                                  {t("service_name")}
+                                  <span className="down-up-arrow">
+                                    <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                    <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                                  </span>
+                                </a>
+                              </th>
+                              <th rowSpan="2" className="service_table_header">
+                                <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
+                                  {t("duration")}
+                                  <span className="down-up-arrow">
+                                    <i className={"fal fa-angle-up" + (sort.duration == "asc" ? " text-dark" : "")}></i>
+                                    <i className={"fal fa-angle-down" + (sort.duration == "desc" ? " text-dark" : "")}></i>
+                                  </span>
+                                </a>
+                              </th>
+                              <th colSpan="3" className="p-2 text-center">
+                                {t("price")}
+                              </th>
+                              <th rowSpan="2" className="service_table_header">
+                                {t("category")}
+                                {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
                             {t("category")}
                             <span className="down-up-arrow">
                               <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
                               <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
                             </span>
                           </a> */}
-                            </th>
-                            <th rowSpan="2">{t("add_on_service")}</th>
-                            <th rowSpan="2" className="service_table_header">
-                              <div className="d-flex align-items-center justify-content-end">{t("action")}</div>
-                            </th>
-                          </tr>
-                          <tr>
-                            <th scope="col" className="p-2">
-                              {t("general")}
-                            </th>
-                            <th scope="col" className="p-2">
-                              {t("junior")}
-                            </th>
-                            <th scope="col" className="p-2">
-                              {t("senior")}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="services-table-data">
-                          <ServiceListView view={ListView} />
-                        </tbody>
-                      </table>
-
+                              </th>
+                              <th rowSpan="2">{t("add_on_service")}</th>
+                              <th rowSpan="2" className="service_table_header"></th>
+                            </tr>
+                            <tr>
+                              <th scope="col" className="p-2">
+                                {t("general")}
+                              </th>
+                              <th scope="col" className="p-2">
+                                {t("junior")}
+                              </th>
+                              <th scope="col" className="p-2">
+                                {t("senior")}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="services-table-data">
+                            <ServiceListView view={ListView} />
+                          </tbody>
+                        </table>
+                      </div>
                       {!isFetching && ListView.next_page_url && (
-                        <div className="col-2 m-auto p-3">
+                        <div className="col-2 m-auto p-3 text-center">
                           <button onClick={loadMoreItems} className="btn btn-primary">
                             {t("more")}
                           </button>

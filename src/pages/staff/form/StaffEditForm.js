@@ -449,7 +449,7 @@ const StaffEditForm = () => {
                     </div>
                   </div>
                   <div className="drawer-footer text-center">
-                    <button type="submit" className="btn btn-lg" disabled={loading}>
+                    <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
                       {loading && <span className="spinner-border spinner-border-sm"></span>}
                       {t("Update_Staff_Member")}
                     </button>

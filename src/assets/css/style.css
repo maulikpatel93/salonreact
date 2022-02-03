@@ -2077,7 +2077,7 @@ header .search .search-wrapper.open {
     left: 18px;
 }
 
-.services-table-shadow {
+.table-shadow {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
     border: 1px solid #d4d4d4;
@@ -2111,7 +2111,7 @@ tbody td {
     padding: 17px 8px;
 }
 
-.services-table-shadow .table {
+.table-shadow .table {
     margin-bottom: 0;
 }
 
@@ -3056,7 +3056,7 @@ table .pro-title {
     .addstaff-member .drawer-footer .btn {
         min-width: auto;
     }
-    .services-table-shadow {
+    .table-shadow {
         margin: 20px 0;
     }
     .common-tab .nav-tabs li a {
@@ -3356,7 +3356,7 @@ table .pro-title {
     .services-table {
         overflow: scroll;
     }
-    .services-table-shadow {
+    .table-shadow {
         margin: 16px 0;
     }
     .setting-dropdown .dropdown-toggle {

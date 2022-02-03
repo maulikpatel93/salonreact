@@ -80,8 +80,8 @@ const PriceTierAddForm = () => {
                     <h4 className="mb-2">{t("add_price_tier")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
                       <InputField type="text" name="name" value={formik.values.name} label={t("price_tier_name")} controlId="pricetierForm-name" />
-                      <div className="text-center">
-                        <button type="submit" className="btn" disabled={loading}>
+                      <div className="text-center mt-3">
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}
                           {t("save")}
                         </button>

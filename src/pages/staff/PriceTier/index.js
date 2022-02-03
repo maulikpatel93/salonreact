@@ -8,6 +8,7 @@ import PriceTierGridView from "./PriceTierGridView";
 import { openAddPriceTierForm, pricetierGridViewApi } from "../../../store/slices/pricetierSlice";
 import PriceTierAddForm from "./PriceTierAddForm";
 import PriceTierEditForm from "./PriceTierEditForm";
+import PaginationLoader from "component/PaginationLoader";
 
 const PriceTier = () => {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ const PriceTier = () => {
   return (
     <>
       <div className="" id="scrollableGridView">
-        <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-price_tier" hasMore={tabview && tabview == "price_tier" && GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+        <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-price_tier" hasMore={tabview && tabview == "price_tier" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
           <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={() => dispatch(openAddPriceTierForm())}>
             <div className="tabs-image">
               <img src={config.imagepath + "tires.png"} alt="" />

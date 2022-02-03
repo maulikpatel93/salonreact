@@ -50,8 +50,9 @@ const StaffGridView = (props) => {
           let id = objectData[item].id;
           let first_name = objectData[item].first_name;
           let last_name = objectData[item].last_name;
-          let phone_number = objectData[item].phone_number;
+          // let phone_number = objectData[item].phone_number;
           let profile_photo_url = objectData[item].profile_photo_url;
+          let price_tier = objectData[item].pricetier && objectData[item].pricetier.name;
           return (
             <div className="box-image-cover" key={i} data-id={id}>
               <div className="dropdown d-inline-block setting-dropdown">
@@ -85,7 +86,7 @@ const StaffGridView = (props) => {
                 )}
                 <div className="image-content">
                   <h5 className="fw-semibold mb-1">{ucfirst(first_name + " " + last_name)}</h5>
-                  <h5 className="mb-0 fw-normal">{phone_number}</h5>
+                  <h5 className="mb-0 fw-normal">{price_tier}</h5>
                 </div>
               </a>
             </div>

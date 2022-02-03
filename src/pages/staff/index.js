@@ -12,6 +12,7 @@ import config from "../../config";
 import StaffGridView from "./List/gridview";
 import StaffAddForm from "./form/StaffAddForm";
 import StaffEditForm from "./form/StaffEditForm";
+import PaginationLoader from "component/PaginationLoader";
 
 const Staff = () => {
   const { t } = useTranslation();
@@ -86,7 +87,7 @@ const Staff = () => {
               <div className="" id="scrollableGridView">
                 {tabview && tabview == "staff" && (
                   <>
-                    <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+                    <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
                       <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={handleopenAddStaffForm}>
                         <div className="tabs-image">
                           <img src={config.imagepath + "tabs-image.png"} alt="" />

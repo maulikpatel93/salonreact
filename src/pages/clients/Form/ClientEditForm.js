@@ -225,7 +225,7 @@ const ClientEditForm = () => {
                 />
               </div>
               <div className="col-md-12 pe-2">
-                <button type="submit" className="btn w-100 btn-lg" disabled={loading}>
+                <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
                   {t("update_client")}
                 </button>

@@ -6,6 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import config from "../../../config";
 import SupplierGridView from "./SupplierGridView";
 import { openAddSupplierForm, supplierGridViewApi } from "../../../store/slices/supplierSlice";
+import PaginationLoader from "component/PaginationLoader";
 
 const Suppliers = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const Suppliers = () => {
     <>
       {GridView.length > 0 || GridView.data ? (
         <div className="" id="scrollableGridView">
-          <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-supplier" hasMore={GridView.next_page_url ? true : false} loader={<h4>loading...</h4>}>
+          <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-supplier" hasMore={GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
             <a className="box-image-cover cursor-pointer" onClick={() => dispatch(openAddSupplierForm())}>
               <div className="tabs-image">
                 <img src={config.imagepath + "suppliers.png"} alt="" />
@@ -45,10 +46,15 @@ const Suppliers = () => {
             </a>
             <SupplierGridView currentUser={currentUser} view={GridView} />
             {!isFetching && GridView.next_page_url && (
-              <div className="col-2 m-auto text-center">
-                <button onClick={loadMoreItems} className="btn btn-primary">
-                  {t("more")}
-                </button>
+              <div className="box-image-cover">
+                <div className="tabs-image">
+                  <img src={config.imagepath + "suppliers.png"} alt="" />
+                </div>
+                <div className="image-content">
+                  <button onClick={loadMoreItems} className="btn btn-primary">
+                    {t("more")}
+                  </button>
+                </div>
               </div>
             )}
           </InfiniteScroll>
