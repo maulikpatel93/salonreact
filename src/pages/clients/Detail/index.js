@@ -13,6 +13,7 @@ import Documents from "./Documents";
 import Notes from "./Photos";
 import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
+import ImageUpload from "component/form/ImageUpload";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -161,9 +162,10 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}<a className="btn btn-outline-primary btn-sm ms-2">
-                      {t('Add_Photo')}
-                    </a></h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">
+                      {t("photos")}
+                      <ImageUpload name="photo" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />
+                    </h2>
                   </div>
                   <div className="content-wrp">
                     <Photos />

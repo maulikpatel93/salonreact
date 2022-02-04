@@ -265,5 +265,9 @@
     "client_note_placeholder": "For example, allergic to latex",
     "pricing": "Pricing",
     "please_add_one": "Please add one",
-    "Add_Staff_Photo": "Add Staff Photo"
+    "Add_Staff_Photo": "Add Staff Photo",
+    "Upload": "Upload",
+    "uploaded": "Uploaded",
+    "uploaded_successfully": "Uploaded successfully",
+    "add_photo": "Add Photo"
 }

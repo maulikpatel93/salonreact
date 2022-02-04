@@ -7,8 +7,8 @@ export const clientStoreApi = createAsyncThunk("client/create", async (formvalue
   try {
     const resposedata = await clientApiController
       .create(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'create'))
-      .catch((error) => HandleError(thunkAPI, error, 'create'));
+      .then((response) => HandleResponse(thunkAPI, response, "create"))
+      .catch((error) => HandleError(thunkAPI, error, "create"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -20,8 +20,8 @@ export const clientUpdateApi = createAsyncThunk("client/update", async (formvalu
   try {
     const resposedata = await clientApiController
       .update(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'update'))
-      .catch((error) => HandleError(thunkAPI, error, 'update'));
+      .then((response) => HandleResponse(thunkAPI, response, "update"))
+      .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -33,8 +33,8 @@ export const clientListViewApi = createAsyncThunk("client/listview", async (form
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'listview'))
-      .catch((error) => HandleError(thunkAPI, error, 'listview'));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -46,8 +46,8 @@ export const clientGridViewApi = createAsyncThunk("client/gridview", async (form
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'gridview'))
-      .catch((error) => HandleError(thunkAPI, error, 'gridview'));
+      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
+      .catch((error) => HandleError(thunkAPI, error, "gridview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -59,8 +59,8 @@ export const clientDetailApi = createAsyncThunk("client/detail", async (formValu
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'detail'))
-      .catch((error) => HandleError(thunkAPI, error, 'detail'));
+      .then((response) => HandleResponse(thunkAPI, response, "detail"))
+      .catch((error) => HandleError(thunkAPI, error, "detail"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -72,8 +72,8 @@ export const clientDeleteApi = createAsyncThunk("client/delete", async (formValu
   try {
     const resposedata = await clientApiController
       .deleted(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'delete'))
-      .catch((error) => HandleError(thunkAPI, error, 'delete'));
+      .then((response) => HandleResponse(thunkAPI, response, "delete"))
+      .catch((error) => HandleError(thunkAPI, error, "delete"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -85,12 +85,25 @@ export const clientSuggetionListApi = createAsyncThunk("client/suggetionlist", a
   try {
     const resposedata = await clientApiController
       .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'suggetionlist'))
-      .catch((error) => HandleError(thunkAPI, error, 'suggetionlist'));
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
+      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const clientphotoStoreApi = createAsyncThunk("clientphoto/upload", async (formvalues, thunkAPI) => {
+  try {
+    const resposedata = await clientApiController
+      .upload(formvalues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "upload"))
+      .catch((error) => HandleError(thunkAPI, error, "upload"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
   }
 });
 
@@ -223,7 +236,7 @@ const clientSlice = createSlice({
     [clientListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [clientSuggetionListApi.pending]: ()=> {},
+    [clientSuggetionListApi.pending]: () => {},
     [clientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
@@ -252,6 +265,9 @@ const clientSlice = createSlice({
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
     [clientDeleteApi.rejected]: () => {},
+    [clientphotoStoreApi.pending]: () => {},
+    [clientphotoStoreApi.fulfilled]: () => {},
+    [clientphotoStoreApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

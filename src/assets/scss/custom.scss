@@ -175,3 +175,18 @@ header {
 .table> :not(:first-child) {
     border-top: none;
 }
+
+.client_photo input[type="file"] {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.photoform {
+    display: inline;
+}
