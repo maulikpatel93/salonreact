@@ -146,8 +146,9 @@ const ClientEditForm = () => {
                   <SelectField name="gender" label={t("gender")} options={genderOptions} placeholder={t("--select--")} controlId="clientForm-gender" />
                 </div>
               </div>
+              <div className="mb-3">
               <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
-
+              </div>
               <div className="row gx-2">
                 <div className="mb-3">
                   <InputField type="text" name="street" value={formik.values.street} label={t("street")} controlId="clientForm-street" />
@@ -165,10 +166,10 @@ const ClientEditForm = () => {
                 </div>
               </div>
               <div className="mb-3">
-                <TextareaField type="text" name="description" value={formik.values.description} label={t("client_notes")} controlId="clientForm-description" />
+                <TextareaField type="text" name="description" placeholder={t('client_note_placeholder')} value={formik.values.description} label={t("client_notes")} controlId="clientForm-description" />
               </div>
               <div className="mb-3">
-                <label htmlFor="">{t("notification")}</label>
+                <label htmlFor="">{t("notifications")}</label>
                 <SwitchField
                   name="send_sms_notification"
                   label={t("send_sms_notification")}

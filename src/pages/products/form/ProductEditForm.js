@@ -177,19 +177,19 @@ const ProductEditForm = () => {
                       <hr className="drawer-supplier-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("price")}</h4>
+                          <h4 className="fw-semibold mb-2">{t("pricing")}</h4>
                           <p>{t("add_the_pricing_details_of_this_product")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="cost_price" value={formik.values.cost_price} label={t("cost_price")} controlId="productForm-cost_price"  />
+                              <InputField type="text" name="cost_price" placeholder="$" value={formik.values.cost_price} label={t("cost_price")} controlId="productForm-cost_price"  />
                             </div>
                             <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="retail_price" value={formik.values.retail_price} label={t("retail_price")} controlId="productForm-retail_price"  />
+                              <InputField type="text" name="retail_price" placeholder="$" value={formik.values.retail_price} label={t("retail_price")} controlId="productForm-retail_price"  />
                             </div>
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="productForm-tax_id" isMulti={false}  />
+                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+'('+t("included_in_price")+')'} controlId="productForm-tax_id" isMulti={false}  />
                             </div>
                           </div>
                         </div>

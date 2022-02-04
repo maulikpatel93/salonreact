@@ -174,7 +174,7 @@ const StaffAddForm = () => {
                             </div>
                           </div>
                           <div className="col-md-6 mb-3">
-                            <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="staff-form" controlId="staffForm-profile_photo" />
+                            <InputFieldImage name="profile_photo" accept="image/*" label={t("Add_Staff_Photo")} page="staff-form" controlId="staffForm-profile_photo" />
                           </div>
                         </div>
                         <div className="row gx-2">

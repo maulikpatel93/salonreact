@@ -338,7 +338,7 @@ const Products = () => {
                         <h4 className="mb-2 fw-semibold">
                           {t("no_products_have_been_created_yet")}
                           <a className="add-product ms-1 cursor-pointer" onClick={() => dispatch(openAddProductForm())}>
-                            {t("please_create_one")}
+                            {t("please_add_one")}
                           </a>
                           .
                         </h4>

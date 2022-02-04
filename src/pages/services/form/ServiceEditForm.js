@@ -228,10 +228,10 @@ const ServiceEditForm = () => {
                             <InputField type="text" name="name" value={formik.values.name} label={t("service_name")} controlId="serviceForm-name" />
                           </div>
                           <div className="mb-3">
-                            <ReactSelectField name="category_id" placeholder={t("search_option")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false} />
+                            <ReactSelectField name="category_id" placeholder={t("select_category")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false} />
                           </div>
                           <div className="mb-3">
-                            <TextareaField name="description" value={formik.values.description} label={t("description")} controlId="serviceForm-description" />
+                            <TextareaField name="description" placeholder={t("Add_a_short_description")} value={formik.values.description} label={t("description")} controlId="serviceForm-description" />
                           </div>
                         </div>
                       </div>
@@ -293,7 +293,7 @@ const ServiceEditForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>

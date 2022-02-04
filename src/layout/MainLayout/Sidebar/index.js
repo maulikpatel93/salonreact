@@ -21,7 +21,7 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={config.basePath + "/calender"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Calendar')}>
+            <NavLink to={config.basePath + "/calendar"} data-bs-toggle="tooltip" data-bs-placement="right" title={t('Calendar')}>
               <span className="icon">
                 <img src={config.imagepath + "caleder.png"} alt="" />
               </span>

@@ -163,52 +163,59 @@ textarea.form-control::placeholder {
     outline: 0;
 }
 
-
-/* body .btn {
+.btn {
     font-weight: normal;
     font-size: 16px;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 6px;
-    background-color: #8c1c4d;
-    color: #fff;
     line-height: normal;
     padding: 9px 13px;
-    border: 1px solid #8c1c4d;
-} */
+}
+
+.btn.focus,
+.btn:focus {
+    box-shadow: none;
+}
 
 .btn i {
     padding-right: 8px;
     font-weight: 600;
 }
 
-
-/* .btn:hover {
-    background-color: transparent;
-    color: #8c1c4d;
-} */
-
-.btn-secondary {
-    font-weight: normal;
-    font-size: 14px;
-    border-radius: 6px;
-    color: #374151;
-    padding: 8px 15px;
-    line-height: normal;
-    background-color: #eeeeee;
-    text-decoration: none;
-    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border: 1px solid #e5e7eb;
-}
-
-.btn-secondary:hover {
-    color: #fff;
-    background-color: #8c1c4d;
-}
-
-body .btn-lg {
+.btn-lg {
     font-size: 17px;
     padding: 13px 15px;
     border-radius: 4px;
+}
+
+.btn-sm {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    border-radius: 4px !important;
+}
+
+.btn-primary {
+    color: #fff !important;
+    background-color: #8c1c4d !important;
+    border-color: #8c1c4d !important;
+}
+
+.btn-primary:hover {
+    color: #8c1c4d !important;
+    background-color: #fff !important;
+    border-color: #8c1c4d !important;
+}
+
+.btn-secondary {
+    color: #fff !important;
+    background-color: #9ca3af !important;
+    border-color: #9ca3af !important;
+}
+
+.btn-secondary:hover {
+    color: #fff !important;
+    background-color: #8c1c4d !important;
+    border-color: #9ca3af !important;
 }
 
 .btn-secondary.focus,
@@ -217,6 +224,20 @@ body .btn-lg {
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
+}
+
+.btn.btn-outline-primary {
+    background-color: #fff;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    padding: 9px 13px;
+}
+
+.btn.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #8c1c4d;
+    border-color: #8c1c4d;
 }
 
 a {
@@ -607,6 +628,9 @@ input.input-photo {
     width: calc(100% - 70px);
     margin-left: 70px;
     padding-top: 71px;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .error label {
@@ -824,6 +848,7 @@ tr {
     height: 100%;
     left: 0;
     background: linear-gradient(180deg, #8f807d 0%, #393332 100%);
+    z-index: 1050;
 }
 
 .sidemenu {

@@ -9,7 +9,7 @@ import config from "./../config";
 // dashboard routing
 // const MainLayout = Loadable(lazy(() => import("../layout/MainLayout")));
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
-const Calender = Loadable(lazy(() => import("../pages/calender")));
+const Calendar = Loadable(lazy(() => import("../pages/calendar")));
 const Sales = Loadable(lazy(() => import("../pages/sales")));
 const Vouchers = Loadable(lazy(() => import("../pages/vouchers")));
 const Subscriptions = Loadable(lazy(() => import("../pages/subscriptions")));
@@ -35,8 +35,8 @@ const MainRoutes = {
       element: <Dashboard />,
     },
     {
-      path: config.basePath + "/calender",
-      element: <Calender />,
+      path: config.basePath + "/calendar",
+      element: <Calendar />,
     },
     {
       path: config.basePath + "/sales",

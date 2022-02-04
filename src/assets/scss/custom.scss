@@ -9,26 +9,22 @@
     }
 }
 
-.btn-primary {
-    background-color: $primary;
-    border-color: $primary;
-}
-
-.btn-primary:hover {
-    color: $primary;
-    background-color: $white;
-    border-color: $primary;
-}
-
-.btn.btn-outline-primary {
-    background: none;
-    color: $primary;
-}
-
-.btn.btn-primary-outline.active {
-    color: $primary;
-}
-
+// .btn-primary {
+//     background-color: $primary;
+//     border-color: $primary;
+// }
+// .btn-primary:hover {
+//     color: $primary;
+//     background-color: $white;
+//     border-color: $primary;
+// }
+// .btn.btn-outline-primary {
+//     background: none;
+//     color: $primary;
+// }
+// .btn.btn-primary-outline.active {
+//     color: $primary;
+// }
 .is-invalid .css-1s2u09g-control {
     border-color: $danger;
 }

@@ -107,7 +107,7 @@ const Clients = () => {
 
   return (
     <>
-      <div className="page-content bg-pink service" id={"page-content-" + tabview}>
+      <div className="page-content bg-pink" id={"page-content-" + tabview}>
         <div className="row bg-white align-items-center sticky-top">
           <div className="common-tab col-md-4 col-4 order-1">
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">

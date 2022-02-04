@@ -161,7 +161,9 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}</h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}<a className="btn btn-outline-primary btn-sm ms-2">
+                      {t('Add_Photo')}
+                    </a></h2>
                   </div>
                   <div className="content-wrp">
                     <Photos />

@@ -142,7 +142,9 @@ const ClientAddForm = () => {
                             <ReactSelectField name="gender" label={t("gender")} options={genderOptions} placeholder={t("--select--")} controlId="clientForm-gender" />
                           </div>
                         </div>
+                        <div className="mb-3">
                         <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
+                        </div>
                       </div>
                       <div className="col-md-5 mb-md-0 mb-3">
                         <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="client-addform" controlId="clientForm-profile_photo" />
@@ -165,10 +167,10 @@ const ClientAddForm = () => {
                           </div>
                         </div>
                         <div className="mb-3">
-                          <TextareaField type="text" name="description" value={formik.values.description} label={t("description")} controlId="clientForm-description" />
+                          <TextareaField type="text" name="description" placeholder={t('client_note_placeholder')} value={formik.values.description} label={t("client_notes")} controlId="clientForm-description" />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="">{t("notification")}</label>
+                          <label htmlFor="">{t("notifications")}</label>
                           <SwitchField name="send_sms_notification" label={t("send_sms_notification")} controlId="clientForm-send_sms_notification" value="1" 
                           onChange={(e) => {
                               if (e.currentTarget.checked) {
@@ -216,7 +218,7 @@ const ClientAddForm = () => {
                     <div className="col-md-7 pe-2">
                       <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("create_client")}
+                        {t("save_client")}
                       </button>
                     </div>
                   </div>
