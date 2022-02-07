@@ -45,7 +45,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     clientReducer,
   ),
@@ -55,7 +55,7 @@ const reducer = combineReducers({
       storage,
       keyPrefix: "salon-",
       debug: false,
-      timeout: 20000
+      timeout: 20000,
     },
     clientphotoReducer,
   ),
@@ -65,7 +65,7 @@ const reducer = combineReducers({
       storage,
       keyPrefix: "salon-",
       debug: false,
-      timeout: 20000
+      timeout: 20000,
     },
     clientdocumentReducer,
   ),
@@ -75,7 +75,7 @@ const reducer = combineReducers({
       storage,
       keyPrefix: "salon-",
       debug: false,
-      timeout: 20000
+      timeout: 20000,
     },
     clientnoteReducer,
   ),
@@ -86,7 +86,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     productReducer,
   ),
@@ -97,7 +97,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     supplierReducer,
   ),
@@ -108,7 +108,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     serviceReducer,
   ),
@@ -119,7 +119,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     categoryReducer,
   ),
@@ -130,7 +130,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     staffReducer,
   ),
@@ -141,7 +141,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     pricetierReducer,
   ),
@@ -152,7 +152,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist:['isTabView']
+      whitelist: ["isTabView"],
     },
     rosterReducer,
   ),
