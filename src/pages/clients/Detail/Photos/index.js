@@ -15,7 +15,7 @@ const Photos = () => {
 
   const handleClientDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_client"), message: t("success"), confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete"), message: t("success"), confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(clientphotoDeleteApi({ id: event.id }));
     }

@@ -1,25 +1,68 @@
-// import React from "react";
-// import { useDispatch } from "react-redux";
-// import { useTranslation } from "react-i18next";
-// import InfiniteScroll from "react-infinite-scroll-component";
-// import ReactPaginate from 'react-paginate';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+
+// import PropTypes from "prop-types";
+// import config from "../../../../config";
+import { swalConfirm } from "../../../../component/Sweatalert2";
+import { clientdocumentGridViewApi, clientdocumentUpdateApi, clientdocumentDeleteApi } from "store/slices/clientdocumentSlice";
+import config from "../../../../config";
 
 const Documents = () => {
-  // const dispatch = useDispatch();
-  // const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const views = useSelector((state) => state.clientdocument.isGridView);
+  const objectData = views && views.data ? views.data : views;
+
+  const handleClientDelete = (e) => {
+    const event = JSON.parse(e.currentTarget.dataset.obj);
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete"), message: t("success"), confirmButtonText: t("yes_delete_it") });
+    if (confirmbtn == true) {
+      dispatch(clientdocumentDeleteApi({ id: event.id }));
+    }
+  };
+
   return (
     <>
-      <div className="complete-box text-center d-flex flex-column justify-content-center mt-xs-4">
-        <div className="complete-box-wrp text-center">
-          <img src="assets/images/docs.png" alt="" className="mb-md-4 mb-3" />
-          <h5 className="mb-2 fw-semibold">
-            Add documents and keep a record of your client’s treatments.
-            <a className="add-document">Add your first document.</a>
-          </h5>
-        </div>
-      </div>
+      {objectData.length > 0 ? (
+        <>
+          {Object.keys(objectData).map((item, i) => {
+            let id = objectData[item].id;
+            let photo_url = objectData[item].photo_url;
+            let client_id = objectData[item].client_id;
+            let is_profile_photo = objectData[item].is_profile_photo;
+            return (
+              <div className="event-box" key={i}>
+                <div className="d-flex align-items-start">
+                  <a >
+                    <img src={config.imagepath + "pdf.png"} alt="" />
+                  </a>
+                  <div className="w-100 px-md-3 px-2">
+                    <h6 className="mb-1">
+                      <b>Consultation-Form.pdf</b>
+                      Uploaded: Monday 12th July 2021
+                    </h6>
+                    <a href="#" className="btn btn-outline btn-sm">
+                      Download
+                    </a>
+                  </div>
+                  <a className="remove cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleClientDelete}>
+                    {t("remove")}
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      ) : (
+        ""
+      )}
     </>
   );
 };
+
+// Documents.propTypes = {
+//   // props: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+// };
 
 export default Documents;

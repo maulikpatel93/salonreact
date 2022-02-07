@@ -92,6 +92,7 @@
     "delete": "Delete",
     "confirmation_delete_text": "You won't be able to revert this!",
     "are_you_sure": "Are you sure?",
+    "are_you_sure_delete": "Are you sure want to delete?",
     "are_you_sure_delete_client": "Are you sure want to delete this client?",
     "are_you_sure_delete_staff": "Are you sure want to delete this staff?",
     "are_you_sure_delete_supplier": "Are you sure want to delete this supplier?",
@@ -270,5 +271,6 @@
     "uploaded": "Uploaded",
     "uploaded_successfully": "Uploaded successfully",
     "add_photo": "Add Photo",
-    "Profile_Image": "Profile Image"
+    "Profile_Image": "Profile Image",
+    "add_document": "Add Document"
 }

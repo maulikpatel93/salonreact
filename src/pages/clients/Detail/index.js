@@ -14,7 +14,9 @@ import Notes from "./Photos";
 import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
 import ImageUpload from "component/form/ImageUpload";
+import DocumentUpload from "component/form/DocumentUpload";
 import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 
@@ -24,7 +26,10 @@ const ClientDetailModal = () => {
   const detail = useSelector((state) => state.client.isDetailData);
   const photoViews = useSelector((state) => state.clientphoto.isGridView);
   const photoObjectData = photoViews && photoViews.data ? photoViews.data : photoViews;
+  const documentViews = useSelector((state) => state.clientdocument.isGridView);
+  const documentObjectData = documentViews && documentViews.data ? documentViews.data : documentViews;
 
+  
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -36,6 +41,7 @@ const ClientDetailModal = () => {
   useEffect(() => {
     if (detail && detail.id) {
       dispatch(clientphotoGridViewApi({ client_id: detail.id }));
+      dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
     }
   }, [detail]);
 
@@ -218,10 +224,30 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("documents")}</h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">
+                      {t("documents")}
+                      <DocumentUpload name="document" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />
+                    </h2>
                   </div>
                   <div className="content-wrp">
-                    <Documents />
+                  {documentObjectData.length > 0 ? (
+                      <>
+                        <InfiniteScroll className="row adddoc-drawer" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
+                          <Documents />
+                        </InfiniteScroll>
+                      </>
+                    ) : (
+                      <div className="complete-box text-center d-flex flex-column justify-content-center mt-xl-4">
+                        <div className="complete-box-wrp text-center">
+                          <img src={config.imagepath + "addphoto-box.png"} alt="" className="mb-md-4 mb-3" />
+                          <h5 className="mb-2 fw-semibold">
+                            {t("add_client_profile_photo_note")}
+                            <br />
+                            <a className="add-photo">{t("Add_your_first_photo")}</a>
+                          </h5>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">

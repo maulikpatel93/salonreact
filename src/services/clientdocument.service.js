@@ -11,8 +11,8 @@ const create = (values) => {
   const formData = new FormData();
   for (let value in values) {
     if (["myFiles"].includes(value) && values[value] && typeof values[value] === "object") {
-      values.myFiles.forEach((photo, index) => {
-        formData.append(`photo[${index}]`, photo);
+      values.myFiles.forEach((document, index) => {
+        formData.append(`document[${index}]`, document);
       });
     } else {
       formData.append(value, values[value]);
@@ -55,7 +55,7 @@ const view = (values) => {
     pagination: values && values.id ? false : true, //true or false
     id: values && values.id ? values.id : "",
     client_id: values && values.client_id ? values.client_id : "",
-    field: values && values.id ? "" : "name,is_profile_photo", // first_name,last_name,email
+    field: values && values.id ? "" : "document", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
   };
