@@ -110,17 +110,10 @@ const clientphotoSlice = createSlice({
     [clientphotoUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       let isGridView = state.isGridView && state.isGridView.data ? state.isGridView.data : state.isGridView;
-      let isListView = state.isListView && state.isListView.data ? state.isListView.data : state.isListView;
       const existingGridData = isGridView ? isGridView.find((event) => event.id === id) : "";
-      const existingListData = isListView ? isListView.find((event) => event.id === id) : "";
       if (existingGridData) {
         Object.keys(changes).map((keyName) => {
           existingGridData[keyName] = changes[keyName];
-        });
-      }
-      if (existingListData) {
-        Object.keys(changes).map((keyName) => {
-          existingListData[keyName] = changes[keyName];
         });
       }
     },
