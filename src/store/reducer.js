@@ -6,6 +6,7 @@ import authReducer from "./slices/authSlice";
 import messageReducer from "./slices/message";
 import imageReducer from "../store/slices/imageSlice";
 import clientReducer from "../store/slices/clientSlice";
+import clientphotoReducer from "../store/slices/clientphotoSlice";
 import supplierReducer from "../store/slices/supplierSlice";
 import productReducer from "../store/slices/productSlice";
 import categoryReducer from "../store/slices/categorySlice";
@@ -45,6 +46,16 @@ const reducer = combineReducers({
       whitelist:['isTabView']
     },
     clientReducer,
+  ),
+  clientphoto: persistReducer(
+    {
+      key: "clientphoto",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000
+    },
+    clientphotoReducer,
   ),
   product: persistReducer(
     {

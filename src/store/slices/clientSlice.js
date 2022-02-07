@@ -94,19 +94,6 @@ export const clientSuggetionListApi = createAsyncThunk("client/suggetionlist", a
   }
 });
 
-export const clientphotoStoreApi = createAsyncThunk("clientphoto/upload", async (formvalues, thunkAPI) => {
-  try {
-    const resposedata = await clientApiController
-      .upload(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "upload"))
-      .catch((error) => HandleError(thunkAPI, error, "upload"));
-    return resposedata;
-  } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
-  }
-});
-
 const initialState = {
   isTabView: "grid",
   isOpenedAddForm: "",
@@ -264,10 +251,6 @@ const clientSlice = createSlice({
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [clientDeleteApi.rejected]: () => {},
-    [clientphotoStoreApi.pending]: () => {},
-    [clientphotoStoreApi.fulfilled]: () => {},
-    [clientphotoStoreApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

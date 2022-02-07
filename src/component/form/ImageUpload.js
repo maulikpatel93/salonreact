@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
 // import config from "../../config";
 import yupconfig from "../../yupconfig";
-import { sweatalert } from "component/Sweatalert2";
 
-import { clientphotoStoreApi } from "../../store/slices/clientSlice";
+import { clientphotoStoreApi } from "../../store/slices/clientphotoSlice";
 // import { removeImage } from "../../store/slices/imageSlice";
-import useScriptRef from "../../hooks/useScriptRef";
 import PropTypes from "prop-types";
+import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import { sweatalert } from "component/Sweatalert2";
 
 const ImageUpload = (props) => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,6 @@ const ImageUpload = (props) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const scriptedRef = useScriptRef();
 
   const initialValues = {
     photo: "",
@@ -30,36 +29,6 @@ const ImageUpload = (props) => {
   });
   yupconfig();
 
-  const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    setLoading(true);
-    try {
-      dispatch(clientStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
-          setStatus({ success: true });
-          resetForm();
-          sweatalert({ title: t("uploaded"), text: t("uploaded_successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
-          const status = action.payload && action.payload.status;
-          const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
-            setErrors(errors);
-          }
-          setStatus({ success: false });
-          setSubmitting(false);
-        }
-      });
-      if (scriptedRef.current) {
-        setLoading(false);
-      }
-    } catch (err) {
-      if (scriptedRef.current) {
-        setErrors(err.message);
-      }
-      setStatus({ success: false });
-      setLoading(false);
-    }
-  };
-
   const hiddenFileInput = React.useRef(null);
 
   const handleClick = () => {
@@ -69,14 +38,19 @@ const ImageUpload = (props) => {
   const handleChange = (event) => {
     const fileUploaded = event.target.files;
     let myFiles = Array.from(fileUploaded);
-//     console.log(myFiles);
-    dispatch(clientphotoStoreApi({ fileUploaded: fileUploaded, id: props.client_id }));
-//     console.log(event.target.files);
+    setLoading(true);
+    dispatch(clientphotoStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
+      if (action.meta.requestStatus == "fulfilled") {
+        dispatch(clientphotoGridViewApi({ client_id: props.client_id }));
+        sweatalert({ title: t("uploaded"), text: t("uploaded_successfully"), icon: "success" });
+      }
+    });
+    setLoading(false);
   };
 
   return (
     <>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleClientSubmit}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema}>
         {(formik) => {
           return (
             <>

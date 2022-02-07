@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -14,6 +14,7 @@ import Notes from "./Photos";
 import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
 import ImageUpload from "component/form/ImageUpload";
+import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -27,6 +28,12 @@ const ClientDetailModal = () => {
     dispatch(closeClientDetailModal());
     dispatch({ type: "client/detail/rejected" });
   };
+
+  useEffect(() => {
+    if(detail && detail.id){
+      dispatch(clientphotoGridViewApi({ client_id: detail.id }));
+    }
+  }, [detail]);
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -168,7 +175,7 @@ const ClientDetailModal = () => {
                     </h2>
                   </div>
                   <div className="content-wrp">
-                    <Photos />
+                    <Photos client_id={detail.id}/>
                   </div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">

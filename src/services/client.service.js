@@ -49,7 +49,7 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
     let sortArray = [];
@@ -107,35 +107,11 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
-const upload = (values) => {
-  const auth = store.getState().auth;
-  const auth_key = auth.user.auth_key;
-  const formData = new FormData();
-  for (let value in values) {
-    if (["fileUploaded"].includes(value) && values[value] && typeof values[value] === "object") {
-     
-      // values.fileUploaded.forEach((photo, index) => {
-      //   console.log(photo);
-      //   // console.log(values.fileUploaded);
-      //   formData.append(`photo${index}`, values.profile[index]);
-      // });
-      formData.append(value, values[value]);
-    } else {
-      formData.append(value, values[value]);
-    }
-  }
-  const action = "afterlogin/client/upload/" + values.id;
-  formData.append("auth_key", auth_key);
-  formData.append("action", action);
-  formData.append("salon_id", auth.user.salon_id);
-  return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
-}
 const clientApiController = {
   create,
   update,
   view,
   deleted,
-  suggetionlist,
-  upload
+  suggetionlist
 };
 export default clientApiController;
