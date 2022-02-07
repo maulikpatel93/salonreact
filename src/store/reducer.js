@@ -7,6 +7,8 @@ import messageReducer from "./slices/message";
 import imageReducer from "../store/slices/imageSlice";
 import clientReducer from "../store/slices/clientSlice";
 import clientphotoReducer from "../store/slices/clientphotoSlice";
+import clientdocumentReducer from "../store/slices/clientdocumentSlice";
+import clientnoteReducer from "../store/slices/clientnoteSlice";
 import supplierReducer from "../store/slices/supplierSlice";
 import productReducer from "../store/slices/productSlice";
 import categoryReducer from "../store/slices/categorySlice";
@@ -56,6 +58,26 @@ const reducer = combineReducers({
       timeout: 20000
     },
     clientphotoReducer,
+  ),
+  clientdocument: persistReducer(
+    {
+      key: "clientdocument",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000
+    },
+    clientdocumentReducer,
+  ),
+  clientnote: persistReducer(
+    {
+      key: "clientnote",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000
+    },
+    clientnoteReducer,
   ),
   product: persistReducer(
     {

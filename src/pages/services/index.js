@@ -67,7 +67,6 @@ const Services = () => {
   };
 
   const fetchDataList = () => {
-    console.log("hello");
     dispatch(serviceListViewApi({ next_page_url: ListView.next_page_url }));
   };
   //Service search

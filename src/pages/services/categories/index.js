@@ -17,7 +17,6 @@ const Categories = () => {
 
   const ListView = useSelector((state) => state.category.isListView);
   const fetchDataGrid = () => {
-    console.log(ListView.next_page_url);
     dispatch(categoryListViewApi({ next_page_url: ListView.next_page_url }));
   };
   const [isFetching, setIsFetching] = useState(false);

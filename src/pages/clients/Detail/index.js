@@ -42,8 +42,6 @@ const ClientDetailModal = () => {
   const fetchDataPhotoList = () => {
     dispatch(clientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
   };
-
-  console.log(photoObjectData);
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -187,7 +185,7 @@ const ClientDetailModal = () => {
                   <div className="content-wrp" id="photolist">
                     {photoObjectData.length > 0 ? (
                       <>
-                        <InfiniteScroll className="row addphoto-drawer" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={photoViews.next_page_url ? true : false} loader={'loading...'}>
+                        <InfiniteScroll className="row addphoto-drawer" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={photoViews.next_page_url ? true : false} loader={<PaginationLoader />}>
                           <Photos />
                         </InfiniteScroll>
                       </>

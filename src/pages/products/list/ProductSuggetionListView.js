@@ -17,7 +17,6 @@ const ProductSuggetionListView = (props) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
     dispatch(productSearchName(suggetionname));
-    console.log('hello1');
     dispatch(closeProductSearchList());
     dispatch(productListViewApi({ id: suggetionid, result:"result_array" }));
   };
