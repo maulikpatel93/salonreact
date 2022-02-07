@@ -15,11 +15,15 @@ import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/c
 import { ucfirst } from "../../../helpers/functions";
 import ImageUpload from "component/form/ImageUpload";
 import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import InfiniteScroll from "react-infinite-scroll-component";
+import PaginationLoader from "component/PaginationLoader";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
   const detailTab = useSelector((state) => state.client.isClientDetailTab);
   const detail = useSelector((state) => state.client.isDetailData);
+  const photoViews = useSelector((state) => state.clientphoto.isGridView);
+  const photoObjectData = photoViews && photoViews.data ? photoViews.data : photoViews;
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -30,10 +34,16 @@ const ClientDetailModal = () => {
   };
 
   useEffect(() => {
-    if(detail && detail.id){
+    if (detail && detail.id) {
       dispatch(clientphotoGridViewApi({ client_id: detail.id }));
     }
   }, [detail]);
+
+  const fetchDataPhotoList = () => {
+    dispatch(clientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
+  };
+
+  console.log(photoObjectData);
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -174,8 +184,25 @@ const ClientDetailModal = () => {
                       <ImageUpload name="photo" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />
                     </h2>
                   </div>
-                  <div className="content-wrp">
-                    <Photos client_id={detail.id}/>
+                  <div className="content-wrp" id="photolist">
+                    {photoObjectData.length > 0 ? (
+                      <>
+                        <InfiniteScroll className="row addphoto-drawer" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={photoViews.next_page_url ? true : false} loader={'loading...'}>
+                          <Photos />
+                        </InfiniteScroll>
+                      </>
+                    ) : (
+                      <div className="complete-box text-center d-flex flex-column justify-content-center mt-xl-4">
+                        <div className="complete-box-wrp text-center">
+                          <img src={config.imagepath + "addphoto-box.png"} alt="" className="mb-md-4 mb-3" />
+                          <h5 className="mb-2 fw-semibold">
+                            {t("add_client_profile_photo_note")}
+                            <br />
+                            <a className="add-photo">{t("Add_your_first_photo")}</a>
+                          </h5>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">
