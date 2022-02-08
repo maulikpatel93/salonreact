@@ -82,7 +82,8 @@ export const clientdocumentSuggetionListApi = createAsyncThunk("clientdocument/s
 });
 
 const initialState = {
-  isGridView: []
+  isGridView: [],
+  isDocumentDrawer: "",
 };
 
 const clientdocumentSlice = createSlice({
@@ -90,21 +91,16 @@ const clientdocumentSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    openDocumentDrawer: (state) => {
+      state.isDocumentDrawer = "open";
+    },
+    closeDocumentDrawer: (state) => {
+      state.isDocumentDrawer = "";
+    },
   },
   extraReducers: {
     [clientdocumentStoreApi.pending]: () => {},
-    [clientdocumentStoreApi.fulfilled]: () => {
-      // if (state.isGridView && state.isGridView.data) {
-      //   state.isGridView.data = [action.payload, ...state.isGridView.data];
-      // } else {
-      //   state.isGridView = { data: [action.payload] };
-      // }
-      // if (state.isListView && state.isListView.data) {
-      //   state.isListView.data = [action.payload, ...state.isListView.data];
-      // } else {
-      //   state.isListView = { data: [action.payload] };
-      // }
-    },
+    [clientdocumentStoreApi.fulfilled]: () => {},
     [clientdocumentStoreApi.rejected]: () => {},
     [clientdocumentUpdateApi.pending]: () => {},
     [clientdocumentUpdateApi.fulfilled]: (state, action) => {
@@ -137,10 +133,9 @@ const clientdocumentSlice = createSlice({
     [clientdocumentDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset } = clientdocumentSlice.actions;
+export const { reset, openDocumentDrawer, closeDocumentDrawer } = clientdocumentSlice.actions;
 export default clientdocumentSlice.reducer;

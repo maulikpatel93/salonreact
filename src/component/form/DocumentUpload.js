@@ -40,9 +40,15 @@ const DocumentUpload = (props) => {
     let myFiles = Array.from(fileUploaded);
     setLoading(true);
     dispatch(clientdocumentStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
-      if (action.meta.requestStatus == "fulfilled") {
+      if (action.meta.requestStatus === "fulfilled") {
         dispatch(clientdocumentGridViewApi({ client_id: props.client_id }));
         sweatalert({ title: t("uploaded"), text: t("uploaded_successfully"), icon: "success" });
+      } else if (action.meta.requestStatus === "rejected") {
+        if (action.payload.status === 422) {
+          let error = action.payload;
+          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+          sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+        }
       }
     });
     setLoading(false);
@@ -58,7 +64,7 @@ const DocumentUpload = (props) => {
                 <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={handleClick}>
                   {props.label}
                 </button>
-                <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} multiple />
+                <input type="file" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} multiple />
                 <button type="submit" className="btn btn-primary w-100 btn-lg d-none" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
                   {t("Upload")}

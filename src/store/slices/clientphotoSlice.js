@@ -68,21 +68,9 @@ export const clientphotoDeleteApi = createAsyncThunk("clientphoto/delete", async
   }
 });
 
-export const clientphotoSuggetionListApi = createAsyncThunk("clientphoto/suggetionlist", async (formValues, thunkAPI) => {
-  try {
-    const resposedata = await clientphotoApiController
-      .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
-      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
-    return resposedata;
-  } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
 const initialState = {
-  isGridView: []
+  isGridView: [],
+  isPhotoDrawer: "",
 };
 
 const clientphotoSlice = createSlice({
@@ -90,21 +78,16 @@ const clientphotoSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    openPhotoDrawer: (state) => {
+      state.isPhotoDrawer = "open";
+    },
+    closePhotoDrawer: (state) => {
+      state.isPhotoDrawer = "";
+    },
   },
   extraReducers: {
     [clientphotoStoreApi.pending]: () => {},
-    [clientphotoStoreApi.fulfilled]: () => {
-      // if (state.isGridView && state.isGridView.data) {
-      //   state.isGridView.data = [action.payload, ...state.isGridView.data];
-      // } else {
-      //   state.isGridView = { data: [action.payload] };
-      // }
-      // if (state.isListView && state.isListView.data) {
-      //   state.isListView.data = [action.payload, ...state.isListView.data];
-      // } else {
-      //   state.isListView = { data: [action.payload] };
-      // }
-    },
+    [clientphotoStoreApi.fulfilled]: () => {},
     [clientphotoStoreApi.rejected]: () => {},
     [clientphotoUpdateApi.pending]: () => {},
     [clientphotoUpdateApi.fulfilled]: (state, action) => {
@@ -137,10 +120,9 @@ const clientphotoSlice = createSlice({
     [clientphotoDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset } = clientphotoSlice.actions;
+export const { reset, openPhotoDrawer, closePhotoDrawer } = clientphotoSlice.actions;
 export default clientphotoSlice.reducer;

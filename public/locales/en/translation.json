@@ -272,5 +272,13 @@
     "uploaded_successfully": "Uploaded successfully",
     "add_photo": "Add Photo",
     "Profile_Image": "Profile Image",
-    "add_document": "Add Document"
+    "add_document": "Add Document",
+    "Add documents and keep a record of your client’s treatments.": "Add documents and keep a record of your client’s treatments.",
+    "Add your first document.": "Add your first document.",
+    "clients": "clients",
+    "Download": "Download",
+    "Add your first note.": "Add your first note.",
+    "Keep a note of anything you need to remember about your client.": "Keep a note of anything you need to remember about your client.",
+    "add_note": "Add Note",
+    "Note": "Note"
 }

@@ -55,7 +55,7 @@ const view = (values) => {
     pagination: values && values.id ? false : true, //true or false
     id: values && values.id ? values.id : "",
     client_id: values && values.client_id ? values.client_id : "",
-    field: values && values.id ? "" : "document", // first_name,last_name,email
+    field: values && values.id ? "" : "document,updated_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
   };

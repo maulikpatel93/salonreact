@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -10,26 +10,17 @@ import Membership from "./Membership";
 import Photos from "./Photos";
 import Invoices from "./Invoices";
 import Documents from "./Documents";
-import Notes from "./Photos";
+import Notes from "./Notes";
 import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
-import ImageUpload from "component/form/ImageUpload";
-import DocumentUpload from "component/form/DocumentUpload";
 import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
-import InfiniteScroll from "react-infinite-scroll-component";
-import PaginationLoader from "component/PaginationLoader";
+import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
   const detailTab = useSelector((state) => state.client.isClientDetailTab);
   const detail = useSelector((state) => state.client.isDetailData);
-  const photoViews = useSelector((state) => state.clientphoto.isGridView);
-  const photoObjectData = photoViews && photoViews.data ? photoViews.data : photoViews;
-  const documentViews = useSelector((state) => state.clientdocument.isGridView);
-  const documentObjectData = documentViews && documentViews.data ? documentViews.data : documentViews;
-
-  
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -38,16 +29,6 @@ const ClientDetailModal = () => {
     dispatch({ type: "client/detail/rejected" });
   };
 
-  useEffect(() => {
-    if (detail && detail.id) {
-      dispatch(clientphotoGridViewApi({ client_id: detail.id }));
-      dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
-    }
-  }, [detail]);
-
-  const fetchDataPhotoList = () => {
-    dispatch(clientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
-  };
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -109,22 +90,65 @@ const ClientDetailModal = () => {
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "photos" ? " active" : "")} id="photos" data-bs-toggle="tab" data-bs-target="#photos-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("photos"))}>
+                  <button
+                    className={"nav-link" + (detailTab && detailTab == "photos" ? " active" : "")}
+                    id="photos"
+                    data-bs-toggle="tab"
+                    data-bs-target="#photos-tab"
+                    type="button"
+                    role="tab"
+                    onClick={() => {
+                      dispatch(clientDetailTab("photos"));
+                      dispatch(clientphotoGridViewApi({ client_id: detail.id }));
+                    }}
+                  >
                     {t("photos")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "invoices" ? " active" : "")} id="invoices" data-bs-toggle="tab" data-bs-target="#invoices-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("invoices"))}>
+                  <button
+                    className={"nav-link" + (detailTab && detailTab == "invoices" ? " active" : "")}
+                    id="invoices"
+                    data-bs-toggle="tab"
+                    data-bs-target="#invoices-tab"
+                    type="button"
+                    role="tab"
+                    onClick={() => {
+                      dispatch(clientDetailTab("invoices"));
+                    }}
+                  >
                     {t("invoices")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "documents" ? " active" : "")} id="documents" data-bs-toggle="tab" data-bs-target="#documents-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("documents"))}>
+                  <button
+                    className={"nav-link" + (detailTab && detailTab == "documents" ? " active" : "")}
+                    id="documents"
+                    data-bs-toggle="tab"
+                    data-bs-target="#documents-tab"
+                    type="button"
+                    role="tab"
+                    onClick={() => {
+                      dispatch(clientDetailTab("documents"));
+                      dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
+                    }}
+                  >
                     {t("documents")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "notes" ? " active" : "")} id="notes" data-bs-toggle="tab" data-bs-target="#notes-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("notes"))}>
+                  <button
+                    className={"nav-link" + (detailTab && detailTab == "notes" ? " active" : "")}
+                    id="notes"
+                    data-bs-toggle="tab"
+                    data-bs-target="#notes-tab"
+                    type="button"
+                    role="tab"
+                    onClick={() => {
+                      dispatch(clientDetailTab("notes"));
+                      dispatch(clientnoteGridViewApi({ client_id: detail.id }));
+                    }}
+                  >
                     {t("notes")}
                   </button>
                 </li>
@@ -183,31 +207,9 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">
-                      {t("photos")}
-                      <ImageUpload name="photo" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />
-                    </h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}</h2>
                   </div>
-                  <div className="content-wrp" id="photolist">
-                    {photoObjectData.length > 0 ? (
-                      <>
-                        <InfiniteScroll className="row addphoto-drawer" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={photoViews.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <Photos />
-                        </InfiniteScroll>
-                      </>
-                    ) : (
-                      <div className="complete-box text-center d-flex flex-column justify-content-center mt-xl-4">
-                        <div className="complete-box-wrp text-center">
-                          <img src={config.imagepath + "addphoto-box.png"} alt="" className="mb-md-4 mb-3" />
-                          <h5 className="mb-2 fw-semibold">
-                            {t("add_client_profile_photo_note")}
-                            <br />
-                            <a className="add-photo">{t("Add_your_first_photo")}</a>
-                          </h5>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <div className="content-wrp">{detailTab && detailTab == "photos" && <Photos />}</div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">
                   <div className="drawer-header">
@@ -224,39 +226,15 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">
-                      {t("documents")}
-                      <DocumentUpload name="document" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />
-                    </h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("documents")}</h2>
                   </div>
-                  <div className="content-wrp">
-                  {documentObjectData.length > 0 ? (
-                      <>
-                        <InfiniteScroll className="row adddoc-drawer" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <Documents />
-                        </InfiniteScroll>
-                      </>
-                    ) : (
-                      <div className="complete-box text-center d-flex flex-column justify-content-center mt-xl-4">
-                        <div className="complete-box-wrp text-center">
-                          <img src={config.imagepath + "addphoto-box.png"} alt="" className="mb-md-4 mb-3" />
-                          <h5 className="mb-2 fw-semibold">
-                            {t("add_client_profile_photo_note")}
-                            <br />
-                            <a className="add-photo">{t("Add_your_first_photo")}</a>
-                          </h5>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <div className="content-wrp">{detailTab && detailTab == "documents" && <Documents />}</div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 mb-lg-5">{t("notes")}</h2>
                   </div>
-                  <div className="content-wrp">
-                    <Notes />
-                  </div>
+                  <div className="content-wrp">{detailTab && detailTab == "notes" && <Notes />}</div>
                 </div>
               </div>
             </div>

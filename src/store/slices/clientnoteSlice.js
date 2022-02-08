@@ -82,7 +82,10 @@ export const clientnoteSuggetionListApi = createAsyncThunk("clientnote/suggetion
 });
 
 const initialState = {
-  isGridView: []
+  isGridView: [],
+  isOpenedAddForm: "",
+  isOpenedEditForm: "",
+  isNoteDrawer: "",
 };
 
 const clientnoteSlice = createSlice({
@@ -90,21 +93,36 @@ const clientnoteSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    openNoteDrawer: (state) => {
+      state.isNoteDrawer = "open";
+      // state.isOpenedAddForm = "";
+      // state.isOpenedEditForm = "";
+    },
+    closeNoteDrawer: (state) => {
+      state.isNoteDrawer = "";
+      // state.isOpenedAddForm = "";
+      // state.isOpenedEditForm = "";
+    },
+    openAddNoteForm: (state = initialState) => {
+      state.isOpenedAddForm = "open";
+      state.isOpenedEditForm = "";
+    },
+    closeAddNoteForm: (state = initialState) => {
+      state.isOpenedAddForm = "";
+      state.isOpenedEditForm = "";
+    },
+    openEditNoteForm: (state = initialState) => {
+      state.isOpenedAddForm = "";
+      state.isOpenedEditForm = "open";
+    },
+    closeEditNoteForm: (state = initialState) => {
+      state.isOpenedAddForm = "";
+      state.isOpenedEditForm = "";
+    },
   },
   extraReducers: {
     [clientnoteStoreApi.pending]: () => {},
-    [clientnoteStoreApi.fulfilled]: () => {
-      // if (state.isGridView && state.isGridView.data) {
-      //   state.isGridView.data = [action.payload, ...state.isGridView.data];
-      // } else {
-      //   state.isGridView = { data: [action.payload] };
-      // }
-      // if (state.isListView && state.isListView.data) {
-      //   state.isListView.data = [action.payload, ...state.isListView.data];
-      // } else {
-      //   state.isListView = { data: [action.payload] };
-      // }
-    },
+    [clientnoteStoreApi.fulfilled]: () => {},
     [clientnoteStoreApi.rejected]: () => {},
     [clientnoteUpdateApi.pending]: () => {},
     [clientnoteUpdateApi.fulfilled]: (state, action) => {
@@ -137,10 +155,9 @@ const clientnoteSlice = createSlice({
     [clientnoteDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset } = clientnoteSlice.actions;
+export const { reset, openNoteDrawer, closeNoteDrawer, openAddNoteForm, closeAddNoteForm, openEditNoteForm, closeEditNoteForm } = clientnoteSlice.actions;
 export default clientnoteSlice.reducer;
