@@ -14,10 +14,12 @@ import { ucfirst } from "helpers/functions";
 import { closeAddStaffForm, staffStoreApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import 'rc-time-picker/assets/index.css';
+import { DateTimePicker } from "react-tempusdominus-bootstrap";
+// import { tempusDominus } from "@eonasdan/tempus-dominus";
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
+  const [date, setDate] = useState(new Date());
   const HourList = [
     { days: "Sunday", start_time: "", end_time: "", break_time: [] },
     { days: "Monday", start_time: "", end_time: "", break_time: [] },
@@ -36,7 +38,7 @@ const StaffAddForm = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
-  
+
   const handleCloseAddStaffForm = () => {
     dispatch(closeAddStaffForm());
   };
@@ -131,7 +133,8 @@ const StaffAddForm = () => {
   };
 
   const PriceTierOptionsData = isPriceTierOption;
-
+  // console.log(tempusDominus.TempusDominus);
+  // new TempusDominus(document.getElementById("icon-only"), {});
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
@@ -168,6 +171,7 @@ const StaffAddForm = () => {
                         <div className="row gx-2">
                           <div className="col-md-6">
                             <div className="mb-3">
+                              <DateTimePicker date={date} debug={false} onChange={(e) => setDate(e.date)} />
                               <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="staffForm-first_name" />
                             </div>
                             <div className="mb-3">
@@ -234,19 +238,18 @@ const StaffAddForm = () => {
                       <div className="col-xl-4 col-md-6 working-hrs">
                         <h3 className="mb-2">{t("Working_Hours")}</h3>
                         <h6 className="subtitle">{t("Set_the_availability_for_this_staff_member")}</h6>
-
                         <ul className="list-unstyled mb-0 p-0">
                           {HourList &&
                             HourList.map((item, i) => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
                               return (
-                                <li key={i}>
+                                <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
                                   <div className="d-none">
                                     <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control" id={`staffForm-days-${i}`} />
                                   </div>
-                                  <Field type="time" name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} onChange={formik.handleChange} />
+                                  <Field name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} onChange={formik.handleChange} />
                                   <span className="mx-2">to</span>
                                   <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control me-xxl-4 me-2"} id={`staffForm-end_time-${i}`} onChange={formik.handleChange} />
                                   <FieldArray
@@ -306,7 +309,7 @@ const StaffAddForm = () => {
                         <h3 className="mb-2">{t("Services")}</h3>
                         <h6 className="subtitle">{t("addonservice_staff_note")}</h6>
                         <ul className="list-unstyled mb-0 p-0 m-0">
-                          <li className="pt-3 pb-0 mt-0 all-staff">
+                          <li className="pt-3 pb-0 mt-0 all-staff li">
                             <div className="checkbox">
                               <input
                                 type="checkbox"
@@ -340,7 +343,7 @@ const StaffAddForm = () => {
                                   let category_name = isAddonServices[item].name;
                                   let addonservicesData = isAddonServices[item].services;
                                   return (
-                                    <li className="pt-3 pb-3" key={item} data-id={category_id}>
+                                    <li className="pt-3 pb-3 li" key={item} data-id={category_id}>
                                       <div className="checkbox">
                                         <input
                                           type="checkbox"
@@ -366,7 +369,7 @@ const StaffAddForm = () => {
                                             let service_name = addonservicesData[itemservice].name;
                                             // let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                                             return (
-                                              <li className="pt-3 pb-3" key={itemservice} data-id={service_id}>
+                                              <li className="pt-3 pb-3 li" key={itemservice} data-id={service_id}>
                                                 <div className="checkbox">
                                                   <input
                                                     type="checkbox"
@@ -392,7 +395,7 @@ const StaffAddForm = () => {
                                     </li>
                                   );
                                 })}
-                              {isAddonServices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                              {isAddonServices.length <= 0 ? <li className="li">{t("no_data_found")}</li> : ""}
                             </ul>
                           </li>
                         </ul>

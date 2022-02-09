@@ -1873,12 +1873,12 @@ header .search .search-wrapper.open {
     margin-top: 24px;
 }
 
-.addstaff-member ul li {
+.addstaff-member ul .li {
     position: relative;
     margin-top: -1px;
 }
 
-.addstaff-member ul li:after {
+.addstaff-member ul .li:after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -1889,7 +1889,7 @@ header .search .search-wrapper.open {
     right: -200px;
 }
 
-.addstaff-member ul li:before {
+.addstaff-member ul .li:before {
     content: "";
     position: absolute;
     top: 0;
@@ -1900,11 +1900,11 @@ header .search .search-wrapper.open {
     right: -200px;
 }
 
-.addstaff-member ul ul li:last-child {
+.addstaff-member ul ul .li:last-child {
     padding-bottom: 0;
 }
 
-.addstaff-member ul ul li:last-child:after {
+.addstaff-member ul ul .li:last-child:after {
     display: none;
 }
 
@@ -1924,14 +1924,14 @@ header .search .search-wrapper.open {
     width: 115px;
 }
 
-.addstaff-member .working-hrs li {
+.addstaff-member .working-hrs .li {
     display: flex;
     align-items: center;
     padding: 18px 0;
     flex-wrap: wrap;
 }
 
-.addstaff-member .service li {
+.addstaff-member .service .li {
     padding: 25px 0 24px;
 }
 
@@ -3560,4 +3560,8 @@ table .pro-title {
         width: 100%;
         display: block;
     }
+}
+
+.bootstrap-datetimepicker-widget table.table> :not(caption)>*>* {
+    padding: 0px;
 }
