@@ -14,6 +14,7 @@ import { ucfirst } from "helpers/functions";
 import { closeAddStaffForm, staffStoreApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
+import 'rc-time-picker/assets/index.css';
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ const StaffAddForm = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
-
+  
   const handleCloseAddStaffForm = () => {
     dispatch(closeAddStaffForm());
   };
