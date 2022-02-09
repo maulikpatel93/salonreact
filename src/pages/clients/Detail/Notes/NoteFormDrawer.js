@@ -11,7 +11,8 @@ const NoteFormDrawer = () => {
   const { t } = useTranslation();
   const rightDrawerOpenedAdd = useSelector((state) => state.clientnote.isOpenedAddForm);
   const rightDrawerOpenedEdit = useSelector((state) => state.clientnote.isOpenedEditForm);
-  const detail = useSelector((state) => state.client.isDetailData);
+  const clientdetail = useSelector((state) => state.client.isDetailData);
+  const notedetail = useSelector((state) => state.clientnote.isDetailData);
   return (
     <>
       <div className={"drawer addnote-drawer " + rightDrawerOpenedAdd + rightDrawerOpenedEdit}>
@@ -23,8 +24,8 @@ const NoteFormDrawer = () => {
             </a>
           </div>
           <div className="drawer-body">
-            {rightDrawerOpenedAdd && <NoteCreate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" client_id={detail.id} />}
-            {rightDrawerOpenedEdit && <NoteUpdate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" client_id={detail.id} />}
+            {rightDrawerOpenedAdd && <NoteCreate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" client_id={clientdetail.id} />}
+            {rightDrawerOpenedEdit && <NoteUpdate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" detail={notedetail} />}
           </div>
         </div>
       </div>

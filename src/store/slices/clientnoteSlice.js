@@ -86,6 +86,7 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isNoteDrawer: "",
+  isDetailData:""
 };
 
 const clientnoteSlice = createSlice({
@@ -155,6 +156,13 @@ const clientnoteSlice = createSlice({
     [clientnoteDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
+    },
+    [clientnoteDetailApi.pending]: () => {},
+    [clientnoteDetailApi.fulfilled]: (state, action) => {
+      state.isDetailData = action.payload;
+    },
+    [clientnoteDetailApi.rejected]: (state) => {
+      state.isDetailData = "";
     },
   },
 });
