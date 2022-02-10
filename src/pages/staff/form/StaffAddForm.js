@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, FieldArray, Field } from "formik";
+import { Formik, FieldArray, Field, useField } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, InputFieldImage, SelectField, SwitchField, MapAddressField } from "../../../component/form/Field";
@@ -14,8 +14,11 @@ import { ucfirst } from "helpers/functions";
 import { closeAddStaffForm, staffStoreApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { DateTimePicker } from "react-tempusdominus-bootstrap";
+import { TimePicker } from "react-tempusdominus-bootstrap";
 // import { tempusDominus } from "@eonasdan/tempus-dominus";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -36,13 +39,12 @@ const StaffAddForm = () => {
   const isAddonServices = useSelector((state) => state.staff.isAddonServices);
 
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const scriptedRef = useScriptRef();
 
   const handleCloseAddStaffForm = () => {
     dispatch(closeAddStaffForm());
   };
-
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -133,11 +135,24 @@ const StaffAddForm = () => {
   };
 
   const PriceTierOptionsData = isPriceTierOption;
+
+  const pickericons = {
+    type: "class",
+    time: "fas fa-clock",
+    date: "fas fa-calendar",
+    up: "fas fa-arrow-up",
+    down: "fas fa-arrow-down",
+    previous: "fas fa-chevron-left",
+    next: "fas fa-chevron-right",
+    today: "fas fa-calendar-check-o",
+    clear: "fas fa-trash",
+    close: "fas fa-times",
+  };
   // console.log(tempusDominus.TempusDominus);
   // new TempusDominus(document.getElementById("icon-only"), {});
   return (
     <React.Fragment>
-      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
+      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit} validateOnChange={true} validateOnBlur={true}>
         {(formik) => {
           useEffect(() => {
             if (isAddonServices) {
@@ -171,7 +186,6 @@ const StaffAddForm = () => {
                         <div className="row gx-2">
                           <div className="col-md-6">
                             <div className="mb-3">
-                              <DateTimePicker date={date} debug={false} onChange={(e) => setDate(e.date)} />
                               <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="staffForm-first_name" />
                             </div>
                             <div className="mb-3">
@@ -204,7 +218,7 @@ const StaffAddForm = () => {
                             <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
                           </div>
                           <div className="col-md-3 col-6 mb-md-4 mb-3">
-                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                            <InputField type="date" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
                           </div>
                         </div>
                         <div className="mb-3">
@@ -243,15 +257,52 @@ const StaffAddForm = () => {
                             HourList.map((item, i) => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
+                              // console.log(formik.values.working_hours[i].start_time);
+                              let linkedPicker1Ref = useRef();
+                              let linkedPicker2Ref = useRef();
                               return (
                                 <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
                                   <div className="d-none">
                                     <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control" id={`staffForm-days-${i}`} />
                                   </div>
-                                  <Field name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} onChange={formik.handleChange} />
-                                  <span className="mx-2">to</span>
-                                  <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control me-xxl-4 me-2"} id={`staffForm-end_time-${i}`} onChange={formik.handleChange} />
+                                  <TimePicker
+                                    pickerRef={linkedPicker1Ref}
+                                    locale={i18n.language}
+                                    noIcon={true}
+                                    debug={false}
+                                    icons={pickericons}
+                                    onChange={(e) => {
+                                      if (e.date) {
+                                        let start_date = moment(new Date(e.date)).format("hh:mm a");
+                                        let minDate = moment(new Date(e.date)).add(15, 'm');
+                                        console.log(minDate);
+                                        formik.setFieldValue(`working_hours[${i}][start_time]`, start_date);
+                                        formik.setFieldValue(`working_hours[${i}][end_time]`, start_date);
+                                        linkedPicker2Ref.current.datetimepicker("minDate", minDate);
+                                      }
+                                      // formik.handleChange(e);
+                                    }}
+                                  />
+                                  {/* <Field name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} /> */}
+                                  <span className="mx-2">{t("to")}</span>
+                                  <TimePicker
+                                    pickerRef={linkedPicker2Ref}
+                                    locale={i18n.language}
+                                    noIcon={true}
+                                    debug={false}
+                                    icons={pickericons}
+                                    onChange={(e) => {
+                                      if (e.date) {
+                                        let end_date = moment(new Date(e.date)).format("hh:mm a");
+                                        let maxDate = new Date(e.date);
+                                        formik.setFieldValue(`working_hours[${i}][end_time]`, end_date);
+                                        linkedPicker1Ref.current.datetimepicker("maxDate", maxDate);
+                                      }
+                                      // formik.handleChange(e);
+                                    }}
+                                  />
+                                  {/* <Field name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control"} id={`staffForm-end_time-${i}`} /> */}
                                   <FieldArray
                                     name={`working_hours.${i}.break_time`}
                                     render={(arrayHelpers) => {
@@ -279,7 +330,7 @@ const StaffAddForm = () => {
                                                   <div key={i + j}>
                                                     <div className="add-break-time w-100 d-flex align-items-center mt-md-3 mt-2" id={`working_hours-break_time-${j}`}>
                                                       <label htmlFor={`staffForm-break_title-${i}-${item}`}>
-                                                        <Field placeholder="" className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
+                                                        <Field placeholder={"title"} className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
                                                       </label>
                                                       <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_start_time ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_start_time]`} id={`staffForm-break_start_time-${i}-${j}`} onChange={formik.handleChange} />
                                                       <span className="mx-2">to</span>
