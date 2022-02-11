@@ -1920,7 +1920,7 @@ header .search .search-wrapper.open {
     font-size: 18px;
 }
 
-.addstaff-member .working-hrs input {
+.addstaff-member .working-hrs .input {
     width: 115px;
 }
 
@@ -2729,7 +2729,7 @@ table .pro-title {
     .addstaff-member .working-hrs label {
         min-width: 110px;
     }
-    .addstaff-member .working-hrs input {
+    .addstaff-member .working-hrs .input {
         width: 86px;
     }
 }
@@ -2754,7 +2754,7 @@ table .pro-title {
     .voucher-preview-inner h2 {
         font-size: 30px;
     }
-    .addstaff-member .working-hrs input {
+    .addstaff-member .working-hrs .input {
         width: 90px;
     }
     .addstaff-member .working-hrs label {
@@ -2866,7 +2866,7 @@ table .pro-title {
         min-width: 90px;
         font-size: 16px;
     }
-    .addstaff-member .working-hrs input {
+    .addstaff-member .working-hrs .input {
         width: 76px;
     }
     .addstaff-member .working-hrs span {
@@ -3553,7 +3553,7 @@ table .pro-title {
     .common-tab .nav {
         justify-content: space-evenly;
     }
-    .addstaff-member .working-hrs input {
+    .addstaff-member .working-hrs .input {
         width: 72px;
     }
     .calendar-header .staff-dropdown {

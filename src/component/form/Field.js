@@ -11,6 +11,9 @@ import config from "../../config";
 import { selectImage, removeImage } from "../../store/slices/imageSlice";
 import CustomSelect from "../../component/form/CustomSelect";
 import { Field } from "formik";
+import DatePicker from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+// import moment from "moment";
 
 const FloatLabelInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
@@ -156,7 +159,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
       ) : (
         ""
       )}
-      
+
       {page === "staff-form" ? (
         <>
           <Form.Group className="" controlId={controlId}>
@@ -270,11 +273,12 @@ const MapAddressField = ({ label, controlId, ...props }) => {
 
 const DatePickerField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
+  
   return (
     <>
       <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        <Form.Control {...field} {...props} isInvalid={!!meta.error} />
+        <Form.Control as={DatePicker} {...field} {...props} isInvalid={!!meta.error} inputClass={props.classname} plugins={[<TimePicker hideSeconds style={{ width: "auto" }} />]} disableDayPicker format="hh:mm A" />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
       </Form.Group>
     </>
@@ -343,6 +347,7 @@ InputFieldImage.propTypes = {
 DatePickerField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
+  classname: PropTypes.string,
 };
 
 export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, InputCheckbox, SwitchField, InputFieldImage, DatePickerField };

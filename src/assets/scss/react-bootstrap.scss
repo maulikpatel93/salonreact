@@ -4,15 +4,3 @@
 $utilities: map-merge( $utilities, ( "cursor": ( property: cursor, values: auto default pointer wait text move help not-allowed, ), ));
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
-@import "~tempusdominus-bootstrap/src/sass/tempusdominus-bootstrap-build.scss";

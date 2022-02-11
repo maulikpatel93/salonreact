@@ -194,3 +194,9 @@ header {
 .react-datepicker-wrapper {
     width: auto !important;
 }
+
+.working-hrs .was-validated .form-control:invalid,
+.form-control.is-invalid {
+    padding: 8px;
+    background-image: none
+}

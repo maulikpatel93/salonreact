@@ -55,13 +55,13 @@ const StaffEditForm = () => {
     add_on_services: [],
     add_on_category: [],
     working_hours: [
-      { days: "Sunday", start_time: "", end_time: "", break_time: [] },
-      { days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "", days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -82,8 +82,16 @@ const StaffEditForm = () => {
     working_hours: Yup.array().of(
       Yup.object().shape({
         days: Yup.string().trim().label(t("days")).required(),
-        start_time: Yup.string().trim().label(t("start_time")).required(),
-        end_time: Yup.string().trim().label(t("end_time")).required(),
+        start_time: Yup.string()
+          .nullable()
+          .when("dayoff", {
+            is: '1',
+            then: Yup.string().trim().label(t("start_time")).required(),
+          }),
+        end_time: Yup.string().when("dayoff", {
+          is: '1',
+          then: Yup.string().trim().label(t("end_time")).required(),
+        }),
         break_time: Yup.array().of(
           Yup.object().shape({
             break_title: Yup.string().trim().label(t("break_title")).required(),
@@ -114,6 +122,7 @@ const StaffEditForm = () => {
           }
           setStatus({ success: false });
           setSubmitting(false);
+          setLoading(false);
         }
       });
       if (scriptedRef.current) {
@@ -150,9 +159,11 @@ const StaffEditForm = () => {
                   let start_time = item.start_time;
                   let end_time = item.end_time;
                   let break_time = item.break_time;
+                  let dayoff = item.dayoff;
                   formik.setFieldValue(`working_hours[${i}][days]`, days ? days : "");
                   formik.setFieldValue(`working_hours[${i}][start_time]`, start_time ? start_time : "");
                   formik.setFieldValue(`working_hours[${i}][end_time]`, end_time ? end_time : "", false);
+                  formik.setFieldValue(`working_hours[${i}][dayoff]`, dayoff ? dayoff : "", false);
                   if (break_time) {
                     break_time.map((breakitem, j) => {
                       let break_title = breakitem.break_title;
@@ -183,6 +194,7 @@ const StaffEditForm = () => {
             }
           }, [detail, isAddonServices]);
 
+          // console.log(formik.errors);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 addstaff-member " : "") + rightDrawerOpened} id="addstaff-member-drawer">
               <div className="drawer-wrp position-relative">
@@ -272,15 +284,44 @@ const StaffEditForm = () => {
                             HourList.map((item, i) => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
+                              let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff === "1" ? "1" : "";
                               return (
-                                <li key={i}>
+                                <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
                                   <div className="d-none">
-                                    <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control" id={`staffForm-days-${i}`} />
+                                    <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control input" id={`staffForm-days-${i}`} />
                                   </div>
-                                  <Field type="time" name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} onChange={formik.handleChange} />
-                                  <span className="mx-2">to</span>
-                                  <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control me-xxl-4 me-2"} id={`staffForm-end_time-${i}`} onChange={formik.handleChange} />
+                                  <div className="me-3">
+                                    <input
+                                      type="checkbox"
+                                      name={`working_hours[${i}][dayoff]`}
+                                      value="1"
+                                      className=""
+                                      id={`staffForm-dayoff-${i}`}
+                                      onChange={(e) => {
+                                        if (e.currentTarget.checked) {
+                                          setTimeout(() => {
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, '1', false);
+                                          }, 100);
+                                        } else {
+                                          setTimeout(() => {
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][start_time]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][end_time]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][break_time]`, [], false);
+                                          }, 100);
+                                        }
+                                        formik.handleChange(e);
+                                      }}
+                                      checked={dayoff ? "checked" : ""}
+                                    />
+                                    <div className="invalida-feedback"></div>
+                                  </div>
+                                  <Field type="time" name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control input"} id={`staffForm-start_time-${i}`} onChange={formik.handleChange} style={{ display: dayoff ? "block" : "none" }} />
+                                  <span className="mx-2" style={{ display: dayoff ? "block" : "none" }}>
+                                    {t("to")}
+                                  </span>
+                                  <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control me-xxl-4 me-2 input"} id={`staffForm-end_time-${i}`} onChange={formik.handleChange} style={{ display: dayoff ? "block" : "none" }} />
                                   <FieldArray
                                     name={`working_hours.${i}.break_time`}
                                     render={(arrayHelpers) => {
@@ -297,6 +338,7 @@ const StaffEditForm = () => {
                                                 break_end_time: "",
                                               })
                                             }
+                                            style={{ display: dayoff ? "block" : "none" }}
                                           >
                                             <i className="fal fa-plus pe-1 small"></i>
                                             {t("Break")}
@@ -308,11 +350,11 @@ const StaffEditForm = () => {
                                                   <div key={i + j}>
                                                     <div className="add-break-time w-100 d-flex align-items-center mt-md-3 mt-2" id={`working_hours-break_time-${j}`}>
                                                       <label htmlFor={`staffForm-break_title-${i}-${item}`}>
-                                                        <Field placeholder="" className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
+                                                        <Field placeholder={"Title"} className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
                                                       </label>
-                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_start_time ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_start_time]`} id={`staffForm-break_start_time-${i}-${j}`} onChange={formik.handleChange} />
+                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_start_time ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_start_time]`} id={`staffForm-break_start_time-${i}-${j}`} onChange={formik.handleChange} />
                                                       <span className="mx-2">to</span>
-                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_end_time ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_end_time]`} id={`staffForm-break_end_time-${i}-${j}`} onChange={formik.handleChange} />
+                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_end_time ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_end_time]`} id={`staffForm-break_end_time-${i}-${j}`} onChange={formik.handleChange} />
                                                       <a className="close-breaktime ps-xxl-4 ps-2 cursor-pointer" onClick={() => arrayHelpers.remove(j)}>
                                                         <img src={config.imagepath + "close-icon.svg"} alt="" />
                                                       </a>

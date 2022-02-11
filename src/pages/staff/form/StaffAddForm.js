@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, FieldArray, Field, useField } from "formik";
+import { Formik, FieldArray, Field } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, InputFieldImage, SelectField, SwitchField, MapAddressField } from "../../../component/form/Field";
@@ -14,15 +14,12 @@ import { ucfirst } from "helpers/functions";
 import { closeAddStaffForm, staffStoreApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { TimePicker } from "react-tempusdominus-bootstrap";
-// import { tempusDominus } from "@eonasdan/tempus-dominus";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
+// import DatePicker from "react-multi-date-picker";
+// import TimePicker from "react-multi-date-picker/plugins/time_picker";
+// import moment from "moment";
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState(new Date());
   const HourList = [
     { days: "Sunday", start_time: "", end_time: "", break_time: [] },
     { days: "Monday", start_time: "", end_time: "", break_time: [] },
@@ -39,7 +36,7 @@ const StaffAddForm = () => {
   const isAddonServices = useSelector((state) => state.staff.isAddonServices);
 
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
   const handleCloseAddStaffForm = () => {
@@ -61,13 +58,13 @@ const StaffAddForm = () => {
     add_on_category: [],
     time: new Date(),
     working_hours: [
-      { days: "Sunday", start_time: "", end_time: "", break_time: [] },
-      { days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "", days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '1', days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -88,8 +85,18 @@ const StaffAddForm = () => {
     working_hours: Yup.array().of(
       Yup.object().shape({
         days: Yup.string().trim().label(t("days")).required(),
-        start_time: Yup.string().trim().label(t("start_time")).required(),
-        end_time: Yup.string().trim().label(t("end_time")).required(),
+        start_time: Yup.string()
+          .nullable()
+          .when("dayoff", {
+            is: '1',
+            then: Yup.string().trim().label(t("start_time")).required(),
+          }),
+        end_time: Yup.string()
+          .nullable()
+          .when("dayoff", {
+            is: '1',
+            then: Yup.string().trim().label(t("end_time")).required(),
+          }),
         break_time: Yup.array().of(
           Yup.object().shape({
             break_title: Yup.string().trim().label(t("break_title")).required(),
@@ -136,23 +143,9 @@ const StaffAddForm = () => {
 
   const PriceTierOptionsData = isPriceTierOption;
 
-  const pickericons = {
-    type: "class",
-    time: "fas fa-clock",
-    date: "fas fa-calendar",
-    up: "fas fa-arrow-up",
-    down: "fas fa-arrow-down",
-    previous: "fas fa-chevron-left",
-    next: "fas fa-chevron-right",
-    today: "fas fa-calendar-check-o",
-    clear: "fas fa-trash",
-    close: "fas fa-times",
-  };
-  // console.log(tempusDominus.TempusDominus);
-  // new TempusDominus(document.getElementById("icon-only"), {});
   return (
     <React.Fragment>
-      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit} validateOnChange={true} validateOnBlur={true}>
+      <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
         {(formik) => {
           useEffect(() => {
             if (isAddonServices) {
@@ -257,52 +250,84 @@ const StaffAddForm = () => {
                             HourList.map((item, i) => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
+                              let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff;
                               // console.log(formik.values.working_hours[i].start_time);
-                              let linkedPicker1Ref = useRef();
-                              let linkedPicker2Ref = useRef();
                               return (
                                 <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
                                   <div className="d-none">
-                                    <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control" id={`staffForm-days-${i}`} />
+                                    <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control input" id={`staffForm-days-${i}`} />
                                   </div>
-                                  <TimePicker
-                                    pickerRef={linkedPicker1Ref}
-                                    locale={i18n.language}
-                                    noIcon={true}
-                                    debug={false}
-                                    icons={pickericons}
+                                  <div className="me-3">
+                                    <input
+                                      type="checkbox"
+                                      name={`working_hours[${i}][dayoff]`}
+                                      value="1"
+                                      className=""
+                                      id={`staffForm-dayoff-${i}`}
+                                      onChange={(e) => {
+                                        if (e.currentTarget.checked) {
+                                          setTimeout(() => {
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, '1', false);
+                                          }, 100);
+                                        } else {
+                                          setTimeout(() => {
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][start_time]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][end_time]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][break_time]`, [], false);
+                                          }, 100);
+                                        }
+                                        formik.handleChange(e);
+                                      }}
+                                      checked={dayoff ? "checked" : ""}
+                                    />
+                                  </div>
+                                  <Field type="time" name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control input"} id={`staffForm-start_time-${i}`} style={{ display: dayoff ? "block" : "none" }} />
+                                  <span className="mx-2" style={{ display: dayoff ? "block" : "none" }}>
+                                    {t("to")}
+                                  </span>
+                                  <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control input me-xxl-4 me-2 "} id={`staffForm-end_time-${i}`} style={{ display: dayoff ? "block" : "none" }} />
+                                  {/* <DatePicker
+                                    name={`working_hours[${i}][start_time]`}
+                                    id={`staffForm-start_time-${i}`}
+                                    inputClass={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control input"}
+                                    plugins={[<TimePicker hideSeconds style={{ width: "auto" }} />]}
+                                    disableDayPicker
+                                    format="hh:mm A"
                                     onChange={(e) => {
-                                      if (e.date) {
-                                        let start_date = moment(new Date(e.date)).format("hh:mm a");
-                                        let minDate = moment(new Date(e.date)).add(15, 'm');
-                                        console.log(minDate);
-                                        formik.setFieldValue(`working_hours[${i}][start_time]`, start_date);
-                                        formik.setFieldValue(`working_hours[${i}][end_time]`, start_date);
-                                        linkedPicker2Ref.current.datetimepicker("minDate", minDate);
+                                      let selectedtime = e?.toDate?.().toString();
+                                      if (selectedtime) {
+                                        let time = moment(selectedtime).format("h:mm A");
+                                        formik.setFieldValue(`working_hours[${i}][start_time]`, time);
+                                        formik.handleChange(time);
+                                      } else {
+                                        let time = "";
+                                        formik.setFieldValue(`working_hours[${i}][start_time]`, time);
+                                        formik.handleChange(time);
                                       }
-                                      // formik.handleChange(e);
                                     }}
-                                  />
-                                  {/* <Field name={`working_hours[${i}][start_time]`} className={(errors_hour && errors_hour.start_time ? "is-invalid" : "") + " form-control"} id={`staffForm-start_time-${i}`} /> */}
-                                  <span className="mx-2">{t("to")}</span>
-                                  <TimePicker
-                                    pickerRef={linkedPicker2Ref}
-                                    locale={i18n.language}
-                                    noIcon={true}
-                                    debug={false}
-                                    icons={pickericons}
+                                  /> */}
+                                  {/* <DatePicker
+                                    name={`working_hours[${i}][end_time]`}
+                                    id={`staffForm-end_time-${i}`}
+                                    inputClass={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control input me-3"}
+                                    plugins={[<TimePicker hideSeconds style={{ width: "auto" }} />]}
+                                    disableDayPicker
+                                    format="hh:mm A"
                                     onChange={(e) => {
-                                      if (e.date) {
-                                        let end_date = moment(new Date(e.date)).format("hh:mm a");
-                                        let maxDate = new Date(e.date);
-                                        formik.setFieldValue(`working_hours[${i}][end_time]`, end_date);
-                                        linkedPicker1Ref.current.datetimepicker("maxDate", maxDate);
+                                      let selectedtime = e?.toDate?.().toString();
+                                      if (selectedtime) {
+                                        let time = moment(selectedtime).format("h:mm A");
+                                        formik.setFieldValue(`working_hours[${i}][end_time]`, time);
+                                        formik.handleChange(time);
+                                      } else {
+                                        let time = "";
+                                        formik.setFieldValue(`working_hours[${i}][end_time]`, time);
+                                        formik.handleChange(time);
                                       }
-                                      // formik.handleChange(e);
                                     }}
-                                  />
-                                  {/* <Field name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control"} id={`staffForm-end_time-${i}`} /> */}
+                                  /> */}
                                   <FieldArray
                                     name={`working_hours.${i}.break_time`}
                                     render={(arrayHelpers) => {
@@ -319,6 +344,7 @@ const StaffAddForm = () => {
                                                 break_end_time: "",
                                               })
                                             }
+                                            style={{ display: dayoff ? "block" : "none" }}
                                           >
                                             <i className="fal fa-plus pe-1 small"></i>
                                             {t("Break")}
@@ -330,11 +356,11 @@ const StaffAddForm = () => {
                                                   <div key={i + j}>
                                                     <div className="add-break-time w-100 d-flex align-items-center mt-md-3 mt-2" id={`working_hours-break_time-${j}`}>
                                                       <label htmlFor={`staffForm-break_title-${i}-${item}`}>
-                                                        <Field placeholder={"title"} className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
+                                                        <Field placeholder={"Title"} className={(errors_breaktime && errors_breaktime.break_title ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_title]`} id={`staffForm-break_title-${i}-${j}`} onChange={formik.handleChange} />
                                                       </label>
-                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_start_time ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_start_time]`} id={`staffForm-break_start_time-${i}-${j}`} onChange={formik.handleChange} />
+                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_start_time ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_start_time]`} id={`staffForm-break_start_time-${i}-${j}`} onChange={formik.handleChange} />
                                                       <span className="mx-2">to</span>
-                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_end_time ? "is-invalid" : "") + " form-control"} name={`working_hours[${i}][break_time][${j}][break_end_time]`} id={`staffForm-break_end_time-${i}-${j}`} onChange={formik.handleChange} />
+                                                      <Field placeholder="" type="time" className={(errors_breaktime && errors_breaktime.break_end_time ? "is-invalid" : "") + " form-control input"} name={`working_hours[${i}][break_time][${j}][break_end_time]`} id={`staffForm-break_end_time-${i}-${j}`} onChange={formik.handleChange} />
                                                       <a className="close-breaktime ps-xxl-4 ps-2 cursor-pointer" onClick={() => arrayHelpers.remove(j)}>
                                                         <img src={config.imagepath + "close-icon.svg"} alt="" />
                                                       </a>
