@@ -10,6 +10,7 @@ import { rosterListViewApi, openAddRosterForm, openEditRosterForm, closeAddRoste
 import Moment from "react-moment";
 import AddTimeForm from "./AddTimeForm";
 import EditTimeForm from "./EditTimeForm";
+import DatePicker from "react-multi-date-picker";
 
 const Roster = () => {
   const { t } = useTranslation();
@@ -111,7 +112,22 @@ const Roster = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-7 col-xl-10"></div>
+        <div className="col-md-3 col-xl-3">
+          <div className="">
+            <div className="date">
+              <div className="input-group">
+                <span className="input-group-text icon">
+                  <i className="fal fa-chevron-left"></i>
+                </span>
+                <DatePicker inputClass="form-control" placeholder="August 19, 2021"/>
+                <span className="input-group-text day">Today</span>
+                <span className="input-group-text icon">
+                  <i className="fal fa-chevron-right"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="table-responsive mt-4">
         <table className="table table-bordered bg-white mb-0">
