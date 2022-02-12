@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // import InfiniteScroll from "react-infinite-scroll-component";
@@ -11,11 +11,12 @@ import Moment from "react-moment";
 import AddTimeForm from "./AddTimeForm";
 import EditTimeForm from "./EditTimeForm";
 import DatePicker from "react-multi-date-picker";
+import moment from "moment";
 
 const Roster = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const rosterListview = useSelector((state) => state.roster.isListView);
   const addTime = useSelector((state) => state.roster.isOpenedAddForm);
@@ -31,18 +32,27 @@ const Roster = () => {
     }
     //dispatch(resetStaffFilter());
   }, []);
-  //   const auth = useSelector((state) => state.auth);
-  //   const currentUser = auth.user;
 
-  let curr = new Date();
+  const getselectedDate = moment(selectedDate?.toDate?.().toString()).format("YYYY-MM-DD");
+  const getselectedDatePicker = moment(selectedDate?.toDate?.().toString()).format("MMMM DD, YYYY");
+  const prevday = moment(getselectedDate).subtract(1, "days");
+  const nextday = moment(getselectedDate).add(1, "days");
+
+  let curr = new Date(getselectedDate);
+
   let week = [];
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 0; i <= 6; i++) {
     let first = curr.getDate() - curr.getDay() + i;
     let date = new Date(curr.setDate(first)).toISOString().slice(0, 10); //2022-11-01 format
-    //     let day = new Date(curr.setDate(first));
+    // let date = moment(curr.setDate(first)).format("YYYY-MM-DD"); //2022-11-01 format
+   
+    // let day = new Date(curr.setDate(first));
     //     let day = date.toLocaleString("en-Us", { weekday: "short", day: "numeric", year: "numeric", month: "short" });
     week.push(date);
   }
+
+  // console.log(moment().day(2));
+  // console.log(getselectedDate);
 
   const handleRosterDelete = (e) => {
     const obj = JSON.parse(e.currentTarget.dataset.obj);
@@ -62,7 +72,6 @@ const Roster = () => {
     //   });
     // }
   };
-
   return (
     <>
       <div className="row justify-content-between">
@@ -116,13 +125,15 @@ const Roster = () => {
           <div className="">
             <div className="date">
               <div className="input-group">
-                <span className="input-group-text icon">
+                <span className="input-group-text icon bg-white" onClick={() => setSelectedDate(prevday)}>
                   <i className="fal fa-chevron-left"></i>
                 </span>
-                <DatePicker inputClass="form-control" placeholder="August 19, 2021"/>
-                <span className="input-group-text day">Today</span>
-                <span className="input-group-text icon">
-                  <i className="fal fa-chevron-right"></i>
+                <DatePicker value={getselectedDatePicker} inputClass="form-control" placeholder="August 19, 2021" format={"MMMM DD, YYYY"} onChange={setSelectedDate} />
+                <span className="input-group-text day cursor-pointer bg-white" onClick={() => setSelectedDate(new Date())}>
+                  {t("Today")}
+                </span>
+                <span className="input-group-text icon bg-white" onClick={() => setSelectedDate(nextday)}>
+                  <i className="fal fa-chevron-right bg-white"></i>
                 </span>
               </div>
             </div>
@@ -130,16 +141,19 @@ const Roster = () => {
         </div>
       </div>
       <div className="table-responsive mt-4">
-        <table className="table table-bordered bg-white mb-0">
+        <table className="table table-bordered bg-white mb-0 rosterlistviewtable">
           <thead className="thead-dark">
             <tr>
               <th>{t("Staff_Member")}</th>
               {week &&
-                week.map((item, i) => (
-                  <th key={i}>
-                    <Moment format="ddd DD MMM">{item}</Moment>
-                  </th>
-                ))}
+                week.map((date, i) => {
+                  let classname = getselectedDate && date && getselectedDate === date ? "active" : "";
+                  return (
+                    <th key={i} date={date} className={classname}>
+                      <Moment format="ddd DD MMM YYYY">{date}</Moment>
+                    </th>
+                  );
+                })}
             </tr>
           </thead>
           <tbody className="body-cover">
@@ -149,7 +163,6 @@ const Roster = () => {
                 let first_name = rosterListview[item].first_name;
                 let last_name = rosterListview[item].last_name;
                 let rosterfield = rosterListview[item].rosterfield;
-
                 //     let image_url = isStaffOption[item].profile_photo_url;
                 return (
                   <tr key={i} data-id={id}>
@@ -157,8 +170,9 @@ const Roster = () => {
                     {week &&
                       week.map((date, j) => {
                         let rosterdata = rosterfield && rosterfield.filter((item) => item.date === date);
+                        let classname = getselectedDate && item && getselectedDate === date ? "active" : "";
                         return (
-                          <td align="center" key={id + j} style={{ backgroundColor: rosterdata.length > 0 && rosterdata[0].away === "1" ? "rgb(143, 128, 125)" : "transparent" }}>
+                          <td date={item} className={classname} align="center" key={id + j} style={{ backgroundColor: rosterdata.length > 0 && rosterdata[0].away === "1" ? "rgb(143, 128, 125)" : "transparent" }}>
                             {rosterdata.length > 0 ? (
                               <>
                                 {rosterdata[0].away === "1" ? (

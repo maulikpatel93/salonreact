@@ -198,5 +198,10 @@ header {
 .working-hrs .was-validated .form-control:invalid,
 .form-control.is-invalid {
     padding: 8px;
-    background-image: none
+    background-image: none;
+}
+
+.rosterlistviewtable tr th.active {
+    background: $primary;
+    color: $white;
 }
