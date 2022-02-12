@@ -31,7 +31,6 @@ const ClientEditForm = () => {
     id: "",
     first_name: "",
     last_name: "",
-    profile_photo: "",
     email: "",
     phone_number: "",
     date_of_birth: "",
@@ -108,7 +107,7 @@ const ClientEditForm = () => {
         {(formik) => {
           useEffect(() => {
             if (detail) {
-              const fields = ["id", "first_name", "last_name", "profile_photo", "email", "phone_number", "date_of_birth", "gender", "address", "street", "suburb", "state", "postcode", "description", "send_sms_notification", "send_email_notification", "recieve_marketing_email"];
+              const fields = ["id", "first_name", "last_name", "email", "phone_number", "date_of_birth", "gender", "address", "street", "suburb", "state", "postcode", "description", "send_sms_notification", "send_email_notification", "recieve_marketing_email"];
               fields.forEach((field) => {
                 if (["send_sms_notification", "send_email_notification", "recieve_marketing_email"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);
