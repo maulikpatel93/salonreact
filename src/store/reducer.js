@@ -18,6 +18,8 @@ import socketReducer from "../store/slices/socketSlice";
 import staffReducer from "../store/slices/staffSlice";
 import pricetierReducer from "../store/slices/pricetierSlice";
 import rosterReducer from "../store/slices/rosterSlice";
+import salonpermissionReducer from "../store/slices/salonpermissionSlice";
+import salonaccessReducer from "../store/slices/salonaccessSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -155,6 +157,28 @@ const reducer = combineReducers({
       whitelist: ["isTabView"],
     },
     rosterReducer,
+  ),
+  salonpermission: persistReducer(
+    {
+      key: "salonpermission",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: ["isTabView"],
+    },
+    salonpermissionReducer,
+  ),
+  salonaccess: persistReducer(
+    {
+      key: "salonaccess",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: ["isTabView"],
+    },
+    salonaccessReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

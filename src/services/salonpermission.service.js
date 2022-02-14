@@ -12,7 +12,7 @@ const create = (values) => {
   for (let value in values) {
     formData.append(value, values[value]);
   }
-  const action = "afterlogin/categories/store";
+  const action = "afterlogin/salonpermission/store";
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("salon_id", auth.user.salon_id);
@@ -30,7 +30,7 @@ const update = (values) => {
       formData.append(value, values[value]);
     }
   }
-  const action = "afterlogin/categories/update/" + values.id;
+  const action = "afterlogin/salonpermission/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("role_id", 6);
@@ -57,7 +57,7 @@ const view = (values) => {
     }
   }
   const pagination = values && values.option ? false : true;
-  const action = page ? `afterlogin/categories/view?page=${page}&${sortstring}` : `afterlogin/categories/view?${sortstring}`;
+  const action = page ? `afterlogin/salonpermission/view?page=${page}&${sortstring}` : `afterlogin/salonpermission/view?${sortstring}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -75,7 +75,7 @@ const view = (values) => {
 const deleted = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const action = `afterlogin/categories/delete/${values.id}`;
+  const action = `afterlogin/salonpermission/delete/${values.id}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -89,7 +89,7 @@ const suggetionlist = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   let q = values && values.q ? values.q : "";
-  const action = page ? `afterlogin/categories/view?page=${page}&q=${q}` : `afterlogin/categories/view?q=${q}`;
+  const action = page ? `afterlogin/salonpermission/view?page=${page}&q=${q}` : `afterlogin/salonpermission/view?q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -102,11 +102,11 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
-const categoryApiController = {
+const salonpermissionApiController = {
   create,
   update,
   view,
   deleted,
   suggetionlist,
 };
-export default categoryApiController;
+export default salonpermissionApiController;
