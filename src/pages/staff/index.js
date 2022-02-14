@@ -13,6 +13,7 @@ import StaffGridView from "./List/gridview";
 import StaffAddForm from "./form/StaffAddForm";
 import StaffEditForm from "./form/StaffEditForm";
 import PaginationLoader from "component/PaginationLoader";
+import Access from "./Access";
 
 const Staff = () => {
   const { t } = useTranslation();
@@ -124,7 +125,7 @@ const Staff = () => {
               {tabview && tabview == "price_tier" && <PriceTier />}
             </div>
             <div className={"tab-pane" + (tabview && tabview == "staff_access" ? " show active" : "")} id="staffaccess">
-              <h3>add clearfix to tab-content (see the css)</h3>
+              {tabview && tabview == "staff_access" && <Access />}
             </div>
           </div>
           {isOpenedAddForm && <StaffAddForm />}
