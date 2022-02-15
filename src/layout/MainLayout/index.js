@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -7,6 +7,9 @@ import Fancybox from "../../component/fancybox.js";
 import config from "../../config";
 // ==============================|| MAIN LAYOUT ||============================== //
 const MainLayout = () => {
+  useEffect(() => {
+   
+  }, []);
   return (
     <>
       <Helmet>
