@@ -147,7 +147,7 @@ const Roster = () => {
               <th>{t("Staff_Member")}</th>
               {week &&
                 week.map((date, i) => {
-                  let classname = getselectedDate && date && getselectedDate === date ? "active" : "";
+                  let classname = getselectedDate && date && getselectedDate === date ? "active text-center" : "text-center";
                   return (
                     <th key={i} date={date} className={classname}>
                       <Moment format="ddd DD MMM YYYY">{date}</Moment>
@@ -170,9 +170,16 @@ const Roster = () => {
                     {week &&
                       week.map((date, j) => {
                         let rosterdata = rosterfield && rosterfield.filter((item) => item.date === date);
-                        let classname = getselectedDate && item && getselectedDate === date ? "active" : "";
+                        let classname = getselectedDate && item && getselectedDate === date ? "active text-center" : "text-center";
+
+                        var backgroundColor = 'transparent';
+                        if(rosterdata.length > 0 && rosterdata[0].away === "1"){
+                          backgroundColor = "rgb(143, 128, 125)";
+                        }else if(rosterdata.length > 0 && rosterdata[0].start_time && rosterdata[0].end_time){
+                          backgroundColor = "rgb(249, 246, 244)";
+                        }
                         return (
-                          <td date={item} className={classname} align="center" key={id + j} style={{ backgroundColor: rosterdata.length > 0 && rosterdata[0].away === "1" ? "rgb(143, 128, 125)" : "transparent" }}>
+                          <td date={item} className={classname} align="center" key={id + j} style={{ backgroundColor: backgroundColor }}>
                             {rosterdata.length > 0 ? (
                               <>
                                 {rosterdata[0].away === "1" ? (
