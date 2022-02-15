@@ -60,15 +60,7 @@ const salonmoduleSlice = createSlice({
       state.isListView = [];
     },
     [salonModuleAccessUpdateApi.pending]: () => {},
-    [salonModuleAccessUpdateApi.fulfilled]: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
-    },
+    [salonModuleAccessUpdateApi.fulfilled]: () => {},
     [salonModuleAccessUpdateApi.rejected]: () => {},
   },
 });

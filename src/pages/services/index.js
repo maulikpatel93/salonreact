@@ -232,27 +232,6 @@ const Services = () => {
                 </a>
               </div>
             </div>
-            <div className="dropdown d-inline-block setting-dropdown">
-              <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                <i className="far fa-ellipsis-v"></i>
-              </button>
-              <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
-                <ul className="p-0 m-0 list-unstyled">
-                  <li>
-                    <a href="#" id="addservice-drawer-link" className="d-flex align-items-center">
-                      <img src={config.imagepath + "import.png"} className="me-3" alt="" />
-                      Import Services
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" id="addsale-drawer-link" className="d-flex align-items-center">
-                      <img src={config.imagepath + "export.png"} className="me-3" />
-                      Export Services
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
 

@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import { ucfirst } from "helpers/functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 // import { salonaccessUpdateApi } from "../../../store/slices/salonaccessSlice";
-import { salonModuleAccessUpdateApi, salonModuleAccessAction } from "../../../store/slices/salonmoduleSlice";
+import { salonmoduleListViewApi, salonModuleAccessUpdateApi, salonModuleAccessAction } from "../../../store/slices/salonmoduleSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
@@ -40,6 +40,7 @@ const AccessForm = () => {
       dispatch(salonModuleAccessUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
+          dispatch(salonmoduleListViewApi({ role_id: 5 }));
           sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
@@ -87,16 +88,16 @@ const AccessForm = () => {
             }
           }, [listview]);
           return (
-            <div className="">
+            <div className="bg-white p-4">
               <form noValidate onSubmit={formik.handleSubmit}>
-                <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
+                <ul className="list-unstyled mb-0 ps-lg-4 ps-3 row">
                   {listview &&
                     Object.keys(listview).map((item) => {
                       let module_id = listview[item].id;
                       let module_name = listview[item].title;
                       let salonpermission = listview[item].salonpermission;
                       return (
-                        <li className="pt-3 pb-3 li" key={item} data-id={module_id}>
+                        <li className="li col-md-2" key={item} data-id={module_id}>
                           <div className="checkbox">
                             <input
                               type="checkbox"
@@ -124,13 +125,7 @@ const AccessForm = () => {
                                 return (
                                   <li className="pt-3 pb-3 li" key={itemservice} data-id={permission_id}>
                                     <div className="checkbox">
-                                    <Field
-                                        type="hidden"
-                                        value={permission_id}
-                                        id={"salon_permission_id" + item + "_" + itemservice}
-                                        name={"salon_permission_id[" + item + "][" + itemservice + "]"}
-                                        onChange={formik.handleChange}
-                                      />
+                                      <Field type="hidden" value={permission_id} id={"salon_permission_id" + item + "_" + itemservice} name={"salon_permission_id[" + item + "][" + itemservice + "]"} onChange={formik.handleChange} />
                                       <Field
                                         type="checkbox"
                                         value={permission_id}
@@ -157,10 +152,14 @@ const AccessForm = () => {
                     })}
                   {listview.length <= 0 ? <li className="li">{t("no_data_found")}</li> : ""}
                 </ul>
-                <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
-                  {loading && <span className="spinner-border spinner-border-sm"></span>}
-                  {t("Update")}
-                </button>
+                <div className="row">
+                  <div className="col-12 text-center mb-3">
+                    <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                      {loading && <span className="spinner-border spinner-border-sm"></span>}
+                      {t("Update")}
+                    </button>
+                  </div>
+                </div>
               </form>
             </div>
           );
