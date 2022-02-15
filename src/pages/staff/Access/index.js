@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+// import { useTranslation } from "react-i18next";
 // import InfiniteScroll from "react-infinite-scroll-component";
 
 // import config from "../../../config";
-import { salonpermissionListViewApi } from "../../../store/slices/salonpermissionSlice";
-// import { ucfirst } from "helpers/functions";
+import { salonmoduleListViewApi } from "../../../store/slices/salonmoduleSlice";
+import AccessForm from "./AcessForm";
 
 const Access = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
-    dispatch(salonpermissionListViewApi());
+    dispatch(salonmoduleListViewApi({ role_id: 5 }));
   }, []);
 
-  return (
-    <>
-     
-    </>
-  );
+  return <>{<AccessForm />}</>;
 };
 
 export default Access;
