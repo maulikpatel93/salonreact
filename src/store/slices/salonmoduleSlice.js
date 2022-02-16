@@ -17,6 +17,19 @@ export const salonmoduleListViewApi = createAsyncThunk("salonmodule/listview", a
   }
 });
 
+export const salonmoduleAccessViewApi = createAsyncThunk("salonmodule/listview", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await salonmoduleApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const salonModuleAccessUpdateApi = createAsyncThunk("salonmodule/update", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await salonmoduleApiController
@@ -32,6 +45,7 @@ export const salonModuleAccessUpdateApi = createAsyncThunk("salonmodule/update",
 
 const initialState = {
   isListView: [],
+  isAccessView: [],
 };
 
 const salonmoduleSlice = createSlice({
@@ -50,6 +64,17 @@ const salonmoduleSlice = createSlice({
       // console.log(changes);
       // state.isAddonServices = action.payload;
     },
+    salonpermission: (state, action) => {
+      const payload = action.payload;
+      const salonmodule = state.isListView;
+
+      const salonaccess = salonmodule
+        .filter((list) => list.id === payload.module_id)
+        .map((list) => {
+          console.log(list.salonpermission);
+        });
+      console.log(salonaccess);
+    },
   },
   extraReducers: {
     [salonmoduleListViewApi.pending]: () => {},
@@ -59,11 +84,18 @@ const salonmoduleSlice = createSlice({
     [salonmoduleListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
+    [salonmoduleAccessViewApi.pending]: () => {},
+    [salonmoduleAccessViewApi.fulfilled]: (state, action) => {
+      state.isAccessView = action.payload;
+    },
+    [salonmoduleAccessViewApi.rejected]: (state) => {
+      state.isAccessView = [];
+    },
     [salonModuleAccessUpdateApi.pending]: () => {},
     [salonModuleAccessUpdateApi.fulfilled]: () => {},
     [salonModuleAccessUpdateApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, salonModuleAccessAction } = salonmoduleSlice.actions;
+export const { reset, salonModuleAccessAction, salonpermission } = salonmoduleSlice.actions;
 export default salonmoduleSlice.reducer;

@@ -11,8 +11,10 @@ import ClientGridView from "./List/gridview";
 import ClientListView from "./List/listview";
 import SuggetionListView from "./List/SuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
+import { SalonModule } from "pages";
 
 const Clients = () => {
+  SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

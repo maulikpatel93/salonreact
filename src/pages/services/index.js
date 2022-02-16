@@ -18,8 +18,10 @@ import ServiceListView from "./list/ServiceListView";
 import ServiceAddForm from "./form/ServiceAddForm";
 import ServiceEditForm from "./form/ServiceEditForm";
 import PaginationLoader from "component/PaginationLoader";
+import { SalonModule } from "pages";
 
 const Services = () => {
+  SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

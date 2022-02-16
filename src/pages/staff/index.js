@@ -14,8 +14,10 @@ import StaffAddForm from "./form/StaffAddForm";
 import StaffEditForm from "./form/StaffEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import Access from "./Access";
+import { SalonModule } from "pages";
 
 const Staff = () => {
+  SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

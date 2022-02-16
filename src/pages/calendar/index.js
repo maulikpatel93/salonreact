@@ -1,6 +1,8 @@
 import React from "react";
+import { SalonModule } from "pages";
 
 const Calendar = () => {
+  SalonModule();
   return (
     <>
       <div className="page-content">

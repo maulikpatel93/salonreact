@@ -18,8 +18,10 @@ import ProductListView from "./list/ProductListView";
 import ProductAddForm from "./form/ProductAddForm";
 import ProductEditForm from "./form/ProductEditForm";
 import PaginationLoader from "component/PaginationLoader";
+import { SalonModule } from "pages";
 
 const Products = () => {
+  SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

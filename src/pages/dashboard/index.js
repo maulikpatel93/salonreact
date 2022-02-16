@@ -1,14 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { SalonModule } from "pages";
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  console.log(dispatch);
+  SalonModule();
   return (
     <>
       <div className="page-content">
-        <div className="container mx-auto">
-        </div>
+        <div className="container mx-auto"></div>
       </div>
     </>
   );
