@@ -63,11 +63,13 @@ const Staff = () => {
           <div className="row bg-white align-items-center sticky-top">
             <div className="col-md-12 col-12">
               <ul className="nav nav-tabs" role="tablist">
-                <li className="nav-item">
-                  <a href="#0" className={"nav-link " + (tabview && tabview == "staff" ? " active" : "")} id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button" role="tab" aria-controls="staff" aria-selected="true" onClick={() => dispatch(staffTabView("staff"))}>
-                    {t("Staff")}
-                  </a>
-                </li>
+                {checkaccess({ name: "list", role_id: role_id, controller: "staff", access }) && (
+                  <li className="nav-item">
+                    <a href="#0" className={"nav-link " + (tabview && tabview == "staff" ? " active" : "")} id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button" role="tab" aria-controls="staff" aria-selected="true" onClick={() => dispatch(staffTabView("staff"))}>
+                      {t("Staff")}
+                    </a>
+                  </li>
+                )}
                 {checkaccess({ name: "list", role_id: role_id, controller: "roster", access }) && (
                   <li className="nav-item">
                     <a href="#0" className={"nav-link " + (tabview && tabview == "roster" ? " active" : "")} id="roster-tab" data-bs-toggle="tab" data-bs-target="#roster" type="button" role="tab" aria-controls="roster" aria-selected="true" onClick={() => dispatch(staffTabView("roster"))}>
@@ -93,41 +95,43 @@ const Staff = () => {
             </div>
           </div>
           <div className="tab-content list-view-content">
-            <div className={"tab-pane" + (tabview && tabview == "staff" ? " show active" : "")} id="staff">
-              <div className="" id="scrollableGridView">
-                {tabview && tabview == "staff" && (
-                  <>
-                    <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
-                      {checkaccess({ name: "create", role_id: role_id, controller: "staff", access }) && (
-                        <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={handleopenAddStaffForm}>
-                          <div className="tabs-image">
-                            <img src={config.imagepath + "tabs-image.png"} alt="" />
+            {checkaccess({ name: "list", role_id: role_id, controller: "staff", access }) && (
+              <div className={"tab-pane" + (tabview && tabview == "staff" ? " show active" : "")} id="staff">
+                <div className="" id="scrollableGridView">
+                  {tabview && tabview == "staff" && (
+                    <>
+                      <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
+                        {checkaccess({ name: "create", role_id: role_id, controller: "staff", access }) && (
+                          <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={handleopenAddStaffForm}>
+                            <div className="tabs-image">
+                              <img src={config.imagepath + "tabs-image.png"} alt="" />
+                            </div>
+                            <div className="image-content">
+                              <h5>
+                                <i className="fal fa-plus me-2"></i> {t("add_staff")}
+                              </h5>
+                            </div>
+                          </a>
+                        )}
+                        <StaffGridView currentUser={currentUser} view={GridView} />
+                        {!isFetching && GridView.next_page_url && (
+                          <div className="box-image-cover">
+                            <div className="tabs-image">
+                              <img src={config.imagepath + "tabs-image.png"} alt="" />
+                            </div>
+                            <div className="image-content">
+                              <button onClick={loadMoreItems} className="btn btn-primary">
+                                {t("more")}
+                              </button>
+                            </div>
                           </div>
-                          <div className="image-content">
-                            <h5>
-                              <i className="fal fa-plus me-2"></i> {t("add_staff")}
-                            </h5>
-                          </div>
-                        </a>
-                      )}
-                      <StaffGridView currentUser={currentUser} view={GridView} />
-                      {!isFetching && GridView.next_page_url && (
-                        <div className="box-image-cover">
-                          <div className="tabs-image">
-                            <img src={config.imagepath + "tabs-image.png"} alt="" />
-                          </div>
-                          <div className="image-content">
-                            <button onClick={loadMoreItems} className="btn btn-primary">
-                              {t("more")}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </InfiniteScroll>
-                  </>
-                )}
+                        )}
+                      </InfiniteScroll>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
             {checkaccess({ name: "list", role_id: role_id, controller: "roster", access }) && (
               <div className={"tab-pane" + (tabview && tabview == "roster" ? " show active" : "")} id="roster">
                 {tabview && tabview == "roster" && <Roster />}

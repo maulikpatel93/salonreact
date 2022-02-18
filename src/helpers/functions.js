@@ -20,7 +20,7 @@ export const ellipseText = function (text, limit) {
 
 export const checkaccess = (obj) => {
   let isaccess = false;
-  if (obj.role_id === 5) {
+  if (obj.role_id === 5 && (obj.module_id || obj.controller)) {
     let salonaccess = obj.access
       .filter((list) => list.module_id === obj.module_id || list.controller === obj.controller)
       .map((list) => {

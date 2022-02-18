@@ -11,15 +11,22 @@ import { ellipseText } from "helpers/functions";
 import DocumentUpload from "component/form/DocumentUpload";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
+import { checkaccess } from "helpers/functions";
 
 const DocumentDrawer = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
+
   const rightDrawerOpened = useSelector((state) => state.clientdocument.isDocumentDrawer);
   const documentViews = useSelector((state) => state.clientdocument.isGridView);
   const documentObjectData = documentViews && documentViews.data ? documentViews.data : documentViews;
   const detail = useSelector((state) => state.client.isDetailData);
-  
+
   const fetchDataPhotoList = () => {
     dispatch(clientdocumentGridViewApi({ client_id: detail.id, next_page_url: documentViews.next_page_url }));
   };
@@ -38,7 +45,7 @@ const DocumentDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
-              {t("documents")} <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />
+              {t("documents")} {checkaccess({ name: "create", role_id: role_id, controller: "clientdocuments", access }) && <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />}
             </h2>
             <a className="close" onClick={() => dispatch(closeDocumentDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -68,13 +75,17 @@ const DocumentDrawer = () => {
                             <p className="mb-2">
                               {t("uploaded")}: {updated_at}
                             </p>
-                            <a href={document_url} target="_blank" download={document} className="btn btn-outline btn-sm">
-                              {t("Download")}
-                            </a>
+                            {checkaccess({ name: "download", role_id: role_id, controller: "clientdocuments", access }) && (
+                              <a href={document_url} target="_blank" download={document} className="btn btn-outline btn-sm">
+                                {t("Download")}
+                              </a>
+                            )}
                           </div>
-                          <a className="remove cursor-pointer" data-obj={JSON.stringify(documentObjectData[item])} onClick={handleClientDelete}>
-                            {t("remove")}
-                          </a>
+                          {checkaccess({ name: "delete", role_id: role_id, controller: "clientdocuments", access }) && (
+                            <a className="remove cursor-pointer" data-obj={JSON.stringify(documentObjectData[item])} onClick={handleClientDelete}>
+                              {t("remove")}
+                            </a>
+                          )}
                         </div>
                       </div>
                     );

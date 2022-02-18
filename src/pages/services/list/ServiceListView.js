@@ -11,11 +11,15 @@ import { categoryOptions } from "../../../store/slices/categorySlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 // import ReactPaginate from 'react-paginate';
+import { checkaccess } from "helpers/functions";
 
 const ServiceListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const views = props.view;
+  const role_id = props.role_id;
+  const access = props.access;
+
   const objectData = views && views.data ? views.data : views;
 
   const handleServiceDelete = (e) => {
@@ -56,43 +60,57 @@ const ServiceListView = (props) => {
           let serviceprice = objectData[item].serviceprice;
           let category_name = objectData[item].category && objectData[item].category.name;
           let add_on_service = objectData[item].addonservices;
-          return ( 
+          return (
             <tr className="service-view-tr" key={i} data-id={id}>
               <td>{i + 1}</td>
               <td>{ucfirst(name)}</td>
               <td>{duration}</td>
-              {serviceprice && Object.keys(serviceprice).map((sp) => {
+              {serviceprice &&
+                Object.keys(serviceprice).map((sp) => {
                   let price = serviceprice[sp].price;
-                  return <td key={sp}>{"$ "+price}</td>;
+                  return <td key={sp}>{"$ " + price}</td>;
                 })}
               <td>{category_name}</td>
-              <td>{add_on_service && Object.keys(add_on_service).map((sp) => {
-                  let name = add_on_service[sp].name;
-                  return <a key={sp} className="btn btn-sm btn-outline-primary cursor-auto me-1 mb-1">{name}</a>;
-                })}</td>
-              <td className="ps-0 text-end" width="60px">
-                <div className="dropdown d-inline-block setting-dropdown">
-                  <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                    <i className="far fa-ellipsis-v"></i>
-                  </button>
-                  <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
-                    <ul className="p-0 m-0 list-unstyled">
-                      <li>
-                        <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleServiceEditForm(e, { tab: "servicedetail" })}>
-                          <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                          {t("edit")}
-                        </a>
-                      </li>
-                      <li>
-                        <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleServiceDelete}>
-                          <i className="far fa-trash me-3"></i>
-                          {t("delete")}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+              <td>
+                {add_on_service &&
+                  Object.keys(add_on_service).map((sp) => {
+                    let name = add_on_service[sp].name;
+                    return (
+                      <a key={sp} className="btn btn-sm btn-outline-primary cursor-auto me-1 mb-1">
+                        {name}
+                      </a>
+                    );
+                  })}
               </td>
+              {(checkaccess({ name: "update", role_id: role_id, controller: "services", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "services", access })) && (
+                <td className="ps-0 text-end" width="60px">
+                  <div className="dropdown d-inline-block setting-dropdown">
+                    <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                      <i className="far fa-ellipsis-v"></i>
+                    </button>
+                    <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
+                      <ul className="p-0 m-0 list-unstyled">
+                        {checkaccess({ name: "update", role_id: role_id, controller: "services", access }) && (
+                          <li>
+                            <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleServiceEditForm(e, { tab: "servicedetail" })}>
+                              <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
+                              {t("edit")}
+                            </a>
+                          </li>
+                        )}
+                        {checkaccess({ name: "delete", role_id: role_id, controller: "services", access }) && (
+                          <li>
+                            <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleServiceDelete}>
+                              <i className="far fa-trash me-3"></i>
+                              {t("delete")}
+                            </a>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              )}
             </tr>
           );
         })}
@@ -101,7 +119,9 @@ const ServiceListView = (props) => {
 };
 ServiceListView.propTypes = {
   view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  access: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   name: PropTypes.string,
   id: PropTypes.string,
+  role_id: PropTypes.number,
 };
 export default ServiceListView;

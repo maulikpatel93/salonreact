@@ -15,6 +15,7 @@ const moduleview = () => {
     auth_key: auth_key,
     action: action,
     salon_permission_field: 0,
+    type: "Menu",
   };
   return axios.post(API_URL + action, data, { headers: authHeader() });
 };

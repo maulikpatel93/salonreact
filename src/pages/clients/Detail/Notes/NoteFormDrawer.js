@@ -19,7 +19,7 @@ const NoteFormDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">{t("add_note")}</h2>
-            <a className="close" onClick={() => dispatch(closeAddNoteForm())}>
+            <a className="close cursor-pointer" onClick={() => dispatch(closeAddNoteForm())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
           </div>

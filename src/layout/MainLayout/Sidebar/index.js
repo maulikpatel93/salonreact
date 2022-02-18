@@ -31,7 +31,21 @@ const Sidebar = () => {
           </li> */}
           {salonmodule &&
             salonmodule.map((module, i) => {
-              let isCheckAccess = checkaccess({ role_id: role_id, module_id: module.id, name: "list", access });
+              let isCheckAccess = checkaccess({ role_id: role_id, module_id: module.id, controller: module.controller, name: "list", access });
+              if ((module.id === 9 || module.controller === "products") && isCheckAccess === false) {
+                isCheckAccess = checkaccess({ role_id: role_id, controller: "suppliers", name: "list", access });
+              }
+
+              if ((module.id === 7 || module.controller === "staff") && isCheckAccess === false) {
+                isCheckAccess = checkaccess({ role_id: role_id, controller: "pricetiers", name: "list", access });
+                if (isCheckAccess === false) {
+                  isCheckAccess = checkaccess({ role_id: role_id, controller: "roster", name: "list", access });
+                }
+              }
+
+              if ((module.id === 8 || module.controller === "services") && isCheckAccess === false) {
+                isCheckAccess = checkaccess({ role_id: role_id, controller: "categories", name: "list", access });
+              }
               if (isCheckAccess) {
                 return (
                   <li key={i}>

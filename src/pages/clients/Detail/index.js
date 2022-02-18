@@ -16,11 +16,19 @@ import { ucfirst } from "../../../helpers/functions";
 import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
+import { checkaccess } from "helpers/functions";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
   const detailTab = useSelector((state) => state.client.isClientDetailTab);
   const detail = useSelector((state) => state.client.isDetailData);
+
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -69,11 +77,13 @@ const ClientDetailModal = () => {
                     {t("appointments")}
                   </button>
                 </li>
-                <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("clientdetail"))}>
-                    {t("client_details")}
-                  </button>
-                </li>
+                {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("clientdetail"))}>
+                      {t("client_details")}
+                    </button>
+                  </li>
+                )}
                 <li className="nav-item" role="presentation">
                   <button className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")} id="vouchers" data-bs-toggle="tab" data-bs-target="#vouchers-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("vouchers"))}>
                     {t("vouchers")}
@@ -89,22 +99,24 @@ const ClientDetailModal = () => {
                     {t("memberships")}
                   </button>
                 </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className={"nav-link" + (detailTab && detailTab == "photos" ? " active" : "")}
-                    id="photos"
-                    data-bs-toggle="tab"
-                    data-bs-target="#photos-tab"
-                    type="button"
-                    role="tab"
-                    onClick={() => {
-                      dispatch(clientDetailTab("photos"));
-                      dispatch(clientphotoGridViewApi({ client_id: detail.id }));
-                    }}
-                  >
-                    {t("photos")}
-                  </button>
-                </li>
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={"nav-link" + (detailTab && detailTab == "photos" ? " active" : "")}
+                      id="photos"
+                      data-bs-toggle="tab"
+                      data-bs-target="#photos-tab"
+                      type="button"
+                      role="tab"
+                      onClick={() => {
+                        dispatch(clientDetailTab("photos"));
+                        dispatch(clientphotoGridViewApi({ client_id: detail.id }));
+                      }}
+                    >
+                      {t("photos")}
+                    </button>
+                  </li>
+                )}
                 <li className="nav-item" role="presentation">
                   <button
                     className={"nav-link" + (detailTab && detailTab == "invoices" ? " active" : "")}
@@ -120,38 +132,42 @@ const ClientDetailModal = () => {
                     {t("invoices")}
                   </button>
                 </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className={"nav-link" + (detailTab && detailTab == "documents" ? " active" : "")}
-                    id="documents"
-                    data-bs-toggle="tab"
-                    data-bs-target="#documents-tab"
-                    type="button"
-                    role="tab"
-                    onClick={() => {
-                      dispatch(clientDetailTab("documents"));
-                      dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
-                    }}
-                  >
-                    {t("documents")}
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className={"nav-link" + (detailTab && detailTab == "notes" ? " active" : "")}
-                    id="notes"
-                    data-bs-toggle="tab"
-                    data-bs-target="#notes-tab"
-                    type="button"
-                    role="tab"
-                    onClick={() => {
-                      dispatch(clientDetailTab("notes"));
-                      dispatch(clientnoteGridViewApi({ client_id: detail.id }));
-                    }}
-                  >
-                    {t("notes")}
-                  </button>
-                </li>
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientdocuments", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={"nav-link" + (detailTab && detailTab == "documents" ? " active" : "")}
+                      id="documents"
+                      data-bs-toggle="tab"
+                      data-bs-target="#documents-tab"
+                      type="button"
+                      role="tab"
+                      onClick={() => {
+                        dispatch(clientDetailTab("documents"));
+                        dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
+                      }}
+                    >
+                      {t("documents")}
+                    </button>
+                  </li>
+                )}
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientnotes", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={"nav-link" + (detailTab && detailTab == "notes" ? " active" : "")}
+                      id="notes"
+                      data-bs-toggle="tab"
+                      data-bs-target="#notes-tab"
+                      type="button"
+                      role="tab"
+                      onClick={() => {
+                        dispatch(clientDetailTab("notes"));
+                        dispatch(clientnoteGridViewApi({ client_id: detail.id }));
+                      }}
+                    >
+                      {t("notes")}
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
             <div className="content col-md-7 position-relative">
@@ -166,16 +182,18 @@ const ClientDetailModal = () => {
                     <Appointment />
                   </div>
                 </div>
-                <div className={"tab-pane fade" + (detailTab && detailTab == "clientdetail" ? " show active" : "")} id="client-detail-tab" role="tabpanel" aria-labelledby="client-detail-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5">
-                      {t("edit_client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
-                    </h2>
+                {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
+                  <div className={"tab-pane fade" + (detailTab && detailTab == "clientdetail" ? " show active" : "")} id="client-detail-tab" role="tabpanel" aria-labelledby="client-detail-tab">
+                    <div className="drawer-header">
+                      <h2 className="mb-4 pe-md-5">
+                        {t("edit_client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
+                      </h2>
+                    </div>
+                    <div className="content-wrp">
+                      <ClientEditForm />
+                    </div>
                   </div>
-                  <div className="content-wrp">
-                    <ClientEditForm />
-                  </div>
-                </div>
+                )}
                 <div className={"tab-pane fade" + (detailTab && detailTab == "vouchers" ? " show active" : "")} id="vouchers-tab" role="tabpanel" aria-labelledby="vouchers-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 mb-lg-5">
@@ -205,12 +223,14 @@ const ClientDetailModal = () => {
                     <Membership />
                   </div>
                 </div>
-                <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}</h2>
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
+                  <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
+                    <div className="drawer-header">
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}</h2>
+                    </div>
+                    <div className="content-wrp">{detailTab && detailTab == "photos" && <Photos role_id={role_id} access={access} />}</div>
                   </div>
-                  <div className="content-wrp">{detailTab && detailTab == "photos" && <Photos />}</div>
-                </div>
+                )}
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 mb-lg-5">
@@ -224,18 +244,22 @@ const ClientDetailModal = () => {
                     <Invoices />
                   </div>
                 </div>
-                <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("documents")}</h2>
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientdocuments", access }) && (
+                  <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">
+                    <div className="drawer-header">
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("documents")}</h2>
+                    </div>
+                    <div className="content-wrp">{detailTab && detailTab == "documents" && <Documents role_id={role_id} access={access} />}</div>
                   </div>
-                  <div className="content-wrp">{detailTab && detailTab == "documents" && <Documents />}</div>
-                </div>
-                <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("notes")}</h2>
+                )}
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientnotes", access }) && (
+                  <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">
+                    <div className="drawer-header">
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("notes")}</h2>
+                    </div>
+                    <div className="content-wrp">{detailTab && detailTab == "notes" && <Notes role_id={role_id} access={access} />}</div>
                   </div>
-                  <div className="content-wrp">{detailTab && detailTab == "notes" && <Notes />}</div>
-                </div>
+                )}
               </div>
             </div>
           </div>

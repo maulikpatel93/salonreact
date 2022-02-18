@@ -19,12 +19,17 @@ import ProductAddForm from "./form/ProductAddForm";
 import ProductEditForm from "./form/ProductEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
+import { checkaccess } from "helpers/functions";
 
 const Products = () => {
   SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
   const tabview = useSelector((state) => state.product.isTabView);
   const ListView = useSelector((state) => state.product.isListView);
   const sort = useSelector((state) => state.product.isSort);
@@ -166,16 +171,20 @@ const Products = () => {
         <div className="row bg-white align-items-center sticky-top">
           <div className="common-tab col-md-4 col-7 order-1">
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">
-              <li className="nav-item">
-                <a href="#" className={"nav-link " + (tabview && tabview == "product" ? " active" : "")} id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onClick={handleProductTab}>
-                  {t("products")}
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#" className={"nav-link " + (tabview && tabview == "supplier" ? " active" : "")} id="suppliers-tab" data-bs-toggle="tab" data-bs-target="#suppliers" type="button" role="tab" aria-controls="suppliers" aria-selected="true" onClick={handleSupplierTab}>
-                  {t("Suppliers")}
-                </a>
-              </li>
+              {checkaccess({ name: "list", role_id: role_id, controller: "products", access }) && (
+                <li className="nav-item">
+                  <a href="#" className={"nav-link " + (tabview && tabview == "product" ? " active" : "")} id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onClick={handleProductTab}>
+                    {t("products")}
+                  </a>
+                </li>
+              )}
+              {checkaccess({ name: "list", role_id: role_id, controller: "suppliers", access }) && (
+                <li className="nav-item">
+                  <a href="#" className={"nav-link " + (tabview && tabview == "supplier" ? " active" : "")} id="suppliers-tab" data-bs-toggle="tab" data-bs-target="#suppliers" type="button" role="tab" aria-controls="suppliers" aria-selected="true" onClick={handleSupplierTab}>
+                    {t("Suppliers")}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
           <div className="col-md-4 py-md-0 py-2 px-md-0 px-4 order-md-2 order-3 search-wrp">
@@ -221,123 +230,136 @@ const Products = () => {
           </div>
           <div className="col-md-4 text-end col-5 ps-0 order-md-3 order-2">
             <div className="tab-content p-0 d-inline-block">
-              <div className={tabview && tabview == "product" ? "active" : ""} style={{ display: tabview && tabview == "product" ? "block" : "none" }}>
-                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddProductForm}>
-                  {t("new_product")}
-                </a>
-              </div>
-              <div className={tabview && tabview == "supplier" ? "active" : ""} style={{ display: tabview && tabview == "supplier" ? "block" : "none" }}>
-                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddSupplierForm}>
-                  {t("new_supplier")}
-                </a>
-              </div>
+              {checkaccess({ name: "create", role_id: role_id, controller: "products", access }) && (
+                <div className={tabview && tabview == "product" ? "active" : ""} style={{ display: tabview && tabview == "product" ? "block" : "none" }}>
+                  <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddProductForm}>
+                    {t("new_product")}
+                  </a>
+                </div>
+              )}
+              {checkaccess({ name: "create", role_id: role_id, controller: "suppliers", access }) && (
+                <div className={tabview && tabview == "supplier" ? "active" : ""} style={{ display: tabview && tabview == "supplier" ? "block" : "none" }}>
+                  <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddSupplierForm}>
+                    {t("new_supplier")}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="container">
           <div className={"tab-content list-view-content"}>
-            <div className={"tab-pane" + (tabview && tabview == "product" ? " show active" : "")} id="product" role="tabpanel" aria-labelledby="product-tab">
-              {tabview && tabview == "product" && (
-                <>
-                  {ListView.length > 0 || ListView.data ? (
-                    <section>
-                      <div className="" id="scrollableListView">
-                        <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                          <div className="table-responsive bg-white table-shadow">
-                            <table className="table mb-0">
-                              <thead>
-                                <tr>
-                                  <th></th>
-                                  <th>
-                                    <a className="product-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                      {t("product_name")}
-                                      <span className="down-up-arrow">
-                                        <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                        <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                                      </span>
-                                    </a>
-                                  </th>
-                                  <th>
-                                    <a className="product-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
-                                      {t("sku")}
-                                      <span className="down-up-arrow">
-                                        <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
-                                        <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
-                                      </span>
-                                    </a>
-                                  </th>
-                                  <th>
-                                    <a className="product-header cursor-pointer" onClick={() => sorting({ supplier: { name: sort && sort.supplier && sort.supplier.name == "asc" ? "desc" : "asc" } })}>
-                                      {t("supplier")}
-                                      <span className="down-up-arrow">
-                                        <i className={"fal fa-angle-up" + (sort && sort.supplier && sort.supplier.name == "asc" ? " text-dark" : "")}></i>
-                                        <i className={"fal fa-angle-down" + (sort && sort.supplier && sort.supplier.name == "desc" ? " text-dark" : "")}></i>
-                                      </span>
-                                    </a>
-                                  </th>
-                                  <th>
-                                    <a className="product-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
-                                      {t("stock")}
-                                      <span className="down-up-arrow">
-                                        <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
-                                        <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
-                                      </span>
-                                    </a>
-                                  </th>
-                                  <th>
-                                    <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
-                                      {t("retail_price")}
-                                      <span className="down-up-arrow">
-                                        <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
-                                        <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
-                                      </span>
-                                    </a>
-                                  </th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody className="services-table-data">
-                                <ProductListView view={ListView} />
-                              </tbody>
-                            </table>
-                          </div>
-                          {!isFetching && ListView.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreItems} className="btn btn-primary">
-                                {t("more")}
-                              </button>
+            {checkaccess({ name: "list", role_id: role_id, controller: "products", access }) && (
+              <div className={"tab-pane" + (tabview && tabview == "product" ? " show active" : "")} id="product" role="tabpanel" aria-labelledby="product-tab">
+                {tabview && tabview == "product" && (
+                  <>
+                    {ListView.length > 0 || ListView.data ? (
+                      <section>
+                        <div className="" id="scrollableListView">
+                          <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                            <div className="table-responsive bg-white table-shadow">
+                              <table className="table mb-0">
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <th>
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                                        {t("product_name")}
+                                        <span className="down-up-arrow">
+                                          <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                                        </span>
+                                      </a>
+                                    </th>
+                                    <th>
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
+                                        {t("sku")}
+                                        <span className="down-up-arrow">
+                                          <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
+                                        </span>
+                                      </a>
+                                    </th>
+                                    <th>
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ supplier: { name: sort && sort.supplier && sort.supplier.name == "asc" ? "desc" : "asc" } })}>
+                                        {t("supplier")}
+                                        <span className="down-up-arrow">
+                                          <i className={"fal fa-angle-up" + (sort && sort.supplier && sort.supplier.name == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort && sort.supplier && sort.supplier.name == "desc" ? " text-dark" : "")}></i>
+                                        </span>
+                                      </a>
+                                    </th>
+                                    <th>
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
+                                        {t("stock")}
+                                        <span className="down-up-arrow">
+                                          <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
+                                        </span>
+                                      </a>
+                                    </th>
+                                    <th>
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
+                                        {t("retail_price")}
+                                        <span className="down-up-arrow">
+                                          <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
+                                        </span>
+                                      </a>
+                                    </th>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody className="services-table-data">
+                                  <ProductListView view={ListView} />
+                                </tbody>
+                              </table>
                             </div>
-                          )}
-                        </InfiniteScroll>
-                      </div>
-                    </section>
-                  ) : (
-                    <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                      <div className="complete-box-wrp text-center ">
-                        <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-                        <h4 className="mb-2 fw-semibold">
-                          {t("no_products_have_been_created_yet")}
-                          <a className="add-product ms-1 cursor-pointer" onClick={() => dispatch(openAddProductForm())}>
-                            {t("please_add_one")}
-                          </a>
-                          .
-                        </h4>
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-            <div className={"tab-pane" + (tabview && tabview == "supplier" ? " show active" : "")} id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">
-              {tabview && tabview == "supplier" && <Suppliers />}
-            </div>
+                            {!isFetching && ListView.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreItems} className="btn btn-primary">
+                                  {t("more")}
+                                </button>
+                              </div>
+                            )}
+                          </InfiniteScroll>
+                        </div>
+                      </section>
+                    ) : (
+                      <>
+                        {checkaccess({ name: "create", role_id: role_id, controller: "products", access }) && (
+                          <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                            <div className="complete-box-wrp text-center ">
+                              <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                              <h4 className="mb-2 fw-semibold">
+                                {t("no_products_have_been_created_yet")}
+                                <a className="add-product ms-1 cursor-pointer" onClick={() => dispatch(openAddProductForm())}>
+                                  {t("please_add_one")}
+                                </a>
+                                .
+                              </h4>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+
+            {checkaccess({ name: "list", role_id: role_id, controller: "suppliers", access }) && (
+              <div className={"tab-pane" + (tabview && tabview == "supplier" ? " show active" : "")} id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">
+                {tabview && tabview == "supplier" && <Suppliers />}
+              </div>
+            )}
           </div>
         </div>
-        {supplierIsOpenedAddForm ? <SupplierAddForm /> : ""}
-        {supplierIsOpenedEditForm ? <SupplierEditForm /> : ""}
-        {productIsOpenedAddForm ? <ProductAddForm /> : ""}
-        {productIsOpenedEditForm ? <ProductEditForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "suppliers", access }) && supplierIsOpenedAddForm ? <SupplierAddForm /> : ""}
+        {checkaccess({ name: "update", role_id: role_id, controller: "suppliers", access }) && supplierIsOpenedEditForm ? <SupplierEditForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "products", access }) && productIsOpenedAddForm ? <ProductAddForm /> : ""}
+        {checkaccess({ name: "update", role_id: role_id, controller: "products", access }) && productIsOpenedEditForm ? <ProductEditForm /> : ""}
       </div>
     </>
   );

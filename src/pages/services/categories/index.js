@@ -7,6 +7,7 @@ import config from "../../../config";
 import CategoryListView from "./CategoryListView";
 import { openAddCategoryForm, categoryListViewApi } from "../../../store/slices/categorySlice";
 import PaginationLoader from "component/PaginationLoader";
+import { checkaccess } from "helpers/functions";
 
 const Categories = () => {
   const { t } = useTranslation();
@@ -15,6 +16,8 @@ const Categories = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
 
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
   const ListView = useSelector((state) => state.category.isListView);
   const fetchDataGrid = () => {
     dispatch(categoryListViewApi({ next_page_url: ListView.next_page_url }));
@@ -41,11 +44,11 @@ const Categories = () => {
                     <tr>
                       <th>{t("category")}</th>
                       <th>{t("count")}</th>
-                      <th></th>
+                      {(checkaccess({ name: "update", role_id: role_id, controller: "categories", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "categories", access })) && <th></th>}
                     </tr>
                   </thead>
                   <tbody className="services-table-data">
-                    <CategoryListView currentUser={currentUser} view={ListView} />
+                    <CategoryListView currentUser={currentUser} view={ListView} role_id={role_id} access={access} />
                   </tbody>
                 </table>
               </div>
@@ -60,18 +63,22 @@ const Categories = () => {
           </div>
         </section>
       ) : (
-        <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-          <div className="complete-box-wrp text-center ">
-            <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-            <h4 className="mb-2 fw-semibold">
-              {t("no_categories_have_been_created_yet")}
-              <a className="add-categories ms-1 cursor-pointer" onClick={() => dispatch(openAddCategoryForm())}>
-                {t("please_create_one")}
-              </a>
-              .
-            </h4>
-          </div>
-        </div>
+        <>
+          {checkaccess({ name: "create", role_id: role_id, controller: "categories", access }) && (
+            <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+              <div className="complete-box-wrp text-center ">
+                <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                <h4 className="mb-2 fw-semibold">
+                  {t("no_categories_have_been_created_yet")}
+                  <a className="add-categories ms-1 cursor-pointer" onClick={() => dispatch(openAddCategoryForm())}>
+                    {t("please_create_one")}
+                  </a>
+                  .
+                </h4>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   );

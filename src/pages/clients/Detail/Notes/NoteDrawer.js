@@ -8,10 +8,17 @@ import { clientnoteGridViewApi, clientnoteDeleteApi, closeNoteDrawer, openAddNot
 import config from "../../../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
+import { checkaccess } from "helpers/functions";
 
 const NoteDrawer = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
+
   const rightDrawerOpened = useSelector((state) => state.clientnote.isNoteDrawer);
   const noteViews = useSelector((state) => state.clientnote.isGridView);
   const noteObjectData = noteViews && noteViews.data ? noteViews.data : noteViews;
@@ -42,11 +49,13 @@ const NoteDrawer = () => {
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
               {t("notes")}
-              <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={() => dispatch(openAddNoteForm())}>
-                {t("add_note")}
-              </button>
+              {checkaccess({ name: "create", role_id: role_id, controller: "clientnotes", access }) && (
+                <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={() => dispatch(openAddNoteForm())}>
+                  {t("add_note")}
+                </button>
+              )}
             </h2>
-            <a className="close" onClick={() => dispatch(closeNoteDrawer())}>
+            <a className="close cursor-pointer" onClick={() => dispatch(closeNoteDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
           </div>
@@ -64,12 +73,16 @@ const NoteDrawer = () => {
                         <div className="row gx-1 justify-content-between">
                           <div className="col-md-7 mb-2">{updated_at}</div>
                           <div className="col-md-5 text-end mb-2">
-                            <a className="remove me-2 cursor-pointer" data-obj={JSON.stringify(noteObjectData[item])} onClick={handleClientDelete}>
-                              {t("remove")}
-                            </a>
-                            <a className="btn btn-outline-primary btn-sm cursor-pointer" onClick={(e) => handleNoteEditForm(e)}>
-                              {t("edit")}
-                            </a>
+                            {checkaccess({ name: "delete", role_id: role_id, controller: "clientnotes", access }) && (
+                              <a className="remove me-2 cursor-pointer" data-obj={JSON.stringify(noteObjectData[item])} onClick={handleClientDelete}>
+                                {t("remove")}
+                              </a>
+                            )}
+                            {checkaccess({ name: "update", role_id: role_id, controller: "clientnotes", access }) && (
+                              <a className="btn btn-outline-primary btn-sm cursor-pointer" onClick={(e) => handleNoteEditForm(e)}>
+                                {t("edit")}
+                              </a>
+                            )}
                           </div>
                         </div>
                         <p>

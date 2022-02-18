@@ -19,12 +19,17 @@ import ServiceAddForm from "./form/ServiceAddForm";
 import ServiceEditForm from "./form/ServiceEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
+import { checkaccess } from "helpers/functions";
 
 const Services = () => {
   SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
   const tabview = useSelector((state) => state.service.isTabView);
   const ListView = useSelector((state) => state.service.isListView);
   const sort = useSelector((state) => state.service.isSort);
@@ -168,16 +173,20 @@ const Services = () => {
         <div className="row bg-white align-items-center sticky-top">
           <div className="common-tab col-md-4 col-7 order-1">
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">
-              <li className="nav-item">
-                <a href="#" className={"nav-link " + (tabview && tabview == "service" ? " active" : "")} id="service-tab" data-bs-toggle="tab" data-bs-target="#service" type="button" role="tab" aria-controls="service" aria-selected="true" onClick={handleServiceTab}>
-                  {t("services")}
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#" className={"nav-link " + (tabview && tabview == "category" ? " active" : "")} id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" aria-controls="categories" aria-selected="true" onClick={handleCategoryTab}>
-                  {t("categories")}
-                </a>
-              </li>
+              {checkaccess({ name: "list", role_id: role_id, controller: "services", access }) && (
+                <li className="nav-item">
+                  <a href="#" className={"nav-link " + (tabview && tabview == "service" ? " active" : "")} id="service-tab" data-bs-toggle="tab" data-bs-target="#service" type="button" role="tab" aria-controls="service" aria-selected="true" onClick={handleServiceTab}>
+                    {t("services")}
+                  </a>
+                </li>
+              )}
+              {checkaccess({ name: "list", role_id: role_id, controller: "categories", access }) && (
+                <li className="nav-item">
+                  <a href="#" className={"nav-link " + (tabview && tabview == "category" ? " active" : "")} id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" aria-controls="categories" aria-selected="true" onClick={handleCategoryTab}>
+                    {t("categories")}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
           <div className="col-md-4 py-md-0 py-2 px-md-0 px-4 order-md-2 order-3 search-wrp">
@@ -223,117 +232,131 @@ const Services = () => {
           </div>
           <div className="col-md-4 text-end col-5 ps-0 order-md-3 order-2">
             <div className="tab-content p-0 d-inline-block">
-              <div className={tabview && tabview == "service" ? "active" : ""} style={{ display: tabview && tabview == "service" ? "block" : "none" }}>
-                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddServiceForm}>
-                  {t("new_service")}
-                </a>
-              </div>
-              <div className={tabview && tabview == "category" ? "active" : ""} style={{ display: tabview && tabview == "category" ? "block" : "none" }}>
-                <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddCategoryForm}>
-                  {t("new_category")}
-                </a>
-              </div>
+              {checkaccess({ name: "create", role_id: role_id, controller: "services", access }) && (
+                <div className={tabview && tabview == "service" ? "active" : ""} style={{ display: tabview && tabview == "service" ? "block" : "none" }}>
+                  <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddServiceForm}>
+                    {t("new_service")}
+                  </a>
+                </div>
+              )}
+              {checkaccess({ name: "create", role_id: role_id, controller: "categories", access }) && (
+                <div className={tabview && tabview == "category" ? "active" : ""} style={{ display: tabview && tabview == "category" ? "block" : "none" }}>
+                  <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddCategoryForm}>
+                    {t("new_category")}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className={"tab-content list-view-content"}>
-          <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
-            {tabview && tabview == "service" && (
-              <>
-                {ListView.length > 0 || ListView.data ? (
-                  <div className="" id="scrollableServiceListView">
-                    <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                      <div className="table-responsive bg-white table-shadow">
-                        <table className="table mb-0">
-                          <thead>
-                            <tr>
-                              <th rowSpan="2" className="service_table_header"></th>
-                              <th rowSpan="2" className="service_table_header">
-                                <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                  {t("service_name")}
-                                  <span className="down-up-arrow">
-                                    <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
-                                    <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
-                                  </span>
-                                </a>
-                              </th>
-                              <th rowSpan="2" className="service_table_header">
-                                <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
-                                  {t("duration")}
-                                  <span className="down-up-arrow">
-                                    <i className={"fal fa-angle-up" + (sort.duration == "asc" ? " text-dark" : "")}></i>
-                                    <i className={"fal fa-angle-down" + (sort.duration == "desc" ? " text-dark" : "")}></i>
-                                  </span>
-                                </a>
-                              </th>
-                              <th colSpan="3" className="p-2 text-center">
-                                {t("price")}
-                              </th>
-                              <th rowSpan="2" className="service_table_header">
-                                {t("category")}
-                                {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
+          {checkaccess({ name: "list", role_id: role_id, controller: "services", access }) && (
+            <div className={"tab-pane" + (tabview && tabview == "service" ? " show active" : "")} id="service" role="tabpanel" aria-labelledby="service-tab">
+              {tabview && tabview == "service" && (
+                <>
+                  {ListView.length > 0 || ListView.data ? (
+                    <div className="" id="scrollableServiceListView">
+                      <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                        <div className="table-responsive bg-white table-shadow">
+                          <table className="table mb-0">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2" className="service_table_header"></th>
+                                <th rowSpan="2" className="service_table_header">
+                                  <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
+                                    {t("service_name")}
+                                    <span className="down-up-arrow">
+                                      <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
+                                      <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
+                                    </span>
+                                  </a>
+                                </th>
+                                <th rowSpan="2" className="service_table_header">
+                                  <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
+                                    {t("duration")}
+                                    <span className="down-up-arrow">
+                                      <i className={"fal fa-angle-up" + (sort.duration == "asc" ? " text-dark" : "")}></i>
+                                      <i className={"fal fa-angle-down" + (sort.duration == "desc" ? " text-dark" : "")}></i>
+                                    </span>
+                                  </a>
+                                </th>
+                                <th colSpan="3" className="p-2 text-center">
+                                  {t("price")}
+                                </th>
+                                <th rowSpan="2" className="service_table_header">
+                                  {t("category")}
+                                  {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
                             {t("category")}
                             <span className="down-up-arrow">
                               <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
                               <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
                             </span>
                           </a> */}
-                              </th>
-                              <th rowSpan="2" className="service_table_header">{t("add_on_service")}</th>
-                              <th rowSpan="2" className="service_table_header"></th>
-                            </tr>
-                            <tr>
-                              <th scope="col" className="p-2">
-                                {t("general")}
-                              </th>
-                              <th scope="col" className="p-2">
-                                {t("junior")}
-                              </th>
-                              <th scope="col" className="p-2">
-                                {t("senior")}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="services-table-data">
-                            <ServiceListView view={ListView} />
-                          </tbody>
-                        </table>
-                      </div>
-                      {!isFetching && ListView.next_page_url && (
-                        <div className="col-2 m-auto p-3 text-center">
-                          <button onClick={loadMoreItems} className="btn btn-primary">
-                            {t("more")}
-                          </button>
+                                </th>
+                                <th rowSpan="2" className="service_table_header">
+                                  {t("add_on_service")}
+                                </th>
+                                {(checkaccess({ name: "update", role_id: role_id, controller: "services", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "services", access })) && <th rowSpan="2" className="service_table_header"></th>}
+                              </tr>
+                              <tr>
+                                <th scope="col" className="p-2">
+                                  {t("general")}
+                                </th>
+                                <th scope="col" className="p-2">
+                                  {t("junior")}
+                                </th>
+                                <th scope="col" className="p-2">
+                                  {t("senior")}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="services-table-data">
+                              <ServiceListView view={ListView} role_id={role_id} access={access} />
+                            </tbody>
+                          </table>
+                        </div>
+                        {!isFetching && ListView.next_page_url && (
+                          <div className="col-2 m-auto p-3 text-center">
+                            <button onClick={loadMoreItems} className="btn btn-primary">
+                              {t("more")}
+                            </button>
+                          </div>
+                        )}
+                      </InfiniteScroll>
+                    </div>
+                  ) : (
+                    <>
+                      {checkaccess({ name: "create", role_id: role_id, controller: "services", access }) && (
+                        <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                          <div className="complete-box-wrp text-center ">
+                            <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                            <h4 className="mb-2 fw-semibold">
+                              {t("no_services_have_been_created_yet")}
+                              <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
+                                {t("please_create_one")}
+                              </a>
+                              .
+                            </h4>
+                          </div>
                         </div>
                       )}
-                    </InfiniteScroll>
-                  </div>
-                ) : (
-                  <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                    <div className="complete-box-wrp text-center ">
-                      <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-                      <h4 className="mb-2 fw-semibold">
-                        {t("no_services_have_been_created_yet")}
-                        <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
-                          {t("please_create_one")}
-                        </a>
-                        .
-                      </h4>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          <div className={"tab-pane" + (tabview && tabview == "category" ? " show active" : "")} id="categories" role="tabpanel" aria-labelledby="categories-tab">
-            {tabview && tabview == "category" && <Categories />}
-          </div>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+          {checkaccess({ name: "list", role_id: role_id, controller: "categories", access }) && (
+            <div className={"tab-pane" + (tabview && tabview == "category" ? " show active" : "")} id="categories" role="tabpanel" aria-labelledby="categories-tab">
+              {tabview && tabview == "category" && <Categories />}
+            </div>
+          )}
         </div>
-        {categoryIsOpenedAddForm ? <CategoryAddForm /> : ""}
-        {categoryIsOpenedEditForm ? <CategoryEditForm /> : ""}
-        {serviceIsOpenedAddForm ? <ServiceAddForm /> : ""}
-        {serviceIsOpenedEditForm ? <ServiceEditForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "categories", access }) && categoryIsOpenedAddForm ? <CategoryAddForm /> : ""}
+        {checkaccess({ name: "update", role_id: role_id, controller: "categories", access }) && categoryIsOpenedEditForm ? <CategoryEditForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "services", access }) && serviceIsOpenedAddForm ? <ServiceAddForm /> : ""}
+        {checkaccess({ name: "update", role_id: role_id, controller: "services", access }) && serviceIsOpenedEditForm ? <ServiceEditForm /> : ""}
       </div>
     </>
   );

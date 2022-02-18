@@ -12,6 +12,7 @@ import ClientListView from "./List/listview";
 import SuggetionListView from "./List/SuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
+import { checkaccess } from "helpers/functions";
 
 const Clients = () => {
   SalonModule();
@@ -20,6 +21,9 @@ const Clients = () => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
+
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
 
   const GridView = useSelector((state) => state.client.isGridView);
   const ListView = useSelector((state) => state.client.isListView);
@@ -154,9 +158,12 @@ const Clients = () => {
                 </a>
               </li>
             </ul>
-            <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
-              {t("new_client")}
-            </a>
+            {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && (
+              <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
+                {t("new_client")}
+              </a>
+            )}
+
             <div className="dropdown d-inline-block setting-dropdown">
               <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
                 <i className="far fa-ellipsis-v"></i>
@@ -186,17 +193,19 @@ const Clients = () => {
               {tabview && tabview == "grid" && (
                 <>
                   <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={tabview && tabview == "grid" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
-                    <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
-                      <div className="tabs-image">
-                        <img src={config.imagepath + "tabs-image.png"} alt="" />
-                      </div>
-                      <div className="image-content">
-                        <h5>
-                          <i className="fal fa-plus me-2"></i> {t("add_new")}
-                        </h5>
-                      </div>
-                    </a>
-                    <ClientGridView currentUser={currentUser} view={GridView} />
+                    {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && (
+                      <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
+                        <div className="tabs-image">
+                          <img src={config.imagepath + "tabs-image.png"} alt="" />
+                        </div>
+                        <div className="image-content">
+                          <h5>
+                            <i className="fal fa-plus me-2"></i> {t("add_new")}
+                          </h5>
+                        </div>
+                      </a>
+                    )}
+                    <ClientGridView currentUser={currentUser} view={GridView} role_id={role_id} access={access} />
                     {!isFetching && GridView.next_page_url && (
                       <div className="box-image-cover">
                         <div className="tabs-image">
@@ -238,7 +247,7 @@ const Clients = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <ClientListView currentUser={currentUser} view={ListView} />
+                          <ClientListView currentUser={currentUser} view={ListView} role_id={role_id} access={access} />
                         </tbody>
                       </table>
                     </div>
@@ -255,8 +264,8 @@ const Clients = () => {
             </div>
           </div>
         </div>
-        {clientIsOpenedAddForm ? <ClientAddForm /> : ""}
-        {clientIsOpenedDetailModal ? <ClientDetailModal /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
+        {(checkaccess({ name: "view", role_id: role_id, controller: "clients", access }) || checkaccess({ name: "update", role_id: role_id, controller: "clients", access })) && clientIsOpenedDetailModal ? <ClientDetailModal /> : ""}
       </div>
     </>
   );

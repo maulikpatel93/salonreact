@@ -5,20 +5,26 @@ import { useTranslation } from "react-i18next";
 // import PropTypes from "prop-types";
 // import config from "../../../../config";
 import { swalConfirm } from "../../../../component/Sweatalert2";
-import { clientphotoGridViewApi,clientphotoUpdateApi, clientphotoDeleteApi, closePhotoDrawer } from "store/slices/clientphotoSlice";
+import { clientphotoGridViewApi, clientphotoUpdateApi, clientphotoDeleteApi, closePhotoDrawer } from "store/slices/clientphotoSlice";
 import config from "../../../../config";
 import ImageUpload from "component/form/ImageUpload";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
+import { checkaccess } from "helpers/functions";
 
 const PhotoDrawer = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
+
   const rightDrawerOpened = useSelector((state) => state.clientphoto.isPhotoDrawer);
   const photoViews = useSelector((state) => state.clientphoto.isGridView);
   const photoObjectData = photoViews && photoViews.data ? photoViews.data : photoViews;
   const detail = useSelector((state) => state.client.isDetailData);
- 
+
   const fetchDataPhotoList = () => {
     dispatch(clientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
   };
@@ -37,7 +43,7 @@ const PhotoDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
-              {t("photos")} <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />
+              {t("photos")} {checkaccess({ name: "create", role_id: role_id, controller: "clientphotos", access }) && <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />}
             </h2>
             <a className="close" onClick={() => dispatch(closePhotoDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -58,18 +64,22 @@ const PhotoDrawer = () => {
                           <img src={photo_url} alt="" />
                         </div>
                         <div className="d-flex justify-content-between align-items-center flex-wrap">
-                          <a
-                            className={(is_profile_photo === "1" ? "disabled " : "") + "btn btn-outline-primary btn-sm cursor-pointer"}
-                            onClick={() => {
-                              dispatch(clientphotoUpdateApi({ id: id, client_id: client_id }));
-                              dispatch(clientphotoGridViewApi({ client_id: client_id }));
-                            }}
-                          >
-                            {t("Profile_Image")}
-                          </a>
-                          <a className="remove mt-md-0 mt-2 cursor-pointer" data-obj={JSON.stringify(photoObjectData[item])} onClick={handleClientDelete}>
-                            {t("remove")}
-                          </a>
+                          {checkaccess({ name: "profileimage", role_id: role_id, controller: "clientphotos", access }) && (
+                            <a
+                              className={(is_profile_photo === "1" ? "disabled " : "") + "btn btn-outline-primary btn-sm cursor-pointer"}
+                              onClick={() => {
+                                dispatch(clientphotoUpdateApi({ id: id, client_id: client_id }));
+                                dispatch(clientphotoGridViewApi({ client_id: client_id }));
+                              }}
+                            >
+                              {t("Profile_Image")}
+                            </a>
+                          )}
+                          {checkaccess({ name: "delete", role_id: role_id, controller: "clientphotos", access }) && (
+                            <a className="remove mt-md-0 mt-2 cursor-pointer" data-obj={JSON.stringify(photoObjectData[item])} onClick={handleClientDelete}>
+                              {t("remove")}
+                            </a>
+                          )}
                         </div>
                       </div>
                     );

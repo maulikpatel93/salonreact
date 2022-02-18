@@ -6,15 +6,17 @@ import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
+import { checkaccess } from "helpers/functions";
 
 const ClientListView = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const views = props.view;
-
+  const role_id = props.role_id;
+  const access = props.access;
   // const view = useSelector((state) => state.client.isView);
   const objectData = views && views.data ? views.data : views;
 
@@ -35,7 +37,6 @@ const ClientListView = (props) => {
       dispatch(clientDetailTab("clientdetail"));
     }
   };
-
 
   return (
     <>
@@ -75,29 +76,35 @@ const ClientListView = (props) => {
                   {email}
                 </a>
               </td>
-              <td className="ps-0 text-end" width="60px">
-                <div className="dropdown d-inline-block setting-dropdown">
-                  <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                    <i className="far fa-ellipsis-v"></i>
-                  </button>
-                  <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
-                    <ul className="p-0 m-0 list-unstyled">
-                      <li>
-                        <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: "clientdetail" })}>
-                          <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                          {t("edit")}
-                        </a>
-                      </li>
-                      <li>
-                        <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleClientDelete}>
-                          <i className="far fa-trash me-3"></i>
-                          {t("delete")}
-                        </a>
-                      </li>
-                    </ul>
+              {(checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "clients", access })) && (
+                <td className="ps-0 text-end" width="60px">
+                  <div className="dropdown d-inline-block setting-dropdown">
+                    <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                      <i className="far fa-ellipsis-v"></i>
+                    </button>
+                    <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
+                      <ul className="p-0 m-0 list-unstyled">
+                        {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
+                          <li>
+                            <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: "clientdetail" })}>
+                              <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
+                              {t("edit")}
+                            </a>
+                          </li>
+                        )}
+                        {checkaccess({ name: "delete", role_id: role_id, controller: "clients", access }) && (
+                          <li>
+                            <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleClientDelete}>
+                              <i className="far fa-trash me-3"></i>
+                              {t("delete")}
+                            </a>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </td>
+                </td>
+              )}
             </tr>
           );
         })}
@@ -106,10 +113,12 @@ const ClientListView = (props) => {
 };
 
 ClientListView.propTypes = {
-  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
+  view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  access: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   first_name: PropTypes.string,
   last_name: PropTypes.string,
   id: PropTypes.string,
   tab: PropTypes.string,
+  role_id: PropTypes.number,
 };
 export default ClientListView;
