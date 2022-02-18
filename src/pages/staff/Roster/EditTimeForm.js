@@ -10,6 +10,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import { rosterListViewApi, rosterUpdateApi, closeAddRosterForm, closeEditRosterForm, openDeleteModal, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 import PropTypes from "prop-types";
+import { checkaccess } from "helpers/functions";
 
 const EditTimeForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,8 @@ const EditTimeForm = (props) => {
   const staff_id = props.staff_id;
   const date = props.date;
   const roster = props.roster;
+  const role_id = props.role_id;
+  const access = props.access;
 
   const initialValues = {
     staff_id: "",
@@ -111,9 +114,11 @@ const EditTimeForm = (props) => {
                     {t("Mark_as_Not_Away")}
                   </button>
                 )}
-                <button type="button" id="removetime" className="col-6 bg-transparent border-1" data-obj={JSON.stringify(roster)} onClick={(e) => dispatch(openDeleteModal(e.currentTarget.getAttribute("data-obj")))}>
-                  {t("Remove_Shift")}
-                </button>
+                {checkaccess({ name: "delete", role_id: role_id, controller: "roster", access }) && (
+                  <button type="button" id="removetime" className="col-6 bg-transparent border-1" data-obj={JSON.stringify(roster)} onClick={(e) => dispatch(openDeleteModal(e.currentTarget.getAttribute("data-obj")))}>
+                    {t("Remove_Shift")}
+                  </button>
+                )}
               </div>
             </form>
           );
@@ -124,7 +129,9 @@ const EditTimeForm = (props) => {
 };
 EditTimeForm.propTypes = {
   roster: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  access: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   staff_id: PropTypes.number,
+  role_id: PropTypes.number,
   date: PropTypes.string,
 };
 

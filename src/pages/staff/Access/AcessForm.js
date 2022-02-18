@@ -20,7 +20,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 const AccessForm = () => {
   const [loading, setLoading] = useState(false);
 
-  const listview = useSelector((state) => state.salonmodule.isListView);
+  const listview = useSelector((state) => state.salonmodule.isAccessView);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -63,7 +63,6 @@ const AccessForm = () => {
       setLoading(false);
     }
   };
-
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
@@ -125,8 +124,8 @@ const AccessForm = () => {
                                 return (
                                   <li className="pt-3 pb-3 li" key={itemservice} data-id={permission_id}>
                                     <div className="checkbox">
-                                      <Field type="hidden" value={permission_id} id={"salon_permission_id" + item + "_" + itemservice} name={"salon_permission_id[" + item + "][" + itemservice + "]"} onChange={formik.handleChange} />
-                                      <Field
+                                      <input type="hidden" value={permission_id} id={"salon_permission_id" + item + "_" + itemservice} name={"salon_permission_id[" + item + "][" + itemservice + "]"} onChange={formik.handleChange} />
+                                      <input
                                         type="checkbox"
                                         value={permission_id}
                                         // checked={formik.values.salonmoduleaccess[j] === permission_id}

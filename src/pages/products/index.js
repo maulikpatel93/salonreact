@@ -173,7 +173,7 @@ const Products = () => {
               </li>
               <li className="nav-item">
                 <a href="#" className={"nav-link " + (tabview && tabview == "supplier" ? " active" : "")} id="suppliers-tab" data-bs-toggle="tab" data-bs-target="#suppliers" type="button" role="tab" aria-controls="suppliers" aria-selected="true" onClick={handleSupplierTab}>
-                  {t("suppliers")}
+                  {t("Suppliers")}
                 </a>
               </li>
             </ul>

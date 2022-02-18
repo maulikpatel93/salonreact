@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -10,6 +10,7 @@ import { pricetierOptions } from "../../../store/slices/pricetierSlice";
 
 import PropTypes from "prop-types";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
+import { checkaccess } from "helpers/functions";
 
 const StaffGridView = (props) => {
   const dispatch = useDispatch();
@@ -18,6 +19,10 @@ const StaffGridView = (props) => {
   const views = props.view;
 
   const objectData = views && views.data ? views.data : views;
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
 
   const handleStaffDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
@@ -55,27 +60,33 @@ const StaffGridView = (props) => {
           let price_tier = objectData[item].pricetier && objectData[item].pricetier.name;
           return (
             <div className="box-image-cover" key={i} data-id={id}>
-              <div className="dropdown d-inline-block setting-dropdown">
-                <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                  <i className="far fa-ellipsis-v"></i>
-                </button>
-                <div className="dropdown-menu dropdown-box dropdown-menu-end" style={{ minWidth: "116px" }} aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
-                  <ul className="p-0 m-0 list-unstyled">
-                    <li>
-                      <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleStaffEditForm(e, { tab: "staffdetail" })}>
-                        <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                        {t("edit")}
-                      </a>
-                    </li>
-                    <li>
-                      <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleStaffDelete}>
-                        <i className="far fa-trash me-3"></i>
-                        {t("delete")}
-                      </a>
-                    </li>
-                  </ul>
+              {(checkaccess({ name: "update", role_id: role_id, controller: "staff", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "staff", access })) && (
+                <div className="dropdown d-inline-block setting-dropdown">
+                  <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                    <i className="far fa-ellipsis-v"></i>
+                  </button>
+                  <div className="dropdown-menu dropdown-box dropdown-menu-end" style={{ minWidth: "116px" }} aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
+                    <ul className="p-0 m-0 list-unstyled">
+                      {checkaccess({ name: "update", role_id: role_id, controller: "staff", access }) && (
+                        <li>
+                          <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleStaffEditForm(e, { tab: "staffdetail" })}>
+                            <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
+                            {t("edit")}
+                          </a>
+                        </li>
+                      )}
+                      {checkaccess({ name: "delete", role_id: role_id, controller: "staff", access }) && (
+                        <li>
+                          <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleStaffDelete}>
+                            <i className="far fa-trash me-3"></i>
+                            {t("delete")}
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
               <a className="staff-detail cursor-pointer" onClick={handleStaffEditForm}>
                 {profile_photo_url ? (
                   <div className="tabs-image">

@@ -12,11 +12,16 @@ import AddTimeForm from "./AddTimeForm";
 import EditTimeForm from "./EditTimeForm";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
+import { checkaccess } from "helpers/functions";
 
 const Roster = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const rosterListview = useSelector((state) => state.roster.isListView);
   const addTime = useSelector((state) => state.roster.isOpenedAddForm);
@@ -45,7 +50,7 @@ const Roster = () => {
     let first = curr.getDate() - curr.getDay() + i;
     let date = new Date(curr.setDate(first)).toISOString().slice(0, 10); //2022-11-01 format
     // let date = moment(curr.setDate(first)).format("YYYY-MM-DD"); //2022-11-01 format
-   
+
     // let day = new Date(curr.setDate(first));
     //     let day = date.toLocaleString("en-Us", { weekday: "short", day: "numeric", year: "numeric", month: "short" });
     week.push(date);
@@ -172,10 +177,10 @@ const Roster = () => {
                         let rosterdata = rosterfield && rosterfield.filter((item) => item.date === date);
                         let classname = getselectedDate && item && getselectedDate === date ? "active text-center" : "text-center";
 
-                        var backgroundColor = 'transparent';
-                        if(rosterdata.length > 0 && rosterdata[0].away === "1"){
+                        var backgroundColor = "transparent";
+                        if (rosterdata.length > 0 && rosterdata[0].away === "1") {
                           backgroundColor = "rgb(143, 128, 125)";
-                        }else if(rosterdata.length > 0 && rosterdata[0].start_time && rosterdata[0].end_time){
+                        } else if (rosterdata.length > 0 && rosterdata[0].start_time && rosterdata[0].end_time) {
                           backgroundColor = "rgb(249, 246, 244)";
                         }
                         return (
@@ -187,8 +192,10 @@ const Roster = () => {
                                     className="away-text cursor-pointer"
                                     data-id={id + "-" + j}
                                     onClick={(e) => {
-                                      dispatch(closeAddRosterForm());
-                                      dispatch(openEditRosterForm(e.currentTarget.getAttribute("data-id")));
+                                      if (checkaccess({ name: "update", role_id: role_id, controller: "roster", access })) {
+                                        dispatch(closeAddRosterForm());
+                                        dispatch(openEditRosterForm(e.currentTarget.getAttribute("data-id")));
+                                      }
                                     }}
                                   >
                                     {t("AWAY")}
@@ -198,8 +205,10 @@ const Roster = () => {
                                     className="updated-time show cursor-pointer"
                                     data-id={id + "-" + j}
                                     onClick={(e) => {
-                                      dispatch(closeAddRosterForm());
-                                      dispatch(openEditRosterForm(e.currentTarget.getAttribute("data-id")));
+                                      if (checkaccess({ name: "update", role_id: role_id, controller: "roster", access })) {
+                                        dispatch(closeAddRosterForm());
+                                        dispatch(openEditRosterForm(e.currentTarget.getAttribute("data-id")));
+                                      }
                                     }}
                                   >
                                     <Moment format="hh:mm A">{date + "T" + rosterdata[0].start_time}</Moment>-<Moment format="hh:mm A">{date + "T" + rosterdata[0].end_time}</Moment>
@@ -211,15 +220,17 @@ const Roster = () => {
                                 className="add-time cursor-pointer"
                                 data-id={id + "-" + j}
                                 onClick={(e) => {
-                                  dispatch(closeEditRosterForm());
-                                  dispatch(openAddRosterForm(e.currentTarget.getAttribute("data-id")));
+                                  if (checkaccess({ name: "create", role_id: role_id, controller: "roster", access })) {
+                                    dispatch(closeEditRosterForm());
+                                    dispatch(openAddRosterForm(e.currentTarget.getAttribute("data-id")));
+                                  }
                                 }}
                               >
                                 <img src={config.imagepath + "plus-gray.png"} alt="" />
                               </a>
                             )}
 
-                            {addTime === id + "-" + j ? (
+                            {checkaccess({ name: "create", role_id: role_id, controller: "roster", access }) && (addTime === id + "-" + j) ? (
                               <div className="addtime-popup">
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeAddRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -230,12 +241,12 @@ const Roster = () => {
                               ""
                             )}
 
-                            {updateTime === id + "-" + j ? (
+                            {checkaccess({ name: "update", role_id: role_id, controller: "roster", access }) && (updateTime === id + "-" + j) ? (
                               <div className="updatetime-popup">
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeEditRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
                                 </a>
-                                <EditTimeForm staff_id={id} date={date} roster={rosterdata.length > 0 && rosterdata[0]} />
+                                <EditTimeForm staff_id={id} date={date} roster={rosterdata.length > 0 && rosterdata[0]} role_id={role_id} access={access}/>
                               </div>
                             ) : (
                               ""
@@ -248,7 +259,7 @@ const Roster = () => {
               })}
           </tbody>
         </table>
-        {isDeleteModal && (
+        {checkaccess({ name: "delete", role_id: role_id, controller: "roster", access }) && isDeleteModal && (
           <div className="modal fade show" id="removetimemodal" tabIndex="-1" aria-labelledby="removetimeModalLabel" aria-hidden="true" style={{ display: "block", paddingRight: "15px" }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content ">

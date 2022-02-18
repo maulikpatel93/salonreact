@@ -5,17 +5,31 @@ import authHeader from "./auth-header";
 
 const API_URL = config.API_URL;
 
-const view = (values) => {
+const moduleview = () => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const role_id = auth.user.role_id === 4 ? 5 : values && values.role_id;
+  const role_id = auth.user.role_id;
   const salon_id = auth.user.salon_id;
-  const salon_permission_field = values.salon_permission_field ? values.salon_permission_field : "";
   const action = `afterlogin/salonmodule/view?role_id=${role_id}&salon_id=${salon_id}`;
   const data = {
     auth_key: auth_key,
     action: action,
-    salon_permission_field: auth.user.role_id === 4 ? salon_permission_field : "*",
+    salon_permission_field: 0,
+  };
+  return axios.post(API_URL + action, data, { headers: authHeader() });
+};
+
+const accessview = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const auth_role_id = auth.user.role_id;
+  const role_id = values && values.type && values.type === "staff_access" && auth_role_id === 4 ? 5 : auth_role_id;
+  const salon_id = auth.user.salon_id;
+  const action = `afterlogin/salonmodule/view?role_id=${role_id}&salon_id=${salon_id}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_permission_field: "*",
   };
   return axios.post(API_URL + action, data, { headers: authHeader() });
 };
@@ -36,7 +50,8 @@ const update = (values) => {
 };
 
 const salonmoduleApiController = {
-  view,
+  moduleview,
+  accessview,
   update,
 };
 export default salonmoduleApiController;

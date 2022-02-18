@@ -17,3 +17,29 @@ export const ellipseText = function (text, limit) {
     return text.substring(0, limit) + "..." + ext;
   } else return text;
 };
+
+export const checkaccess = (obj) => {
+  let isaccess = false;
+  if (obj.role_id === 5) {
+    let salonaccess = obj.access
+      .filter((list) => list.module_id === obj.module_id || list.controller === obj.controller)
+      .map((list) => {
+        if (list.permission && list.permission.includes(obj.name)) {
+          return true;
+        }
+      });
+    var filtered = salonaccess.filter(function (x) {
+      return x !== undefined;
+    });
+    if (filtered.length > 0) {
+      isaccess = true;
+    }
+  }
+  if (obj.role_id === 4) {
+    isaccess = true;
+  }
+  if (obj.module_id === 1) {
+    isaccess = true;
+  }
+  return isaccess;
+};

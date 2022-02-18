@@ -59,12 +59,12 @@ const StaffAddForm = () => {
     time: new Date(),
     working_hours: [
       { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "", days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Monday", start_time: "", end_time: "", break_time: [] },
       { dayoff: '1', days: "Tuesday", start_time: "", end_time: "", break_time: [] },
       { dayoff: '1', days: "Wednesday", start_time: "", end_time: "", break_time: [] },
       { dayoff: '1', days: "Thursday", start_time: "", end_time: "", break_time: [] },
       { dayoff: '1', days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: '', days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -211,7 +211,7 @@ const StaffAddForm = () => {
                             <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
                           </div>
                           <div className="col-md-3 col-6 mb-md-4 mb-3">
-                            <InputField type="date" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
                           </div>
                         </div>
                         <div className="mb-3">

@@ -1,14 +1,17 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import config from "../../../config";
 import { useTranslation } from "react-i18next";
+import { checkaccess } from "helpers/functions";
+
 const Sidebar = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const role_id = currentUser && currentUser.role_id;
+  const access = useSelector((state) => state.salonmodule.isAccess);
   const salonmodule = useSelector((state) => state.salonmodule.isListView);
-  // console.log(salonmodule);
   return (
     <aside className="sidenav-bar">
       <div className="sidenav-logo py-4 text-center">
@@ -28,16 +31,19 @@ const Sidebar = () => {
           </li> */}
           {salonmodule &&
             salonmodule.map((module, i) => {
-              return (
-                <li key={i}>
-                  <NavLink to={config.basePath + "/" + module.controller} data-bs-toggle="tooltip" data-bs-placement="right" title={t(module.title)}>
-                    <span className="icon">
-                      <img src={config.imagepath + module.icon} alt="" />
-                    </span>
-                    <span className="d-lg-none ps-3">{t("Calendar")}</span>
-                  </NavLink>
-                </li>
-              );
+              let isCheckAccess = checkaccess({ role_id: role_id, module_id: module.id, name: "list", access });
+              if (isCheckAccess) {
+                return (
+                  <li key={i}>
+                    <NavLink to={config.basePath + "/" + module.controller} data-bs-toggle="tooltip" data-bs-placement="right" title={t(module.title)}>
+                      <span className="icon">
+                        <img src={config.imagepath + module.icon} alt="" />
+                      </span>
+                      <span className="d-lg-none ps-3">{t(module.title)}</span>
+                    </NavLink>
+                  </li>
+                );
+              }
             })}
           {/* <li>
             <NavLink to={config.basePath + "/calendar"} data-bs-toggle="tooltip" data-bs-placement="right" title={t("Calendar")}>

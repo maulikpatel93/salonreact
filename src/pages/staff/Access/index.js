@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from "react-redux";
 // import InfiniteScroll from "react-infinite-scroll-component";
 
 // import config from "../../../config";
-import { salonmoduleAccessViewApi } from "../../../store/slices/salonmoduleSlice";
+// import { salonmoduleAccessViewApi } from "../../../store/slices/salonmoduleSlice";
 import AccessForm from "./AcessForm";
 
 const Access = () => {
   // const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
+  // const auth = useSelector((state) => state.auth);
+  // const currentUser = auth.user;
 
   useEffect(() => {
-    dispatch(salonmoduleAccessViewApi({ role_id: currentUser && currentUser.role_id}));
+    // dispatch(salonmoduleAccessViewApi({ type: "staff_access" }));
   }, []);
 
   return <>{<AccessForm />}</>;
