@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import config from "../../../config";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,6 @@ import { checkaccess } from "helpers/functions";
 
 const Sidebar = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const role_id = currentUser && currentUser.role_id;

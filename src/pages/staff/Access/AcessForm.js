@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, Field } from "formik";
+import { Formik } from "formik";
 // import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
