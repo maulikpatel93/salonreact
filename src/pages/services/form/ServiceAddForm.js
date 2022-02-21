@@ -63,24 +63,24 @@ const ServiceAddForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().max(100).label(t("service_name")).trim().required(),
-    category_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("category")).required())),
+    name: Yup.string().max(100).label(t("Service Name")).trim().required(),
+    category_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Category")).required())),
     description: Yup.string().trim().label(t("Description")).required(),
-    duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("duration")).required())),
-    padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("padding_time")).required())),
-    tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
+    duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Duration")).required())),
+    padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Padding Time")).required())),
+    tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Tax")).required())),
     service_price: Yup.object().shape({
       general: Yup.object().shape({
-        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
       }),
       junior: Yup.object().shape({
-        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
       }),
       senior: Yup.object().shape({
-        price: Yup.string().trim().label(t("price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("add_on_price")).test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
       }),
     }),
     service_booked_online: Yup.mixed().nullable(),
@@ -89,7 +89,7 @@ const ServiceAddForm = () => {
       .nullable()
       .when("deposit_booked_online", {
         is: 1,
-        then: Yup.string().trim().label(t("deposit_booked_price")).required().test("Digits only", t("The_field_should_have_digits_only"), decimalOnly),
+        then: Yup.string().trim().label(t("Deposit booked price")).required().test("Digits only", t("The field should have digits only"), decimalOnly),
       }),
     add_on_services: Yup.array(),
     add_on_staff: Yup.array(),
@@ -131,14 +131,14 @@ const ServiceAddForm = () => {
   const categoryOptionsData = isCategoryOption;
   const taxOptionsData = isTaxOption;
   const durationOptionsData = [
-    { value: "30", label: "30 " + t("minute") },
-    { value: "50", label: "50 " + t("minute") },
-    { value: "60", label: "60 " + t("minute") },
+    { value: "30", label: "30 " + t("Minute") },
+    { value: "50", label: "50 " + t("Minute") },
+    { value: "60", label: "60 " + t("Minute") },
   ];
   const paddingtimeOptionsData = [
-    { value: "30", label: "30 " + t("minute") },
-    { value: "50", label: "50 " + t("minute") },
-    { value: "60", label: "60 " + t("minute") },
+    { value: "30", label: "30 " + t("Minute") },
+    { value: "50", label: "50 " + t("Minute") },
+    { value: "60", label: "60 " + t("Minute") },
   ];
   const service_price = [
     { name: "General", price: "", add_on_price: "" },
@@ -183,7 +183,7 @@ const ServiceAddForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t("new_service")}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("New Service")}</h3>
                     <div className="ms-auto">
                       <button type="button" className="close btn me-1 cursor-pointer" onClick={handleCloseAddServiceForm}>
                         {t("Cancel")}
@@ -199,31 +199,31 @@ const ServiceAddForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Description")}</h4>
-                          <p>{t("add_the_name_and_description_of_this_service")}</p>
+                          <p>{t("Add the name and description of this service.")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="mb-3">
-                            <InputField type="text" name="name" value={formik.values.name} label={t("service_name")} controlId="serviceForm-name" />
+                            <InputField type="text" name="name" value={formik.values.name} label={t("Service Name")} controlId="serviceForm-name" />
                           </div>
                           <div className="mb-3">
-                            <ReactSelectField name="category_id" placeholder={t("select_category")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false} />
+                            <ReactSelectField name="category_id" placeholder={t("Select a category")} value={formik.values.category_id} options={categoryOptionsData} label={t("Category")} controlId="serviceForm-category_id" isMulti={false} />
                           </div>
                           <div className="mb-3">
-                            <TextareaField name="description" placeholder={t("Add_a_short_description")} value={formik.values.description} label={t("Description")} controlId="serviceForm-description" />
+                            <TextareaField name="description" placeholder={t("Add a short description")} value={formik.values.description} label={t("Description")} controlId="serviceForm-description" />
                           </div>
                         </div>
                       </div>
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("price")}</h4>
-                          <p className="text-sm">{t("price_note_service")}</p>
+                          <h4 className="fw-semibold mb-2">{t("Price")}</h4>
+                          <p className="text-sm">{t("Price_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-3 mb-2 col-4"></div>
-                            <div className="col-lg-3 col-md-4 col-4 mb-2">{t("price")}</div>
-                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("add_on_price")}</div>
+                            <div className="col-lg-3 col-md-4 col-4 mb-2">{t("Price")}</div>
+                            <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("Add-on Price")}</div>
                           </div>
                           {service_price &&
                             Object.keys(service_price).map((item, i) => {
@@ -247,31 +247,31 @@ const ServiceAddForm = () => {
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("duration")}</h4>
-                          <p>{t("how_long_is_this_service")}</p>
+                          <h4 className="fw-semibold mb-2">{t("Duration")}</h4>
+                          <p>{t("How long is this service?")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-auto">
-                              <ReactSelectField name="duration" placeholder={t("Search_option")} value={formik.values.duration} options={durationOptionsData} label={t("duration")} controlId="serviceForm-duration" isMulti={false} />
+                              <ReactSelectField name="duration" placeholder={t("Search_option")} value={formik.values.duration} options={durationOptionsData} label={t("Duration")} controlId="serviceForm-duration" isMulti={false} />
                             </div>
                             <div className="col-auto">
-                              <ReactSelectField name="padding_time" placeholder={t("Search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("padding_time")} controlId="serviceForm-padding_time" isMulti={false} />
+                              <ReactSelectField name="padding_time" placeholder={t("Search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("Padding Time")} controlId="serviceForm-padding_time" isMulti={false} />
                             </div>
                           </div>
-                          <p>{t("padding_time_note")}</p>
+                          <p>{t("Padding Time_note")}</p>
                         </div>
                       </div>
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("tax")}</h4>
-                          <p>{t("set_the_tax_rate")}</p>
+                          <h4 className="fw-semibold mb-2">{t("Tax")}</h4>
+                          <p>{t("Set the tax rate.")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -279,15 +279,15 @@ const ServiceAddForm = () => {
                       <hr className="drawer-category-hr"></hr>
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("online_bookings")}</h4>
-                          <p>{t("online_bookings_note_service")}</p>
+                          <h4 className="fw-semibold mb-2">{t("Online bookings")}</h4>
+                          <p>{t("Online bookings_note_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-12">
                               <SwitchField
                                 name="service_booked_online"
-                                label={t("service_booked_online")}
+                                label={t("Service_booked_online")}
                                 controlId="serviceForm-service_booked_online"
                                 value={"1"}
                                 onChange={(e) => {
@@ -307,7 +307,7 @@ const ServiceAddForm = () => {
                             <div className="col-md-12">
                               <SwitchField
                                 name="deposit_booked_online"
-                                label={t("deposit_booked_online")}
+                                label={t("Deposit required when booked online")}
                                 controlId="serviceForm-deposit_booked_online"
                                 value={"1"}
                                 onChange={(e) => {
@@ -325,7 +325,7 @@ const ServiceAddForm = () => {
                               />
                               <div className="row" style={{ display: formik.values.deposit_booked_online == "" || formik.values.deposit_booked_online == 0 ? "none" : "" }}>
                                 <div className="mb-3 col-md-6">
-                                  <InputField type="text" name="deposit_booked_price" value={formik.values.deposit_booked_price} label={t("deposit_booked_price")} controlId="serviceForm-deposit_booked_price" />
+                                  <InputField type="text" name="deposit_booked_price" value={formik.values.deposit_booked_price} label={t("Deposit booked price")} controlId="serviceForm-deposit_booked_price" />
                                 </div>
                               </div>
                             </div>
@@ -338,7 +338,7 @@ const ServiceAddForm = () => {
                           <div className="row mx-0 addstaff-member pb-0">
                             <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                               <h4 className="fw-semibold mb-2">{t("Staff")}</h4>
-                              <p>{t("add_on_staff_note")}</p>
+                              <p>{t("Choose which staff members are able to perform this service.")}</p>
                             </div>
                             <div className="col-md-6 pe-md-0 service mt-0 pt-0">
                               <ul className="list-unstyled mb-0 p-0 m-0">
@@ -443,8 +443,8 @@ const ServiceAddForm = () => {
                           <hr className="drawer-category-hr"></hr>
                           <div className="row mx-0 addstaff-member pb-0">
                             <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                              <h4 className="fw-semibold mb-2">{t("add_on_services")}</h4>
-                              <p>{t("add_on_services_note")}</p>
+                              <h4 className="fw-semibold mb-2">{t("Add on Servicess")}</h4>
+                              <p>{t("Add on Servicess_note")}</p>
                             </div>
                             <div className="col-md-6 pe-md-0 service mt-0 pt-0">
                               <ul className="list-unstyled mb-0 p-0 m-0">

@@ -80,14 +80,14 @@ const Staff = () => {
                 {checkaccess({ name: "list", role_id: role_id, controller: "pricetiers", access }) && (
                   <li className="nav-item">
                     <a href="#0" className={"nav-link " + (tabview && tabview == "price_tier" ? " active" : "")} id="pricetiers-tab" data-bs-toggle="tab" data-bs-target="#pricetiers" type="button" role="tab" aria-controls="pricetiers" aria-selected="true" onClick={() => dispatch(staffTabView("price_tier"))}>
-                      {t("Price_Tiers")}
+                      {t("Price Tiers")}
                     </a>
                   </li>
                 )}
                 {role_id === 4 && (
                   <li className="nav-item">
                     <a href="#0" className={"nav-link " + (tabview && tabview == "staff_access" ? " active" : "")} id="staffaccess-tab" data-bs-toggle="tab" data-bs-target="#staffaccess" type="button" role="tab" aria-controls="staffaccess" aria-selected="true" onClick={() => dispatch(staffTabView("staff_access"))}>
-                      {t("Staff_Access")}
+                      {t("Staff Access")}
                     </a>
                   </li>
                 )}
@@ -108,7 +108,7 @@ const Staff = () => {
                             </div>
                             <div className="image-content">
                               <h5>
-                                <i className="fal fa-plus me-2"></i> {t("add_staff")}
+                                <i className="fal fa-plus me-2"></i> {t("Add Staff")}
                               </h5>
                             </div>
                           </a>
@@ -139,7 +139,7 @@ const Staff = () => {
             )}
             {checkaccess({ name: "list", role_id: role_id, controller: "pricetiers", access }) && (
               <div className={"tab-pane" + (tabview && tabview == "price_tier" ? " show active" : "")} id="pricetiers">
-                <h5 className="fw-semibold">{t("price_tier_listing_note")}</h5>
+                <h5 className="fw-semibold">{t("Price_tier_listing_note")}</h5>
                 {tabview && tabview == "price_tier" && <PriceTier />}
               </div>
             )}

@@ -42,7 +42,7 @@ const DocumentUpload = (props) => {
     dispatch(clientdocumentStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(clientdocumentGridViewApi({ client_id: props.client_id }));
-        sweatalert({ title: t("uploaded"), text: t("uploaded_successfully"), icon: "success" });
+        sweatalert({ title: t("uploaded"), text: t("Uploaded successfully"), icon: "success" });
       } else if (action.meta.requestStatus === "rejected") {
         if (action.payload.status === 422) {
           let error = action.payload;

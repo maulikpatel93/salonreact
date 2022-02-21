@@ -84,7 +84,7 @@ const Roster = () => {
           <div className="dropdown staff-dropdown">
             <div className="btn-group w-100">
               <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                {isStaffFilter ? isStaffFilter.name : t("All_Staff")}
+                {isStaffFilter ? isStaffFilter.name : t("All Staff")}
               </button>
               <span
                 className="btn btn-primary"
@@ -149,7 +149,7 @@ const Roster = () => {
         <table className="table table-bordered bg-white mb-0 rosterlistviewtable">
           <thead className="thead-dark">
             <tr>
-              <th>{t("Staff_Member")}</th>
+              <th>{t("Staff Member")}</th>
               {week &&
                 week.map((date, i) => {
                   let classname = getselectedDate && date && getselectedDate === date ? "active text-center" : "text-center";
@@ -265,15 +265,15 @@ const Roster = () => {
               <div className="modal-content ">
                 <div className="modal-body text-center p-md-4 p-3">
                   <img src={config.imagepath + "warning-red.png"} className="mb-lg-3 mb-2" alt="" />
-                  <h5>{t("Are_you_sure")}</h5>
-                  <h6>{t("roster_delete_note")}</h6>
+                  <h5>{t("Are you sure?")}</h5>
+                  <h6>{t("You are about to remove a shift that repeats weekly. Removing this shift will update Amanda’s ongoing working hours.")}</h6>
                 </div>
                 <div className="modal-footer p-md-4 p-3 justify-content-center border-0">
                   <button type="button" className="btn btn-outline-primary" onClick={() => dispatch(closeDeleteModal())}>
                     {t("Cancel")}
                   </button>
                   <button type="button" className="btn btn-primary" data-obj={isDeleteModal} onClick={(e) => handleRosterDelete(e)}>
-                    {t("Remove_This_Shift")}
+                    {t("Yes, Remove This Shift")}
                   </button>
                 </div>
               </div>

@@ -176,14 +176,14 @@ const Services = () => {
               {checkaccess({ name: "list", role_id: role_id, controller: "services", access }) && (
                 <li className="nav-item">
                   <a href="#" className={"nav-link " + (tabview && tabview == "service" ? " active" : "")} id="service-tab" data-bs-toggle="tab" data-bs-target="#service" type="button" role="tab" aria-controls="service" aria-selected="true" onClick={handleServiceTab}>
-                    {t("services")}
+                    {t("Services")}
                   </a>
                 </li>
               )}
               {checkaccess({ name: "list", role_id: role_id, controller: "categories", access }) && (
                 <li className="nav-item">
                   <a href="#" className={"nav-link " + (tabview && tabview == "category" ? " active" : "")} id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" aria-controls="categories" aria-selected="true" onClick={handleCategoryTab}>
-                    {t("categories")}
+                    {t("Categories")}
                   </a>
                 </li>
               )}
@@ -235,14 +235,14 @@ const Services = () => {
               {checkaccess({ name: "create", role_id: role_id, controller: "services", access }) && (
                 <div className={tabview && tabview == "service" ? "active" : ""} style={{ display: tabview && tabview == "service" ? "block" : "none" }}>
                   <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddServiceForm}>
-                    {t("new_service")}
+                    {t("New Service")}
                   </a>
                 </div>
               )}
               {checkaccess({ name: "create", role_id: role_id, controller: "categories", access }) && (
                 <div className={tabview && tabview == "category" ? "active" : ""} style={{ display: tabview && tabview == "category" ? "block" : "none" }}>
                   <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddCategoryForm}>
-                    {t("new_category")}
+                    {t("New Category")}
                   </a>
                 </div>
               )}
@@ -265,7 +265,7 @@ const Services = () => {
                                 <th rowSpan="2" className="service_table_header"></th>
                                 <th rowSpan="2" className="service_table_header">
                                   <a className="service-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                    {t("service_name")}
+                                    {t("Service Name")}
                                     <span className="down-up-arrow">
                                       <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
                                       <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
@@ -274,7 +274,7 @@ const Services = () => {
                                 </th>
                                 <th rowSpan="2" className="service_table_header">
                                   <a className="service-header cursor-pointer" onClick={() => sorting({ duration: sort.duration == "asc" ? "desc" : "asc" })}>
-                                    {t("duration")}
+                                    {t("Duration")}
                                     <span className="down-up-arrow">
                                       <i className={"fal fa-angle-up" + (sort.duration == "asc" ? " text-dark" : "")}></i>
                                       <i className={"fal fa-angle-down" + (sort.duration == "desc" ? " text-dark" : "")}></i>
@@ -282,12 +282,12 @@ const Services = () => {
                                   </a>
                                 </th>
                                 <th colSpan="3" className="p-2 text-center">
-                                  {t("price")}
+                                  {t("Price")}
                                 </th>
                                 <th rowSpan="2" className="service_table_header">
-                                  {t("category")}
+                                  {t("Category")}
                                   {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
-                            {t("category")}
+                            {t("Category")}
                             <span className="down-up-arrow">
                               <i className={"fal fa-angle-up" + (sort && sort.category && sort.category.name == "asc" ? " text-dark" : "")}></i>
                               <i className={"fal fa-angle-down" + (sort && sort.category && sort.category.name == "desc" ? " text-dark" : "")}></i>
@@ -295,19 +295,19 @@ const Services = () => {
                           </a> */}
                                 </th>
                                 <th rowSpan="2" className="service_table_header">
-                                  {t("add_on_service")}
+                                  {t("Add on Services")}
                                 </th>
                                 {(checkaccess({ name: "update", role_id: role_id, controller: "services", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "services", access })) && <th rowSpan="2" className="service_table_header"></th>}
                               </tr>
                               <tr>
                                 <th scope="col" className="p-2">
-                                  {t("general")}
+                                  {t("General")}
                                 </th>
                                 <th scope="col" className="p-2">
-                                  {t("junior")}
+                                  {t("Junior")}
                                 </th>
                                 <th scope="col" className="p-2">
-                                  {t("senior")}
+                                  {t("Senior")}
                                 </th>
                               </tr>
                             </thead>
@@ -332,7 +332,7 @@ const Services = () => {
                           <div className="complete-box-wrp text-center ">
                             <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                             <h4 className="mb-2 fw-semibold">
-                              {t("no_services_have_been_created_yet")}
+                              {t("No services have been created yet.")}
                               <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
                                 {t("Please create one")}
                               </a>

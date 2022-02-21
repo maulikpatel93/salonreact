@@ -42,7 +42,7 @@ const ImageUpload = (props) => {
     dispatch(clientphotoStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
       if (action.meta.requestStatus == "fulfilled") {
         dispatch(clientphotoGridViewApi({ client_id: props.client_id }));
-        sweatalert({ title: t("uploaded"), text: t("uploaded_successfully"), icon: "success" });
+        sweatalert({ title: t("uploaded"), text: t("Uploaded successfully"), icon: "success" });
       }
     });
     setLoading(false);

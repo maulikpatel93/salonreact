@@ -49,7 +49,7 @@ const PriceTier = () => {
               </div>
               <div className="image-content">
                 <h5>
-                  <i className="fal fa-plus me-2"></i> {t("add_price_tier")}
+                  <i className="fal fa-plus me-2"></i> {t("Add Price Tier")}
                 </h5>
               </div>
             </a>

@@ -139,12 +139,12 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={config.basePath + "/account"} data-bs-toggle="tooltip" data-bs-placement="right" title={t("Account_Setup")}>
+            <NavLink to={config.basePath + "/account"} data-bs-toggle="tooltip" data-bs-placement="right" title={t("Account Setup")}>
               <span className="icon">
                 {" "}
                 <img src={config.imagepath + "setting.png"} alt="" />
               </span>
-              <span className="d-lg-none ps-3">{t("Account_Setup")}</span>
+              <span className="d-lg-none ps-3">{t("Account Setup")}</span>
             </NavLink>
           </li> */}
         </ul>

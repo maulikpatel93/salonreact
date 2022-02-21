@@ -31,7 +31,7 @@ const CategoryEditForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(100).label(t("category_name")).required(),
+    name: Yup.string().trim().max(100).label(t("Category_name")).required(),
   });
   yupconfig();
 
@@ -92,7 +92,7 @@ const CategoryEditForm = () => {
                   <div className="modal-body p-md-4 p-3">
                     <h4 className="mb-2">{t("Edit_category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
-                      <InputField type="text" name="name" value={formik.values.name} label={t("category_name")} controlId="categoryForm-name" />
+                      <InputField type="text" name="name" value={formik.values.name} label={t("Category_name")} controlId="categoryForm-name" />
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}

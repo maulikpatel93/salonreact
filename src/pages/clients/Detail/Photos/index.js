@@ -17,10 +17,10 @@ const Photos = () => {
         <div className="complete-box-wrp text-center">
           <img src={config.imagepath + "addphoto-box.png"} alt="" className="mb-md-4 mb-3" />
           <h5 className="mb-2 fw-semibold">
-            {t("add_client_profile_photo_note")}
+            {t("Add a client profile photo and keep a record of their treatments.")}
             <br />
             <a className="add-photo cursor-pointer" onClick={() => dispatch(openPhotoDrawer())}>
-              {t("Add_your_first_photo")}
+              {t("Add your first photo.")}
             </a>
           </h5>
         </div>

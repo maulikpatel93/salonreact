@@ -77,9 +77,9 @@ const PriceTierAddForm = () => {
                     <img src={config.imagepath + "close-icon.svg"} alt="" />
                   </button>
                   <div className="modal-body p-md-4 p-3">
-                    <h4 className="mb-2">{t("add_price_tier")}</h4>
+                    <h4 className="mb-2">{t("Add Price Tier")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
-                      <InputField type="text" name="name" value={formik.values.name} label={t("price_tier_name")} controlId="pricetierForm-name" />
+                      <InputField type="text" name="name" value={formik.values.name} label={t("Price_tier_name")} controlId="pricetierForm-name" />
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}

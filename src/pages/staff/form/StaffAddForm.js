@@ -80,7 +80,7 @@ const StaffAddForm = () => {
     state: Yup.string().trim().label(t("State")),
     postcode: Yup.string().trim().max(12).label(t("Postcode")),
     description: Yup.string().trim().label(t("Description")),
-    price_tier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Price_Tier")).required())),
+    price_tier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Price Tier")).required())),
     add_on_services: Yup.array(),
     working_hours: Yup.array().of(
       Yup.object().shape({
@@ -92,9 +92,9 @@ const StaffAddForm = () => {
             is: "1",
             then: Yup.string()
               .trim()
-              .label(t("start_time"))
+              .label(t("Start Time"))
               .required()
-              .test("start_time_test", (value, field) => {
+              .test("Start Time_test", (value, field) => {
                 const { end_time } = field.parent;
                 if (end_time !== undefined && value !== undefined) {
                   if (end_time > value) {
@@ -113,9 +113,9 @@ const StaffAddForm = () => {
             is: "1",
             then: Yup.string()
               .trim()
-              .label(t("end_time"))
+              .label(t("End Time"))
               .required()
-              .test("end_time_test", (value, field) => {
+              .test("End Time_test", (value, field) => {
                 const { start_time } = field.parent;
                 if (start_time !== undefined && value !== undefined) {
                   if (start_time < value) {
@@ -129,12 +129,12 @@ const StaffAddForm = () => {
           }),
         break_time: Yup.array().of(
           Yup.object().shape({
-            break_title: Yup.string().trim().label(t("break_title")).required(),
+            break_title: Yup.string().trim().label(t("Break Title")).required(),
             break_start_time: Yup.string()
               .trim()
-              .label(t("break_start_time"))
+              .label(t("Break Start Time"))
               .required()
-              .test("break_start_time_test", (value, field) => {
+              .test("Break Start Time_test", (value, field) => {
                 const { break_end_time } = field.parent;
                 if (break_end_time !== undefined && value !== undefined) {
                   if (break_end_time > value) {
@@ -147,9 +147,9 @@ const StaffAddForm = () => {
               }),
             break_end_time: Yup.string()
               .trim()
-              .label(t("break_end_time"))
+              .label(t("Break End Time"))
               .required()
-              .test("break_end_time_test", (value, field) => {
+              .test("Break End Time_test", (value, field) => {
                 const { break_start_time } = field.parent;
                 if (break_start_time !== undefined && value !== undefined) {
                   if (break_start_time < value) {
@@ -225,7 +225,7 @@ const StaffAddForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-4 py-3">
-                    <h1 className="pe-md-5 pe-3 mb-0">{t("New_Staff_Member")}</h1>
+                    <h1 className="pe-md-5 pe-3 mb-0">{t("New Staff Member")}</h1>
                     <a className="close-drawer cursor-pointer" onClick={handleCloseAddStaffForm}>
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
@@ -234,7 +234,7 @@ const StaffAddForm = () => {
                     <div className="row mx-0">
                       <div className="col-xl-4 col-md-6 detail">
                         <h3 className="mb-2">{t("Details")}</h3>
-                        <h6 className="subtitle">{t("Add_your_staff_member’s_details")}</h6>
+                        <h6 className="subtitle">{t("Add your staff member’s details.")}</h6>
                         <div className="row gx-2">
                           <div className="col-md-6">
                             <div className="mb-3">
@@ -245,7 +245,7 @@ const StaffAddForm = () => {
                             </div>
                           </div>
                           <div className="col-md-6 mb-3">
-                            <InputFieldImage name="profile_photo" accept="image/*" label={t("Add_Staff_Photo")} page="staff-form" controlId="staffForm-profile_photo" />
+                            <InputFieldImage name="profile_photo" accept="image/*" label={t("Add Staff Photo")} page="staff-form" controlId="staffForm-profile_photo" />
                           </div>
                         </div>
                         <div className="row gx-2">
@@ -276,7 +276,7 @@ const StaffAddForm = () => {
                         <div className="mb-3">
                           <SwitchField
                             name="calendar_booking"
-                            label={t("Allow_calendar_bookings")}
+                            label={t("Allow calendar bookings")}
                             controlId="clientForm-calendar_booking"
                             value="1"
                             onChange={(e) => {
@@ -294,16 +294,16 @@ const StaffAddForm = () => {
                           />
                         </div>
                         <div className="col-md-12 mb-3">
-                          <SelectField name="price_tier_id" placeholder={t("--Select--")} value={formik.values.price_tier_id} options={PriceTierOptionsData} label={t("Price_Tier")} controlId="staffForm-price_tier" />
+                          <SelectField name="price_tier_id" placeholder={t("--Select--")} value={formik.values.price_tier_id} options={PriceTierOptionsData} label={t("Price Tier")} controlId="staffForm-price_tier" />
                           <span className="info">
                             <img src={config.imagepath + "info.png"} className="me-2" alt="" />
-                            <span className="align-middle">{t("Charge_for_services_based_on_level_of_experience")}</span>
+                            <span className="align-middle">{t("Charge for services based on level of experience")}</span>
                           </span>
                         </div>
                       </div>
                       <div className="col-xl-4 col-md-6 working-hrs">
-                        <h3 className="mb-2">{t("Working_Hours")}</h3>
-                        <h6 className="subtitle">{t("Set_the_availability_for_this_staff_member")}</h6>
+                        <h3 className="mb-2">{t("Working Hours")}</h3>
+                        <h6 className="subtitle">{t("Set the availability for this staff member.")}</h6>
                         <ul className="list-unstyled mb-0 p-0">
                           {HourList &&
                             HourList.map((item, i) => {
@@ -445,7 +445,7 @@ const StaffAddForm = () => {
                       </div>
                       <div className="col-xl-4 col-md-12 service">
                         <h3 className="mb-2">{t("Services")}</h3>
-                        <h6 className="subtitle">{t("addonservice_staff_note")}</h6>
+                        <h6 className="subtitle">{t("Select which services this staff member is able to perform.")}</h6>
                         <ul className="list-unstyled mb-0 p-0 m-0">
                           <li className="pt-3 pb-0 mt-0 all-staff li">
                             <div className="checkbox">
@@ -543,7 +543,7 @@ const StaffAddForm = () => {
                   <div className="drawer-footer text-center">
                     <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
                       {loading && <span className="spinner-border spinner-border-sm"></span>}
-                      {t("Create_Staff_Member")}
+                      {t("Create Staff Member")}
                     </button>
                   </div>
                 </form>

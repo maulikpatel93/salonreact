@@ -33,9 +33,9 @@ const AddTimeForm = (props) => {
     date: Yup.string().trim().required(),
     start_time: Yup.string()
       .trim()
-      .label(t("start_time"))
+      .label(t("Start Time"))
       .required()
-      .test("start_time_test", (value, field) => {
+      .test("Start Time_test", (value, field) => {
         const { end_time } = field.parent;
         if (end_time !== undefined && value !== undefined) {
           if (end_time > value) {
@@ -48,9 +48,9 @@ const AddTimeForm = (props) => {
       }),
     end_time: Yup.string()
       .trim()
-      .label(t("end_time"))
+      .label(t("End Time"))
       .required()
-      .test("end_time_test", (value, field) => {
+      .test("End Time_test", (value, field) => {
         const { start_time } = field.parent;
         if (start_time !== undefined && value !== undefined) {
           if (start_time < value) {
@@ -109,7 +109,7 @@ const AddTimeForm = (props) => {
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className="p-md-4 p-3">
-                <h6 className="fw-semibold text-start mb-3">{t("Set_start_and_end_time")}</h6>
+                <h6 className="fw-semibold text-start mb-3">{t("Set start and end time")}</h6>
                 <Field type="hidden" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " form-control"} name="staff_id" onChange={formik.handleChange} />
                 <Field type="hidden" className={(formik.errors && formik.errors.start_time ? "is-invalid" : "") + " form-control"} name="date" onChange={formik.handleChange} />
                 <div className="d-flex align-items-center">

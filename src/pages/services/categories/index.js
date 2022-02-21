@@ -42,7 +42,7 @@ const Categories = () => {
                 <table className="table categorie-table mb-0">
                   <thead>
                     <tr>
-                      <th>{t("category")}</th>
+                      <th>{t("Category")}</th>
                       <th>{t("count")}</th>
                       {(checkaccess({ name: "update", role_id: role_id, controller: "categories", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "categories", access })) && <th></th>}
                     </tr>
@@ -69,7 +69,7 @@ const Categories = () => {
               <div className="complete-box-wrp text-center ">
                 <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                 <h4 className="mb-2 fw-semibold">
-                  {t("no_categories_have_been_created_yet")}
+                  {t("No categories have been created yet.")}
                   <a className="add-categories ms-1 cursor-pointer" onClick={() => dispatch(openAddCategoryForm())}>
                     {t("Please create one")}
                   </a>
