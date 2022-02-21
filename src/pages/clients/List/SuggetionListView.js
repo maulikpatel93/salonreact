@@ -12,6 +12,8 @@ const SuggetionListView = (props) => {
   const dispatch = useDispatch();
 
   const view = props.view;
+  const page = props.page;
+  const formik = props.formik;
   // const view = useSelector((state) => state.client.isView);
   const objectData = view && view.data ? view.data : view;
 
@@ -19,6 +21,9 @@ const SuggetionListView = (props) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
 
+    if(page && page === "appointmentAddForm"){
+      formik.setFieldValue('client_id', suggetionid);
+    }
     console.log(suggetionid+' '+suggetionname);
     dispatch(clientSearchName(suggetionname));
     dispatch(closeClientSearchList());
@@ -54,8 +59,10 @@ const SuggetionListView = (props) => {
 };
 SuggetionListView.propTypes = {
   view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
+  formik: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
   first_name: PropTypes.string,
   last_name: PropTypes.string,
-  id: PropTypes.string
+  id: PropTypes.string,
+  page: PropTypes.string
 };
 export default SuggetionListView;

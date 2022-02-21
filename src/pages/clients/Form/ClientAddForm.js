@@ -218,7 +218,7 @@ const ClientAddForm = () => {
                     <div className="col-md-7 pe-2">
                       <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("Save_client")}
+                        {t("Save Client")}
                       </button>
                     </div>
                   </div>

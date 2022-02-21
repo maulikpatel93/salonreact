@@ -414,10 +414,14 @@ select.form-control {
 }
 
 input.date {
-    background-image: url(../images/date.svg);
-    background-repeat: no-repeat;
-    background-position: 97% center;
-    padding-right: 30px;
+    background-image: url(../images/date.svg) !important;
+    background-repeat: no-repeat !important;
+    background-position: 97% center !important;
+    padding-right: 30px !important;
+}
+
+.rmdp-container {
+    display: block !important;
 }
 
 input::-webkit-inner-spin-button,

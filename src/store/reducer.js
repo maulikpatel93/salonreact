@@ -20,6 +20,8 @@ import pricetierReducer from "../store/slices/pricetierSlice";
 import rosterReducer from "../store/slices/rosterSlice";
 import salonmoduleReducer from "./slices/salonmoduleSlice";
 import salonaccessReducer from "../store/slices/salonaccessSlice";
+import busytimeReducer from "../store/slices/busytimeSlice";
+import appointmentReducer from "../store/slices/appointmentSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -179,6 +181,28 @@ const reducer = combineReducers({
       whitelist: ["isTabView"],
     },
     salonaccessReducer,
+  ),
+  busytime: persistReducer(
+    {
+      key: "busytime",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    busytimeReducer,
+  ),
+  appointment: persistReducer(
+    {
+      key: "appointment",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    appointmentReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,
