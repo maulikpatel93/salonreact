@@ -51,7 +51,7 @@ const NoteDrawer = () => {
               {t("Notes")}
               {checkaccess({ name: "create", role_id: role_id, controller: "clientnotes", access }) && (
                 <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={() => dispatch(openAddNoteForm())}>
-                  {t("add_note")}
+                  {t("Add Note")}
                 </button>
               )}
             </h2>

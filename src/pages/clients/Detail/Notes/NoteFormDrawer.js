@@ -18,14 +18,14 @@ const NoteFormDrawer = () => {
       <div className={"drawer addnote-drawer " + rightDrawerOpenedAdd + rightDrawerOpenedEdit}>
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
-            <h2 className="mb-4 pe-md-5 pe-3">{t("add_note")}</h2>
+            <h2 className="mb-4 pe-md-5 pe-3">{t("Add Note")}</h2>
             <a className="close cursor-pointer" onClick={() => dispatch(closeAddNoteForm())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
           </div>
           <div className="drawer-body">
-            {rightDrawerOpenedAdd && <NoteCreate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" client_id={clientdetail.id} />}
-            {rightDrawerOpenedEdit && <NoteUpdate name="note" className="btn btn-outline btn-sm ms-2" label={t("add_note")} page="client-addnoteform" controlId="clientForm-note" detail={notedetail} />}
+            {rightDrawerOpenedAdd && <NoteCreate name="note" className="btn btn-outline btn-sm ms-2" label={t("Add Note")} page="client-addnoteform" controlId="clientForm-note" client_id={clientdetail.id} />}
+            {rightDrawerOpenedEdit && <NoteUpdate name="note" className="btn btn-outline btn-sm ms-2" label={t("Add Note")} page="client-addnoteform" controlId="clientForm-note" detail={notedetail} />}
           </div>
         </div>
       </div>
