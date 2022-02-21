@@ -16,7 +16,7 @@ import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
-// import moment from "moment";
+import moment from "moment";
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -60,11 +60,11 @@ const StaffAddForm = () => {
     working_hours: [
       { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
       { dayoff: "1", days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '', days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "", days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -86,22 +86,80 @@ const StaffAddForm = () => {
       Yup.object().shape({
         days: Yup.string().trim().label(t("days")).required(),
         start_time: Yup.string()
+          .trim()
           .nullable()
           .when("dayoff", {
-            is: '1',
-            then: Yup.string().trim().label(t("start_time")).required(),
+            is: "1",
+            then: Yup.string()
+              .trim()
+              .label(t("start_time"))
+              .required()
+              .test("start_time_test", (value, field) => {
+                const { end_time } = field.parent;
+                if (end_time !== undefined && value !== undefined) {
+                  if (end_time > value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
           }),
         end_time: Yup.string()
+          .trim()
           .nullable()
           .when("dayoff", {
-            is: '1',
-            then: Yup.string().trim().label(t("end_time")).required(),
+            is: "1",
+            then: Yup.string()
+              .trim()
+              .label(t("end_time"))
+              .required()
+              .test("end_time_test", (value, field) => {
+                const { start_time } = field.parent;
+                if (start_time !== undefined && value !== undefined) {
+                  if (start_time < value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
           }),
         break_time: Yup.array().of(
           Yup.object().shape({
             break_title: Yup.string().trim().label(t("break_title")).required(),
-            break_start_time: Yup.string().trim().label(t("break_start_time")).required(),
-            break_end_time: Yup.string().trim().label(t("break_end_time")).required(),
+            break_start_time: Yup.string()
+              .trim()
+              .label(t("break_start_time"))
+              .required()
+              .test("break_start_time_test", (value, field) => {
+                const { break_end_time } = field.parent;
+                if (break_end_time !== undefined && value !== undefined) {
+                  if (break_end_time > value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
+            break_end_time: Yup.string()
+              .trim()
+              .label(t("break_end_time"))
+              .required()
+              .test("break_end_time_test", (value, field) => {
+                const { break_start_time } = field.parent;
+                if (break_start_time !== undefined && value !== undefined) {
+                  if (break_start_time < value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
           }),
         ),
       }),
@@ -109,6 +167,7 @@ const StaffAddForm = () => {
   });
   yupconfig();
 
+  console.log(moment("01:00:00", "HH:mm:ss").isAfter("02:00:00"));
   const handleStaffSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
@@ -252,6 +311,7 @@ const StaffAddForm = () => {
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
                               let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff;
                               // console.log(formik.values.working_hours[i].start_time);
+                              console.log(errors_hour);
                               return (
                                 <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
@@ -268,7 +328,7 @@ const StaffAddForm = () => {
                                       onChange={(e) => {
                                         if (e.currentTarget.checked) {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, '1', false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "1", false);
                                           }, 100);
                                         } else {
                                           setTimeout(() => {
@@ -288,6 +348,7 @@ const StaffAddForm = () => {
                                     {t("to")}
                                   </span>
                                   <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control input me-xxl-4 me-2 "} id={`staffForm-end_time-${i}`} style={{ display: dayoff ? "block" : "none" }} />
+
                                   {/* <DatePicker
                                     name={`working_hours[${i}][start_time]`}
                                     id={`staffForm-start_time-${i}`}

@@ -36,8 +36,36 @@ const EditTimeForm = (props) => {
   const validationSchema = Yup.object().shape({
     staff_id: Yup.string().trim().required(),
     date: Yup.string().trim().required(),
-    start_time: Yup.string().trim().label(t("start_time")).required(),
-    end_time: Yup.string().trim().label(t("end_time")).required(),
+    start_time: Yup.string()
+      .trim()
+      .label(t("start_time"))
+      .required()
+      .test("start_time_test", (value, field) => {
+        const { end_time } = field.parent;
+        if (end_time !== undefined && value !== undefined) {
+          if (end_time > value) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return false;
+      }),
+    end_time: Yup.string()
+      .trim()
+      .label(t("end_time"))
+      .required()
+      .test("end_time_test", (value, field) => {
+        const { start_time } = field.parent;
+        if (start_time !== undefined && value !== undefined) {
+          if (start_time < value) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return false;
+      }),
   });
   yupconfig();
   const handleRosterSubmit = (values, { setErrors, setStatus, setSubmitting }) => {

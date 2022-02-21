@@ -57,11 +57,11 @@ const StaffEditForm = () => {
     working_hours: [
       { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
       { dayoff: "", days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: '1', days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: "1", days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -83,20 +83,80 @@ const StaffEditForm = () => {
       Yup.object().shape({
         days: Yup.string().trim().label(t("days")).required(),
         start_time: Yup.string()
+          .trim()
           .nullable()
           .when("dayoff", {
-            is: '1',
-            then: Yup.string().trim().label(t("start_time")).required(),
+            is: "1",
+            then: Yup.string()
+              .trim()
+              .label(t("start_time"))
+              .required()
+              .test("start_time_test", (value, field) => {
+                const { end_time } = field.parent;
+                if (end_time !== undefined && value !== undefined) {
+                  if (end_time > value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
           }),
-        end_time: Yup.string().when("dayoff", {
-          is: '1',
-          then: Yup.string().trim().label(t("end_time")).required(),
-        }),
+        end_time: Yup.string()
+          .trim()
+          .nullable()
+          .when("dayoff", {
+            is: "1",
+            then: Yup.string()
+              .trim()
+              .label(t("end_time"))
+              .required()
+              .test("end_time_test", (value, field) => {
+                const { start_time } = field.parent;
+                if (start_time !== undefined && value !== undefined) {
+                  if (start_time < value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
+          }),
         break_time: Yup.array().of(
           Yup.object().shape({
             break_title: Yup.string().trim().label(t("break_title")).required(),
-            break_start_time: Yup.string().trim().label(t("break_start_time")).required(),
-            break_end_time: Yup.string().trim().label(t("break_end_time")).required(),
+            break_start_time: Yup.string()
+              .trim()
+              .label(t("break_start_time"))
+              .required()
+              .test("break_start_time_test", (value, field) => {
+                const { break_end_time } = field.parent;
+                if (break_end_time !== undefined && value !== undefined) {
+                  if (break_end_time > value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
+            break_end_time: Yup.string()
+              .trim()
+              .label(t("break_end_time"))
+              .required()
+              .test("break_end_time_test", (value, field) => {
+                const { break_start_time } = field.parent;
+                if (break_start_time !== undefined && value !== undefined) {
+                  if (break_start_time < value) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                return false;
+              }),
           }),
         ),
       }),
@@ -301,7 +361,7 @@ const StaffEditForm = () => {
                                       onChange={(e) => {
                                         if (e.currentTarget.checked) {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, '1', false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "1", false);
                                           }, 100);
                                         } else {
                                           setTimeout(() => {
