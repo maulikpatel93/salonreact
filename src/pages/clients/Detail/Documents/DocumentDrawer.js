@@ -33,7 +33,7 @@ const DocumentDrawer = () => {
 
   const handleClientDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete"), message: t("success"), confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete"), message: t("Success"), confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(clientdocumentDeleteApi({ id: event.id }));
     }
@@ -45,7 +45,7 @@ const DocumentDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
-              {t("documents")} {checkaccess({ name: "create", role_id: role_id, controller: "clientdocuments", access }) && <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />}
+              {t("Documents")} {checkaccess({ name: "create", role_id: role_id, controller: "clientdocuments", access }) && <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />}
             </h2>
             <a className="close" onClick={() => dispatch(closeDocumentDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -83,7 +83,7 @@ const DocumentDrawer = () => {
                           </div>
                           {checkaccess({ name: "delete", role_id: role_id, controller: "clientdocuments", access }) && (
                             <a className="remove cursor-pointer" data-obj={JSON.stringify(documentObjectData[item])} onClick={handleClientDelete}>
-                              {t("remove")}
+                              {t("Remove")}
                             </a>
                           )}
                         </div>

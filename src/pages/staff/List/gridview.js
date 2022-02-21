@@ -27,7 +27,7 @@ const StaffGridView = (props) => {
   const handleStaffDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_staff"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_staff"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(staffDeleteApi({ id: props.id }));
     }
@@ -71,7 +71,7 @@ const StaffGridView = (props) => {
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleStaffEditForm(e, { tab: "staffdetail" })}>
                             <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                            {t("edit")}
+                            {t("Edit")}
                           </a>
                         </li>
                       )}
@@ -79,7 +79,7 @@ const StaffGridView = (props) => {
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleStaffDelete}>
                             <i className="far fa-trash me-3"></i>
-                            {t("delete")}
+                            {t("Delete")}
                           </a>
                         </li>
                       )}

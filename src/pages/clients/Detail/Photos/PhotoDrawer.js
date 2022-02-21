@@ -31,7 +31,7 @@ const PhotoDrawer = () => {
 
   const handleClientDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete"), message: t("success"), confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete"), message: t("Success"), confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(clientphotoDeleteApi({ id: event.id }));
     }
@@ -43,7 +43,7 @@ const PhotoDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
-              {t("photos")} {checkaccess({ name: "create", role_id: role_id, controller: "clientphotos", access }) && <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />}
+              {t("Photos")} {checkaccess({ name: "create", role_id: role_id, controller: "clientphotos", access }) && <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("add_photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />}
             </h2>
             <a className="close" onClick={() => dispatch(closePhotoDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -77,7 +77,7 @@ const PhotoDrawer = () => {
                           )}
                           {checkaccess({ name: "delete", role_id: role_id, controller: "clientphotos", access }) && (
                             <a className="remove mt-md-0 mt-2 cursor-pointer" data-obj={JSON.stringify(photoObjectData[item])} onClick={handleClientDelete}>
-                              {t("remove")}
+                              {t("Remove")}
                             </a>
                           )}
                         </div>

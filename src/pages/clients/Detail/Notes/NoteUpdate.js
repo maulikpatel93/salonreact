@@ -35,7 +35,7 @@ const NoteUpdate = (props) => {
         resetForm();
         dispatch(clientnoteGridViewApi({ client_id: detail.client_id }));
         dispatch(closeAddNoteForm());
-        sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
+        sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
       } else if (action.meta.requestStatus === "rejected") {
         const status = action.payload && action.payload.status;
         const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -61,7 +61,7 @@ const NoteUpdate = (props) => {
           return (
             <>
               <form noValidate onSubmit={formik.handleSubmit} className="photoform">
-                <TextareaField type="text" name="note" placeholder={t('client_note_placeholder')} value={formik.values.note} label={t("client_notes")} controlId="clientForm-note" />
+                <TextareaField type="text" name="note" placeholder={t('client_note_placeholder')} value={formik.values.note} label={t("Client Notes")} controlId="clientForm-note" />
                 <button type="submit" className="btn btn-primary w-100 btn-md mt-3" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
                   {t("Update")}

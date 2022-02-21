@@ -25,7 +25,7 @@ const ServiceListView = (props) => {
   const handleServiceDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_service"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_service"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(serviceDeleteApi({ id: props.id }));
     }
@@ -94,7 +94,7 @@ const ServiceListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleServiceEditForm(e, { tab: "servicedetail" })}>
                               <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                              {t("edit")}
+                              {t("Edit")}
                             </a>
                           </li>
                         )}
@@ -102,7 +102,7 @@ const ServiceListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleServiceDelete}>
                               <i className="far fa-trash me-3"></i>
-                              {t("delete")}
+                              {t("Delete")}
                             </a>
                           </li>
                         )}

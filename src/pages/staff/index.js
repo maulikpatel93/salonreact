@@ -121,7 +121,7 @@ const Staff = () => {
                             </div>
                             <div className="image-content">
                               <button onClick={loadMoreItems} className="btn btn-primary">
-                                {t("more")}
+                                {t("More")}
                               </button>
                             </div>
                           </div>

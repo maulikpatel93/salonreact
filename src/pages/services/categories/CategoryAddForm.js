@@ -45,7 +45,7 @@ const CategoryAddForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeAddCategoryForm());
-          sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -86,7 +86,7 @@ const CategoryAddForm = () => {
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}
-                          {t("save")}
+                          {t("Save")}
                         </button>
                       </div>
                     </form>

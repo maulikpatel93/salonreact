@@ -1,5 +1,6 @@
 import React from "react";
 import { SalonModule } from "pages";
+import config from "../../config";
 
 const Calendar = () => {
   SalonModule();
@@ -20,7 +21,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex align-items-center">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Whitney Blessing</span>
@@ -30,7 +31,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex align-items-center">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>
@@ -40,7 +41,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex align-items-center">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>
@@ -77,7 +78,7 @@ const Calendar = () => {
                 </div>
                 <div className="col-auto pt-lg-4 pt-md-3 pt-2 text-end ms-auto">
                   <a href="#" className="btn btn-secondary me-1 print-img" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Print Calendar">
-                    <img src="assets/images/print.png" alt="" />
+                    <img src={config.imagepath+"print.png"} alt="" />
                   </a>
                   <div className="dropdown d-inline-block create-dropdown">
                     <button className="dropdown-toggle dropdown-toggle-icon-none btn btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -202,7 +203,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>
@@ -213,7 +214,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>
@@ -224,7 +225,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>
@@ -352,7 +353,7 @@ const Calendar = () => {
                         <li>
                           <a href="#" className="d-flex">
                             <div className="user-img me-2">
-                              <img src="assets/images/Avatar.png" alt="" />
+                              <img src={config.imagepath+"Avatar.png"} alt="" />
                             </div>
                             <div className="user-id">
                               <span className="user-name">Jo Smith</span>

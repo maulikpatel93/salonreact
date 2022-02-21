@@ -23,7 +23,7 @@ const ClientListView = (props) => {
   const handleClientDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_client"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_client"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(clientDeleteApi({ id: props.id }));
     }
@@ -88,7 +88,7 @@ const ClientListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: "clientdetail" })}>
                               <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                              {t("edit")}
+                              {t("Edit")}
                             </a>
                           </li>
                         )}
@@ -96,7 +96,7 @@ const ClientListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleClientDelete}>
                               <i className="far fa-trash me-3"></i>
-                              {t("delete")}
+                              {t("Delete")}
                             </a>
                           </li>
                         )}

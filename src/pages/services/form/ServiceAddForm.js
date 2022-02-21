@@ -65,7 +65,7 @@ const ServiceAddForm = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().max(100).label(t("service_name")).trim().required(),
     category_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("category")).required())),
-    description: Yup.string().trim().label(t("description")).required(),
+    description: Yup.string().trim().label(t("Description")).required(),
     duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("duration")).required())),
     padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("padding_time")).required())),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
@@ -105,7 +105,7 @@ const ServiceAddForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeAddServiceForm());
-          sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -186,11 +186,11 @@ const ServiceAddForm = () => {
                     <h3 className="mb-0 fw-semibold">{t("new_service")}</h3>
                     <div className="ms-auto">
                       <button type="button" className="close btn me-1 cursor-pointer" onClick={handleCloseAddServiceForm}>
-                        {t("cancel")}
+                        {t("Cancel")}
                       </button>
                       <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("save")}
+                        {t("Save")}
                       </button>
                     </div>
                   </div>
@@ -198,7 +198,7 @@ const ServiceAddForm = () => {
                     <div className="col-xxl-6 col-xl-10 col-md-12 mx-auto add-form px-md-4 px-1 py-lg-5 py-3">
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("description")}</h4>
+                          <h4 className="fw-semibold mb-2">{t("Description")}</h4>
                           <p>{t("add_the_name_and_description_of_this_service")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
@@ -209,7 +209,7 @@ const ServiceAddForm = () => {
                             <ReactSelectField name="category_id" placeholder={t("select_category")} value={formik.values.category_id} options={categoryOptionsData} label={t("category")} controlId="serviceForm-category_id" isMulti={false} />
                           </div>
                           <div className="mb-3">
-                            <TextareaField name="description" placeholder={t("Add_a_short_description")} value={formik.values.description} label={t("description")} controlId="serviceForm-description" />
+                            <TextareaField name="description" placeholder={t("Add_a_short_description")} value={formik.values.description} label={t("Description")} controlId="serviceForm-description" />
                           </div>
                         </div>
                       </div>
@@ -253,10 +253,10 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-auto">
-                              <ReactSelectField name="duration" placeholder={t("search_option")} value={formik.values.duration} options={durationOptionsData} label={t("duration")} controlId="serviceForm-duration" isMulti={false} />
+                              <ReactSelectField name="duration" placeholder={t("Search_option")} value={formik.values.duration} options={durationOptionsData} label={t("duration")} controlId="serviceForm-duration" isMulti={false} />
                             </div>
                             <div className="col-auto">
-                              <ReactSelectField name="padding_time" placeholder={t("search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("padding_time")} controlId="serviceForm-padding_time" isMulti={false} />
+                              <ReactSelectField name="padding_time" placeholder={t("Search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("padding_time")} controlId="serviceForm-padding_time" isMulti={false} />
                             </div>
                           </div>
                           <p>{t("padding_time_note")}</p>
@@ -271,7 +271,7 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -367,7 +367,7 @@ const ServiceAddForm = () => {
                                         }
                                       }}
                                     />
-                                    <label>{t("all_staff")}</label>
+                                    <label>{t("All Staff")}</label>
                                   </div>
                                   <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                     {isAddonStaff &&
@@ -428,7 +428,7 @@ const ServiceAddForm = () => {
                                           </li>
                                         );
                                       })}
-                                    {isAddonStaff.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                                    {isAddonStaff.length <= 0 ? <li>{t("No data found")}</li> : ""}
                                   </ul>
                                 </li>
                               </ul>
@@ -473,7 +473,7 @@ const ServiceAddForm = () => {
                                         }
                                       }}
                                     />
-                                    <label>{t("all_services")}</label>
+                                    <label>{t("All_services")}</label>
                                   </div>
                                   <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                     {isAddonServices &&
@@ -534,7 +534,7 @@ const ServiceAddForm = () => {
                                           </li>
                                         );
                                       })}
-                                    {isAddonServices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                                    {isAddonServices.length <= 0 ? <li>{t("No data found")}</li> : ""}
                                   </ul>
                                 </li>
                               </ul>

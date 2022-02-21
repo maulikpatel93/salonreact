@@ -40,7 +40,7 @@ const Suppliers = () => {
               </div>
               <div className="image-content">
                 <h5>
-                  <i className="fal fa-plus me-2"></i> {t("add_new")}
+                  <i className="fal fa-plus me-2"></i> {t("Add New")}
                 </h5>
               </div>
             </a>
@@ -52,7 +52,7 @@ const Suppliers = () => {
                 </div>
                 <div className="image-content">
                   <button onClick={loadMoreItems} className="btn btn-primary">
-                    {t("more")}
+                    {t("More")}
                   </button>
                 </div>
               </div>
@@ -64,9 +64,9 @@ const Suppliers = () => {
           <div className="complete-box-wrp text-center ">
             <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
             <h4 className="mb-2 fw-semibold">
-              {t("no_suppliers_have_been_created_yet")}
+              {t("No suppliers have been created yet.")}
               <a className="add-suppliers ms-1 cursor-pointer" onClick={() => dispatch(openAddSupplierForm())}>
-                {t("please_create_one")}
+                {t("Please create one")}
               </a>
               .
             </h4>

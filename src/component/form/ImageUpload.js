@@ -25,7 +25,7 @@ const ImageUpload = (props) => {
   };
 
   const validationSchema = Yup.object().shape({
-    //     first_name: Yup.string().trim().max(50).label(t("first_name")).required(),
+    //     first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
   });
   yupconfig();
 

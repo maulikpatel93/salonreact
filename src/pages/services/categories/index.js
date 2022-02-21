@@ -55,7 +55,7 @@ const Categories = () => {
               {!isFetching && ListView.next_page_url && (
                 <div className="col-2 m-auto text-center">
                   <button onClick={loadMoreItems} className="btn btn-primary m-4">
-                    {t("more")}
+                    {t("More")}
                   </button>
                 </div>
               )}
@@ -71,7 +71,7 @@ const Categories = () => {
                 <h4 className="mb-2 fw-semibold">
                   {t("no_categories_have_been_created_yet")}
                   <a className="add-categories ms-1 cursor-pointer" onClick={() => dispatch(openAddCategoryForm())}>
-                    {t("please_create_one")}
+                    {t("Please create one")}
                   </a>
                   .
                 </h4>

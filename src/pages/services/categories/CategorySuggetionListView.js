@@ -40,7 +40,7 @@ const CategorySuggetionListView = (props) => {
           );
         })}
 
-      {objectData.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+      {objectData.length <= 0 ? <li>{t("No data found")}</li> : ""}
     </>
   );
 };

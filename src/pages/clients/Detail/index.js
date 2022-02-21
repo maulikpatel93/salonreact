@@ -56,47 +56,47 @@ const ClientDetailModal = () => {
               <div className="row gx-2 action-box mb-3 align-items-end">
                 <a href="#" className="col text-center text-decoration-none">
                   <img src={config.imagepath + "appoinment.png"} alt="" />
-                  <span className="d-block">{t("appointment")}</span>
+                  <span className="d-block">{t("Appointment")}</span>
                 </a>
                 <a href="#" className="col text-center text-decoration-none">
                   <img src={config.imagepath + "sale-light.png"} alt="" />
-                  <span className="d-block">{t("sale")}</span>
+                  <span className="d-block">{t("Sale")}</span>
                 </a>
                 <a href="#" className="col text-center text-decoration-none">
                   <img src={config.imagepath + "email.png"} alt="" />
-                  <span className="d-block">{t("email")}</span>
+                  <span className="d-block">{t("Email Address")}</span>
                 </a>
                 <a href="#" className="col text-center text-decoration-none">
                   <img src={config.imagepath + "sms.png"} alt="" />
-                  <span className="d-block">{t("sms")}</span>
+                  <span className="d-block">{t("SMS")}</span>
                 </a>
               </div>
               <ul className="nav flex-md-column nav-pills mb-0 list-unstyled" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
                   <button className={"nav-link" + (detailTab && detailTab == "appointment" ? " active" : "")} id="appoinment" data-bs-toggle="tab" data-bs-target="#appoinment-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("appoinment"))}>
-                    {t("appointments")}
+                    {t("Appointments")}
                   </button>
                 </li>
                 {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
                   <li className="nav-item" role="presentation">
                     <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("clientdetail"))}>
-                      {t("client_details")}
+                      {t("Client Details")}
                     </button>
                   </li>
                 )}
                 <li className="nav-item" role="presentation">
                   <button className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")} id="vouchers" data-bs-toggle="tab" data-bs-target="#vouchers-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("vouchers"))}>
-                    {t("vouchers")}
+                    {t("Vouchers")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
                   <button className={"nav-link" + (detailTab && detailTab == "subscriptions" ? " active" : "")} id="subscriptions" data-bs-toggle="tab" data-bs-target="#subscriptions-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("subscriptions"))}>
-                    {t("subscriptions")}
+                    {t("Subscriptions")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
                   <button className={"nav-link" + (detailTab && detailTab == "memberships" ? " active" : "")} id="memberships" data-bs-toggle="tab" data-bs-target="#memberships-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("memberships"))}>
-                    {t("memberships")}
+                    {t("Memberships")}
                   </button>
                 </li>
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
@@ -113,7 +113,7 @@ const ClientDetailModal = () => {
                         dispatch(clientphotoGridViewApi({ client_id: detail.id }));
                       }}
                     >
-                      {t("photos")}
+                      {t("Photos")}
                     </button>
                   </li>
                 )}
@@ -129,7 +129,7 @@ const ClientDetailModal = () => {
                       dispatch(clientDetailTab("invoices"));
                     }}
                   >
-                    {t("invoices")}
+                    {t("Invoices")}
                   </button>
                 </li>
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientdocuments", access }) && (
@@ -146,7 +146,7 @@ const ClientDetailModal = () => {
                         dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
                       }}
                     >
-                      {t("documents")}
+                      {t("Documents")}
                     </button>
                   </li>
                 )}
@@ -164,7 +164,7 @@ const ClientDetailModal = () => {
                         dispatch(clientnoteGridViewApi({ client_id: detail.id }));
                       }}
                     >
-                      {t("notes")}
+                      {t("Notes")}
                     </button>
                   </li>
                 )}
@@ -175,7 +175,7 @@ const ClientDetailModal = () => {
                 <div className={"tab-pane fade" + (detailTab && detailTab == "appointment" ? " show active" : "")} id="appoinment-tab" role="tabpanel" aria-labelledby="appoinment-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5">
-                      {t("appointments")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
+                      {t("Appointments")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
                     </h2>
                   </div>
                   <div className="content-wrp">
@@ -186,7 +186,7 @@ const ClientDetailModal = () => {
                   <div className={"tab-pane fade" + (detailTab && detailTab == "clientdetail" ? " show active" : "")} id="client-detail-tab" role="tabpanel" aria-labelledby="client-detail-tab">
                     <div className="drawer-header">
                       <h2 className="mb-4 pe-md-5">
-                        {t("edit_client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
+                        {t("Edit_client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
                       </h2>
                     </div>
                     <div className="content-wrp">
@@ -197,9 +197,9 @@ const ClientDetailModal = () => {
                 <div className={"tab-pane fade" + (detailTab && detailTab == "vouchers" ? " show active" : "")} id="vouchers-tab" role="tabpanel" aria-labelledby="vouchers-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 mb-lg-5">
-                      {t("vouchers")}
+                      {t("Vouchers")}
                       <a href="#" className="btn sell-gift-voucher ms-2">
-                        {t("sell_gift_voucher")}
+                        {t("Sell Gift Voucher")}
                       </a>
                     </h2>
                   </div>
@@ -209,7 +209,7 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "subscriptions" ? " show active" : "")} id="subscriptions-tab" role="tabpanel" aria-labelledby="subscriptions-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("subscriptions")}</h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Subscriptions")}</h2>
                   </div>
                   <div className="content-wrp">
                     <Subscription />
@@ -217,7 +217,7 @@ const ClientDetailModal = () => {
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "memberships" ? " show active" : "")} id="memberships-tab" role="tabpanel" aria-labelledby="memberships-tab">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("memberships")}</h2>
+                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Memberships")}</h2>
                   </div>
                   <div className="content-wrp">
                     <Membership />
@@ -226,7 +226,7 @@ const ClientDetailModal = () => {
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
                     <div className="drawer-header">
-                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("photos")}</h2>
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Photos")}</h2>
                     </div>
                     <div className="content-wrp">{detailTab && detailTab == "photos" && <Photos role_id={role_id} access={access} />}</div>
                   </div>
@@ -234,9 +234,9 @@ const ClientDetailModal = () => {
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 mb-lg-5">
-                      {t("invoices")}
+                      {t("Invoices")}
                       <a href="#" className="btn btn-outline btn-sm ms-2">
-                        {t("print_statement")}
+                        {t("Print Statement")}
                       </a>
                     </h2>
                   </div>
@@ -247,7 +247,7 @@ const ClientDetailModal = () => {
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientdocuments", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">
                     <div className="drawer-header">
-                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("documents")}</h2>
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Documents")}</h2>
                     </div>
                     <div className="content-wrp">{detailTab && detailTab == "documents" && <Documents role_id={role_id} access={access} />}</div>
                   </div>
@@ -255,7 +255,7 @@ const ClientDetailModal = () => {
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientnotes", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">
                     <div className="drawer-header">
-                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("notes")}</h2>
+                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Notes")}</h2>
                     </div>
                     <div className="content-wrp">{detailTab && detailTab == "notes" && <Notes role_id={role_id} access={access} />}</div>
                   </div>

@@ -58,10 +58,10 @@ const RestLogin = () => {
       {(formik) => (
         <form noValidate onSubmit={formik.handleSubmit}>
           <div className="d-flex flex-row align-items-center justify-content-center mb-5">
-            <h1 className="fw-normal mb-0 me-3">{t("sign_in")}</h1>
+            <h1 className="fw-normal mb-0 me-3">{t("Sign In")}</h1>
           </div>
-          <FloatLabelInputField name="email" type="text" placeholder="" label={t("email")} controlId="login-email" />
-          <FloatLabelInputField name="password" type="password" placeholder="" autoComplete="off" label={t("password")} controlId="login-password" />
+          <FloatLabelInputField name="email" type="text" placeholder="" label={t("Email Address")} controlId="login-email" />
+          <FloatLabelInputField name="password" type="password" placeholder="" autoComplete="off" label={t("Password")} controlId="login-password" />
           
           {message && (
               <div className="alert alert-danger alert-dismissible fade show" role="alert">
@@ -73,17 +73,17 @@ const RestLogin = () => {
             <div className="form-check mb-0">
               <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
               <label className="form-check-label" htmlFor="form2Example3">
-                {t("remember_me")}
+                {t("Remember me")}
               </label>
             </div>
             <Link to="#!" className="text-body">
-              {t("forgot_password?")}
+              {t("Forgot password??")}
             </Link>
           </div>
           <div className="text-center text-lg-start mt-4 pt-2">
             <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
               {loading && <span className="spinner-border spinner-border-sm"></span>}
-              {t("login")}
+              {t("Login")}
             </button>
           </div>
         </form>

@@ -48,22 +48,22 @@ const ProductAddForm = () => {
 
   const validationSchema = Yup.object().shape({
     image: Yup.mixed().nullable(),
-    name: Yup.string().max(100).label(t("product_name")).trim().required(),
-    sku: Yup.string().trim().label(t("sku")).required(),
-    description: Yup.string().trim().label(t("description")).required(),
-    cost_price: Yup.string().trim().label(t("cost_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
-    retail_price: Yup.string().trim().label(t("retail_price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+    name: Yup.string().max(100).label(t("Product Name")).trim().required(),
+    sku: Yup.string().trim().label(t("SKU")).required(),
+    description: Yup.string().trim().label(t("Description")).required(),
+    cost_price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
+    retail_price: Yup.string().trim().label(t("Retail Price")).required().test("Decimal only", t("The_field_should_have_decimal_only"), decimalOnly),
     manage_stock: Yup.mixed().nullable(),
     stock_quantity: Yup.string().when("manage_stock", {
       is: 1,
-      then: Yup.string().trim().label(t("stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
+      then: Yup.string().trim().label(t("Stock_quantity")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
     }),
     low_stock_threshold: Yup.string().when("manage_stock", {
       is: 1,
       then: Yup.string().trim().label(t("low_stock_threshold")).required().test("Digits only", t("The_field_should_have_digits_only"), digitOnly).nullable(),
     }),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("tax")).required())),
-    supplier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("supplier")).required())),
+    supplier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Supplier")).required())),
   });
   yupconfig();
 
@@ -76,7 +76,7 @@ const ProductAddForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeAddProductForm());
-          sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -111,14 +111,14 @@ const ProductAddForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t("new_product")}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("New Product")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseAddProductForm}>
-                        {t("cancel")}
+                        {t("Cancel")}
                       </a>
                       <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("save")}
+                        {t("Save")}
                       </button>
                     </div>
                   </div>
@@ -126,22 +126,22 @@ const ProductAddForm = () => {
                     <div className="col-xxl-6 col-xl-10 col-md-12 mx-auto add-form px-md-4 px-1 py-lg-5 py-3">
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                          <h4 className="fw-semibold mb-2">{t("description")}</h4>
+                          <h4 className="fw-semibold mb-2">{t("Description")}</h4>
                           <p>{t("add_the_name_and_general_details_of_this_product")}</p>
                           <InputFieldImage name="image" accept="image/*" label={t("add_product_image")} page="product-form" controlId="productForm-logo" imagname="" imageurl="" />
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="mb-3">
-                            <InputField type="text" name="name" value={formik.values.name} label={t("product_name")} controlId="productForm-name" />
+                            <InputField type="text" name="name" value={formik.values.name} label={t("Product Name")} controlId="productForm-name" />
                           </div>
                           <div className="mb-3">
-                            <InputField type="text" name="sku" value={formik.values.sku} label={t("sku")} controlId="productForm-sku" />
+                            <InputField type="text" name="sku" value={formik.values.sku} label={t("SKU")} controlId="productForm-sku" />
                           </div>
                           <div className="mb-3">
-                            <ReactSelectField name="supplier_id" placeholder={t("search_option")} value={formik.values.supplier_id} options={supplierOptionsData} label={t("supplier")} controlId="productForm-supplier_id" isMulti={false} />
+                            <ReactSelectField name="supplier_id" placeholder={t("Search_option")} value={formik.values.supplier_id} options={supplierOptionsData} label={t("Supplier")} controlId="productForm-supplier_id" isMulti={false} />
                           </div>
                           <div className="mb-3">
-                            <TextareaField name="description" value={formik.values.description} label={t("description")} controlId="productForm-description" />
+                            <TextareaField name="description" value={formik.values.description} label={t("Description")} controlId="productForm-description" />
                           </div>
                         </div>
                       </div>
@@ -154,13 +154,13 @@ const ProductAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="cost_price" placeholder="$" value={formik.values.cost_price} label={t("cost_price")} controlId="productForm-cost_price" />
+                              <InputField type="text" name="cost_price" placeholder="$" value={formik.values.cost_price} label={t("Cost Price")} controlId="productForm-cost_price" />
                             </div>
                             <div className="mb-2 col-md-4 col-6 mb-3">
-                              <InputField type="text" name="retail_price" placeholder="$" value={formik.values.retail_price} label={t("retail_price")} controlId="productForm-retail_price" />
+                              <InputField type="text" name="retail_price" placeholder="$" value={formik.values.retail_price} label={t("Retail Price")} controlId="productForm-retail_price" />
                             </div>
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+'('+t("included_in_price")+')'} controlId="productForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("tax")+'('+t("included_in_price")+')'} controlId="productForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -192,7 +192,7 @@ const ProductAddForm = () => {
                           />
                           <div className="row" style={{ display: formik.values.manage_stock == "" || formik.values.manage_stock == 0 ? "none" : "" }}>
                             <div className="mb-3 col-md-6">
-                              <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity} label={t("stock_quantity")} controlId="productForm-stock_quantity" />
+                              <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity} label={t("Stock_quantity")} controlId="productForm-stock_quantity" />
                             </div>
                             <div className="mb-3 col-md-6">
                               <InputField type="text" name="low_stock_threshold" value={formik.values.low_stock_threshold} label={t("low_stock_threshold")} controlId="productForm-low_stock_threshold" />

@@ -149,7 +149,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
               {label}
             </button>
             <button type="button" className={image && image.selected ? "btn btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
-              {t("remove")}
+              {t("Remove")}
             </button>
             <Form.Control.Feedback type="invalid" className={image && image.selected ? "d-none" : "d-block"}>
               {meta.error}
@@ -167,7 +167,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
               <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} className={image && image.selected ? "input-photo d-none" : "input-photo"} />
               <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
               <span className={"cursor-pointer " + (image && image.selected ? "d-block" : "d-none")} onClick={removeSelectedImage}>
-                {t("remove")}
+                {t("Remove")}
               </span>
               <span className={"cursor-pointer " + (image && image.selected ? "d-none" : "d-block")}>{label}</span>
             </div>
@@ -189,7 +189,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
               <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={!!meta.error} className={image && image.selected ? "input-photo d-none" : "input-photo"} />
               <img src={image && image.selected ? image.url : config.imagepath + "addphoto.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
               <span className={"cursor-pointer " + (image && image.selected ? "d-block" : "d-none")} onClick={removeSelectedImage}>
-                {t("remove")}
+                {t("Remove")}
               </span>
               <span className={"cursor-pointer " + (image && image.selected ? "d-none" : "d-block")}>{label}</span>
             </div>
@@ -208,7 +208,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
         //     {label}
         //   </button>
         //   <button type="button" className={image && image.selected ? "btn btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
-        //     {t("remove")}
+        //     {t("Remove")}
         //   </button>
         //   <Form.Control.Feedback type="invalid" className={image && image.selected ? "d-none" : "d-block"}>
         //     {meta.error}

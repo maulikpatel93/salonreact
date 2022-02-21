@@ -30,7 +30,7 @@ const NoteDrawer = () => {
 
   const handleClientDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete"), message: t("success"), confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete"), message: t("Success"), confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(clientnoteDeleteApi({ id: event.id }));
     }
@@ -48,7 +48,7 @@ const NoteDrawer = () => {
         <div className="drawer-wrp position-relative">
           <div className="drawer-header">
             <h2 className="mb-4 pe-md-5 pe-3">
-              {t("notes")}
+              {t("Notes")}
               {checkaccess({ name: "create", role_id: role_id, controller: "clientnotes", access }) && (
                 <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={() => dispatch(openAddNoteForm())}>
                   {t("add_note")}
@@ -75,12 +75,12 @@ const NoteDrawer = () => {
                           <div className="col-md-5 text-end mb-2">
                             {checkaccess({ name: "delete", role_id: role_id, controller: "clientnotes", access }) && (
                               <a className="remove me-2 cursor-pointer" data-obj={JSON.stringify(noteObjectData[item])} onClick={handleClientDelete}>
-                                {t("remove")}
+                                {t("Remove")}
                               </a>
                             )}
                             {checkaccess({ name: "update", role_id: role_id, controller: "clientnotes", access }) && (
                               <a className="btn btn-outline-primary btn-sm cursor-pointer" onClick={(e) => handleNoteEditForm(e)}>
-                                {t("edit")}
+                                {t("Edit")}
                               </a>
                             )}
                           </div>

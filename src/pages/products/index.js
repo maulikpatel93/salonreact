@@ -174,7 +174,7 @@ const Products = () => {
               {checkaccess({ name: "list", role_id: role_id, controller: "products", access }) && (
                 <li className="nav-item">
                   <a href="#" className={"nav-link " + (tabview && tabview == "product" ? " active" : "")} id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onClick={handleProductTab}>
-                    {t("products")}
+                    {t("Products")}
                   </a>
                 </li>
               )}
@@ -195,14 +195,14 @@ const Products = () => {
                 </span>
                 {tabview && tabview == "product" ? (
                   <>
-                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameProduct} onInput={(e) => dispatch(productSearchName(e.target.value))} onClick={handleClickSearchProduct} onKeyUp={handleKeyUpSearchProduct} onBlur={handleOnBlurProduct} />
+                    <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchNameProduct} onInput={(e) => dispatch(productSearchName(e.target.value))} onClick={handleClickSearchProduct} onKeyUp={handleKeyUpSearchProduct} onBlur={handleOnBlurProduct} />
                     <a href="#" className="close" style={{ display: isSearchNameProduct ? "block" : "none" }} onClick={handleCloseSearchProduct}>
                       <i className="fal fa-times"></i>
                     </a>
                   </>
                 ) : (
                   <>
-                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameSupplier} onInput={(e) => dispatch(supplierSearchName(e.target.value))} onClick={handleClickSearchSupplier} onKeyUp={handleKeyUpSearchSupplier} onBlur={handleOnBlurSupplier} />
+                    <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchNameSupplier} onInput={(e) => dispatch(supplierSearchName(e.target.value))} onClick={handleClickSearchSupplier} onKeyUp={handleKeyUpSearchSupplier} onBlur={handleOnBlurSupplier} />
                     <a href="#" className="close" style={{ display: isSearchNameSupplier ? "block" : "none" }} onClick={handleCloseSearchSupplier}>
                       <i className="fal fa-times"></i>
                     </a>
@@ -233,14 +233,14 @@ const Products = () => {
               {checkaccess({ name: "create", role_id: role_id, controller: "products", access }) && (
                 <div className={tabview && tabview == "product" ? "active" : ""} style={{ display: tabview && tabview == "product" ? "block" : "none" }}>
                   <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleopenAddProductForm}>
-                    {t("new_product")}
+                    {t("New Product")}
                   </a>
                 </div>
               )}
               {checkaccess({ name: "create", role_id: role_id, controller: "suppliers", access }) && (
                 <div className={tabview && tabview == "supplier" ? "active" : ""} style={{ display: tabview && tabview == "supplier" ? "block" : "none" }}>
                   <a className="btn btn-primary add-service me-md-3 me-1 add-new-btn px-xs-4" onClick={handleOpenAddSupplierForm}>
-                    {t("new_supplier")}
+                    {t("New Supplier")}
                   </a>
                 </div>
               )}
@@ -265,7 +265,7 @@ const Products = () => {
                                     <th></th>
                                     <th>
                                       <a className="product-header cursor-pointer" onClick={() => sorting({ name: sort.name == "asc" ? "desc" : "asc" })}>
-                                        {t("product_name")}
+                                        {t("Product Name")}
                                         <span className="down-up-arrow">
                                           <i className={"fal fa-angle-up" + (sort.name == "asc" ? " text-dark" : "")}></i>
                                           <i className={"fal fa-angle-down" + (sort.name == "desc" ? " text-dark" : "")}></i>
@@ -274,7 +274,7 @@ const Products = () => {
                                     </th>
                                     <th>
                                       <a className="product-header cursor-pointer" onClick={() => sorting({ sku: sort.sku == "asc" ? "desc" : "asc" })}>
-                                        {t("sku")}
+                                        {t("SKU")}
                                         <span className="down-up-arrow">
                                           <i className={"fal fa-angle-up" + (sort.sku == "asc" ? " text-dark" : "")}></i>
                                           <i className={"fal fa-angle-down" + (sort.sku == "desc" ? " text-dark" : "")}></i>
@@ -283,7 +283,7 @@ const Products = () => {
                                     </th>
                                     <th>
                                       <a className="product-header cursor-pointer" onClick={() => sorting({ supplier: { name: sort && sort.supplier && sort.supplier.name == "asc" ? "desc" : "asc" } })}>
-                                        {t("supplier")}
+                                        {t("Supplier")}
                                         <span className="down-up-arrow">
                                           <i className={"fal fa-angle-up" + (sort && sort.supplier && sort.supplier.name == "asc" ? " text-dark" : "")}></i>
                                           <i className={"fal fa-angle-down" + (sort && sort.supplier && sort.supplier.name == "desc" ? " text-dark" : "")}></i>
@@ -292,7 +292,7 @@ const Products = () => {
                                     </th>
                                     <th>
                                       <a className="product-header cursor-pointer" onClick={() => sorting({ stock_quantity: sort.stock_quantity == "asc" ? "desc" : "asc" })}>
-                                        {t("stock")}
+                                        {t("Stock")}
                                         <span className="down-up-arrow">
                                           <i className={"fal fa-angle-up" + (sort.stock_quantity == "asc" ? " text-dark" : "")}></i>
                                           <i className={"fal fa-angle-down" + (sort.stock_quantity == "desc" ? " text-dark" : "")}></i>
@@ -301,7 +301,7 @@ const Products = () => {
                                     </th>
                                     <th>
                                       <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
-                                        {t("retail_price")}
+                                        {t("Retail Price")}
                                         <span className="down-up-arrow">
                                           <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
                                           <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
@@ -319,7 +319,7 @@ const Products = () => {
                             {!isFetching && ListView.next_page_url && (
                               <div className="col-2 m-auto p-3 text-center">
                                 <button onClick={loadMoreItems} className="btn btn-primary">
-                                  {t("more")}
+                                  {t("More")}
                                 </button>
                               </div>
                             )}
@@ -333,7 +333,7 @@ const Products = () => {
                             <div className="complete-box-wrp text-center ">
                               <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                               <h4 className="mb-2 fw-semibold">
-                                {t("no_products_have_been_created_yet")}
+                                {t("No products have been added yet.")}
                                 <a className="add-product ms-1 cursor-pointer" onClick={() => dispatch(openAddProductForm())}>
                                   {t("please_add_one")}
                                 </a>

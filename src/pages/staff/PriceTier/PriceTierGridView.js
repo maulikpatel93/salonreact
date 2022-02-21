@@ -22,7 +22,7 @@ const PriceTierGridView = (props) => {
   const handlePriceTierDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(pricetierDeleteApi({ id: props.id }));
     }
@@ -53,7 +53,7 @@ const PriceTierGridView = (props) => {
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleEditForm(e)}>
                             <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                            {t("edit")}
+                            {t("Edit")}
                           </a>
                         </li>
                       )}
@@ -62,7 +62,7 @@ const PriceTierGridView = (props) => {
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handlePriceTierDelete}>
                             <i className="far fa-trash me-3"></i>
-                            {t("delete")}
+                            {t("Delete")}
                           </a>
                         </li>
                       )}

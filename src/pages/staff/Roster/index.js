@@ -70,7 +70,7 @@ const Roster = () => {
       }
     });
     // const name = ucfirst(props.name);
-    // let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
+    // let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
     // if (confirmbtn == true) {
     //   dispatch(rosterDeleteApi({ id: props.id })).then((action) => {
     //     console.log(action);

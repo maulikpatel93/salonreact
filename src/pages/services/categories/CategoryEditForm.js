@@ -44,7 +44,7 @@ const CategoryEditForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditCategoryForm());
-          sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -90,13 +90,13 @@ const CategoryEditForm = () => {
                     <img src={config.imagepath + "close-icon.svg"} alt="" />
                   </button>
                   <div className="modal-body p-md-4 p-3">
-                    <h4 className="mb-2">{t("edit_category")}</h4>
+                    <h4 className="mb-2">{t("Edit_category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
                       <InputField type="text" name="name" value={formik.values.name} label={t("category_name")} controlId="categoryForm-name" />
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}
-                          {t("save")}
+                          {t("Save")}
                         </button>
                       </div>
                     </form>

@@ -22,7 +22,7 @@ const CategoryListView = (props) => {
   const handleCategoryDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_category"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_category"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(categoryDeleteApi({ id: props.id }));
     }
@@ -60,7 +60,7 @@ const CategoryListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center edit-service cursor-pointer" onClick={(e) => handleEditForm(e)}>
                               <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                              {t("edit")}
+                              {t("Edit")}
                             </a>
                           </li>
                         )}
@@ -68,7 +68,7 @@ const CategoryListView = (props) => {
                           <li>
                             <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleCategoryDelete}>
                               <i className="far fa-trash me-3"></i>
-                              {t("delete")}
+                              {t("Delete")}
                             </a>
                           </li>
                         )}

@@ -41,7 +41,7 @@ const AccessForm = () => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           dispatch(salonmoduleListViewApi({ role_id: 5 }));
-          sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -149,7 +149,7 @@ const AccessForm = () => {
                         </li>
                       );
                     })}
-                  {listview.length <= 0 ? <li className="li">{t("no_data_found")}</li> : ""}
+                  {listview.length <= 0 ? <li className="li">{t("No data found")}</li> : ""}
                 </ul>
                 <div className="row">
                   <div className="col-12 text-center mb-3">

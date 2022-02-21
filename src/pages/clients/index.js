@@ -119,7 +119,7 @@ const Clients = () => {
             <ul className="nav nav-tabs mb-0 justify-content-start" role="tablist">
               <li className="nav-item">
                 <a className="nav-link active cursor-pointer" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
-                  {t("all")}
+                  {t("All")}
                 </a>
               </li>
             </ul>
@@ -130,7 +130,7 @@ const Clients = () => {
                 <span className="input-group-text">
                   <i className="far fa-search"></i>
                 </span>
-                <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchName} onInput={(e) => dispatch(clientSearchName(e.target.value))} onClick={handleClickSearch} onKeyUp={handleKeyUpSearch} onBlur={handleOnBlur} />
+                <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchName} onInput={(e) => dispatch(clientSearchName(e.target.value))} onClick={handleClickSearch} onKeyUp={handleKeyUpSearch} onBlur={handleOnBlur} />
                 <a className="close cursor-pointer" style={{ display: isSearchName ? "block" : "none" }} onClick={handleCloseSearch}>
                   <i className="fal fa-times"></i>
                 </a>
@@ -145,7 +145,7 @@ const Clients = () => {
             </div>
           </div>
           <div className="col-md-4 col-8 text-end ps-0 mb-md-0 mb-2 order-3">
-            <span className="list-view-lable me-1">{t("display_as")}:</span>
+            <span className="list-view-lable me-1">{t("Display as")}:</span>
             <ul className="nav nav-tabs mb-0 d-inline-block list-view-tab border-0 me-xl-3" role="tablist">
               <li className="nav-item d-inline-block">
                 <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "grid" ? " active" : "")} id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" onClick={() => dispatch(clientTabGridView())}>
@@ -160,7 +160,7 @@ const Clients = () => {
             </ul>
             {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && (
               <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
-                {t("new_client")}
+                {t("New Client")}
               </a>
             )}
 
@@ -200,7 +200,7 @@ const Clients = () => {
                         </div>
                         <div className="image-content">
                           <h5>
-                            <i className="fal fa-plus me-2"></i> {t("add_new")}
+                            <i className="fal fa-plus me-2"></i> {t("Add New")}
                           </h5>
                         </div>
                       </a>
@@ -213,7 +213,7 @@ const Clients = () => {
                         </div>
                         <div className="image-content">
                           <button onClick={loadMoreItemsGrid} className="btn btn-primary">
-                            {t("more")}
+                            {t("More")}
                           </button>
                         </div>
                       </div>
@@ -235,15 +235,15 @@ const Clients = () => {
                             <th></th>
                             <th>
                               <a className="cursor-pointer" onClick={() => sorting({ first_name: sort.first_name == "asc" ? "desc" : "asc" })}>
-                                {t("name")}
+                                {t("Name")}
                                 <span className="down-up-arrow">
                                   <i className={"fal fa-angle-up" + (sort.first_name == "asc" ? " text-dark" : "")}></i>
                                   <i className={"fal fa-angle-down" + (sort.first_name == "desc" ? " text-dark" : "")}></i>
                                 </span>
                               </a>
                             </th>
-                            <th>{t("phone")}</th>
-                            <th colSpan="2">{t("email")}</th>
+                            <th>{t("Phone")}</th>
+                            <th colSpan="2">{t("Email Address")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -254,7 +254,7 @@ const Clients = () => {
                     {!isFetching && ListView.next_page_url && (
                       <div className="col-2 m-auto p-3 text-center">
                         <button onClick={loadMoreItemsList} className="btn btn-primary">
-                          {t("more")}
+                          {t("More")}
                         </button>
                       </div>
                     )}

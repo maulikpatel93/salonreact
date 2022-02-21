@@ -66,17 +66,17 @@ const StaffEditForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    first_name: Yup.string().trim().max(50).label(t("first_name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("last_name")).required(),
+    first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
     profile_photo: Yup.mixed(),
-    email: Yup.string().trim().max(100).email().label(t("email")).required(),
-    phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("phone_number")).required(),
-    address: Yup.string().trim().label(t("address")),
-    street: Yup.string().trim().label(t("street")),
-    suburb: Yup.string().trim().label(t("suburb")),
-    state: Yup.string().trim().label(t("state")),
-    postcode: Yup.string().trim().max(12).label(t("postcode")),
-    description: Yup.string().trim().label(t("description")),
+    email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+    phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
+    address: Yup.string().trim().label(t("Address")),
+    street: Yup.string().trim().label(t("Street")),
+    suburb: Yup.string().trim().label(t("Suburb")),
+    state: Yup.string().trim().label(t("State")),
+    postcode: Yup.string().trim().max(12).label(t("Postcode")),
+    description: Yup.string().trim().label(t("Description")),
     price_tier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Price_Tier")).required())),
     add_on_services: Yup.array(),
     working_hours: Yup.array().of(
@@ -173,7 +173,7 @@ const StaffEditForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditStaffForm());
-          sweatalert({ title: t("updated"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -273,10 +273,10 @@ const StaffEditForm = () => {
                         <div className="row gx-2">
                           <div className="col-md-6">
                             <div className="mb-3">
-                              <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="staffForm-first_name" />
+                              <InputField type="text" name="first_name" value={formik.values.first_name} label={t("First Name")} controlId="staffForm-first_name" />
                             </div>
                             <div className="mb-3">
-                              <InputField type="text" name="last_name" value={formik.values.last_name} label={t("last_name")} controlId="staffForm-last_name" />
+                              <InputField type="text" name="last_name" value={formik.values.last_name} label={t("Last Name")} controlId="staffForm-last_name" />
                             </div>
                           </div>
                           <div className="col-md-6 mb-3">
@@ -285,27 +285,27 @@ const StaffEditForm = () => {
                         </div>
                         <div className="row gx-2">
                           <div className="col-md-6 mb-3">
-                            <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
+                            <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("Mobile")} controlId="clientForm-phone_number" />
                           </div>
                           <div className="col-md-6 mb-3">
-                            <InputField type="text" name="email" value={formik.values.email} label={t("email")} controlId="clientForm-email" />
+                            <InputField type="text" name="email" value={formik.values.email} label={t("Email Address")} controlId="clientForm-email" />
                           </div>
                         </div>
                         <div className="mb-3">
-                          <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
+                          <MapAddressField name="address" label={t("Address")} value={formik.values.address} placeholder={t("Start typing address")} controlId="clientForm-address" />
                         </div>
                         <div className="mb-3">
-                          <InputField type="text" name="street" value={formik.values.street} label={t("street")} controlId="clientForm-street" />
+                          <InputField type="text" name="street" value={formik.values.street} label={t("Street")} controlId="clientForm-street" />
                         </div>
                         <div className="row gx-2">
                           <div className="col-md-6 mb-md-4 mb-3">
-                            <InputField type="text" name="suburb" value={formik.values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
+                            <InputField type="text" name="suburb" value={formik.values.suburb} label={t("Suburb")} controlId="clientForm-suburb" />
                           </div>
                           <div className="col-md-3 col-6 mb-md-4 mb-3">
-                            <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
+                            <InputField type="text" name="state" value={formik.values.state} label={t("State")} controlId="clientForm-state" />
                           </div>
                           <div className="col-md-3 col-6 mb-md-4 mb-3">
-                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("Postcode")} controlId="clientForm-postcode" />
                           </div>
                         </div>
                         <div className="mb-3">
@@ -329,7 +329,7 @@ const StaffEditForm = () => {
                           />
                         </div>
                         <div className="col-md-12 mb-3">
-                          <SelectField name="price_tier_id" placeholder={t("--select--")} value={formik.values.price_tier_id} options={PriceTierOptionsData} label={t("Price_Tier")} controlId="staffForm-price_tier" />
+                          <SelectField name="price_tier_id" placeholder={t("--Select--")} value={formik.values.price_tier_id} options={PriceTierOptionsData} label={t("Price_Tier")} controlId="staffForm-price_tier" />
                           <span className="info">
                             <img src={config.imagepath + "info.png"} className="me-2" alt="" />
                             <span className="align-middle">{t("Charge_for_services_based_on_level_of_experience")}</span>
@@ -482,7 +482,7 @@ const StaffEditForm = () => {
                                   }
                                 }}
                               />
-                              <label>{t("all_services")}</label>
+                              <label>{t("All_services")}</label>
                             </div>
                             <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                               {isAddonServices &&
@@ -543,7 +543,7 @@ const StaffEditForm = () => {
                                     </li>
                                   );
                                 })}
-                              {isAddonServices.length <= 0 ? <li>{t("no_data_found")}</li> : ""}
+                              {isAddonServices.length <= 0 ? <li>{t("No data found")}</li> : ""}
                             </ul>
                           </li>
                         </ul>

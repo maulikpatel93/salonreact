@@ -100,7 +100,7 @@ const Login = () => {
 //                   >
 //                     <Form>
 //                       <div className="d-flex flex-row align-items-center justify-content-center mb-5">
-//                         <h1 className="fw-normal mb-0 me-3">{t("sign_in")}</h1>
+//                         <h1 className="fw-normal mb-0 me-3">{t("Sign In")}</h1>
 //                       </div>
 //                       <FloatLabelInputField
 //                         name="email"
@@ -112,7 +112,7 @@ const Login = () => {
 //                             : "form-control"
 //                         }
 //                         id="login-email"
-//                         label={t("email")}
+//                         label={t("Email Address")}
 //                       />
 //                       <FloatLabelInputField
 //                         name="password"
@@ -125,7 +125,7 @@ const Login = () => {
 //                         }
 //                         id="login-password"
 //                         autoComplete="off"
-//                         label={t("password")}
+//                         label={t("Password")}
 //                       />
 //                       <div className="d-flex justify-content-between align-items-center mb-3">
 //                         <div className="form-check mb-0">
@@ -139,11 +139,11 @@ const Login = () => {
 //                             className="form-check-label"
 //                             htmlFor="form2Example3"
 //                           >
-//                             {t("remember_me")}
+//                             {t("Remember me")}
 //                           </label>
 //                         </div>
 //                         <Link to="#!" className="text-body">
-//                           {t("forgot_password?")}
+//                           {t("Forgot password??")}
 //                         </Link>
 //                       </div>
 //                       <div className="text-center text-lg-start mt-4 pt-2">
@@ -155,7 +155,7 @@ const Login = () => {
 //                           {loading && (
 //                             <span className="spinner-border spinner-border-sm"></span>
 //                           )}
-//                           {t("login")}
+//                           {t("Login")}
 //                         </button>
 //                       </div>
 //                     </Form>

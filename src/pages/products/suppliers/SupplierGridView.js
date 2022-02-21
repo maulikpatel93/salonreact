@@ -18,7 +18,7 @@ const SupplierGridView = (props) => {
   const handleSupplierDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("are_you_sure_delete_supplier"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_supplier"), message: name, confirmButtonText: t("yes_delete_it") });
     if (confirmbtn == true) {
       dispatch(supplierDeleteApi({ id: props.id }));
     }
@@ -50,25 +50,25 @@ const SupplierGridView = (props) => {
                     <li>
                       <a className="d-flex align-items-center cursor-pointer" onClick={handleEditForm}>
                         <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
-                        {t("edit")}
+                        {t("Edit")}
                       </a>
                     </li>
                     <li>
                       <a className="d-flex align-items-center cursor-pointer">
                         <img src={config.imagepath + "sms.png"} className="me-3" alt="" />
-                        {t("sms")}
+                        {t("SMS")}
                       </a>
                     </li>
                     <li>
                       <a className="d-flex align-items-center cursor-pointer">
                         <img src={config.imagepath + "email.png"} className="me-3" alt="" />
-                        {t("email")}
+                        {t("Email Address")}
                       </a>
                     </li>
                     <li>
                       <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleSupplierDelete}>
                         <i className="far fa-trash me-3"></i>
-                        {t("delete")}
+                        {t("Delete")}
                       </a>
                     </li>
                   </ul>

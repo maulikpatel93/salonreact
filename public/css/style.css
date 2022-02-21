@@ -208,8 +208,8 @@ textarea.form-control::placeholder {
 
 .btn-secondary {
     color: #fff !important;
-    background-color: #9ca3af !important;
-    border-color: #9ca3af !important;
+    background-color: #EEEEEE !important;
+    border-color: #EEEEEE !important;
 }
 
 .btn-secondary:hover {

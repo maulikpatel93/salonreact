@@ -44,19 +44,19 @@ const ClientAddForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    first_name: Yup.string().trim().max(50).label(t("first_name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("last_name")).required(),
+    first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
     profile_photo: Yup.mixed(),
-    email: Yup.string().trim().max(100).email().label(t("email")).required(),
-    phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("phone_number")).required(),
-    date_of_birth: Yup.string().trim().label(t("date_of_birth")),
-    gender: Yup.string().trim().label(t("gender")).required().nullable(),
-    address: Yup.string().trim().label(t("address")),
-    street: Yup.string().trim().label(t("street")),
-    suburb: Yup.string().trim().label(t("suburb")),
-    state: Yup.string().trim().label(t("state")),
-    postcode: Yup.string().trim().max(12).label(t("postcode")),
-    description: Yup.string().trim().label(t("description")),
+    email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+    phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
+    date_of_birth: Yup.string().trim().label(t("Date Of Birth")),
+    gender: Yup.string().trim().label(t("Gender")).required().nullable(),
+    address: Yup.string().trim().label(t("Address")),
+    street: Yup.string().trim().label(t("Street")),
+    suburb: Yup.string().trim().label(t("Suburb")),
+    state: Yup.string().trim().label(t("State")),
+    postcode: Yup.string().trim().max(12).label(t("Postcode")),
+    description: Yup.string().trim().label(t("Description")),
     send_sms_notification: Yup.bool().nullable(),
     send_email_notification: Yup.bool().nullable(),
     recieve_marketing_email: Yup.bool().nullable(),
@@ -72,7 +72,7 @@ const ClientAddForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeAddClientForm());
-          sweatalert({ title: t("created"), text: t("created_successfully"), icon: "success" });
+          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -96,9 +96,9 @@ const ClientAddForm = () => {
   };
 
   const genderOptions = [
-    { value: "Male", label: t("male") },
-    { value: "Female", label: t("female") },
-    { value: "Other", label: t("other") },
+    { value: "Male", label: t("Male") },
+    { value: "Female", label: t("Female") },
+    { value: "Other", label: t("Other") },
   ];
 
   return (
@@ -120,58 +120,58 @@ const ClientAddForm = () => {
                       <div className="col-md-7">
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="first_name" value={formik.values.first_name} label={t("first_name")} controlId="clientForm-first_name" />
+                            <InputField type="text" name="first_name" value={formik.values.first_name} label={t("First Name")} controlId="clientForm-first_name" />
                           </div>
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="last_name" value={formik.values.last_name} label={t("last_name")} controlId="clientForm-last_name" />
-                          </div>
-                        </div>
-                        <div className="row gx-2">
-                          <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("phone_number")} controlId="clientForm-phone_number" />
-                          </div>
-                          <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="email" value={formik.values.email} label={t("email")} controlId="clientForm-email" />
+                            <InputField type="text" name="last_name" value={formik.values.last_name} label={t("Last Name")} controlId="clientForm-last_name" />
                           </div>
                         </div>
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="date" name="date_of_birth" value={formik.values.date_of_birth} label={t("date_of_birth")} controlId="clientForm-date_of_birth" />
+                            <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("Mobile")} controlId="clientForm-phone_number" />
                           </div>
                           <div className="col-sm-6 mb-3">
-                            <ReactSelectField name="gender" label={t("gender")} options={genderOptions} placeholder={t("--select--")} controlId="clientForm-gender" />
+                            <InputField type="text" name="email" value={formik.values.email} label={t("Email Address")} controlId="clientForm-email" />
+                          </div>
+                        </div>
+                        <div className="row gx-2">
+                          <div className="col-sm-6 mb-3">
+                            <InputField type="date" name="date_of_birth" value={formik.values.date_of_birth} label={t("Date Of Birth")} controlId="clientForm-date_of_birth" />
+                          </div>
+                          <div className="col-sm-6 mb-3">
+                            <ReactSelectField name="gender" label={t("Gender")} options={genderOptions} placeholder={t("--Select--")} controlId="clientForm-gender" />
                           </div>
                         </div>
                         <div className="mb-3">
-                        <MapAddressField name="address" label={t("address")} value={formik.values.address} placeholder={t("typing_address")} controlId="clientForm-address" />
+                        <MapAddressField name="address" label={t("Address")} value={formik.values.address} placeholder={t("Start typing address")} controlId="clientForm-address" />
                         </div>
                       </div>
                       <div className="col-md-5 mb-md-0 mb-3">
-                        <InputFieldImage name="profile_photo" accept="image/*" label={t("profile_photo")} page="client-addform" controlId="clientForm-profile_photo" />
+                        <InputFieldImage name="profile_photo" accept="image/*" label={t("Upload Profile Photo")} page="client-addform" controlId="clientForm-profile_photo" />
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-md-7">
                         <div className="mb-3">
-                          <InputField type="text" name="street" value={formik.values.street} label={t("street")} controlId="clientForm-street" />
+                          <InputField type="text" name="street" value={formik.values.street} label={t("Street")} controlId="clientForm-street" />
                         </div>
                         <div className="row gx-2">
                           <div className="col-sm-6 mb-3">
-                            <InputField type="text" name="suburb" value={formik.values.suburb} label={t("suburb")} controlId="clientForm-suburb" />
+                            <InputField type="text" name="suburb" value={formik.values.suburb} label={t("Suburb")} controlId="clientForm-suburb" />
                           </div>
                           <div className="col-sm-3 col-6 mb-3">
-                            <InputField type="text" name="state" value={formik.values.state} label={t("state")} controlId="clientForm-state" />
+                            <InputField type="text" name="state" value={formik.values.state} label={t("State")} controlId="clientForm-state" />
                           </div>
                           <div className="col-sm-3 col-6 mb-3">
-                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("postcode")} controlId="clientForm-postcode" />
+                            <InputField type="text" name="postcode" value={formik.values.postcode} label={t("Postcode")} controlId="clientForm-postcode" />
                           </div>
                         </div>
                         <div className="mb-3">
-                          <TextareaField type="text" name="description" placeholder={t('client_note_placeholder')} value={formik.values.description} label={t("client_notes")} controlId="clientForm-description" />
+                          <TextareaField type="text" name="description" placeholder={t('client_note_placeholder')} value={formik.values.description} label={t("Client Notes")} controlId="clientForm-description" />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="">{t("notifications")}</label>
-                          <SwitchField name="send_sms_notification" label={t("send_sms_notification")} controlId="clientForm-send_sms_notification" value="1" 
+                          <label htmlFor="">{t("Notifications")}</label>
+                          <SwitchField name="send_sms_notification" label={t("Send SMS notifications to client")} controlId="clientForm-send_sms_notification" value="1" 
                           onChange={(e) => {
                               if (e.currentTarget.checked) {
                                 setTimeout(() => {
@@ -184,7 +184,7 @@ const ClientAddForm = () => {
                               }
                               formik.handleChange(e);
                             }}/>
-                          <SwitchField name="send_email_notification" label={t("send_email_notification")} controlId="clientForm-send_email_notification" value="1" 
+                          <SwitchField name="send_email_notification" label={t("Send email notifications to client")} controlId="clientForm-send_email_notification" value="1" 
                           onChange={(e) => {
                             if (e.currentTarget.checked) {
                               setTimeout(() => {
@@ -197,7 +197,7 @@ const ClientAddForm = () => {
                             }
                             formik.handleChange(e);
                           }}/>
-                          <SwitchField name="recieve_marketing_email" label={t("recieve_marketing_email")} controlId="clientForm-recieve_marketing_email" value="1" 
+                          <SwitchField name="recieve_marketing_email" label={t("Client agrees to receive marketing emails")} controlId="clientForm-recieve_marketing_email" value="1" 
                           onChange={(e) => {
                             if (e.currentTarget.checked) {
                               setTimeout(() => {
@@ -218,7 +218,7 @@ const ClientAddForm = () => {
                     <div className="col-md-7 pe-2">
                       <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("save_client")}
+                        {t("Save_client")}
                       </button>
                     </div>
                   </div>

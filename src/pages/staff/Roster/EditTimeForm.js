@@ -78,7 +78,7 @@ const EditTimeForm = (props) => {
           dispatch(closeAddRosterForm());
           dispatch(closeEditRosterForm());
           setStatus({ success: true });
-          sweatalert({ title: t("updated"), text: t("updated_successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;

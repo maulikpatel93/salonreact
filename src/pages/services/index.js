@@ -197,14 +197,14 @@ const Services = () => {
                 </span>
                 {tabview && tabview == "service" ? (
                   <>
-                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameService} onInput={(e) => dispatch(serviceSearchName(e.target.value))} onClick={handleClickSearchService} onKeyUp={handleKeyUpSearchService} onBlur={handleOnBlurService} />
+                    <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchNameService} onInput={(e) => dispatch(serviceSearchName(e.target.value))} onClick={handleClickSearchService} onKeyUp={handleKeyUpSearchService} onBlur={handleOnBlurService} />
                     <a className="close cursor-pointer" style={{ display: isSearchNameService ? "block" : "none" }} onClick={handleCloseSearchService}>
                       <i className="fal fa-times"></i>
                     </a>
                   </>
                 ) : (
                   <>
-                    <input type="text" className="form-control search-input" placeholder={t("search")} value={isSearchNameCategory} onInput={(e) => dispatch(categorySearchName(e.target.value))} onClick={handleClickSearchCategory} onKeyUp={handleKeyUpSearchCategory} onBlur={handleOnBlurCategory} />
+                    <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchNameCategory} onInput={(e) => dispatch(categorySearchName(e.target.value))} onClick={handleClickSearchCategory} onKeyUp={handleKeyUpSearchCategory} onBlur={handleOnBlurCategory} />
                     <a className="close cursor-pointer" style={{ display: isSearchNameCategory ? "block" : "none" }} onClick={handleCloseSearchCategory}>
                       <i className="fal fa-times"></i>
                     </a>
@@ -319,7 +319,7 @@ const Services = () => {
                         {!isFetching && ListView.next_page_url && (
                           <div className="col-2 m-auto p-3 text-center">
                             <button onClick={loadMoreItems} className="btn btn-primary">
-                              {t("more")}
+                              {t("More")}
                             </button>
                           </div>
                         )}
@@ -334,7 +334,7 @@ const Services = () => {
                             <h4 className="mb-2 fw-semibold">
                               {t("no_services_have_been_created_yet")}
                               <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
-                                {t("please_create_one")}
+                                {t("Please create one")}
                               </a>
                               .
                             </h4>
