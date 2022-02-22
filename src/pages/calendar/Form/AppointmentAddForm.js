@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, Field } from "formik";
+import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField } from "../../../component/form/Field";
@@ -23,18 +23,17 @@ import { decimalOnly } from "../../../component/form/Validation";
 
 const AppointmentAddForm = () => {
   const [loading, setLoading] = useState(false);
-  const [clientId, setClientId] = useState("");
+  // const [clientId, setClientId] = useState("");
   const rightDrawerOpened = useSelector((state) => state.appointment.isOpenedAddForm);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const scriptedRef = useScriptRef();
 
-  const auth = useSelector((state) => state.auth);
-  const currentUser = auth.user;
-
-  const role_id = currentUser && currentUser.role_id;
-  const access = useSelector((state) => state.salonmodule.isAccess);
+  // const auth = useSelector((state) => state.auth);
+  // const currentUser = auth.user;
+  // const role_id = currentUser && currentUser.role_id;
+  // const access = useSelector((state) => state.salonmodule.isAccess);
   const isSearchList = useSelector((state) => state.client.isSearchList);
   const isSearchName = useSelector((state) => state.client.isSearchName);
   const SuggetionView = useSelector((state) => state.client.isSuggetionListView);
@@ -114,8 +113,9 @@ const AppointmentAddForm = () => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           resetForm();
+          dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeAddAppointmentForm());
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          sweatalert({ title: t("Booked"), text: t("Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -160,7 +160,6 @@ const AppointmentAddForm = () => {
               formik.setFieldValue("cost", cost ? cost[0].price : "");
             }
           }, [isServicePrice]);
-          console.log(formik.values);
           return (
             <div className={"drawer appointment-drawer " + rightDrawerOpened} id="addappoinment-drawer">
               <div className="drawer-wrp position-relative">
@@ -181,7 +180,7 @@ const AppointmentAddForm = () => {
                     <div className="mb-3 search">
                       <div className="d-flex justify-content-between align-items-center">
                         <label htmlFor="">{t("Client")}</label>
-                        <a id="addclient-link" className="h6 mb-0" onClick={handleClientAddForm}>
+                        <a id="addclient-link" className="h6 mb-0 cursor-pointer" onClick={handleClientAddForm}>
                           <i className="fal fa-plus pe-1 small"></i>
                           {t("New Client")}
                         </a>

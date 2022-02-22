@@ -297,5 +297,7 @@
     "Add any notes about the appointment": "Add any notes about the appointment",
     "Mobile is Invalid": "Mobile is Invalid",
     "Only Allow hours and Minutes": "Only Allow hours and Minutes",
-    "Total of {{hour}}hr {{minute}}minutes": "Total of {{hour}}hr {{minute}}minutes"
+    "Total of {{hour}}hr {{minute}}minutes": "Total of {{hour}}hr {{minute}}minutes",
+    "Booked": "Booked",
+    "Booked Successfully": "Booked Successfully"
 }
