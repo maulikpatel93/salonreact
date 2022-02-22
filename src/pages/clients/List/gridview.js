@@ -8,6 +8,7 @@ import { swalConfirm } from "../../../component/Sweatalert2";
 import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
 import PropTypes from "prop-types";
 import { checkaccess } from "helpers/functions";
+import { appointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientGridView = (props) => {
   const dispatch = useDispatch();
@@ -29,11 +30,17 @@ const ClientGridView = (props) => {
   };
   const handleClientDetailModal = (e, props) => {
     const id = e.currentTarget.closest(".box-image-cover").dataset.id;
-    dispatch(openClientDetailModal());
-    dispatch(clientDetailApi({ id }));
-    if (props && props.tab == "clientdetail") {
-      dispatch(clientDetailTab("clientdetail"));
-    }
+    dispatch(clientDetailApi({ id })).then((action) => {
+      if (action.meta.requestStatus === "fulfilled") {
+        dispatch(openClientDetailModal());
+        if (props && props.tab === "clientdetail") {
+          dispatch(clientDetailTab("clientdetail"));
+        }
+        if (props && props.tab === "appointment") {
+          dispatch(appointmentListViewApi({ client_id: id }));
+        }
+      }
+    });
   };
   return (
     <>
@@ -85,7 +92,7 @@ const ClientGridView = (props) => {
                   </div>
                 </div>
               )}
-              <a className="client-detail cursor-pointer" onClick={handleClientDetailModal}>
+              <a className="client-detail cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: "appointment" })}>
                 {profile_photo_url ? (
                   <div className="tabs-image">
                     <img src={profile_photo_url} alt="" className="rounded-circle wh-118" />

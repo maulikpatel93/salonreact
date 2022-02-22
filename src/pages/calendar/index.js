@@ -29,6 +29,7 @@ const Calendar = () => {
 
   const handleBusytimeDrawer = () => {
     dispatch(openAddBusytimeForm());
+    dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
   const handleAppointmentDrawer = () => {
     dispatch(openAddAppointmentForm());

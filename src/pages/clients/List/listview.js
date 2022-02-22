@@ -9,6 +9,7 @@ import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTa
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
 import { checkaccess } from "helpers/functions";
+import { appointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientListView = (props) => {
   const { t } = useTranslation();
@@ -31,11 +32,17 @@ const ClientListView = (props) => {
 
   const handleClientDetailModal = (e, props) => {
     const id = e.currentTarget.closest(".client-view-tr").dataset.id;
-    dispatch(openClientDetailModal());
-    dispatch(clientDetailApi({ id }));
-    if (props && props.tab == "clientdetail") {
-      dispatch(clientDetailTab("clientdetail"));
-    }
+    dispatch(clientDetailApi({ id })).then((action) => {
+      if (action.meta.requestStatus === "fulfilled") {
+        dispatch(openClientDetailModal());
+        if (props && props.tab === "clientdetail") {
+          dispatch(clientDetailTab("clientdetail"));
+        }
+        if (props && props.tab === "appointment") {
+          dispatch(appointmentListViewApi({ client_id: id }));
+        }
+      }
+    });
   };
 
   return (
@@ -62,7 +69,7 @@ const ClientListView = (props) => {
                 )}
               </td>
               <td>
-                <a className="cursor-pointer text-decoration-dotted hover-primary" onClick={handleClientDetailModal}>
+                <a className="cursor-pointer text-decoration-dotted hover-primary" onClick={(e) => handleClientDetailModal(e, { tab: "appointment" })}>
                   {ucfirst(first_name + " " + last_name)}
                 </a>
               </td>

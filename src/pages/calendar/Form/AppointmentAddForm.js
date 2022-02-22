@@ -30,10 +30,6 @@ const AppointmentAddForm = () => {
   const dispatch = useDispatch();
   const scriptedRef = useScriptRef();
 
-  // const auth = useSelector((state) => state.auth);
-  // const currentUser = auth.user;
-  // const role_id = currentUser && currentUser.role_id;
-  // const access = useSelector((state) => state.salonmodule.isAccess);
   const isSearchList = useSelector((state) => state.client.isSearchList);
   const isSearchName = useSelector((state) => state.client.isSearchName);
   const SuggetionView = useSelector((state) => state.client.isSuggetionListView);

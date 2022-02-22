@@ -17,6 +17,7 @@ import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
 import { checkaccess } from "helpers/functions";
+import { appointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -36,7 +37,11 @@ const ClientDetailModal = () => {
     dispatch(closeClientDetailModal());
     dispatch({ type: "client/detail/rejected" });
   };
-
+  const first_name = detail.first_name;
+  const last_name = detail.last_name;
+  const email = detail.email;
+  // let phone_number = detail.phone_number;
+  const profile_photo_url = detail.profile_photo_url;
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -47,10 +52,18 @@ const ClientDetailModal = () => {
           <div className="drawer-body row">
             <div className="left-menu col-md-5">
               <div className="d-flex mb-3">
-                <div className="user-initial me-md-3 me-2">js</div>
+                {profile_photo_url ? (
+                  <div className="user me-md-3 me-2">
+                    <a data-fancybox="" data-src={profile_photo_url}>
+                      <img src={profile_photo_url} alt="" className="rounded-circle wh-40" />
+                    </a>
+                  </div>
+                ) : (
+                  <div className="user-initial me-md-3 me-2">{first_name.charAt(0) + "" + last_name.charAt(0)}</div>
+                )}
                 <div className="user-id">
-                  <h3 className="user-name mb-0">{ucfirst(detail.first_name + " " + detail.last_name)}</h3>
-                  <span className="user-id">{detail.email}</span>
+                  <h3 className="user-name mb-0">{ucfirst(first_name + " " + last_name)}</h3>
+                  <span className="user-id">{email}</span>
                 </div>
               </div>
               <div className="row gx-2 action-box mb-3 align-items-end">
@@ -72,11 +85,24 @@ const ClientDetailModal = () => {
                 </a>
               </div>
               <ul className="nav flex-md-column nav-pills mb-0 list-unstyled" id="myTab" role="tablist">
-                <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "appointment" ? " active" : "")} id="appoinment" data-bs-toggle="tab" data-bs-target="#appoinment-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("appoinment"))}>
-                    {t("Appointments")}
-                  </button>
-                </li>
+                {checkaccess({ name: "list", role_id: role_id, controller: "appointment", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={"nav-link" + (detailTab && detailTab == "appointment" ? " active" : "")}
+                      id="appoinment"
+                      data-bs-toggle="tab"
+                      data-bs-target="#appoinment-tab"
+                      type="button"
+                      role="tab"
+                      onClick={() => {
+                        dispatch(clientDetailTab("appointment"));
+                        dispatch(appointmentListViewApi({ client_id: detail.id }));
+                      }}
+                    >
+                      {t("Appointments")}
+                    </button>
+                  </li>
+                )}
                 {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
                   <li className="nav-item" role="presentation">
                     <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("clientdetail"))}>
@@ -172,16 +198,16 @@ const ClientDetailModal = () => {
             </div>
             <div className="content col-md-7 position-relative">
               <div className="tab-content" id="myTabContent">
-                <div className={"tab-pane fade" + (detailTab && detailTab == "appointment" ? " show active" : "")} id="appoinment-tab" role="tabpanel" aria-labelledby="appoinment-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5">
-                      {t("Appointments")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
-                    </h2>
+                {checkaccess({ name: "list", role_id: role_id, controller: "appointment", access }) && (
+                  <div className={"tab-pane fade" + (detailTab && detailTab == "appointment" ? " show active" : "")} id="appoinment-tab" role="tabpanel" aria-labelledby="appoinment-tab">
+                    <div className="drawer-header">
+                      <h2 className="mb-4 pe-md-5">
+                        {t("Appointments")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
+                      </h2>
+                    </div>
+                    <div className="content-wrp" id={detailTab && "clientdetail_"+detailTab}>{detailTab && detailTab == "appointment" && <Appointment role_id={role_id} access={access} />}</div>
                   </div>
-                  <div className="content-wrp">
-                    <Appointment />
-                  </div>
-                </div>
+                )}
                 {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "clientdetail" ? " show active" : "")} id="client-detail-tab" role="tabpanel" aria-labelledby="client-detail-tab">
                     <div className="drawer-header">

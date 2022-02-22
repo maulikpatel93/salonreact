@@ -45,7 +45,7 @@ const PhotoDrawer = () => {
             <h2 className="mb-4 pe-md-5 pe-3">
               {t("Photos")} {checkaccess({ name: "create", role_id: role_id, controller: "clientphotos", access }) && <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("Add Photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />}
             </h2>
-            <a className="close" onClick={() => dispatch(closePhotoDrawer())}>
+            <a className="close cursor-pointer" onClick={() => dispatch(closePhotoDrawer())}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
           </div>

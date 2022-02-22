@@ -299,5 +299,12 @@
     "Only Allow hours and Minutes": "Only Allow hours and Minutes",
     "Total of {{hour}}hr {{minute}}minutes": "Total of {{hour}}hr {{minute}}minutes",
     "Booked": "Booked",
-    "Booked Successfully": "Booked Successfully"
+    "Booked Successfully": "Booked Successfully",
+    "Reason": "Reason",
+    "e.g. Training, lunch break etc": "e.g. Training, lunch break etc",
+    "Start Time cannot be greater than the End Time": "Start Time cannot be greater than the End Time",
+    "End Time cannot be less than the Start Time": "End Time cannot be less than the Start Time",
+    "Added": "Added",
+    "Added Successfully": "Added Successfully",
+    "{{service_name}} with {{staff_name}}": "{{service_name}} with {{staff_name}}"
 }

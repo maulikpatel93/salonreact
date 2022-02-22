@@ -30,12 +30,12 @@ export const appointmentUpdateApi = createAsyncThunk("appointment/update", async
   }
 });
 
-export const appointmentListViewApi = createAsyncThunk("appointment/gridview", async (formValues, thunkAPI) => {
+export const appointmentListViewApi = createAsyncThunk("appointment/listview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await appointmentApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
-      .catch((error) => HandleError(thunkAPI, error, "gridview"));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();

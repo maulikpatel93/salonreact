@@ -44,12 +44,12 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
     let sortArray = [];
     Object.keys(sort).map(function (key, index) {
-      return sortArray[index] = `sort[${key}]=${sort[key]}`;
+      return (sortArray[index] = `sort[${key}]=${sort[key]}`);
     });
     if (sortArray.length > 0) {
       let jsort = sortArray.join("&");
@@ -64,10 +64,11 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && values.id ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name", // first_name,last_name,email
+    client_id: values && values.client_id ? values.client_id : "",
+    field: values && values.id ? "" : "date,start_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
-    option: values && values.option ? values.option : ''
+    option: values && values.option ? values.option : "",
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
@@ -87,6 +88,6 @@ const appointmentApiController = {
   create,
   update,
   view,
-  deleted
+  deleted,
 };
 export default appointmentApiController;
