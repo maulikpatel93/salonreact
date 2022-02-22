@@ -107,6 +107,19 @@ export const staffOptions = createAsyncThunk("staff/staffOptions", async (formVa
   }
 });
 
+export const staffOptionsDropdown = createAsyncThunk("staff/staffOptionsDropdown", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await staffApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, 'staffOptionsDropdown'))
+      .catch((error) => HandleError(thunkAPI, error, 'staffOptionsDropdown'));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -120,6 +133,7 @@ const initialState = {
   isSearchName: "",
   isAddonServices: [],
   isStaffOption: [],
+  isStaffOptionDropdown: [],
 };
 
 const staffSlice = createSlice({
@@ -269,6 +283,13 @@ const staffSlice = createSlice({
     },
     [staffOptions.rejected]: (state) => {
       state.isStaffOption = [];
+    },
+    [staffOptionsDropdown.pending]: () => {},
+    [staffOptionsDropdown.fulfilled]: (state, action) => {
+      state.isStaffOptionDropdown = action.payload;
+    },
+    [staffOptionsDropdown.rejected]: (state) => {
+      state.isStaffOptionDropdown = [];
     },
   },
 });

@@ -90,7 +90,7 @@ const view = (values) => {
       result: result, //business_name,owner_name
       staff_working_hours_field: false,
       staff_service_field: false,
-      roster_field: false
+      roster_field: false,
     };
   } else {
     staffdata = {
@@ -101,7 +101,10 @@ const view = (values) => {
       id: values && values.id ? values.id : "",
       field: values && values.id ? "" : "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
       salon_field: false, //business_name,owner_name
-      price_tier_field: "name", //business_name,owner_name
+      price_tier_field: values && values.option ? "0" : "name", //business_name,owner_name
+      staff_service_field: values && values.option ? "0" : "*", //business_name,owner_name
+      staff_working_hours_field: values && values.option ? "0" : "*", //business_name,owner_name
+      roster_field: values && values.option ? "0" : "*", //business_name,owner_name
       result: result, //business_name,owner_name
       option: values && values.option ? values.option : "",
     };

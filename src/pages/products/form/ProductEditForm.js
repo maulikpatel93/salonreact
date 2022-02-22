@@ -140,7 +140,7 @@ const ProductEditForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t("Edit_product")}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("Edit Product")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditSupplierForm}>
                         {t("Cancel")}
@@ -167,7 +167,7 @@ const ProductEditForm = () => {
                             <InputField type="text" name="sku" value={formik.values.sku} label={t("SKU")} controlId="productForm-sku"  />
                           </div>
                           <div className="mb-3">
-                            <ReactSelectField name="supplier_id" placeholder={t("Search_option")} value={formik.values.supplier_id} options={supplierOptionsData} label={t("Supplier")} controlId="productForm-supplier_id" isMulti={false}  />
+                            <ReactSelectField name="supplier_id" placeholder={t("Search...")} value={formik.values.supplier_id} options={supplierOptionsData} label={t("Supplier")} controlId="productForm-supplier_id" isMulti={false}  />
                           </div>
                           <div className="mb-3">
                             <TextareaField name="description" value={formik.values.description} label={t("Description")} controlId="productForm-description"  />
@@ -189,7 +189,7 @@ const ProductEditForm = () => {
                               <InputField type="text" name="retail_price" placeholder="$" value={formik.values.retail_price} label={t("Retail Price")} controlId="productForm-retail_price"  />
                             </div>
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+'('+t("Included in price")+')'} controlId="productForm-tax_id" isMulti={false}  />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+'('+t("Included in price")+')'} controlId="productForm-tax_id" isMulti={false}  />
                             </div>
                           </div>
                         </div>

@@ -18,7 +18,7 @@ const SupplierGridView = (props) => {
   const handleSupplierDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_supplier"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this supplier?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(supplierDeleteApi({ id: props.id }));
     }

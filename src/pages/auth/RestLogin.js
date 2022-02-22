@@ -77,7 +77,7 @@ const RestLogin = () => {
               </label>
             </div>
             <Link to="#!" className="text-body">
-              {t("Forgot password??")}
+              {t("Forgot password?")}
             </Link>
           </div>
           <div className="text-center text-lg-start mt-4 pt-2">

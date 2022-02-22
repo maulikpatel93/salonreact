@@ -107,6 +107,31 @@ export const addonstaff = createAsyncThunk("service/addonstaff", async (formValu
   }
 });
 
+export const serviceOptions = createAsyncThunk("service/serviceOptions", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await serviceApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, 'serviceOptions'))
+      .catch((error) => HandleError(thunkAPI, error, 'serviceOptions'));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+export const servicePriceApi = createAsyncThunk("service/serviceprice", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await serviceApiController
+      .serviceprice(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, 'serviceprice'))
+      .catch((error) => HandleError(thunkAPI, error, 'serviceprice'));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -120,6 +145,8 @@ const initialState = {
   isSearchName: "",
   isAddonServices: [],
   isAddonStaff: [],
+  isServiceOption: [],
+  isServicePrice: [],
 };
 
 const serviceSlice = createSlice({
@@ -276,6 +303,20 @@ const serviceSlice = createSlice({
     },
     [addonstaff.rejected]: (state) => {
       state.isAddonStaff = [];
+    },
+    [serviceOptions.pending]: () => {},
+    [serviceOptions.fulfilled]: (state, action) => {
+      state.isServiceOption = action.payload;
+    },
+    [serviceOptions.rejected]: (state) => {
+      state.isTaxOption = [];
+    },
+    [servicePriceApi.pending]: () => {},
+    [servicePriceApi.fulfilled]: (state, action) => {
+      state.isServicePrice = action.payload;
+    },
+    [servicePriceApi.rejected]: (state) => {
+      state.isServicePrice = [];
     },
   },
 });

@@ -165,7 +165,7 @@ const ClientEditForm = () => {
                 </div>
               </div>
               <div className="mb-3">
-                <TextareaField type="text" name="description" placeholder={t('client_note_placeholder')} value={formik.values.description} label={t("Client Notes")} controlId="clientForm-description" />
+                <TextareaField type="text" name="description" placeholder={t("For example, allergic to latex")} value={formik.values.description} label={t("Client Notes")} controlId="clientForm-description" />
               </div>
               <div className="mb-3">
                 <label htmlFor="">{t("Notifications")}</label>

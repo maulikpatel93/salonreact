@@ -186,7 +186,7 @@ const ClientDetailModal = () => {
                   <div className={"tab-pane fade" + (detailTab && detailTab == "clientdetail" ? " show active" : "")} id="client-detail-tab" role="tabpanel" aria-labelledby="client-detail-tab">
                     <div className="drawer-header">
                       <h2 className="mb-4 pe-md-5">
-                        {t("Edit_client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
+                        {t("Edit Client")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
                       </h2>
                     </div>
                     <div className="content-wrp">

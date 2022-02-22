@@ -1,7 +1,8 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Select from "react-select";
-
+import { servicePriceApi } from "store/slices/serviceSlice";
+import { useDispatch } from "react-redux";
 // interface Option {
 //   label: string;
 //   value: string;
@@ -15,7 +16,11 @@ import Select from "react-select";
 // }
 
 export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
+  const dispatch = useDispatch();
   const onChange = (option) => {
+    if (field.name == "service_id") {
+      dispatch(servicePriceApi({ service_id: option && option.value }));
+    }
     if (option) {
       form.setFieldValue(field.name, isMulti ? option.map((item) => item.value) : option.value);
     } else {
@@ -78,7 +83,7 @@ CustomSelect.propTypes = {
   form: PropTypes.object,
   options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   isMulti: PropTypes.bool,
-  controlId: PropTypes.string
+  controlId: PropTypes.string,
 };
 
 export default CustomSelect;

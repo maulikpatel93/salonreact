@@ -253,13 +253,13 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-auto">
-                              <ReactSelectField name="duration" placeholder={t("Search_option")} value={formik.values.duration} options={durationOptionsData} label={t("Duration")} controlId="serviceForm-duration" isMulti={false} />
+                              <ReactSelectField name="duration" placeholder={t("Search...")} value={formik.values.duration} options={durationOptionsData} label={t("Duration")} controlId="serviceForm-duration" isMulti={false} />
                             </div>
                             <div className="col-auto">
-                              <ReactSelectField name="padding_time" placeholder={t("Search_option")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("Padding Time")} controlId="serviceForm-padding_time" isMulti={false} />
+                              <ReactSelectField name="padding_time" placeholder={t("Search...")} value={formik.values.padding_time} options={paddingtimeOptionsData} label={t("Padding Time")} controlId="serviceForm-padding_time" isMulti={false} />
                             </div>
                           </div>
-                          <p>{t("Padding Time_note")}</p>
+                          <p>{t("Padding time can be added for preparation or clean-up and it will block out the additional time in your calendar.")}</p>
                         </div>
                       </div>
                       <hr className="drawer-category-hr"></hr>
@@ -271,7 +271,7 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search_option")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -473,7 +473,7 @@ const ServiceAddForm = () => {
                                         }
                                       }}
                                     />
-                                    <label>{t("All_services")}</label>
+                                    <label>{t("All Services")}</label>
                                   </div>
                                   <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                                     {isAddonServices &&

@@ -22,7 +22,7 @@ const PriceTierGridView = (props) => {
   const handlePriceTierDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this pricetier?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(pricetierDeleteApi({ id: props.id }));
     }

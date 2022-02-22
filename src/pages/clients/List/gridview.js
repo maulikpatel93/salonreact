@@ -22,7 +22,7 @@ const ClientGridView = (props) => {
   const handleClientDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_client"), message: name, confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this client?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(clientDeleteApi({ id: props.id }));
     }

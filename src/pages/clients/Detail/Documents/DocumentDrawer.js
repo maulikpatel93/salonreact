@@ -33,7 +33,7 @@ const DocumentDrawer = () => {
 
   const handleClientDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete"), message: t("Success"), confirmButtonText: t("yes_delete_it") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete?"), message: t("Success"), confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(clientdocumentDeleteApi({ id: event.id }));
     }

@@ -482,7 +482,7 @@ const StaffEditForm = () => {
                                   }
                                 }}
                               />
-                              <label>{t("All_services")}</label>
+                              <label>{t("All Services")}</label>
                             </div>
                             <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
                               {isAddonServices &&

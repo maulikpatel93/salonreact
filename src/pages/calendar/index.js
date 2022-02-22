@@ -10,6 +10,8 @@ import { openAddAppointmentForm } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
+import { serviceOptions } from "store/slices/serviceSlice";
+import { staffOptions } from "store/slices/staffSlice";
 
 const Calendar = () => {
   SalonModule();
@@ -30,6 +32,8 @@ const Calendar = () => {
   };
   const handleAppointmentDrawer = () => {
     dispatch(openAddAppointmentForm());
+    dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
+    dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
   const handleClientDrawer = () => {
     dispatch(openAddClientForm());

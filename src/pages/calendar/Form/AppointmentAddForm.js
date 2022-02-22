@@ -6,17 +6,20 @@ import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, MapAddressField, ReactSelectField, TextareaField, SwitchField, InputFieldImage } from "../../../component/form/Field";
+import { InputField, ReactSelectField, SelectField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
 import useScriptRef from "../../../hooks/useScriptRef";
 import { closeAddAppointmentForm, appointmentStoreApi } from "../../../store/slices/appointmentSlice";
-import { openAddClientForm, clientGridViewApi, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
+import { servicePriceApi } from "../../../store/slices/serviceSlice";
+import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
 import SuggetionListView from "pages/clients/List/SuggetionListView";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
+import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
+import { decimalOnly } from "../../../component/form/Validation";
 
 const AppointmentAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -35,6 +38,9 @@ const AppointmentAddForm = () => {
   const isSearchList = useSelector((state) => state.client.isSearchList);
   const isSearchName = useSelector((state) => state.client.isSearchName);
   const SuggetionView = useSelector((state) => state.client.isSuggetionListView);
+  const isServiceOption = useSelector((state) => state.service.isServiceOption);
+  const isStaffOption = useSelector((state) => state.staff.isStaffOption);
+  const isServicePrice = useSelector((state) => state.service.isServicePrice);
 
   const handlecloseAddAppointmentForm = () => {
     dispatch(closeAddAppointmentForm());
@@ -88,10 +94,13 @@ const AppointmentAddForm = () => {
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Service")).required())),
     staff_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Staff")).required())),
-    date: Yup.string().trim().label(t("Date")).required(),
+    date: Yup.date()
+      .label(t("Date"))
+      .required()
+      .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
     start_time: Yup.string().trim().label(t("Start Time")).required(),
-    duration: Yup.string().trim().label(t("Duration")).required(),
-    cost: Yup.string().trim().label(t("Cost")).required(),
+    duration: Yup.string().trim().matches(config.duration_pattern, t(config.duration_HM_error)).label(t("Duration")).required(),
+    cost: Yup.string().trim().label(t("Cost")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     repeats: Yup.string().trim().label(t("Repeats")).required(),
     booking_notes: Yup.string().trim().label(t("Booking Notes")),
     client_name: Yup.string().trim().label(t("Client")),
@@ -132,13 +141,25 @@ const AppointmentAddForm = () => {
   const handleClientAddForm = () => {
     dispatch(openAddClientForm());
   };
+
+  const serviceOptionsData = isServiceOption;
+  const staffOptionsData = isStaffOption;
+  const repeatsOptionsData = [
+    { value: "No", label: t("No") },
+    { value: "Yes", label: t("Yes") },
+  ];
   return (
     <>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleAppointmentSubmit}>
         {(formik) => {
-          // useEffect(() => {
-          //   formik.setFieldValue("date", getselectedDatePicker, false);
-          // }, [getselectedDatePicker]);
+          useEffect(() => {
+            if (isServicePrice) {
+              let duration = isServicePrice.duration ? MinutesToHours(isServicePrice.duration) : "";
+              let cost = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              formik.setFieldValue("duration", duration);
+              formik.setFieldValue("cost", cost ? cost[0].price : "");
+            }
+          }, [isServicePrice]);
           console.log(formik.values);
           return (
             <div className={"drawer appointment-drawer " + rightDrawerOpened} id="addappoinment-drawer">
@@ -146,7 +167,13 @@ const AppointmentAddForm = () => {
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 pe-3">{t("Add Appointment")}</h2>
-                    <a className="close-drawer cursor-pointer" onClick={handlecloseAddAppointmentForm}>
+                    <a
+                      className="close-drawer cursor-pointer"
+                      onClick={() => {
+                        dispatch(servicePriceApi({ service_id: "" }));
+                        handlecloseAddAppointmentForm();
+                      }}
+                    >
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
                   </div>
@@ -209,6 +236,7 @@ const AppointmentAddForm = () => {
                         inputClass={(formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
+                        minDate={new Date()}
                         onChange={(e) => {
                           let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("dddd, DD MMMM YYYY") : "";
                           formik.setFieldValue("date", getselectedDatePicker);
@@ -221,51 +249,34 @@ const AppointmentAddForm = () => {
                         <InputField type="time" name="start_time" value={formik.values.start_time} label={t("Start Time")} controlId="appointmentForm-start_time" />
                       </div>
                       <div className="col-sm-8 mb-3">
-                        <label htmlFor="">Service</label>
-                        <select name="" id="" className="form-control">
-                          <option value="">Choose Service</option>
-                          <option value="">Service</option>
-                          <option value="">Service</option>
-                        </select>
+                        <ReactSelectField name="service_id" placeholder={t("Choose Service")} value={formik.values.service_id} options={serviceOptionsData} label={t("Service")} controlId="appointmentForm-service_id" isMulti={false} />
                       </div>
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-6 mb-3">
-                        <label htmlFor="">Staff</label>
-                        <select name="" id="" className="form-control">
-                          <option value="">Choose Staff</option>
-                          <option value="">Member</option>
-                          <option value="">Member</option>
-                        </select>
+                        <ReactSelectField name="staff_id" placeholder={t("Choose Staff")} value={formik.values.staff_id} options={staffOptionsData} label={t("Staff")} controlId="appointmentForm-staff_id" isMulti={false} />
                       </div>
                       <div className="col-sm-3 col-6 mb-3">
-                        <label htmlFor="">Duration</label>
-                        <input type="text" className="form-control" placeholder="--/--" />
+                        <InputField name="duration" value={formik.values.duration} label={t("Duration")} mask="99:99" controlId="appointmentForm-duration" placeholder="--:--" />
                       </div>
                       <div className="col-sm-3 col-6 mb-3">
-                        <label htmlFor="">Cost</label>
-                        <input type="text" className="form-control" placeholder="$" />
+                        <InputField name="cost" value={formik.values.cost} label={t("Cost")} controlId="appointmentForm-cost" placeholder="$" />
                       </div>
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="">Repeats</label>
-                      <select name="" id="" className="form-control">
-                        <option value="">Yes</option>
-                        <option value="">No</option>
-                      </select>
-                      <a href="#" className="btn btn-outline-primary mt-3">
+                      <SelectField name="repeats" placeholder={t("--Select--")} value={formik.values.repeats} options={repeatsOptionsData} label={t("Repeats")} controlId="appointmentForm-repeats" />
+                      {/* <a href="#" className="btn btn-outline-primary mt-3">
                         Add Another Service
-                      </a>
+                      </a> */}
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="">Booking notes</label>
-                      <textarea id="my-textarea" className="form-control" name="" rows="5" placeholder="Add any notes about the appointment"></textarea>
+                      <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
                   </div>
                   <div className="drawer-footer">
                     <div className="row justify-content-between">
-                      <div className="col-auto h5 mb-3">Total of 1hr 45 minutes</div>
-                      <div className="col-auto h5 mb-3">$180.00</div>
+                      <div className="col-auto h5 mb-3">{(getHours(formik.values.duration, "H:m") || getMinutes(formik.values.duration, "H:m")) && t("Total of {{hour}}hr {{minute}}minutes", { hour: getHours(formik.values.duration, "H:m"), minute: getMinutes(formik.values.duration, "H:m") })}</div>
+                      <div className="col-auto h5 mb-3 float-end">${formik.values.cost ? formik.values.cost : "00.00"}</div>
                     </div>
                     <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                       {loading && <span className="spinner-border spinner-border-sm"></span>}

@@ -43,3 +43,50 @@ export const checkaccess = (obj) => {
   }
   return isaccess;
 };
+
+export const MinutesToHours = (minutes) => {
+  var Hours = Math.floor(minutes / 60);
+  var minutes = minutes % 60;
+  if (Hours < 10) {
+    Hours = "0" + Hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  return Hours + ":" + minutes;
+};
+
+export const HoursToMinutes = (timeInHour) => {
+  var timeParts = timeInHour.split(":");
+  return Number(timeParts[0]) * 60 + Number(timeParts[1]);
+};
+
+export const getHours = (time, format) => {
+  if (format === "H:m") {
+    time = HoursToMinutes(time);
+  }
+  var Hours = Math.floor(time / 60);
+  var minutes = time % 60;
+  if (Hours < 10) {
+    Hours = "0" + Hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  return Hours ? Hours : "";
+};
+
+export const getMinutes = (time, format) => {
+  if (format === "H:m") {
+    time = HoursToMinutes(time);
+  }
+  var Hours = Math.floor(time / 60);
+  var minutes = time % 60;
+  if (Hours < 10) {
+    Hours = "0" + Hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  return minutes ? minutes : "";
+};

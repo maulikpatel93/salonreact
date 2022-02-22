@@ -139,7 +139,7 @@ const Staff = () => {
             )}
             {checkaccess({ name: "list", role_id: role_id, controller: "pricetiers", access }) && (
               <div className={"tab-pane" + (tabview && tabview == "price_tier" ? " show active" : "")} id="pricetiers">
-                <h5 className="fw-semibold">{t("Price_tier_listing_note")}</h5>
+                <h5 className="fw-semibold">{t("Create price tiers based on the skill level of your staff.")}</h5>
                 {tabview && tabview == "price_tier" && <PriceTier />}
               </div>
             )}

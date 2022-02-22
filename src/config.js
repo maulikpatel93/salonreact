@@ -41,7 +41,9 @@ const config = {
   defaultPath: "/dashboard",
   API_URL: "http://127.0.0.1:8000/api/v1/",
   phone_number_pattern: /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/,
-  phone_number_334_error: "phone_number_334_error",
+  phone_number_334_error: "Mobile is Invalid",
+  duration_pattern: /^([0-1]\d|2[0-3]):([0-5]\d)$/,
+  duration_HM_error: "Only Allow hours and Minutes",
   google_api_key: "AIzaSyDtEOPPr627_yGNQJaZaBLFrKUF_GVNpvw",
   bing_api_key: "AisIvzcLWeb3W3FZt45Al5-dT3BQUh6bMbtEiTHXwZlfAw8lH4wCxuldUuX-lgX1",
 };

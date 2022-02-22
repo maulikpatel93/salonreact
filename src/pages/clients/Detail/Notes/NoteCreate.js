@@ -54,7 +54,7 @@ const NoteCreate = (props) => {
           return (
             <>
               <form noValidate onSubmit={formik.handleSubmit} className="photoform">
-                <TextareaField type="text" name="note" placeholder={t('client_note_placeholder')} value={formik.values.note} label={t("Client Notes")} controlId="clientForm-note" />
+                <TextareaField type="text" name="note" placeholder={t("For example, allergic to latex")} value={formik.values.note} label={t("Client Notes")} controlId="clientForm-note" />
                 <button type="submit" className="btn btn-primary w-100 btn-md mt-3" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
                   {t("Add")}

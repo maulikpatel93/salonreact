@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 // import InfiniteScroll from "react-infinite-scroll-component";
 
 import config from "../../../config";
-import { staffOptions } from "../../../store/slices/staffSlice";
+import { staffOptionsDropdown } from "../../../store/slices/staffSlice";
 import { ucfirst } from "helpers/functions";
 import { rosterListViewApi, openAddRosterForm, openEditRosterForm, closeAddRosterForm, closeEditRosterForm, closeDeleteModal, rosterDeleteApi, staffFilter, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import Moment from "react-moment";
@@ -22,14 +22,14 @@ const Roster = () => {
   const currentUser = auth.user;
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
-  const isStaffOption = useSelector((state) => state.staff.isStaffOption);
+  const isStaffOptionDropdown = useSelector((state) => state.staff.isStaffOptionDropdown);
   const rosterListview = useSelector((state) => state.roster.isListView);
   const addTime = useSelector((state) => state.roster.isOpenedAddForm);
   const updateTime = useSelector((state) => state.roster.isOpenedEditForm);
   const isDeleteModal = useSelector((state) => state.roster.isDeleteModal);
   const isStaffFilter = useSelector((state) => state.roster.isStaffFilter);
   useEffect(() => {
-    dispatch(staffOptions({ dropdown: true }));
+    dispatch(staffOptionsDropdown({ dropdown: true }));
     if (isStaffFilter) {
       dispatch(rosterListViewApi({ id: isStaffFilter.id }));
     } else {
@@ -70,7 +70,7 @@ const Roster = () => {
       }
     });
     // const name = ucfirst(props.name);
-    // let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure?_delete_pricetier"), message: name, confirmButtonText: t("yes_delete_it") });
+    // let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this pricetier?"), message: name, confirmButtonText: t("Yes, delete it!") });
     // if (confirmbtn == true) {
     //   dispatch(rosterDeleteApi({ id: props.id })).then((action) => {
     //     console.log(action);
@@ -97,12 +97,12 @@ const Roster = () => {
               </span>
               <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
                 <ul className="p-0 m-0 list-unstyled">
-                  {isStaffOption &&
-                    Object.keys(isStaffOption).map((item, i) => {
-                      let id = isStaffOption[item].id;
-                      let first_name = isStaffOption[item].first_name;
-                      let last_name = isStaffOption[item].last_name;
-                      let image_url = isStaffOption[item].profile_photo_url;
+                  {isStaffOptionDropdown &&
+                    Object.keys(isStaffOptionDropdown).map((item, i) => {
+                      let id = isStaffOptionDropdown[item].id;
+                      let first_name = isStaffOptionDropdown[item].first_name;
+                      let last_name = isStaffOptionDropdown[item].last_name;
+                      let image_url = isStaffOptionDropdown[item].profile_photo_url;
                       let name = ucfirst(first_name) + " " + ucfirst(last_name);
                       return (
                         <li key={i} data-id={id}>
@@ -168,7 +168,7 @@ const Roster = () => {
                 let first_name = rosterListview[item].first_name;
                 let last_name = rosterListview[item].last_name;
                 let rosterfield = rosterListview[item].rosterfield;
-                //     let image_url = isStaffOption[item].profile_photo_url;
+                //     let image_url = isStaffOptionDropdown[item].profile_photo_url;
                 return (
                   <tr key={i} data-id={id}>
                     <td>{ucfirst(first_name) + " " + ucfirst(last_name)}</td>

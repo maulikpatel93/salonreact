@@ -82,10 +82,14 @@ const view = (values) => {
     id: values && values.id ? values.id : "",
     field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
-    supplier_field: "name", //business_name,owner_name
-    tax_field: "name", //business_name,owner_name
-    addOnService_field: "name", //business_name,owner_name
+    serviceprice_field: values && values.option ? "0" : "name,price,add_on_price", //business_name,owner_name
+    supplier_field: values && values.option ? "0" : "name", //business_name,owner_name
+    tax_field: values && values.option ? "0" : "name", //business_name,owner_name
+    addOnService_field: values && values.option ? "0" : "name", //business_name,owner_name
+    addOnStaff_field: values && values.option ? "0" : "name", //business_name,owner_name
+    category_field: values && values.option ? "0" : "name", //business_name,owner_name
     result: result, //business_name,owner_name
+    option: values && values.option ? values.option : "",
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
@@ -150,6 +154,20 @@ const addonstaff = (values) => {
   return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const serviceprice = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  let service_id = values && values.service_id ? values.service_id : "";
+  const action = `afterlogin/services/serviceprice`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    service_id: service_id,
+  };
+  return axios.post(API_URL + action, data, { headers: authHeader() });
+};
+
 const serviceApiController = {
   create,
   update,
@@ -158,5 +176,6 @@ const serviceApiController = {
   suggetionlist,
   addonservices,
   addonstaff,
+  serviceprice,
 };
 export default serviceApiController;

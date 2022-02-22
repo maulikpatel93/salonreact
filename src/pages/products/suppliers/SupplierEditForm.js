@@ -109,7 +109,7 @@ const SupplierEditForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t('edit_supplier')}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("Edit Supplier")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditSupplierForm}>
                         {t("Cancel")}

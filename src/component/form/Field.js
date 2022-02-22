@@ -33,7 +33,7 @@ const InputField = ({ label, controlId, ...props }) => {
     <>
       <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        {field.name === "phone_number" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
+        {field.name === "phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={!!meta.error} /> : <Form.Control {...field} {...props} isInvalid={!!meta.error} />}
 
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
       </Form.Group>
