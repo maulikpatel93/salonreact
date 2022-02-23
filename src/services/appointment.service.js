@@ -45,6 +45,10 @@ const view = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   const result = values && values.result ? values.result : "";
+  const filter = values && values.filter ? JSON.stringify(values.filter) : "";
+  if (filter === "") {
+    store.dispatch({ type: "appointment/closeAppointmentFilter" });
+  }
   let sortstring = "";
   if (sort) {
     let sortArray = [];
@@ -68,6 +72,7 @@ const view = (values) => {
     field: values && values.id ? "" : "date,start_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
+    filter: filter, //business_name,owner_name
     option: values && values.option ? values.option : "",
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });

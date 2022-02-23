@@ -100,6 +100,7 @@ const initialState = {
   isOpenedEditForm: "",
   isListView: [],
   isDetailData: "",
+  isFilter: "",
 };
 
 const appointmentSlice = createSlice({
@@ -122,6 +123,12 @@ const appointmentSlice = createSlice({
     closeEditAppointmentForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
+    },
+    openAppointmentFilter: (state, action) => {
+      state.isFilter = action.payload;
+    },
+    closeAppointmentFilter: (state) => {
+      state.isFilter = "";
     },
   },
   extraReducers: {
@@ -176,5 +183,5 @@ const appointmentSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm } = appointmentSlice.actions;
+export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm, openAppointmentFilter, closeAppointmentFilter } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

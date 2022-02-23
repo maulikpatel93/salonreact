@@ -205,3 +205,8 @@ header {
     background: $primary;
     color: $white;
 }
+
+.drawer-footer .form-check {
+    min-height: 1.5rem !important;
+    margin-bottom: 0.125rem !important;
+}

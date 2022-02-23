@@ -6,70 +6,33 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, ReactSelectField, SelectField, TextareaField } from "../../../component/form/Field";
+import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeAddAppointmentForm, appointmentStoreApi } from "../../../store/slices/appointmentSlice";
+import { closeEditAppointmentForm, appointmentUpdateApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
-import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
-import SuggetionListView from "pages/clients/List/SuggetionListView";
-import InfiniteScroll from "react-infinite-scroll-component";
-import PaginationLoader from "component/PaginationLoader";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
 
-const AppointmentAddForm = () => {
+const AppointmentEditForm = () => {
   const [loading, setLoading] = useState(false);
   // const [clientId, setClientId] = useState("");
-  const rightDrawerOpened = useSelector((state) => state.appointment.isOpenedAddForm);
+  const rightDrawerOpened = useSelector((state) => state.appointment.isOpenedEditForm);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const scriptedRef = useScriptRef();
 
-  const isSearchList = useSelector((state) => state.client.isSearchList);
-  const isSearchName = useSelector((state) => state.client.isSearchName);
-  const SuggetionView = useSelector((state) => state.client.isSuggetionListView);
   const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const isServicePrice = useSelector((state) => state.service.isServicePrice);
+  const detail = useSelector((state) => state.appointment.isDetailData);
 
-  const handlecloseAddAppointmentForm = () => {
-    dispatch(closeAddAppointmentForm());
-  };
-
-  const fetchDataSuggetionList = () => {
-    dispatch(clientSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
-  };
-
-  const handleClickSearch = (e) => {
-    let q = e.currentTarget.value;
-    if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
-    }
-  };
-  const handleKeyUpSearch = (e) => {
-    let q = e.currentTarget.value;
-    dispatch(clientSearchName(q));
-    if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
-    } else {
-      dispatch(closeClientSearchList());
-    }
-  };
-  const handleCloseSearch = () => {
-    dispatch(clientSearchName(""));
-    dispatch(closeClientSearchList());
-  };
-  const handleOnBlur = () => {
-    // setTimeout(() => {
-    //   dispatch(closeClientSearchList());
-    // }, 200);
+  const handlecloseEditAppointmentForm = () => {
+    dispatch(closeEditAppointmentForm());
   };
 
   const initialValues = {
@@ -82,7 +45,8 @@ const AppointmentAddForm = () => {
     cost: "",
     repeats: "",
     booking_notes: "",
-    client_name: "",
+    status: "",
+    status_manage: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -98,19 +62,18 @@ const AppointmentAddForm = () => {
     cost: Yup.string().trim().label(t("Cost")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     repeats: Yup.string().trim().label(t("Repeats")).required(),
     booking_notes: Yup.string().trim().label(t("Booking Notes")),
-    client_name: Yup.string().trim().label(t("Client")),
   });
   yupconfig();
 
   const handleAppointmentSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(appointmentStoreApi(values)).then((action) => {
+      dispatch(appointmentUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
-          dispatch(closeAddAppointmentForm());
+          dispatch(closeEditAppointmentForm());
           sweatalert({ title: t("Booked"), text: t("Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
@@ -134,94 +97,57 @@ const AppointmentAddForm = () => {
     }
   };
 
-  const handleClientAddForm = () => {
-    dispatch(openAddClientForm());
-  };
-
   const serviceOptionsData = isServiceOption;
   const staffOptionsData = isStaffOption;
   const repeatsOptionsData = [
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
   ];
+  const statusmanageOptionsData = [
+    { value: "Not Started", label: t("Not Started") },
+    { value: "Started", label: t("Started") },
+  ];
   return (
     <>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleAppointmentSubmit}>
         {(formik) => {
           useEffect(() => {
-            if (isServicePrice) {
+            if (typeof isServicePrice !== "undefined" && Array.isArray(isServicePrice) && isServicePrice.length === 0 && detail) {
+              const fields = ["id", "client_id", "service_id", "staff_id", "date", "start_time", "duration", "cost", "repeats", "booking_notes"];
+              fields.forEach((field) => {
+                if (["date"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
+                } else if (["duration"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
+                } else {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                }
+              });
+            } else if (isServicePrice) {
               let duration = isServicePrice.duration ? MinutesToHours(isServicePrice.duration) : "";
               let cost = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              formik.setFieldValue("service_id", isServicePrice.id);
               formik.setFieldValue("duration", duration);
               formik.setFieldValue("cost", cost ? cost[0].price : "");
             }
-            formik.setFieldValue("repeats", "No");
-          }, [isServicePrice]);
+          }, [detail, isServicePrice]);
           return (
-            <div className={"drawer appointment-drawer " + rightDrawerOpened} id="addappoinment-drawer">
+            <div className={"drawer client-editappoinment " + rightDrawerOpened} id="addappoinment-drawer">
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 pe-3">{t("Add Appointment")}</h2>
+                    <h2 className="mb-4 pe-md-5 pe-3">{t("Edit Appointment")}</h2>
                     <a
-                      className="close-drawer cursor-pointer"
+                      className="close cursor-pointer"
                       onClick={() => {
                         dispatch(servicePriceApi({ service_id: "" }));
-                        handlecloseAddAppointmentForm();
+                        handlecloseEditAppointmentForm();
                       }}
                     >
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
                   </div>
                   <div className="drawer-body pymd-5 py-3">
-                    <div className="mb-3 search">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <label htmlFor="">{t("Client")}</label>
-                        <a id="addclient-link" className="h6 mb-0 cursor-pointer" onClick={handleClientAddForm}>
-                          <i className="fal fa-plus pe-1 small"></i>
-                          {t("New Client")}
-                        </a>
-                      </div>
-                      <div className="input-group">
-                        <span className="input-group-text" id="inputGroupPrepend">
-                          <i className="far fa-search"></i>
-                        </span>
-                        <input
-                          type="text"
-                          name="client_name"
-                          id="appointmentForm-client_name"
-                          className={(formik.errors && formik.errors.client_id ? "is-invalid" : "") + " form-control search-input"}
-                          placeholder={t("Search")}
-                          value={isSearchName}
-                          onInput={(e) => {
-                            formik.setFieldValue("client_id", "");
-                            dispatch(clientSearchName(e.target.value));
-                          }}
-                          onClick={handleClickSearch}
-                          onKeyUp={handleKeyUpSearch}
-                          onBlur={handleOnBlur}
-                        />
-                        <a
-                          className="close cursor-pointer"
-                          style={{ display: isSearchName ? "block" : "none" }}
-                          onClick={() => {
-                            formik.setFieldValue("client_id", "");
-                            handleCloseSearch();
-                          }}
-                        >
-                          <i className="fal fa-times"></i>
-                        </a>
-                        {/* {formik.errors && formik.errors.client_id && <div className="invalid-feedback">{formik.errors.client_id}</div>} */}
-                      </div>
-                      <div className={"search-result dropdown-box " + isSearchList} id="search-content">
-                        <InfiniteScroll className="" dataLength={SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <ul className="p-0 m-0 list-unstyled">
-                            <SuggetionListView view={SuggetionView} page={"appointmentAddForm"} formik={formik} />
-                          </ul>
-                        </InfiniteScroll>
-                      </div>
-                      <InputField type="hidden" name="client_id" id="appointmentForm-client_id" />
-                    </div>
                     <div className="mb-3">
                       {/* <InputField type="date" name="date" value={formik.values.date_of_birth} label={t("Date")} controlId="appointmentForm-date" placeholder={t("Select Date")}/> */}
                       <label htmlFor="">{t("Date")}</label>
@@ -269,15 +195,50 @@ const AppointmentAddForm = () => {
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
                   </div>
-                  <div className="drawer-footer">
-                    <div className="row justify-content-between">
-                      <div className="col-auto h5 mb-3">{(getHours(formik.values.duration, "H:m") || getMinutes(formik.values.duration, "H:m")) && t("Total of {{hour}}hr {{minute}}minutes", { hour: getHours(formik.values.duration, "H:m"), minute: getMinutes(formik.values.duration, "H:m") })}</div>
-                      <div className="col-auto h5 mb-3 float-end">${formik.values.cost ? formik.values.cost : "00.00"}</div>
+                  <div className="drawer-footer pt-0">
+                    <div className="row gx-2 align-items-center footer-top">
+                      <div className="col-md-6 mb-md-0 mb-3">
+                        <SwitchField
+                          name="status"
+                          label={t("Confirmed")}
+                          controlId="appointmentForm-status"
+                          value="1"
+                          onChange={(e) => {
+                            if (e.currentTarget.checked) {
+                              // setTimeout(() => {
+                              formik.setFieldValue("status", 1, false);
+                              // }, 100);
+                            } else {
+                              // setTimeout(() => {
+                              formik.setFieldValue("status", "", false);
+                              // }, 100);
+                            }
+                            //formik.handleChange(e);
+                          }}
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <SelectField name="status_manage" placeholder={""} value={formik.values.status_manage} options={statusmanageOptionsData} label={"0"} controlId="appointmentForm-status_manage" />
+                      </div>
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
-                      {loading && <span className="spinner-border spinner-border-sm"></span>}
-                      {t("Save Appointment")}
-                    </button>
+                    <div className="row justify-content-between mt-3 mb-lg-2">
+                      <div className="col-auto h5 mb-3 fw-semibold">{(getHours(formik.values.duration, "H:m") || getMinutes(formik.values.duration, "H:m")) && t("Total of {{hour}}hr {{minute}}minutes", { hour: getHours(formik.values.duration, "H:m"), minute: getMinutes(formik.values.duration, "H:m") })}</div>
+                      <div className="col-auto h5 mb-3 fw-semibold float-end">${formik.values.cost ? formik.values.cost : "00.00"}</div>
+                    </div>
+                    <div className="row">
+                      <div className="col-6">
+                        <button type="button" className="btn btn-danger w-100 btn-lg" disabled={loading}>
+                          {loading && <span className="spinner-border spinner-border-sm"></span>}
+                          {t("Cancel Appointment")}
+                        </button>
+                      </div>
+                      <div className="col-6">
+                        <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
+                          {loading && <span className="spinner-border spinner-border-sm"></span>}
+                          {t("Save Appointment")}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -289,4 +250,4 @@ const AppointmentAddForm = () => {
   );
 };
 
-export default AppointmentAddForm;
+export default AppointmentEditForm;

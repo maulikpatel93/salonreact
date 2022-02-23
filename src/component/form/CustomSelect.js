@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
   const dispatch = useDispatch();
   const onChange = (option) => {
-    if (field.name == "service_id") {
+    if (field.name === "service_id") {
       dispatch(servicePriceApi({ service_id: option && option.value }));
     }
     if (option) {

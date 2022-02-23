@@ -68,11 +68,13 @@ const SelectField = ({ label, controlId, options, ...props }) => {
   return (
     <>
       <Form.Group className="" controlId={controlId}>
-        <Form.Label>{label}</Form.Label>
+        {label === "0" ? "" : <Form.Label>{label}</Form.Label>}
         <Form.Control as="select" {...field} {...props} isInvalid={!!meta.error}>
-          <option key="0" value="">
-            {props.placeholder}
-          </option>
+          {props.placeholder && (
+            <option key="0" value="">
+              {props.placeholder}
+            </option>
+          )}
           {List}
         </Form.Control>
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
@@ -273,7 +275,7 @@ const MapAddressField = ({ label, controlId, ...props }) => {
 
 const DatePickerField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
-  
+
   return (
     <>
       <Form.Group className="" controlId={controlId}>

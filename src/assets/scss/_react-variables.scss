@@ -29,6 +29,7 @@ $cyan: #0dcaf0 !default;
 $themePrimary: #8c1c4d !default;
 $themeTextColor: #374151 !default;
 $themeSecondary: #EEEEEE !default;
+$themeDanger: #EF0000 !default;
 // scss-docs-end color-variables
 // scss-docs-start colors-map
 $colors: ( "blue": $blue, "indigo": $indigo, "purple": $purple, "pink": $pink, "red": $red, "orange": $orange, "yellow": $yellow, "green": $green, "teal": $teal, "cyan": $cyan, "white": $white, "gray": $gray-600, "gray-dark": $gray-800, "themePrimary": $themePrimary) !default;
@@ -39,6 +40,6 @@ $secondary: $themeSecondary !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
-$danger: $red !default;
+$danger: $themeDanger !default;
 $light: $gray-100 !default;
 $dark: $gray-900 !default;

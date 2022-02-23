@@ -17,7 +17,7 @@ import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
 import { checkaccess } from "helpers/functions";
-import { appointmentListViewApi } from "store/slices/appointmentSlice";
+import { appointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -29,7 +29,8 @@ const ClientDetailModal = () => {
 
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
-
+  const isFilter = useSelector((state) => state.appointment.isFilter);
+  
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -42,6 +43,13 @@ const ClientDetailModal = () => {
   const email = detail.email;
   // let phone_number = detail.phone_number;
   const profile_photo_url = detail.profile_photo_url;
+  const filterOption = [
+    { value: "", label: t("All") },
+    { value: "Scheduled", label: t("Scheduled") },
+    { value: "Confirmed", label: t("Confirmed") },
+    { value: "Completed", label: t("Completed") },
+    { value: "Cancelled", label: t("Cancelled") },
+  ];
   return (
     <React.Fragment>
       <div className={"drawer client-detaildrawer p-0 " + rightDrawerOpened}>
@@ -96,7 +104,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(clientDetailTab("appointment"));
-                        dispatch(appointmentListViewApi({ client_id: detail.id }));
+                        dispatch(appointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
                       }}
                     >
                       {t("Appointments")}
@@ -204,8 +212,34 @@ const ClientDetailModal = () => {
                       <h2 className="mb-4 pe-md-5">
                         {t("Appointments")} <img src={config.imagepath + "print.png"} alt="" className="ms-md-2 ms-1" />
                       </h2>
+                      <div className="row justify-content-end">
+                        <div className="col-4 mb-3">
+                          <select
+                            className="form-control"
+                            onChange={(e) => {
+                              const filter = { status: e.currentTarget.value };
+                              dispatch(openAppointmentFilter(filter));
+                              dispatch(appointmentListViewApi({ client_id: detail.id, filter: filter }));
+                            }}
+                            value={isFilter && isFilter.status}
+                          >
+                            {filterOption &&
+                              Object.keys(filterOption).map((item, i) => {
+                                let value = filterOption[item].value;
+                                let label = filterOption[item].label;
+                                return (
+                                  <option value={value} key={i}>
+                                    {label}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                      </div>
                     </div>
-                    <div className="content-wrp" id={detailTab && "clientdetail_"+detailTab}>{detailTab && detailTab == "appointment" && <Appointment role_id={role_id} access={access} />}</div>
+                    <div className="content-wrp" id={detailTab && "clientdetail_" + detailTab}>
+                      {detailTab && detailTab == "appointment" && <Appointment role_id={role_id} access={access} />}
+                    </div>
                   </div>
                 )}
                 {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (

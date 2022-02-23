@@ -306,5 +306,14 @@
     "End Time cannot be less than the Start Time": "End Time cannot be less than the Start Time",
     "Added": "Added",
     "Added Successfully": "Added Successfully",
-    "{{service_name}} with {{staff_name}}": "{{service_name}} with {{staff_name}}"
+    "{{service_name}} with {{staff_name}}": "{{service_name}} with {{staff_name}}",
+    "Scheduled": "Scheduled",
+    "Confirmed": "Confirmed",
+    "Completed": "Completed",
+    "Cancelled": "Cancelled",
+    "--Filter--": "--Filter--",
+    "Edit Appointment": "Edit Appointment",
+    "Cancel Appointment": "Cancel Appointment",
+    "Not Started": "Not Started",
+    "Started": "Started"
 }

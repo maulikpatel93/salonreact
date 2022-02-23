@@ -5,6 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import AppointmentListview from "./AppointmentListview";
 import { appointmentListViewApi } from "store/slices/appointmentSlice";
+import AppointmentEditForm from "pages/calendar/Form/AppointmentEditForm";
 
 const Appointment = () => {
   const dispatch = useDispatch();
@@ -16,15 +17,17 @@ const Appointment = () => {
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
   const ListView = useSelector((state) => state.appointment.isListView);
+  const isFilter = useSelector((state) => state.appointment.isFilter);
+  const editForm = useSelector((state) => state.appointment.isOpenedEditForm);
 
   const fetchDataList = () => {
-    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter }));
   };
 
   const [isFetching, setIsFetching] = useState(false);
   const loadMoreItemsList = () => {
     setIsFetching(true);
-    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter }));
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);
@@ -44,6 +47,7 @@ const Appointment = () => {
           )}
         </InfiniteScroll>
       </div>
+      {editForm && <AppointmentEditForm />}
     </>
   );
 };

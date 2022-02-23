@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
 import { checkaccess } from "helpers/functions";
-import { openAddClientForm } from "../../store/slices/clientSlice";
+import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { openAddBusytimeForm } from "store/slices/busytimeSlice";
 import { openAddAppointmentForm } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
@@ -33,6 +33,8 @@ const Calendar = () => {
   };
   const handleAppointmentDrawer = () => {
     dispatch(openAddAppointmentForm());
+    dispatch(clientSearchName(""));
+    dispatch(closeClientSearchList());
     dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
     dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
