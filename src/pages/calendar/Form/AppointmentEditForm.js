@@ -7,10 +7,10 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
-import { sweatalert } from "../../../component/Sweatalert2";
+import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeEditAppointmentForm, appointmentUpdateApi } from "../../../store/slices/appointmentSlice";
+import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
@@ -74,7 +74,8 @@ const AppointmentEditForm = () => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeEditAppointmentForm());
-          sweatalert({ title: t("Booked"), text: t("Booked Successfully"), icon: "success" });
+          dispatch(appointmentListViewApi());
+          sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -113,12 +114,20 @@ const AppointmentEditForm = () => {
         {(formik) => {
           useEffect(() => {
             if (typeof isServicePrice !== "undefined" && Array.isArray(isServicePrice) && isServicePrice.length === 0 && detail) {
-              const fields = ["id", "client_id", "service_id", "staff_id", "date", "start_time", "duration", "cost", "repeats", "booking_notes"];
+              const fields = ["id", "client_id", "service_id", "staff_id", "date", "start_time", "duration", "cost", "repeats", "booking_notes", "status", "status_manage"];
               fields.forEach((field) => {
                 if (["date"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
                 } else if (["duration"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
+                } else if (["status_manage"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "Not Started", false);
+                } else if (["status"].includes(field)) {
+                  if (detail[field] === "Confirmed") {
+                    formik.setFieldValue(field, 1, false);
+                  } else {
+                    formik.setFieldValue(field, "", false);
+                  }
                 } else {
                   formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
                 }
@@ -227,7 +236,26 @@ const AppointmentEditForm = () => {
                     </div>
                     <div className="row">
                       <div className="col-6">
-                        <button type="button" className="btn btn-danger w-100 btn-lg" disabled={loading}>
+                        <button
+                          type="button"
+                          className="btn btn-danger w-100 btn-lg"
+                          disabled={loading}
+                          onClick={(e) => {
+                            let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to cancel the appointment?"), message: "", confirmButtonText: t("Yes, cancelled it!") });
+                            if (confirmbtn == true) {
+                              dispatch(appointmentUpdateApi({ id: formik.values.id, client_id: formik.values.client_id, status: "Cancelled", clickEvent: "statusupdate" })).then((action) => {
+                                if (action.meta.requestStatus == "fulfilled") {
+                                  formik.setStatus({ success: true });
+                                  formik.resetForm();
+                                  dispatch(servicePriceApi({ service_id: "" }));
+                                  dispatch(closeEditAppointmentForm());
+                                  dispatch(appointmentListViewApi());
+                                  sweatalert({ title: t("Appointment booking Cancelled"), text: t("Appointment booking Cancelled"), icon: "success" });
+                                }
+                              });
+                            }
+                          }}
+                        >
                           {loading && <span className="spinner-border spinner-border-sm"></span>}
                           {t("Cancel Appointment")}
                         </button>

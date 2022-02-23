@@ -111,7 +111,7 @@ const AppointmentAddForm = () => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeAddAppointmentForm());
-          sweatalert({ title: t("Booked"), text: t("Booked Successfully"), icon: "success" });
+          sweatalert({ title: t("Booked"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;

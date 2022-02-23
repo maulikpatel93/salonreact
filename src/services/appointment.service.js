@@ -22,15 +22,15 @@ const create = (values) => {
 const update = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
+  const clickEvent = values && values.clickEvent;
   const formData = new FormData();
   for (let value in values) {
-    if (["gender"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, values[value].value);
-    } else {
-      formData.append(value, values[value]);
-    }
+    formData.append(value, values[value]);
   }
-  const action = "afterlogin/appointment/update/" + values.id;
+  let action = "afterlogin/appointment/update/" + values.id;
+  if (clickEvent && clickEvent === "statusupdate") {
+    action = "afterlogin/appointment/status/" + values.id;
+  }
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("role_id", 6);

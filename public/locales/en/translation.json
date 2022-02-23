@@ -315,5 +315,9 @@
     "Edit Appointment": "Edit Appointment",
     "Cancel Appointment": "Cancel Appointment",
     "Not Started": "Not Started",
-    "Started": "Started"
+    "Started": "Started",
+    "Appointment booking Updated": "Appointment booking Updated",
+    "Appointment booking Cancelled": "Appointment booking Cancelled",
+    "Are you sure you want to cancel the appointment?": "Are you sure you want to cancel the appointment?",
+    "Yes, cancelled it!": "Yes, cancelled it!"
 }

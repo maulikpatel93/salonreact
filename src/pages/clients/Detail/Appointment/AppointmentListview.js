@@ -51,19 +51,21 @@ const AppointmentListview = (props) => {
               <div
                 className={(status === "Scheduled" && "cursor-pointer") + " text-decoration-none event-box"}
                 onClick={() => {
-                  dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
-                    if (action.meta.requestStatus === "fulfilled") {
-                      dispatch(openEditAppointmentForm());
-                      dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-                      dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
-                    } else if (action.meta.requestStatus === "rejected") {
-                      if (action.payload.status === 422) {
-                        let error = action.payload;
-                        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-                        sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+                  if (status === "Scheduled") {
+                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                      if (action.meta.requestStatus === "fulfilled") {
+                        dispatch(openEditAppointmentForm());
+                        dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
+                        dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+                      } else if (action.meta.requestStatus === "rejected") {
+                        if (action.payload.status === 422) {
+                          let error = action.payload;
+                          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                          sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+                        }
                       }
-                    }
-                  });
+                    });
+                  }
                 }}
               >
                 <h6 className="mb-1 color-wine fw-semibold d-flex align-items-start">
