@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
-import { checkaccess } from "helpers/functions";
+import { checkaccess, uniqueArrayofObject } from "helpers/functions";
 import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { openAddBusytimeForm } from "store/slices/busytimeSlice";
-import { openAddAppointmentForm } from "store/slices/appointmentSlice";
+import { appointmentListViewApi, openAddAppointmentForm } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
 import { serviceOptions } from "store/slices/serviceSlice";
 import { staffOptions } from "store/slices/staffSlice";
+//Calender
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import moment from "moment";
 
 const Calendar = () => {
   SalonModule();
@@ -26,6 +33,42 @@ const Calendar = () => {
   const clientIsOpenedAddForm = useSelector((state) => state.client.isOpenedAddForm);
   const appointmentIsOpenedAddForm = useSelector((state) => state.appointment.isOpenedAddForm);
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
+  const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
+
+  const events = [];
+  const clients = [];
+  const resources = [];
+  dateAppointmentListView &&
+    Object.keys(dateAppointmentListView).map((item) => {
+      let id = dateAppointmentListView[item].id;
+      let date = dateAppointmentListView[item].date;
+      let start_time = dateAppointmentListView[item].start_time;
+      let duration = dateAppointmentListView[item].duration;
+      let client = dateAppointmentListView[item].client;
+      // console.log(dateAppointmentListView[item]);
+      // console.log(moment(date + "T" + start_time).format("h:mm a"));
+      // resources.push({ id: "a", title: "Room A" });
+      clients.push(client);
+      events.push({ resourceId: client.id, start: date + "T" + start_time, backgroundColor: "#8f807d", borderColor: "#8f807d" });
+    });
+  const uniqueclients = uniqueArrayofObject(clients, ["id"]);
+  uniqueclients &&
+    Object.keys(uniqueclients).map((item) => {
+      let id = uniqueclients[item].id;
+      let first_name = uniqueclients[item].first_name;
+      let last_name = uniqueclients[item].last_name;
+      let profile_photo_url = uniqueclients[item].profile_photo_url;
+      // resources.push({ id: id, title: first_name + " " + last_name });
+      resources.push({ id: id, html: first_name + " <br> " + last_name });
+    });
+
+  // const unique = [...new Set(clients.map(item => item.id))];
+  // console.log(resources);
+  // const events = [
+  //   { start: "2022-02-24T12:30:00Z" }, // already in UTC, so won't shift
+  //   { start: "2022-02-24T12:30:00+XX:XX" }, // will shift to 00:00 offset
+  //   { start: "2022-02-24T12:30:00" }, // will be parsed as if it were '2018-09-01T12:30:00Z'
+  // ];
 
   const handleBusytimeDrawer = () => {
     dispatch(openAddBusytimeForm());
@@ -41,6 +84,84 @@ const Calendar = () => {
   const handleClientDrawer = () => {
     dispatch(openAddClientForm());
   };
+
+  const handleDateSelect = (selectInfo) => {
+    let calendarApi = selectInfo.view.calendar;
+    // console.log(selectInfo);
+    // let title = prompt("Please enter a new title for your event");
+    calendarApi.unselect(); // clear date selection
+    // if (title) {
+    //   calendarApi.addEvent(
+    //     {
+    //       // will render immediately. will call handleEventAdd
+    //       title,
+    //       start: selectInfo.startStr,
+    //       end: selectInfo.endStr,
+    //       allDay: selectInfo.allDay,
+    //     },
+    //     true,
+    //   ); // temporary=true, will get overwritten when reducer gives new events
+    // }
+  };
+
+  const handleEventClick = (clickInfo) => {
+    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      clickInfo.event.remove(); // will render immediately. will call handleEventRemove
+    }
+  };
+  const handleDates = (rangeInfo) => {
+    dispatch(appointmentListViewApi({ date: rangeInfo.startStr }));
+    // this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr).catch(reportNetworkError);
+  };
+
+  const handleEventAdd = (addInfo) => {
+    // this.props.createEvent(addInfo.event.toPlainObject()).catch(() => {
+    //   reportNetworkError();
+    //   addInfo.revert();
+    // });
+  };
+
+  const handleEventChange = (changeInfo) => {
+    // this.props.updateEvent(changeInfo.event.toPlainObject()).catch(() => {
+    //   reportNetworkError();
+    //   changeInfo.revert();
+    // });
+  };
+
+  const handleEventRemove = (removeInfo) => {
+    // this.props.deleteEvent(removeInfo.event.id).catch(() => {
+    //   reportNetworkError();
+    //   removeInfo.revert();
+    // });
+  };
+
+  const renderEventContent = (eventInfo) => {
+    return (
+      <>
+        <b>{eventInfo.timeText}</b>
+        <i>{eventInfo.event.title}</i>
+      </>
+    );
+  };
+
+  const renderSidebarEvent = (plainEventObject) => {
+    return (
+      <li key={plainEventObject.id}>
+        <b>
+          {formatDate(plainEventObject.start, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </b>
+        <i>{plainEventObject.title}</i>
+      </li>
+    );
+  };
+
+  function reportNetworkError() {
+    alert("This action could not be completed");
+  }
   return (
     <>
       <div className="page-content">
@@ -157,14 +278,47 @@ const Calendar = () => {
             </div>
           </div>
           <div className="container">
-            <div className="tab-content py-lg-5 py-3">
+            <FullCalendar
+              schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
+              plugins={[resourceTimeGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "timeGridDay,timeGridWeek",
+              }}
+              buttonText={{ today: t("Today"), week: t("Week"), day: t("Day") }}
+              // initialView="timeGridDay"
+              initialView="resourceTimeGridDay"
+              resources={resources}
+              slotDuration={"00:15:00"}
+              allDaySlot={false}
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              // weekends={props.weekendsVisible}
+              datesSet={handleDates}
+              select={handleDateSelect}
+              events={events}
+              eventContent={renderEventContent} // custom render function
+              eventClick={handleEventClick}
+              eventAdd={handleEventAdd}
+              eventChange={handleEventChange} // called for drag-n-drop/resize
+              eventRemove={handleEventRemove}
+              timeZone={currentUser.salon && currentUser.salon.timezone}
+              timeFormat={"H:mm"}
+              resourceLabelContent={function (arg) {
+                return { html: arg.resource.extendedProps.html };
+              }}
+            />
+            {/* <div className="tab-content py-lg-5 py-3">
               <div className="tab-pane active" id="day" role="tabpanel">
                 plugin
               </div>
               <div className="tab-pane" id="week" role="tabpanel">
                 plugin............
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
         {checkaccess({ name: "create", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedAddForm ? <AppointmentAddForm /> : ""}

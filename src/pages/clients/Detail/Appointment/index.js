@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import AppointmentListview from "./AppointmentListview";
-import { appointmentListViewApi } from "store/slices/appointmentSlice";
+import { clientAppointmentListViewApi } from "store/slices/appointmentSlice";
 import AppointmentEditForm from "pages/calendar/Form/AppointmentEditForm";
 
 const Appointment = () => {
@@ -16,18 +16,19 @@ const Appointment = () => {
 
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
-  const ListView = useSelector((state) => state.appointment.isListView);
+  const ListView = useSelector((state) => state.appointment.isClientAppointmentListView);
   const isFilter = useSelector((state) => state.appointment.isFilter);
   const editForm = useSelector((state) => state.appointment.isOpenedEditForm);
+  const detail = useSelector((state) => state.client.isDetailData);
 
   const fetchDataList = () => {
-    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter }));
+    dispatch(clientAppointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter, client_id: detail.id }));
   };
 
   const [isFetching, setIsFetching] = useState(false);
   const loadMoreItemsList = () => {
     setIsFetching(true);
-    dispatch(appointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter }));
+    dispatch(clientAppointmentListViewApi({ next_page_url: ListView.next_page_url, filter: isFilter, client_id: detail.id }));
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);

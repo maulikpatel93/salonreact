@@ -43,6 +43,19 @@ export const appointmentListViewApi = createAsyncThunk("appointment/listview", a
   }
 });
 
+export const clientAppointmentListViewApi = createAsyncThunk("appointment/clientappointmentlistview", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await appointmentApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "clientappointmentlistview"))
+      .catch((error) => HandleError(thunkAPI, error, "clientappointmentlistview"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const appointmentOptions = createAsyncThunk("appointment/appointmentOptions", async (formValues, thunkAPI) => {
   try {
     const resposedata = await appointmentApiController
@@ -99,6 +112,7 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isListView: [],
+  isClientAppointmentListView: [],
   isDetailData: "",
   isFilter: "",
 };
@@ -166,6 +180,21 @@ const appointmentSlice = createSlice({
     },
     [appointmentListViewApi.rejected]: (state) => {
       state.isListView = [];
+    },
+    [clientAppointmentListViewApi.pending]: () => {},
+    [clientAppointmentListViewApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isClientAppointmentListView.current_page ? state.isClientAppointmentListView.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isClientAppointmentListView && state.isClientAppointmentListView.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isClientAppointmentListView = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isClientAppointmentListView.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isClientAppointmentListView = action.payload;
+    },
+    [clientAppointmentListViewApi.rejected]: (state) => {
+      state.isClientAppointmentListView = [];
     },
     [appointmentDetailApi.pending]: () => {},
     [appointmentDetailApi.fulfilled]: (state, action) => {

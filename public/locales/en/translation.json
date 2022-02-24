@@ -319,5 +319,8 @@
     "Appointment booking Updated": "Appointment booking Updated",
     "Appointment booking Cancelled": "Appointment booking Cancelled",
     "Are you sure you want to cancel the appointment?": "Are you sure you want to cancel the appointment?",
-    "Yes, cancelled it!": "Yes, cancelled it!"
+    "Yes, cancelled it!": "Yes, cancelled it!",
+    "Appointment Booked Successfully": "Appointment Booked Successfully",
+    "Week": "Week",
+    "Day": "Day"
 }

@@ -10,7 +10,7 @@ import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField }
 import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
+import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
@@ -74,6 +74,7 @@ const AppointmentEditForm = () => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeEditAppointmentForm());
+          dispatch(clientAppointmentListViewApi({ client: detail.id }));
           dispatch(appointmentListViewApi());
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
@@ -249,6 +250,7 @@ const AppointmentEditForm = () => {
                                   formik.resetForm();
                                   dispatch(servicePriceApi({ service_id: "" }));
                                   dispatch(closeEditAppointmentForm());
+                                  dispatch(clientAppointmentListViewApi({ client: detail.id }));
                                   dispatch(appointmentListViewApi());
                                   sweatalert({ title: t("Appointment booking Cancelled"), text: t("Appointment booking Cancelled"), icon: "success" });
                                 }

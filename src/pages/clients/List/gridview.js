@@ -8,7 +8,7 @@ import { swalConfirm } from "../../../component/Sweatalert2";
 import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
 import PropTypes from "prop-types";
 import { checkaccess } from "helpers/functions";
-import { appointmentListViewApi } from "store/slices/appointmentSlice";
+import { clientAppointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientGridView = (props) => {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const ClientGridView = (props) => {
           dispatch(clientDetailTab("clientdetail"));
         }
         if (props && props.tab === "appointment") {
-          dispatch(appointmentListViewApi({ client_id: id }));
+          dispatch(clientAppointmentListViewApi({ client_id: id }));
         }
       }
     });

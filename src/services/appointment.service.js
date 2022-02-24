@@ -45,6 +45,7 @@ const view = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   const result = values && values.result ? values.result : "";
+  const date = values && values.date ? values.date : "";
   const filter = values && values.filter ? JSON.stringify(values.filter) : "";
   if (filter === "") {
     store.dispatch({ type: "appointment/closeAppointmentFilter" });
@@ -66,9 +67,10 @@ const view = (values) => {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
-    pagination: values && values.id ? false : pagination, //true or false
+    pagination: values && (values.id || date) ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
     client_id: values && values.client_id ? values.client_id : "",
+    date: values && values.date ? values.date : "",
     field: values && values.id ? "" : "date,start_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name

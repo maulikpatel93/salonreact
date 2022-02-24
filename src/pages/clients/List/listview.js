@@ -9,7 +9,7 @@ import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTa
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
 import { checkaccess } from "helpers/functions";
-import { appointmentListViewApi } from "store/slices/appointmentSlice";
+import { clientAppointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientListView = (props) => {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ const ClientListView = (props) => {
           dispatch(clientDetailTab("clientdetail"));
         }
         if (props && props.tab === "appointment") {
-          dispatch(appointmentListViewApi({ client_id: id }));
+          dispatch(clientAppointmentListViewApi({ client_id: id }));
         }
       }
     });

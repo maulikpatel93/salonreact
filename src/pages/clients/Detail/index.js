@@ -17,7 +17,7 @@ import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
 import { checkaccess } from "helpers/functions";
-import { appointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
+import { clientAppointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -30,7 +30,7 @@ const ClientDetailModal = () => {
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
   const isFilter = useSelector((state) => state.appointment.isFilter);
-  
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -104,7 +104,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(clientDetailTab("appointment"));
-                        dispatch(appointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
+                        dispatch(clientAppointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
                       }}
                     >
                       {t("Appointments")}
@@ -219,7 +219,7 @@ const ClientDetailModal = () => {
                             onChange={(e) => {
                               const filter = { status: e.currentTarget.value };
                               dispatch(openAppointmentFilter(filter));
-                              dispatch(appointmentListViewApi({ client_id: detail.id, filter: filter }));
+                              dispatch(clientAppointmentListViewApi({ client_id: detail.id, filter: filter }));
                             }}
                             value={isFilter && isFilter.status}
                           >

@@ -10,7 +10,7 @@ import { InputField, ReactSelectField, SelectField, TextareaField } from "../../
 import { sweatalert } from "../../../component/Sweatalert2";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeAddAppointmentForm, appointmentStoreApi } from "../../../store/slices/appointmentSlice";
+import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
 import SuggetionListView from "pages/clients/List/SuggetionListView";
@@ -111,6 +111,8 @@ const AppointmentAddForm = () => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeAddAppointmentForm());
+          dispatch(appointmentListViewApi());
+          dispatch(clientAppointmentListViewApi({ client: values.client_id }));
           sweatalert({ title: t("Booked"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
