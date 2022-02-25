@@ -45,7 +45,12 @@ const view = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   const result = values && values.result ? values.result : "";
-  const date = values && values.date ? values.date : "";
+  //Appointment Calender view parameter
+  const start_date = values && values.start_date ? values.start_date : "";
+  const end_date = values && values.end_date ? values.end_date : "";
+  const timezone = values && values.timezone ? values.timezone : "";
+  const type = values && values.type ? values.type : "";
+  //Appointment Calender view parameter close
   const filter = values && values.filter ? JSON.stringify(values.filter) : "";
   if (filter === "") {
     store.dispatch({ type: "appointment/closeAppointmentFilter" });
@@ -67,15 +72,18 @@ const view = (values) => {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
-    pagination: values && (values.id || date) ? false : pagination, //true or false
+    pagination: values && (values.id || start_date) ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    client_id: values && values.client_id ? values.client_id : "",
-    date: values && values.date ? values.date : "",
     field: values && values.id ? "" : "date,start_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
     filter: filter, //business_name,owner_name
     option: values && values.option ? values.option : "",
+    client_id: values && values.client_id ? values.client_id : "",
+    start_date: start_date,
+    end_date: end_date,
+    timezone: timezone,
+    type: type,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };

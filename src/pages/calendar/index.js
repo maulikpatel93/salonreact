@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
@@ -13,17 +13,24 @@ import BusytimeAddForm from "./Form/BusytimeAddForm";
 import { serviceOptions } from "store/slices/serviceSlice";
 import { staffOptions } from "store/slices/staffSlice";
 //Calender
+import DatePicker, { DateObject, getAllDatesInRange } from "react-multi-date-picker";
 import FullCalendar from "@fullcalendar/react";
+import momentPlugin from "@fullcalendar/moment";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import moment from "moment";
 
 const Calendar = () => {
   SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const calendarRef = useRef();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDateRange, setSelectedDateRange] = useState([]);
+  const [selectedType, setSelectedType] = useState("day");
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
@@ -58,18 +65,12 @@ const Calendar = () => {
       let first_name = uniqueclients[item].first_name;
       let last_name = uniqueclients[item].last_name;
       let profile_photo_url = uniqueclients[item].profile_photo_url;
+      let profile_photo_content = profile_photo_url ? '<img class="" src="' + profile_photo_url + '" alt=""/>' : '<div class="user-initial">' + first_name.charAt(0) + "" + last_name.charAt(0) + "</div>";
       // resources.push({ id: id, title: first_name + " " + last_name });
-      resources.push({ id: id, html: first_name + " <br> " + last_name });
+      resources.push({ id: id, html: '<div class="calenderProfileImg">' + profile_photo_content + '<div class="image-content">' + first_name + " " + last_name + "</div></div>" });
     });
-
-  // const unique = [...new Set(clients.map(item => item.id))];
-  // console.log(resources);
-  // const events = [
-  //   { start: "2022-02-24T12:30:00Z" }, // already in UTC, so won't shift
-  //   { start: "2022-02-24T12:30:00+XX:XX" }, // will shift to 00:00 offset
-  //   { start: "2022-02-24T12:30:00" }, // will be parsed as if it were '2018-09-01T12:30:00Z'
-  // ];
-
+  console.log(events);
+  console.log(resources);
   const handleBusytimeDrawer = () => {
     dispatch(openAddBusytimeForm());
     dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
@@ -108,10 +109,6 @@ const Calendar = () => {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove(); // will render immediately. will call handleEventRemove
     }
-  };
-  const handleDates = (rangeInfo) => {
-    dispatch(appointmentListViewApi({ date: rangeInfo.startStr }));
-    // this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr).catch(reportNetworkError);
   };
 
   const handleEventAdd = (addInfo) => {
@@ -159,6 +156,77 @@ const Calendar = () => {
     );
   };
 
+  function handleDates(rangeInfo) {
+    let timezone = rangeInfo.view && rangeInfo.view.dateEnv && rangeInfo.view.dateEnv.timeZone;
+    let type = "day";
+    if (rangeInfo.view && rangeInfo.view.type === "resourceTimeGridDay") {
+      type = "day";
+    } else if (rangeInfo.view && rangeInfo.view.type === "timeGridWeek") {
+      type = "week";
+    }
+    dispatch(appointmentListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type })).then((action) => {
+      if (action.meta.requestStatus === "rejected") {
+        if (action.payload.status === 422) {
+        }
+      }
+    });
+    // this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr).catch(reportNetworkError);
+  }
+
+  function handleClickPrev() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.prev();
+    someMethod();
+  }
+
+  function handleClickNext() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.next();
+    someMethod();
+  }
+
+  function handleClickToday() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.today();
+    someMethod();
+  }
+
+  function handleClickDay() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.changeView("resourceTimeGridDay");
+    someMethod();
+  }
+
+  function handleClickWeek() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.changeView("timeGridWeek");
+    someMethod();
+  }
+
+  useEffect(() => {
+    someMethod();
+  }, []);
+
+  function someMethod() {
+    if (calendarRef.current) {
+      let calendarApi = calendarRef.current.getApi();
+      if (calendarApi.view.type === "resourceTimeGridDay") {
+        setSelectedDate(calendarApi.view.title);
+        setSelectedType("day");
+      } else if (calendarApi.view.type === "timeGridWeek") {
+        let weekpicker = calendarApi.view.title.split(' – ');
+        setSelectedDateRange(weekpicker);
+        setSelectedType("week");
+      }
+    }
+  }
+  // const getselectedDatePicker = moment(selectedDate?.toDate?.().toString()).format("MMMM DD, YYYY");
+  const getselectedDatePicker = selectedDate;
+  const getselectedDatePickerRange = selectedDateRange;
+  // console.log(getselectedDatePicker);
+  // console.log(selectedDate);
+  // let calendarApi = this.calendarRef.current.getApi()
+  // calendarApi.next()
   function reportNetworkError() {
     alert("This action could not be completed");
   }
@@ -213,12 +281,46 @@ const Calendar = () => {
                 <div className="col-auto pt-lg-4 pt-md-3 pt-2">
                   <div className="date">
                     <div className="input-group">
-                      <span className="input-group-text icon">
+                      <span className="input-group-text icon cursor-pointer" onClick={handleClickPrev}>
                         <i className="fal fa-chevron-left"></i>
                       </span>
-                      <input type="text" className="form-control" defaultValue="August 19, 2021" placeholder="date" />
-                      <span className="input-group-text day">Today</span>
-                      <span className="input-group-text icon">
+                      {selectedType === "day" ? (
+                        <DatePicker
+                          value={getselectedDatePicker}
+                          inputClass="form-control"
+                          placeholder="August 19, 2021"
+                          format={"MMMM DD, YYYY"}
+                          onChange={(e) => {
+                            let date = moment(e?.toDate?.().toString()).format("MMMM DD, YYYY");
+                            let dateYMD = moment(e?.toDate?.().toString()).format("YYYY-MM-DD");
+                            setSelectedDate(date);
+                            let calendarApi = calendarRef.current.getApi();
+                            calendarApi.gotoDate(dateYMD);
+                          }}
+                        />
+                      ) : (
+                        <DatePicker
+                          value={getselectedDatePickerRange}
+                          inputClass="form-control"
+                          range
+                          weekPicker
+                          format={"MMM DD, YYYY"}
+                          onChange={(dateObjects) => {
+                            let start_date = moment(dateObjects[0]?.toDate?.().toString()).format("MMM DD, YYYY");
+                            let end_date = moment(dateObjects[1]?.toDate?.().toString()).format("MMM DD, YYYY");
+                            // console.log(start_date+ ' ~ ' +end_date);
+                            // console.log(getAllDatesInRange(dateObjects));
+                            // let dateYMD = moment(e?.toDate?.().toString()).format("YYYY-MM-DD");
+                            setSelectedDateRange(dateObjects);
+                            // let calendarApi = calendarRef.current.getApi();
+                            // calendarApi.gotoDate(dateObjects);
+                          }}
+                        />
+                      )}
+                      <span className="input-group-text day cursor-pointer" onClick={handleClickToday}>
+                        {t("Today")}
+                      </span>
+                      <span className="input-group-text icon cursor-pointer" onClick={handleClickNext}>
                         <i className="fal fa-chevron-right"></i>
                       </span>
                     </div>
@@ -226,11 +328,11 @@ const Calendar = () => {
                 </div>
                 <div className="col-auto pt-lg-4 pt-md-3 pt-2">
                   <div className="list-group custom-tab mb-sm-0 mb-2" id="myList" role="tablist">
-                    <a className="list-group-item list-group-item-action active" data-bs-toggle="list" href="#day" role="tab">
-                      Day
+                    <a className="list-group-item list-group-item-action active" data-bs-toggle="list" href="#day" role="tab" onClick={handleClickDay}>
+                      {t("Day")}
                     </a>
-                    <a className="list-group-item list-group-item-action" data-bs-toggle="list" href="#week" role="tab">
-                      Week
+                    <a className="list-group-item list-group-item-action" data-bs-toggle="list" href="#week" role="tab" onClick={handleClickWeek}>
+                      {t("Week")}
                     </a>
                   </div>
                 </div>
@@ -279,18 +381,33 @@ const Calendar = () => {
           </div>
           <div className="container">
             <FullCalendar
+              ref={calendarRef}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
-              plugins={[resourceTimeGridPlugin, timeGridPlugin, interactionPlugin]}
-              headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "timeGridDay,timeGridWeek",
-              }}
+              plugins={[momentPlugin, resourceTimeGridPlugin, interactionPlugin]}
+              headerToolbar={false}
+              // headerToolbar={{
+              //   left: "prev,next today",
+              //   center: "title",
+              //   right: "resourceTimeGridDay,timeGridWeek",
+              //   html: "Test",
+              // }}
               buttonText={{ today: t("Today"), week: t("Week"), day: t("Day") }}
               // initialView="timeGridDay"
               initialView="resourceTimeGridDay"
-              resources={resources}
+              views={{
+                week: {
+                  titleFormat: "MMMM D, YYYY",
+                  // titleRangeSeparator: " ~ ",
+                  // titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
+                },
+              }}
+              formatRange={false}
               slotDuration={"00:15:00"}
+              slotLabelFormat={{
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: false,
+              }}
               allDaySlot={false}
               editable={true}
               selectable={true}
@@ -300,6 +417,7 @@ const Calendar = () => {
               datesSet={handleDates}
               select={handleDateSelect}
               events={events}
+              resources={resources}
               eventContent={renderEventContent} // custom render function
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
@@ -309,6 +427,9 @@ const Calendar = () => {
               timeFormat={"H:mm"}
               resourceLabelContent={function (arg) {
                 return { html: arg.resource.extendedProps.html };
+              }}
+              resourceHeaderRender={function (renderInfo) {
+                console.log(renderInfo.el);
               }}
             />
             {/* <div className="tab-content py-lg-5 py-3">
