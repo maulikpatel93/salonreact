@@ -25,7 +25,7 @@ const swalError = (props) => {
 };
 
 const swalConfirm = (btn, props) => {
-  if (btn.getAttribute("confirmOK") == "1") {
+  if (btn.getAttribute("confirmOK") === "1" || btn.getAttribute("confirmOK") === 1) {
     btn.setAttribute("confirmOK", "0");
     return true;
   }
@@ -40,7 +40,12 @@ const swalConfirm = (btn, props) => {
   }).then((result) => {
     if (result.value) {
       btn.setAttribute("confirmOK", "1");
-      btn.click();
+      if (props.message === "statusupdate") {
+        const event = new Event("change", { bubbles: true });
+        btn.dispatchEvent(event);
+      } else {
+        btn.click();
+      }
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       btn.setAttribute("confirmOK", "0");
     }

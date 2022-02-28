@@ -322,5 +322,15 @@
     "Yes, cancelled it!": "Yes, cancelled it!",
     "Appointment Booked Successfully": "Appointment Booked Successfully",
     "Week": "Week",
-    "Day": "Day"
+    "Day": "Day",
+    "Checkout": "Checkout",
+    "Reschedule": "Reschedule",
+    "Book Next": "Book Next",
+    "Email": "Email",
+    "Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.": "Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.",
+    "Status": "Status",
+    "Are you sure want to delete this appointment?": "Are you sure want to delete this appointment?",
+    "Are you sure you want to {{ status }} the appointment?": "Are you sure you want to {{ status }} the appointment?",
+    "Yes, {{ status }} it!": "Yes, {{ status }} it!",
+    "Appointment status updated": "Appointment status updated"
 }

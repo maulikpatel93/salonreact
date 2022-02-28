@@ -74,7 +74,7 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && (values.id || start_date) ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "date,start_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
+    field: values && values.id ? "" : "date,start_time,end_time,duration,cost,repeats,booking_notes,status,cancellation_reason,reschedule,reschedule_at", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
     filter: filter, //business_name,owner_name

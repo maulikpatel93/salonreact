@@ -8,6 +8,7 @@ import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
+import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
 import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
@@ -18,10 +19,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
-import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
+import { MinutesToHours, getHours, getMinutes, ucfirst } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
 
-const AppointmentAddForm = () => {
+const AppointmentAddForm = (props) => {
   const [loading, setLoading] = useState(false);
   // const [clientId, setClientId] = useState("");
   const rightDrawerOpened = useSelector((state) => state.appointment.isOpenedAddForm);
@@ -29,13 +30,15 @@ const AppointmentAddForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const scriptedRef = useScriptRef();
-
   const isSearchList = useSelector((state) => state.client.isSearchList);
   const isSearchName = useSelector((state) => state.client.isSearchName);
   const SuggetionView = useSelector((state) => state.client.isSuggetionListView);
   const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const isServicePrice = useSelector((state) => state.service.isServicePrice);
+  const appointmentDetail = useSelector((state) => state.appointment.isDetailData);
+  const isRangeInfo = props.isRangeInfo;
+  const client = appointmentDetail && appointmentDetail.client;
 
   const handlecloseAddAppointmentForm = () => {
     dispatch(closeAddAppointmentForm());
@@ -107,12 +110,16 @@ const AppointmentAddForm = () => {
     try {
       dispatch(appointmentStoreApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
+          let data = action.payload;
+          let startdate = data.date + "T" + data.start_time;
           setStatus({ success: true });
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeAddAppointmentForm());
-          dispatch(appointmentListViewApi());
           dispatch(clientAppointmentListViewApi({ client: values.client_id }));
+          if (isRangeInfo) {
+            dispatch(appointmentListViewApi(isRangeInfo));
+          }
           sweatalert({ title: t("Booked"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
@@ -146,6 +153,9 @@ const AppointmentAddForm = () => {
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
   ];
+  // useEffect(() => {
+  //   props.apicall('2022-02-16');
+  // }, [props.isRangeInfo]);
   return (
     <>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleAppointmentSubmit}>
@@ -157,8 +167,12 @@ const AppointmentAddForm = () => {
               formik.setFieldValue("duration", duration);
               formik.setFieldValue("cost", cost ? cost[0].price : "");
             }
+            if (client) {
+              formik.setFieldValue("client_id", client.id ? client.id : "");
+              dispatch(clientSearchName(ucfirst(client.first_name + " " + client.last_name)));
+            }
             formik.setFieldValue("repeats", "No");
-          }, [isServicePrice]);
+          }, [isServicePrice, client]);
           return (
             <div className={"drawer appointment-drawer " + rightDrawerOpened} id="addappoinment-drawer">
               <div className="drawer-wrp position-relative">
@@ -175,6 +189,7 @@ const AppointmentAddForm = () => {
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
                   </div>
+                  {/* <button onClick={props.apicall('2022-02-16')}>Click me</button> */}
                   <div className="drawer-body pymd-5 py-3">
                     <div className="mb-3 search">
                       <div className="d-flex justify-content-between align-items-center">
@@ -290,5 +305,7 @@ const AppointmentAddForm = () => {
     </>
   );
 };
-
+AppointmentAddForm.propTypes = {
+  isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+};
 export default AppointmentAddForm;

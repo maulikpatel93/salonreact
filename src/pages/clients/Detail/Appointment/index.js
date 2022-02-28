@@ -48,7 +48,7 @@ const Appointment = () => {
           )}
         </InfiniteScroll>
       </div>
-      {editForm && <AppointmentEditForm />}
+      {editForm && <AppointmentEditForm page={"client-detail"} />}
     </>
   );
 };

@@ -126,6 +126,10 @@ img {
     font-weight: 600 !important;
 }
 
+.text-jusitfy {
+    text-align: justify;
+}
+
 
 /*plaecholder*/
 
@@ -207,9 +211,9 @@ textarea.form-control::placeholder {
 }
 
 .btn-secondary {
-    color: #fff !important;
-    background-color: #EEEEEE !important;
-    border-color: #EEEEEE !important;
+    color: #000 !important;
+    background-color: #eeeeee !important;
+    border-color: #eeeeee !important;
 }
 
 .btn-secondary:hover {
@@ -228,14 +232,14 @@ textarea.form-control::placeholder {
 
 .btn-danger {
     color: #fff;
-    background-color: #EF0000;
-    border-color: #EF0000;
+    background-color: #ef0000;
+    border-color: #ef0000;
 }
 
 .btn-danger:hover {
-    color: #EF0000 !important;
+    color: #ef0000 !important;
     background-color: #fff !important;
-    border-color: #EF0000 !important;
+    border-color: #ef0000 !important;
 }
 
 .btn.btn-outline-primary {
@@ -2724,7 +2728,6 @@ table .pro-title {
     .addphoto-drawer,
     .client-invoice-drawer,
     .adddoc-drawer,
-    .client-editappoinment,
     .addnote-drawer,
     .adddoc-drawer {
         box-shadow: none;

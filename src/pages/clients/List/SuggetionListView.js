@@ -24,7 +24,7 @@ const SuggetionListView = (props) => {
     if(page && page === "appointmentAddForm"){
       formik.setFieldValue('client_id', suggetionid);
     }
-    console.log(suggetionid+' '+suggetionname);
+    // console.log(suggetionid+' '+suggetionname);
     dispatch(clientSearchName(suggetionname));
     dispatch(closeClientSearchList());
     dispatch(clientGridViewApi({ id: suggetionid, result:"result_array" }));

@@ -236,3 +236,23 @@ header {
 .calenderProfileImg .image-content {
     font-weight: normal;
 }
+
+.calendar_event_content li {
+    color: $white;
+    margin-bottom: 2px;
+}
+
+.drawer.appointment-detail .include-footer .drawer-body {
+    height: calc(100vh - 290px) !important;
+}
+
+
+/*-Calender Css */
+
+.fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky>* {
+    top: 66px !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+    padding: 20px 4px !important;
+}

@@ -3,26 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
-import { checkaccess, uniqueArrayofObject } from "helpers/functions";
+import { checkaccess, ucfirst, uniqueArrayofObject } from "helpers/functions";
 import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { openAddBusytimeForm } from "store/slices/busytimeSlice";
-import { appointmentListViewApi, openAddAppointmentForm } from "store/slices/appointmentSlice";
+import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal, openEditAppointmentForm } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
 import { serviceOptions } from "store/slices/serviceSlice";
 import { staffOptions } from "store/slices/staffSlice";
 //Calender
-import DatePicker, { DateObject, getAllDatesInRange } from "react-multi-date-picker";
+// import { Tooltip } from "bootstrap";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import DatePicker from "react-multi-date-picker";
 import FullCalendar from "@fullcalendar/react";
 import momentPlugin from "@fullcalendar/moment";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import moment from "moment";
-
+import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo } from "store/slices/calendarSlice";
+import AppointmentEditForm from "./Form/AppointmentEditForm";
+import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
 const Calendar = () => {
   SalonModule();
   const { t } = useTranslation();
@@ -39,24 +41,41 @@ const Calendar = () => {
   const access = useSelector((state) => state.salonmodule.isAccess);
   const clientIsOpenedAddForm = useSelector((state) => state.client.isOpenedAddForm);
   const appointmentIsOpenedAddForm = useSelector((state) => state.appointment.isOpenedAddForm);
+  const appointmentIsOpenedEditForm = useSelector((state) => state.appointment.isOpenedEditForm);
+  const appointmentIsOpenedDetailModal = useSelector((state) => state.appointment.isOpenedDetailModal);
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
   const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
+  const isRangeInfo = useSelector((state) => state.calendar.isRangeInfo);
+  const calendarTab = useSelector((state) => state.calendar.isTabView);
 
   const events = [];
   const clients = [];
   const resources = [];
   dateAppointmentListView &&
     Object.keys(dateAppointmentListView).map((item) => {
+      // console.log(dateAppointmentListView[item]);
       let id = dateAppointmentListView[item].id;
       let date = dateAppointmentListView[item].date;
       let start_time = dateAppointmentListView[item].start_time;
-      let duration = dateAppointmentListView[item].duration;
+      let status = dateAppointmentListView[item].status;
       let client = dateAppointmentListView[item].client;
-      // console.log(dateAppointmentListView[item]);
-      // console.log(moment(date + "T" + start_time).format("h:mm a"));
-      // resources.push({ id: "a", title: "Room A" });
+      let service = dateAppointmentListView[item].service;
+      let staff = dateAppointmentListView[item].staff;
+      let client_name = client.first_name + " " + client.last_name;
       clients.push(client);
-      events.push({ resourceId: client.id, start: date + "T" + start_time, backgroundColor: "#8f807d", borderColor: "#8f807d" });
+      events.push({
+        resourceId: client.id,
+        start: date + "T" + start_time,
+        backgroundColor: "#8f807d",
+        borderColor: "#8f807d",
+        title: client_name,
+        extendedProps: {
+          appointment: { id, status },
+          client: client,
+          service: service,
+          staff: staff,
+        },
+      });
     });
   const uniqueclients = uniqueArrayofObject(clients, ["id"]);
   uniqueclients &&
@@ -69,8 +88,6 @@ const Calendar = () => {
       // resources.push({ id: id, title: first_name + " " + last_name });
       resources.push({ id: id, html: '<div class="calenderProfileImg">' + profile_photo_content + '<div class="image-content">' + first_name + " " + last_name + "</div></div>" });
     });
-  console.log(events);
-  console.log(resources);
   const handleBusytimeDrawer = () => {
     dispatch(openAddBusytimeForm());
     dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
@@ -86,91 +103,59 @@ const Calendar = () => {
     dispatch(openAddClientForm());
   };
 
-  const handleDateSelect = (selectInfo) => {
-    let calendarApi = selectInfo.view.calendar;
-    // console.log(selectInfo);
-    // let title = prompt("Please enter a new title for your event");
-    calendarApi.unselect(); // clear date selection
-    // if (title) {
-    //   calendarApi.addEvent(
-    //     {
-    //       // will render immediately. will call handleEventAdd
-    //       title,
-    //       start: selectInfo.startStr,
-    //       end: selectInfo.endStr,
-    //       allDay: selectInfo.allDay,
-    //     },
-    //     true,
-    //   ); // temporary=true, will get overwritten when reducer gives new events
-    // }
-  };
-
-  const handleEventClick = (clickInfo) => {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove(); // will render immediately. will call handleEventRemove
-    }
-  };
-
-  const handleEventAdd = (addInfo) => {
-    // this.props.createEvent(addInfo.event.toPlainObject()).catch(() => {
-    //   reportNetworkError();
-    //   addInfo.revert();
-    // });
-  };
-
-  const handleEventChange = (changeInfo) => {
-    // this.props.updateEvent(changeInfo.event.toPlainObject()).catch(() => {
-    //   reportNetworkError();
-    //   changeInfo.revert();
-    // });
-  };
-
-  const handleEventRemove = (removeInfo) => {
-    // this.props.deleteEvent(removeInfo.event.id).catch(() => {
-    //   reportNetworkError();
-    //   removeInfo.revert();
-    // });
-  };
-
   const renderEventContent = (eventInfo) => {
+    let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
+    let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
+    let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
+    if (client && service && staff) {
+      let popover = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
+      return (
+        <>
+          <OverlayTrigger
+            placement="top-start"
+            delay={{ show: 250, hide: 400 }}
+            overlay={(props) => (
+              <Tooltip id="Description__tooltip" {...props}>
+                <div dangerouslySetInnerHTML={{ __html: popover }} />
+              </Tooltip>
+            )}
+          >
+            <ul className="list-unstyled p-2 calendar_event_content cursor-pointer">
+              <li className="">
+                <b>{eventInfo.event.title}</b>
+              </li>
+              <li className="">{t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })}</li>
+              <li className="align-self-center">
+                <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
+              </li>
+            </ul>
+          </OverlayTrigger>
+        </>
+      );
+    }
     return (
       <>
         <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
       </>
-    );
-  };
-
-  const renderSidebarEvent = (plainEventObject) => {
-    return (
-      <li key={plainEventObject.id}>
-        <b>
-          {formatDate(plainEventObject.start, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
-        </b>
-        <i>{plainEventObject.title}</i>
-      </li>
     );
   };
 
   function handleDates(rangeInfo) {
     let timezone = rangeInfo.view && rangeInfo.view.dateEnv && rangeInfo.view.dateEnv.timeZone;
-    let type = "day";
+    let type = calendarTab;
     if (rangeInfo.view && rangeInfo.view.type === "resourceTimeGridDay") {
       type = "day";
     } else if (rangeInfo.view && rangeInfo.view.type === "timeGridWeek") {
       type = "week";
     }
     dispatch(appointmentListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type })).then((action) => {
-      if (action.meta.requestStatus === "rejected") {
+      if (action.meta.requestStatus === "fulfilled") {
+        dispatch(calendarRangeInfo({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type }));
+      } else if (action.meta.requestStatus === "rejected") {
         if (action.payload.status === 422) {
         }
       }
     });
-    // this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr).catch(reportNetworkError);
   }
 
   function handleClickPrev() {
@@ -194,13 +179,93 @@ const Calendar = () => {
   function handleClickDay() {
     let calendarApi = calendarRef.current.getApi();
     calendarApi.changeView("resourceTimeGridDay");
+    dispatch(calendarTabDayView());
     someMethod();
   }
 
   function handleClickWeek() {
     let calendarApi = calendarRef.current.getApi();
     calendarApi.changeView("timeGridWeek");
+    dispatch(calendarTabWeekView());
     someMethod();
+  }
+
+  function handleEventClick(clickInfo) {
+    if (clickInfo.event.extendedProps) {
+      let id = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.id;
+      let status = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.status;
+      let client_id = clickInfo.event.extendedProps.client && clickInfo.event.extendedProps.client.id;
+      dispatch(closeAddAppointmentForm());
+      dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          dispatch(openAppointmentDetailModal());
+        } else if (action.meta.requestStatus === "rejected") {
+          if (action.payload.status === 422) {
+            let error = action.payload;
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+          }
+        }
+      });
+      // if (status === "Scheduled") {
+      //   dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+      //     if (action.meta.requestStatus === "fulfilled") {
+      //       dispatch(openEditAppointmentForm());
+      //       dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
+      //       dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+      //     } else if (action.meta.requestStatus === "rejected") {
+      //       if (action.payload.status === 422) {
+      //         let error = action.payload;
+      //         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      //         sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+      //       }
+      //     }
+      //   });
+      // }
+    }
+    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove(); // will render immediately. will call handleEventRemove
+    // }
+  }
+
+  function handleEventAdd(addInfo) {
+    // this.props.createEvent(addInfo.event.toPlainObject()).catch(() => {
+    //   reportNetworkError();
+    //   addInfo.revert();
+    // });
+  }
+
+  function handleEventChange(changeInfo) {
+    // this.props.updateEvent(changeInfo.event.toPlainObject()).catch(() => {
+    //   reportNetworkError();
+    //   changeInfo.revert();
+    // });
+  }
+
+  function handleEventRemove(removeInfo) {
+    // this.props.deleteEvent(removeInfo.event.id).catch(() => {
+    //   reportNetworkError();
+    //   removeInfo.revert();
+    // });
+  }
+
+  function handleDateSelect(selectInfo) {
+    let calendarApi = selectInfo.view.calendar;
+    // console.log(selectInfo);
+    // let title = prompt("Please enter a new title for your event");
+    calendarApi.unselect(); // clear date selection
+    // if (title) {
+    //   calendarApi.addEvent(
+    //     {
+    //       // will render immediately. will call handleEventAdd
+    //       title,
+    //       start: selectInfo.startStr,
+    //       end: selectInfo.endStr,
+    //       allDay: selectInfo.allDay,
+    //     },
+    //     true,
+    //   ); // temporary=true, will get overwritten when reducer gives new events
+    // }
   }
 
   useEffect(() => {
@@ -214,19 +279,14 @@ const Calendar = () => {
         setSelectedDate(calendarApi.view.title);
         setSelectedType("day");
       } else if (calendarApi.view.type === "timeGridWeek") {
-        let weekpicker = calendarApi.view.title.split(' – ');
+        let weekpicker = calendarApi.view.title.split(" – ");
         setSelectedDateRange(weekpicker);
         setSelectedType("week");
       }
     }
   }
-  // const getselectedDatePicker = moment(selectedDate?.toDate?.().toString()).format("MMMM DD, YYYY");
   const getselectedDatePicker = selectedDate;
   const getselectedDatePickerRange = selectedDateRange;
-  // console.log(getselectedDatePicker);
-  // console.log(selectedDate);
-  // let calendarApi = this.calendarRef.current.getApi()
-  // calendarApi.next()
   function reportNetworkError() {
     alert("This action could not be completed");
   }
@@ -234,7 +294,7 @@ const Calendar = () => {
     <>
       <div className="page-content">
         <section className="calendar">
-          <div className="calendar-header">
+          <div className="calendar-header sticky-top bg-white">
             <div className="container">
               <div className="row">
                 <div className="col-sm-auto col-12 pt-lg-4 pt-md-3 pt-2">
@@ -288,6 +348,7 @@ const Calendar = () => {
                         <DatePicker
                           value={getselectedDatePicker}
                           inputClass="form-control"
+                          id="datepicker"
                           placeholder="August 19, 2021"
                           format={"MMMM DD, YYYY"}
                           onChange={(e) => {
@@ -302,18 +363,17 @@ const Calendar = () => {
                         <DatePicker
                           value={getselectedDatePickerRange}
                           inputClass="form-control"
+                          id="datepicker"
                           range
                           weekPicker
                           format={"MMM DD, YYYY"}
                           onChange={(dateObjects) => {
                             let start_date = moment(dateObjects[0]?.toDate?.().toString()).format("MMM DD, YYYY");
                             let end_date = moment(dateObjects[1]?.toDate?.().toString()).format("MMM DD, YYYY");
-                            // console.log(start_date+ ' ~ ' +end_date);
-                            // console.log(getAllDatesInRange(dateObjects));
-                            // let dateYMD = moment(e?.toDate?.().toString()).format("YYYY-MM-DD");
+                            let dateYMD = moment(dateObjects[0]?.toDate?.().toString()).format("YYYY-MM-DD");
                             setSelectedDateRange(dateObjects);
-                            // let calendarApi = calendarRef.current.getApi();
-                            // calendarApi.gotoDate(dateObjects);
+                            let calendarApi = calendarRef.current.getApi();
+                            calendarApi.gotoDate(dateYMD);
                           }}
                         />
                       )}
@@ -328,10 +388,10 @@ const Calendar = () => {
                 </div>
                 <div className="col-auto pt-lg-4 pt-md-3 pt-2">
                   <div className="list-group custom-tab mb-sm-0 mb-2" id="myList" role="tablist">
-                    <a className="list-group-item list-group-item-action active" data-bs-toggle="list" href="#day" role="tab" onClick={handleClickDay}>
+                    <a className={"list-group-item list-group-item-action cursor-pointer" + (calendarTab && calendarTab === "day" ? " active" : "")} onClick={handleClickDay}>
                       {t("Day")}
                     </a>
-                    <a className="list-group-item list-group-item-action" data-bs-toggle="list" href="#week" role="tab" onClick={handleClickWeek}>
+                    <a className={"list-group-item list-group-item-action cursor-pointer" + (calendarTab && calendarTab === "week" ? " active" : "")} onClick={handleClickWeek}>
                       {t("Week")}
                     </a>
                   </div>
@@ -379,26 +439,18 @@ const Calendar = () => {
               </div>
             </div>
           </div>
-          <div className="container">
+          <div className="container mt-4">
             <FullCalendar
               ref={calendarRef}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
               plugins={[momentPlugin, resourceTimeGridPlugin, interactionPlugin]}
               headerToolbar={false}
-              // headerToolbar={{
-              //   left: "prev,next today",
-              //   center: "title",
-              //   right: "resourceTimeGridDay,timeGridWeek",
-              //   html: "Test",
-              // }}
               buttonText={{ today: t("Today"), week: t("Week"), day: t("Day") }}
-              // initialView="timeGridDay"
-              initialView="resourceTimeGridDay"
+              initialView={calendarTab && calendarTab === "week" ? "timeGridWeek" : "resourceTimeGridDay"}
               views={{
                 week: {
                   titleFormat: "MMMM D, YYYY",
-                  // titleRangeSeparator: " ~ ",
-                  // titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
+                  dayHeaderFormat: "DD ddd",
                 },
               }}
               formatRange={false}
@@ -408,8 +460,12 @@ const Calendar = () => {
                 minute: "2-digit",
                 hour12: false,
               }}
+              height="auto"
+              nowIndicator={true}
               allDaySlot={false}
               editable={true}
+              eventStartEditable={false}
+              eventDurationEditable={false}
               selectable={true}
               selectMirror={true}
               dayMaxEvents={true}
@@ -418,6 +474,28 @@ const Calendar = () => {
               select={handleDateSelect}
               events={events}
               resources={resources}
+              // eventDidMount={function (eventInfo, element) {
+              //   console.log(element);
+              //   let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
+              //   let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
+              //   let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
+              //   let description = "";
+              //   if (client && service && staff) {
+              //     description = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
+              //   }
+              //   var tooltip = (props) => (
+              //     <Tooltip id="button-tooltip" {...props}>
+              //       {description}
+              //     </Tooltip>
+              //   )
+              //   // var tooltip = new Tooltip(eventInfo.el, {
+              //   //   title: description,
+              //   //   // placement: "bottom",
+              //   //   trigger: "hover",
+              //   //   container: false,
+              //   //   html: true,
+              //   // });
+              // }}
               eventContent={renderEventContent} // custom render function
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
@@ -428,21 +506,12 @@ const Calendar = () => {
               resourceLabelContent={function (arg) {
                 return { html: arg.resource.extendedProps.html };
               }}
-              resourceHeaderRender={function (renderInfo) {
-                console.log(renderInfo.el);
-              }}
             />
-            {/* <div className="tab-content py-lg-5 py-3">
-              <div className="tab-pane active" id="day" role="tabpanel">
-                plugin
-              </div>
-              <div className="tab-pane" id="week" role="tabpanel">
-                plugin............
-              </div>
-            </div> */}
           </div>
         </section>
-        {checkaccess({ name: "create", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedAddForm ? <AppointmentAddForm /> : ""}
+        {checkaccess({ name: "view", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedDetailModal ? <AppointmentDetailDrawer isRangeInfo={isRangeInfo} /> : ""}
+        {checkaccess({ name: "update", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedEditForm ? <AppointmentEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedAddForm ? <AppointmentAddForm isRangeInfo={isRangeInfo} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
       </div>

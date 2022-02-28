@@ -111,6 +111,7 @@ export const appointmentSuggetionListApi = createAsyncThunk("appointment/suggeti
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
+  isOpenedDetailModal: "",
   isListView: [],
   isClientAppointmentListView: [],
   isDetailData: "",
@@ -138,6 +139,12 @@ const appointmentSlice = createSlice({
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
     },
+    openAppointmentDetailModal: (state = initialState) => {
+      state.isOpenedDetailModal = "open";
+    },
+    closeAppointmentDetailModal: (state = initialState) => {
+      state.isOpenedDetailModal = "";
+    },
     openAppointmentFilter: (state, action) => {
       state.isFilter = action.payload;
     },
@@ -147,24 +154,16 @@ const appointmentSlice = createSlice({
   },
   extraReducers: {
     [appointmentStoreApi.pending]: () => {},
-    [appointmentStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
-      } else {
-        state.isListView = { data: [action.payload] };
-      }
+    [appointmentStoreApi.fulfilled]: () => {
+      // if (state.isListView && state.isListView.data) {
+      //   state.isListView.data = [action.payload, ...state.isListView.data];
+      // } else {
+      //   state.isListView = { data: [action.payload] };
+      // }
     },
     [appointmentStoreApi.rejected]: () => {},
     [appointmentUpdateApi.pending]: () => {},
-    [appointmentUpdateApi.fulfilled]: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
-    },
+    [appointmentUpdateApi.fulfilled]: () => {},
     [appointmentUpdateApi.rejected]: () => {},
     [appointmentListViewApi.pending]: () => {},
     [appointmentListViewApi.fulfilled]: (state, action) => {
@@ -204,13 +203,10 @@ const appointmentSlice = createSlice({
       state.isDetailData = "";
     },
     [appointmentDeleteApi.pending]: () => {},
-    [appointmentDeleteApi.fulfilled]: (state, action) => {
-      const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
-    },
+    [appointmentDeleteApi.fulfilled]: () => {},
     [appointmentDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm, openAppointmentFilter, closeAppointmentFilter } = appointmentSlice.actions;
+export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm, openAppointmentDetailModal, closeAppointmentDetailModal, openAppointmentFilter, closeAppointmentFilter } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

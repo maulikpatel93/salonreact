@@ -8,16 +8,17 @@ import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
 import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
+import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
+import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi, clientAppointmentListViewApi, appointmentDetailApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
 
-const AppointmentEditForm = () => {
+const AppointmentEditForm = (props) => {
   const [loading, setLoading] = useState(false);
   // const [clientId, setClientId] = useState("");
   const rightDrawerOpened = useSelector((state) => state.appointment.isOpenedEditForm);
@@ -25,12 +26,14 @@ const AppointmentEditForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const scriptedRef = useScriptRef();
+  const isRangeInfo = props.isRangeInfo;
+  const page = props.page;
 
   const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const isServicePrice = useSelector((state) => state.service.isServicePrice);
   const detail = useSelector((state) => state.appointment.isDetailData);
-
+  console.log(detail);
   const handlecloseEditAppointmentForm = () => {
     dispatch(closeEditAppointmentForm());
   };
@@ -53,10 +56,8 @@ const AppointmentEditForm = () => {
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Service")).required())),
     staff_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Staff")).required())),
-    date: Yup.date()
-      .label(t("Date"))
-      .required()
-      .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
+    date: Yup.date().label(t("Date")).required(),
+    // .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
     start_time: Yup.string().trim().label(t("Start Time")).required(),
     duration: Yup.string().trim().matches(config.duration_pattern, t(config.duration_HM_error)).label(t("Duration")).required(),
     cost: Yup.string().trim().label(t("Cost")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
@@ -74,8 +75,11 @@ const AppointmentEditForm = () => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeEditAppointmentForm());
-          dispatch(clientAppointmentListViewApi({ client: detail.id }));
-          dispatch(appointmentListViewApi());
+          dispatch(clientAppointmentListViewApi({ client: detail.client_id }));
+          if (isRangeInfo) {
+            dispatch(appointmentListViewApi(isRangeInfo));
+            dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+          }
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
@@ -148,7 +152,7 @@ const AppointmentEditForm = () => {
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 pe-3">{t("Edit Appointment")}</h2>
                     <a
-                      className="close cursor-pointer"
+                      className={page && page === "calendar" ? "close-drawer cursor-pointer" : "close cursor-pointer"}
                       onClick={() => {
                         dispatch(servicePriceApi({ service_id: "" }));
                         handlecloseEditAppointmentForm();
@@ -251,7 +255,10 @@ const AppointmentEditForm = () => {
                                   dispatch(servicePriceApi({ service_id: "" }));
                                   dispatch(closeEditAppointmentForm());
                                   dispatch(clientAppointmentListViewApi({ client: detail.id }));
-                                  dispatch(appointmentListViewApi());
+                                  if (isRangeInfo) {
+                                    dispatch(appointmentListViewApi(isRangeInfo));
+                                    dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+                                  }
                                   sweatalert({ title: t("Appointment booking Cancelled"), text: t("Appointment booking Cancelled"), icon: "success" });
                                 }
                               });
@@ -279,5 +286,8 @@ const AppointmentEditForm = () => {
     </>
   );
 };
-
+AppointmentEditForm.propTypes = {
+  isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  page: PropTypes.string,
+};
 export default AppointmentEditForm;
