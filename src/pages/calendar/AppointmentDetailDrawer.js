@@ -213,7 +213,7 @@ const AppointmentDetailDrawer = (props) => {
               <Moment format="dddd, MMMM Do YYYY">{date}</Moment>
             </h3>
             <h5 className="mb-1 fw-normal">
-              {service.name} - {cost}
+              {service.name} - {"$ "+cost}
             </h5>
             <h6 className="mb-1">{ucfirst(staff.first_name + " " + staff.last_name)}</h6>
             <h6 className="mb-1">
