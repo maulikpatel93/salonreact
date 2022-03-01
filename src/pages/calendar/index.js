@@ -6,7 +6,7 @@ import config from "../../config";
 import { checkaccess, ucfirst, uniqueArrayofObject } from "helpers/functions";
 import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { openAddBusytimeForm } from "store/slices/busytimeSlice";
-import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal, openEditAppointmentForm } from "store/slices/appointmentSlice";
+import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
@@ -24,6 +24,7 @@ import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import moment from "moment";
 import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo } from "store/slices/calendarSlice";
 import AppointmentEditForm from "./Form/AppointmentEditForm";
+import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
 const Calendar = () => {
   SalonModule();
@@ -42,6 +43,7 @@ const Calendar = () => {
   const clientIsOpenedAddForm = useSelector((state) => state.client.isOpenedAddForm);
   const appointmentIsOpenedAddForm = useSelector((state) => state.appointment.isOpenedAddForm);
   const appointmentIsOpenedEditForm = useSelector((state) => state.appointment.isOpenedEditForm);
+  const appointmentIsOpenedRescheduleForm = useSelector((state) => state.appointment.isOpenedRescheduleForm);
   const appointmentIsOpenedDetailModal = useSelector((state) => state.appointment.isOpenedDetailModal);
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
   const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
@@ -62,12 +64,27 @@ const Calendar = () => {
       let service = dateAppointmentListView[item].service;
       let staff = dateAppointmentListView[item].staff;
       let client_name = client.first_name + " " + client.last_name;
+      let backgroundColor = "#8f807d";
+      let borderColor = "#8f807d";
+      if (status === "Scheduled") {
+        backgroundColor = "#8f807d";
+        borderColor = "#8f807d";
+      } else if (status === "Confirmed") {
+        backgroundColor = "#ecd078";
+        borderColor = "#ecd078";
+      } else if (status === "Completed") {
+        backgroundColor = "#59ba41";
+        borderColor = "#59ba41";
+      } else if (status === "Cancelled") {
+        backgroundColor = "#c02942";
+        borderColor = "#c02942";
+      }
       clients.push(client);
       events.push({
         resourceId: client.id,
         start: date + "T" + start_time,
-        backgroundColor: "#8f807d",
-        borderColor: "#8f807d",
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
         title: client_name,
         extendedProps: {
           appointment: { id, status },
@@ -104,34 +121,37 @@ const Calendar = () => {
   };
 
   const renderEventContent = (eventInfo) => {
-    let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
-    let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
-    let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
-    if (client && service && staff) {
-      let popover = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
-      return (
-        <>
-          <OverlayTrigger
-            placement="top-start"
-            delay={{ show: 250, hide: 400 }}
-            overlay={(props) => (
-              <Tooltip id="Description__tooltip" {...props}>
-                <div dangerouslySetInnerHTML={{ __html: popover }} />
-              </Tooltip>
-            )}
-          >
-            <ul className="list-unstyled p-2 calendar_event_content cursor-pointer">
-              <li className="">
-                <b>{eventInfo.event.title}</b>
-              </li>
-              <li className="">{t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })}</li>
-              <li className="align-self-center">
-                <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
-              </li>
-            </ul>
-          </OverlayTrigger>
-        </>
-      );
+    if (eventInfo.event) {
+      let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
+      let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
+      let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
+      let status = eventInfo.event.extendedProps && eventInfo.event.extendedProps.appointment && eventInfo.event.extendedProps.appointment.status;
+      if (client && service && staff) {
+        let popover = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
+        return (
+          <>
+            <OverlayTrigger
+              placement="top-start"
+              delay={{ show: 250, hide: 400 }}
+              overlay={(props) => (
+                <Tooltip id="Description__tooltip" {...props}>
+                  <div dangerouslySetInnerHTML={{ __html: popover }} />
+                </Tooltip>
+              )}
+            >
+              <ul className="list-unstyled p-2 calendar_event_content cursor-pointer">
+                <li className={status === "Confirmed" ? "text-dark" : ""}>
+                  <b>{eventInfo.event.title}</b>
+                </li>
+                <li className={status === "Confirmed" ? "text-dark" : ""}>{t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })}</li>
+                <li className={status === "Confirmed" ? "text-dark align-self-center" : "align-self-center"}>
+                  <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
+                </li>
+              </ul>
+            </OverlayTrigger>
+          </>
+        );
+      }
     }
     return (
       <>
@@ -191,9 +211,8 @@ const Calendar = () => {
   }
 
   function handleEventClick(clickInfo) {
-    if (clickInfo.event.extendedProps) {
+    if (clickInfo.event && clickInfo.event.extendedProps) {
       let id = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.id;
-      let status = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.status;
       let client_id = clickInfo.event.extendedProps.client && clickInfo.event.extendedProps.client.id;
       dispatch(closeAddAppointmentForm());
       dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
@@ -228,21 +247,21 @@ const Calendar = () => {
     // }
   }
 
-  function handleEventAdd(addInfo) {
+  function handleEventAdd() {
     // this.props.createEvent(addInfo.event.toPlainObject()).catch(() => {
     //   reportNetworkError();
     //   addInfo.revert();
     // });
   }
 
-  function handleEventChange(changeInfo) {
+  function handleEventChange() {
     // this.props.updateEvent(changeInfo.event.toPlainObject()).catch(() => {
     //   reportNetworkError();
     //   changeInfo.revert();
     // });
   }
 
-  function handleEventRemove(removeInfo) {
+  function handleEventRemove() {
     // this.props.deleteEvent(removeInfo.event.id).catch(() => {
     //   reportNetworkError();
     //   removeInfo.revert();
@@ -287,9 +306,7 @@ const Calendar = () => {
   }
   const getselectedDatePicker = selectedDate;
   const getselectedDatePickerRange = selectedDateRange;
-  function reportNetworkError() {
-    alert("This action could not be completed");
-  }
+
   return (
     <>
       <div className="page-content">
@@ -368,8 +385,6 @@ const Calendar = () => {
                           weekPicker
                           format={"MMM DD, YYYY"}
                           onChange={(dateObjects) => {
-                            let start_date = moment(dateObjects[0]?.toDate?.().toString()).format("MMM DD, YYYY");
-                            let end_date = moment(dateObjects[1]?.toDate?.().toString()).format("MMM DD, YYYY");
                             let dateYMD = moment(dateObjects[0]?.toDate?.().toString()).format("YYYY-MM-DD");
                             setSelectedDateRange(dateObjects);
                             let calendarApi = calendarRef.current.getApi();
@@ -512,6 +527,7 @@ const Calendar = () => {
         {checkaccess({ name: "view", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedDetailModal ? <AppointmentDetailDrawer isRangeInfo={isRangeInfo} /> : ""}
         {checkaccess({ name: "update", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedEditForm ? <AppointmentEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedAddForm ? <AppointmentAddForm isRangeInfo={isRangeInfo} /> : ""}
+        {checkaccess({ name: "reschedule", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedRescheduleForm ? <AppointmentRescheduleForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
       </div>

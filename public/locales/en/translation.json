@@ -332,5 +332,8 @@
     "Are you sure want to delete this appointment?": "Are you sure want to delete this appointment?",
     "Are you sure you want to {{ status }} the appointment?": "Are you sure you want to {{ status }} the appointment?",
     "Yes, {{ status }} it!": "Yes, {{ status }} it!",
-    "Appointment status updated": "Appointment status updated"
+    "Appointment status updated": "Appointment status updated",
+    "Appointment reschedule successfully": "Appointment reschedule successfully",
+    "Reschedule appointment": "Reschedule appointment",
+    "Are you sure want to reschedule appointment?": "Are you sure want to reschedule appointment?"
 }

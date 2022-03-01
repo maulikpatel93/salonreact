@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
-import { appointmentDeleteApi, appointmentListViewApi, appointmentUpdateApi, clientAppointmentListViewApi, closeAppointmentDetailModal, closeEditAppointmentForm, openAddAppointmentForm } from "store/slices/appointmentSlice";
+import { appointmentDeleteApi, appointmentListViewApi, appointmentUpdateApi, clientAppointmentListViewApi, closeAppointmentDetailModal, closeEditAppointmentForm, openAddAppointmentForm, openRescheduleAppointmentForm } from "store/slices/appointmentSlice";
 import { ucfirst } from "helpers/functions";
 import { appointmentDetailApi, openEditAppointmentForm } from "store/slices/appointmentSlice";
 import { serviceOptions, servicePriceApi } from "store/slices/serviceSlice";
@@ -51,6 +51,17 @@ const AppointmentDetailDrawer = (props) => {
   useEffect(() => {
     setChangeStatus(status);
   }, []);
+
+  let textColor = "";
+  if (status === "Scheduled") {
+    textColor = "";
+  } else if (status === "Confirmed") {
+    textColor = "text-warning";
+  } else if (status === "Completed") {
+    textColor = "text-success";
+  } else if (status === "Cancelled") {
+    textColor = "text-danger";
+  }
 
   const handleDeleteAppointment = (e) => {
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this appointment?"), message: "", confirmButtonText: t("Yes, delete it!") });
@@ -137,49 +148,65 @@ const AppointmentDetailDrawer = (props) => {
             >
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
-            {status && status === "Scheduled" && (
-              <>
-                <div className="row gx-2 action-box mb-3 align-items-end mt-3">
-                  <a
-                    className="col text-center text-decoration-none cursor-pointer"
-                    onClick={() => {
-                      dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
-                        if (action.meta.requestStatus === "fulfilled") {
-                          dispatch(openEditAppointmentForm());
-                          dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-                          dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
-                        } else if (action.meta.requestStatus === "rejected") {
-                          if (action.payload.status === 422) {
-                            let error = action.payload;
-                            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-                            sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
-                          }
+
+            <div className="row gx-2 action-box mb-3 align-items-end mt-3">
+              {status && status === "Scheduled" && (
+                <a
+                  className="col text-center text-decoration-none cursor-pointer"
+                  onClick={() => {
+                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                      if (action.meta.requestStatus === "fulfilled") {
+                        dispatch(openEditAppointmentForm());
+                        dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
+                        dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+                      } else if (action.meta.requestStatus === "rejected") {
+                        if (action.payload.status === 422) {
+                          let error = action.payload;
+                          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                          sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
                         }
-                      });
-                    }}
-                  >
-                    <img src={config.imagepath + "edit-big.png"} alt="" />
-                    <span className="d-block">{t("Edit")}</span>
-                  </a>
-                  <a className="col text-center text-decoration-none cursor-pointer">
-                    <img src={config.imagepath + "appoinment.png"} alt="" />
-                    <span className="d-block">{t("Reschedule")}</span>
-                  </a>
-                  <a className="col text-center text-decoration-none cursor-pointer" onClick={handleAppointmentDrawer}>
-                    <img src={config.imagepath + "book-next.png"} alt="" />
-                    <span className="d-block">{t("Book Next")}</span>
-                  </a>
-                  <a className="col text-center text-decoration-none cursor-pointer">
-                    <img src={config.imagepath + "email.png"} alt="" />
-                    <span className="d-block">{t("Email")}</span>
-                  </a>
-                  <a className="col text-center text-decoration-none cursor-pointer">
-                    <img src={config.imagepath + "sms.png"} alt="" />
-                    <span className="d-block">{t("SMS")}</span>
-                  </a>
-                </div>
-              </>
-            )}
+                      }
+                    });
+                  }}
+                >
+                  <img src={config.imagepath + "edit-big.png"} alt="" />
+                  <span className="d-block">{t("Edit")}</span>
+                </a>
+              )}
+              {status && status === "Confirmed" && (
+                <a
+                  className="col text-center text-decoration-none cursor-pointer"
+                  onClick={() => {
+                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                      if (action.meta.requestStatus === "fulfilled") {
+                        dispatch(openRescheduleAppointmentForm());
+                      } else if (action.meta.requestStatus === "rejected") {
+                        if (action.payload.status === 422) {
+                          let error = action.payload;
+                          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                          sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+                        }
+                      }
+                    });
+                  }}
+                >
+                  <img src={config.imagepath + "appoinment.png"} alt="" />
+                  <span className="d-block">{t("Reschedule")}</span>
+                </a>
+              )}
+              <a className="col text-center text-decoration-none cursor-pointer" onClick={handleAppointmentDrawer}>
+                <img src={config.imagepath + "book-next.png"} alt="" />
+                <span className="d-block">{t("Book Next")}</span>
+              </a>
+              <a className="col text-center text-decoration-none cursor-pointer">
+                <img src={config.imagepath + "email.png"} alt="" />
+                <span className="d-block">{t("Email")}</span>
+              </a>
+              <a className="col text-center text-decoration-none cursor-pointer">
+                <img src={config.imagepath + "sms.png"} alt="" />
+                <span className="d-block">{t("SMS")}</span>
+              </a>
+            </div>
           </div>
           <div className="drawer-body pb-md-5 pb-3">
             <h3 className="mb-2">
@@ -207,16 +234,20 @@ const AppointmentDetailDrawer = (props) => {
                     })}
                 </select>
               ) : (
-                <h5 className="">{status}</h5>
+                <h5 className={textColor + " fw-bold"}>{status}</h5>
               )}
             </div>
             <p className="mb-2 text-jusitfy">{t("Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.", { start_time: "09:15Am", end_time: "10::00Pm", staff_name: "Amanda" })}</p>
           </div>
-          <div className="drawer-footer text-center">
-            <a className="btn btn-secondary btn-lg text-dark cursor-pointer me-3" onClick={handleDeleteAppointment}>
-              <i className="fas fa-trash-alt p-0"></i>
-            </a>
-            <a className="btn btn-primary btn-lg cursor-pointer w-75">{t("Checkout")}</a>
+          <div className="drawer-footer text-center pt-3">
+            <div className="row">
+              <div className="col-12">
+                <a className="btn btn-secondary btn-lg text-dark cursor-pointer me-3" onClick={handleDeleteAppointment}>
+                  <i className="fas fa-trash-alt p-0"></i>
+                </a>
+                <a className="btn btn-primary btn-lg cursor-pointer w-75">{t("Checkout")}</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

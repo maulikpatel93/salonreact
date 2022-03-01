@@ -33,7 +33,6 @@ const update = (values) => {
   }
   formData.append("auth_key", auth_key);
   formData.append("action", action);
-  formData.append("role_id", 6);
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
@@ -99,10 +98,26 @@ const deleted = (values) => {
   return axios.post(API_URL + action, data, { headers: authHeader() });
 };
 
+const reschedule = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const clickEvent = values && values.clickEvent;
+  const formData = new FormData();
+  for (let value in values) {
+    formData.append(value, values[value]);
+  }
+  let action = "afterlogin/appointment/reschedule/" + values.id;
+  formData.append("auth_key", auth_key);
+  formData.append("action", action);
+  formData.append("salon_id", auth.user.salon_id);
+  return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
+};
+
 const appointmentApiController = {
   create,
   update,
   view,
   deleted,
+  reschedule,
 };
 export default appointmentApiController;

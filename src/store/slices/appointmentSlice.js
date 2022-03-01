@@ -30,6 +30,19 @@ export const appointmentUpdateApi = createAsyncThunk("appointment/update", async
   }
 });
 
+export const appointmentRescheduleApi = createAsyncThunk("appointment/reschedule", async (formvalues, thunkAPI) => {
+  try {
+    const resposedata = await appointmentApiController
+      .reschedule(formvalues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "reschedule"))
+      .catch((error) => HandleError(thunkAPI, error, "reschedule"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
+  }
+});
+
 export const appointmentListViewApi = createAsyncThunk("appointment/listview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await appointmentApiController
@@ -111,6 +124,7 @@ export const appointmentSuggetionListApi = createAsyncThunk("appointment/suggeti
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
+  isOpenedRescheduleForm: "",
   isOpenedDetailModal: "",
   isListView: [],
   isClientAppointmentListView: [],
@@ -125,19 +139,33 @@ const appointmentSlice = createSlice({
     reset: () => initialState,
     openAddAppointmentForm: (state = initialState) => {
       state.isOpenedEditForm = "";
+      state.isOpenedRescheduleForm = "";
       state.isOpenedAddForm = "open";
     },
     closeAddAppointmentForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
+      state.isOpenedRescheduleForm = "";
     },
     openEditAppointmentForm: (state = initialState) => {
       state.isOpenedAddForm = "";
+      state.isOpenedRescheduleForm = "";
       state.isOpenedEditForm = "open";
     },
     closeEditAppointmentForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
+      state.isOpenedRescheduleForm = "";
+    },
+    openRescheduleAppointmentForm: (state = initialState) => {
+      state.isOpenedAddForm = "";
+      state.isOpenedEditForm = "";
+      state.isOpenedRescheduleForm = "open";
+    },
+    closeRescheduleAppointmentForm: (state = initialState) => {
+      state.isOpenedAddForm = "";
+      state.isOpenedEditForm = "";
+      state.isOpenedRescheduleForm = "";
     },
     openAppointmentDetailModal: (state = initialState) => {
       state.isOpenedDetailModal = "open";
@@ -165,6 +193,9 @@ const appointmentSlice = createSlice({
     [appointmentUpdateApi.pending]: () => {},
     [appointmentUpdateApi.fulfilled]: () => {},
     [appointmentUpdateApi.rejected]: () => {},
+    [appointmentRescheduleApi.pending]: () => {},
+    [appointmentRescheduleApi.fulfilled]: () => {},
+    [appointmentRescheduleApi.rejected]: () => {},
     [appointmentListViewApi.pending]: () => {},
     [appointmentListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
@@ -208,5 +239,5 @@ const appointmentSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm, openAppointmentDetailModal, closeAppointmentDetailModal, openAppointmentFilter, closeAppointmentFilter } = appointmentSlice.actions;
+export const { reset, openAddAppointmentForm, closeAddAppointmentForm, openEditAppointmentForm, closeEditAppointmentForm, openAppointmentDetailModal, closeAppointmentDetailModal, openAppointmentFilter, closeAppointmentFilter, openRescheduleAppointmentForm, closeRescheduleAppointmentForm } = appointmentSlice.actions;
 export default appointmentSlice.reducer;
