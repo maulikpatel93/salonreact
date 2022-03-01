@@ -104,7 +104,6 @@ const AppointmentAddForm = (props) => {
     client_name: Yup.string().trim().label(t("Client")),
   });
   yupconfig();
-
   const handleAppointmentSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {

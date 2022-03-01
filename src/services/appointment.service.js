@@ -49,6 +49,7 @@ const view = (values) => {
   const end_date = values && values.end_date ? values.end_date : "";
   const timezone = values && values.timezone ? values.timezone : "";
   const type = values && values.type ? values.type : "";
+  const staff_id = values && values.staff_id ? values.staff_id : "";
   //Appointment Calender view parameter close
   const filter = values && values.filter ? JSON.stringify(values.filter) : "";
   if (filter === "") {
@@ -83,6 +84,7 @@ const view = (values) => {
     end_date: end_date,
     timezone: timezone,
     type: type,
+    staff_id: staff_id,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };

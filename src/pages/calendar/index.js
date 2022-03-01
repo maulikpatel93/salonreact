@@ -11,7 +11,7 @@ import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
 import { serviceOptions } from "store/slices/serviceSlice";
-import { staffOptions } from "store/slices/staffSlice";
+import { staffOptions, staffOptionsDropdown } from "store/slices/staffSlice";
 //Calender
 // import { Tooltip } from "bootstrap";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -26,6 +26,7 @@ import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo } from "stor
 import AppointmentEditForm from "./Form/AppointmentEditForm";
 import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
+import { calendarResetStaffFilter, calendarStaffFilter } from "store/slices/calendarSlice";
 const Calendar = () => {
   SalonModule();
   const { t } = useTranslation();
@@ -47,11 +48,22 @@ const Calendar = () => {
   const appointmentIsOpenedDetailModal = useSelector((state) => state.appointment.isOpenedDetailModal);
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
   const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
+  const isStaffOptionDropdown = useSelector((state) => state.staff.isStaffOptionDropdown);
   const isRangeInfo = useSelector((state) => state.calendar.isRangeInfo);
   const calendarTab = useSelector((state) => state.calendar.isTabView);
+  const isStaffFilter = useSelector((state) => state.calendar.isStaffFilter);
+
+  useEffect(() => {
+    dispatch(staffOptionsDropdown({ dropdown: true }));
+    if (isStaffFilter) {
+      dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: isStaffFilter && isStaffFilter.id }));
+      //dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: isStaffFilter && isStaffFilter.id }));
+    }
+    //dispatch(calendarResetStaffFilter());
+  }, []);
 
   const events = [];
-  const clients = [];
+  const staffs = [];
   const resources = [];
   dateAppointmentListView &&
     Object.keys(dateAppointmentListView).map((item) => {
@@ -79,9 +91,9 @@ const Calendar = () => {
         backgroundColor = "#c02942";
         borderColor = "#c02942";
       }
-      clients.push(client);
+      staffs.push(staff);
       events.push({
-        resourceId: client.id,
+        resourceId: staff.id,
         start: date + "T" + start_time,
         backgroundColor: backgroundColor,
         borderColor: borderColor,
@@ -94,7 +106,7 @@ const Calendar = () => {
         },
       });
     });
-  const uniqueclients = uniqueArrayofObject(clients, ["id"]);
+  const uniqueclients = uniqueArrayofObject(staffs, ["id"]);
   uniqueclients &&
     Object.keys(uniqueclients).map((item) => {
       let id = uniqueclients[item].id;
@@ -143,7 +155,7 @@ const Calendar = () => {
                 <li className={status === "Confirmed" ? "text-dark" : ""}>
                   <b>{eventInfo.event.title}</b>
                 </li>
-                <li className={status === "Confirmed" ? "text-dark" : ""}>{t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })}</li>
+                <li className={status === "Confirmed" ? "text-dark" : ""}>{service.name}</li>
                 <li className={status === "Confirmed" ? "text-dark align-self-center" : "align-self-center"}>
                   <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
                 </li>
@@ -168,14 +180,8 @@ const Calendar = () => {
     } else if (rangeInfo.view && rangeInfo.view.type === "timeGridWeek") {
       type = "week";
     }
-    dispatch(appointmentListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type })).then((action) => {
-      if (action.meta.requestStatus === "fulfilled") {
-        dispatch(calendarRangeInfo({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type }));
-      } else if (action.meta.requestStatus === "rejected") {
-        if (action.payload.status === 422) {
-        }
-      }
-    });
+    dispatch(calendarRangeInfo({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type, staff_id: isStaffFilter && isStaffFilter.id }));
+    dispatch(appointmentListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type, staff_id: isStaffFilter && isStaffFilter.id }));
   }
 
   function handleClickPrev() {
@@ -304,6 +310,7 @@ const Calendar = () => {
       }
     }
   }
+
   const getselectedDatePicker = selectedDate;
   const getselectedDatePickerRange = selectedDateRange;
 
@@ -316,42 +323,57 @@ const Calendar = () => {
               <div className="row">
                 <div className="col-sm-auto col-12 pt-lg-4 pt-md-3 pt-2">
                   <div className="dropdown staff-dropdown">
-                    <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      {t("All Staff")}
-                    </button>
-                    <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
-                      <ul className="p-0 m-0 list-unstyled">
-                        <li>
-                          <a href="#" className="d-flex align-items-center">
-                            <div className="user-img me-2">
-                              <img src={config.imagepath + "Avatar.png"} alt="" />
-                            </div>
-                            <div className="user-id">
-                              <span className="user-name">Whitney Blessing</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="d-flex align-items-center">
-                            <div className="user-img me-2">
-                              <img src={config.imagepath + "Avatar.png"} alt="" />
-                            </div>
-                            <div className="user-id">
-                              <span className="user-name">Jo Smith</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="d-flex align-items-center">
-                            <div className="user-img me-2">
-                              <img src={config.imagepath + "Avatar.png"} alt="" />
-                            </div>
-                            <div className="user-id">
-                              <span className="user-name">Jo Smith</span>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
+                    <div className="btn-group w-100">
+                      <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {isStaffFilter ? isStaffFilter.name : t("All Staff")}
+                      </button>
+                      <span
+                        className="btn btn-primary"
+                        onClick={() => {
+                          dispatch(calendarResetStaffFilter());
+                          dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: "" }));
+                          dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: "" }));
+                        }}
+                      >
+                        x
+                      </span>
+                      <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
+                        <ul className="p-0 m-0 list-unstyled">
+                          {isStaffOptionDropdown &&
+                            Object.keys(isStaffOptionDropdown).map((item, i) => {
+                              let id = isStaffOptionDropdown[item].id;
+                              let first_name = isStaffOptionDropdown[item].first_name;
+                              let last_name = isStaffOptionDropdown[item].last_name;
+                              let image_url = isStaffOptionDropdown[item].profile_photo_url;
+                              let name = ucfirst(first_name) + " " + ucfirst(last_name);
+                              return (
+                                <li key={i} data-id={id}>
+                                  <a
+                                    className="d-flex align-items-center cursor-pointer"
+                                    onClick={() => {
+                                      dispatch(calendarStaffFilter({ id, name }));
+                                      dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: id }));
+                                      dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: id }));
+                                      // setTimeout(() => {
+                                      //   console.log(isRangeInfo);
+                                      // }, 500);
+
+                                      // let dateYMD = moment(isRangeInfo.start_date).format("YYYY-MM-DD");
+                                      // let calendarApi = calendarRef.current.getApi();
+                                      // calendarApi.gotoDate(dateYMD);
+                                      // dispatch(rosterListViewApi({ id }));
+                                    }}
+                                  >
+                                    <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
+                                    <div className="user-id">
+                                      <span className="user-name">{name}</span>
+                                    </div>
+                                  </a>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
