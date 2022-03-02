@@ -103,7 +103,7 @@ const deleted = (values) => {
 const reschedule = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const clickEvent = values && values.clickEvent;
+  // const clickEvent = values && values.clickEvent;
   const formData = new FormData();
   for (let value in values) {
     formData.append(value, values[value]);

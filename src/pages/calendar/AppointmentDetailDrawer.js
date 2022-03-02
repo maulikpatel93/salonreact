@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
@@ -11,10 +11,9 @@ import Moment from "react-moment";
 import { swalConfirm, sweatalert } from "component/Sweatalert2";
 import PropTypes from "prop-types";
 import { clientSearchName, closeClientSearchList } from "store/slices/clientSlice";
-import { offset } from "@popperjs/core";
 
 const AppointmentDetailDrawer = (props) => {
-  const [changeStatus, setChangeStatus] = useState("");
+  // const [changeStatus, setChangeStatus] = useState("");
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

@@ -108,8 +108,8 @@ const AppointmentAddForm = (props) => {
     try {
       dispatch(appointmentStoreApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
-          let data = action.payload;
-          let startdate = data.date + "T" + data.start_time;
+          // let data = action.payload;
+          // let startdate = data.date + "T" + data.start_time;
           setStatus({ success: true });
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));

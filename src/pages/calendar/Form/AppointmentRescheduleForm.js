@@ -6,8 +6,8 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
-import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
+import { InputField } from "../../../component/form/Field";
+import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
