@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import { clientSearchName, closeClientSearchList } from "store/slices/clientSlice";
 
 const AppointmentDetailDrawer = (props) => {
-  // const [changeStatus, setChangeStatus] = useState("");
+  const [changeStatus, setChangeStatus] = useState("");
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
