@@ -74,7 +74,6 @@ const AppointmentAddForm = (props) => {
     //   dispatch(closeClientSearchList());
     // }, 200);
   };
-
   const initialValues = {
     client_id: "",
     service_id: "",
@@ -147,7 +146,8 @@ const AppointmentAddForm = (props) => {
   };
 
   const serviceOptionsData = isServiceOption;
-  const staffOptionsData = isStaffOption;
+  const staffOptionsData = isStaffOption.length > 0 ? isStaffOption : null;
+ 
   const repeatsOptionsData = [
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
@@ -165,6 +165,7 @@ const AppointmentAddForm = (props) => {
               let cost = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
               formik.setFieldValue("duration", duration);
               formik.setFieldValue("cost", cost ? cost[0].price : "");
+              formik.setFieldValue("staff_id", "");
             }
             if (client) {
               formik.setFieldValue("client_id", client.id ? client.id : "");

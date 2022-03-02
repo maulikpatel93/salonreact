@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
@@ -33,7 +33,7 @@ const AppointmentEditForm = (props) => {
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const isServicePrice = useSelector((state) => state.service.isServicePrice);
   const detail = useSelector((state) => state.appointment.isDetailData);
-  console.log(detail);
+
   const handlecloseEditAppointmentForm = () => {
     dispatch(closeEditAppointmentForm());
   };
@@ -104,7 +104,7 @@ const AppointmentEditForm = (props) => {
   };
 
   const serviceOptionsData = isServiceOption;
-  const staffOptionsData = isStaffOption;
+  const staffOptionsData = isStaffOption.length > 0 ? isStaffOption : null;
   const repeatsOptionsData = [
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
@@ -143,6 +143,7 @@ const AppointmentEditForm = (props) => {
               formik.setFieldValue("service_id", isServicePrice.id);
               formik.setFieldValue("duration", duration);
               formik.setFieldValue("cost", cost ? cost[0].price : "");
+              formik.setFieldValue("staff_id", "", false);
             }
           }, [detail, isServicePrice]);
           return (

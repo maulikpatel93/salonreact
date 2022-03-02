@@ -25,6 +25,7 @@ const AppointmentListview = (props) => {
         Object.keys(objectData).map((item) => {
           let id = objectData[item].id;
           let client_id = objectData[item].client_id;
+          let service_id = objectData[item].service_id;
           let date = objectData[item].date;
           let start_time = objectData[item].start_time;
           let datetime = date + " " + start_time;
@@ -56,7 +57,7 @@ const AppointmentListview = (props) => {
                       if (action.meta.requestStatus === "fulfilled") {
                         dispatch(openEditAppointmentForm());
                         dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-                        dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+                        dispatch(staffOptions({ option: { valueField: "users.id", labelField: "CONCAT(users.last_name,' ',users.first_name)" }, service_id: service_id }));
                       } else if (action.meta.requestStatus === "rejected") {
                         if (action.payload.status === 422) {
                           let error = action.payload;

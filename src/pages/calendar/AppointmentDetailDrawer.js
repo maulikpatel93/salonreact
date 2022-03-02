@@ -89,7 +89,7 @@ const AppointmentDetailDrawer = (props) => {
     dispatch(clientSearchName(""));
     dispatch(closeClientSearchList());
     dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-    dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+    // dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
 
   const handleStatusUpdate = (e) => {
@@ -158,7 +158,9 @@ const AppointmentDetailDrawer = (props) => {
                       if (action.meta.requestStatus === "fulfilled") {
                         dispatch(openEditAppointmentForm());
                         dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-                        dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+                        if (service && service.id) {
+                          dispatch(staffOptions({ option: { valueField: "users.id", labelField: "CONCAT(users.last_name,' ',users.first_name)" }, service_id: service && service.id }));
+                        }
                       } else if (action.meta.requestStatus === "rejected") {
                         if (action.payload.status === 422) {
                           let error = action.payload;
@@ -213,7 +215,7 @@ const AppointmentDetailDrawer = (props) => {
               <Moment format="dddd, MMMM Do YYYY">{date}</Moment>
             </h3>
             <h5 className="mb-1 fw-normal">
-              {service.name} - {"$"+cost}
+              {service.name} - {"$" + cost}
             </h5>
             <h6 className="mb-1">{ucfirst(staff.first_name + " " + staff.last_name)}</h6>
             <h6 className="mb-1">

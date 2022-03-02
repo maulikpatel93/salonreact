@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { servicePriceApi } from "store/slices/serviceSlice";
 import { useDispatch } from "react-redux";
+import { staffOptions } from "store/slices/staffSlice";
 // interface Option {
 //   label: string;
 //   value: string;
@@ -16,10 +17,17 @@ import { useDispatch } from "react-redux";
 // }
 
 export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
+  console.log(options);
+  const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {
     if (field.name === "service_id") {
-      dispatch(servicePriceApi({ service_id: option && option.value }));
+      dispatch(servicePriceApi({ service_id: option && option.value })).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          let service = action.payload;
+          dispatch(staffOptions({ option: { valueField: "users.id", labelField: "CONCAT(users.last_name,' ',users.first_name)" }, service_id: service.id }));
+        }
+      });
     }
     if (option) {
       form.setFieldValue(field.name, isMulti ? option.map((item) => item.value) : option.value);
@@ -52,13 +60,14 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
   return (
     <>
       <Select
+        ref={selectRef}
         className={className}
         id={controlId}
         name={field.name}
         value={getValue()}
         onChange={onChange}
         placeholder={placeholder}
-        options={options}
+        options={options ? options : []}
         isMulti={isMulti}
         isClearable
         styles={customStyles}

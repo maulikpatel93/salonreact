@@ -51,6 +51,7 @@ const view = (values) => {
   const next_page_url = values && values.next_page_url;
   const result = values && values.result ? values.result : "";
   const dropdown = values && values.dropdown ? values.dropdown : "";
+  const service_id = values && values.service_id ? values.service_id : "";
 
   let sortstring = "";
   if (sort) {
@@ -107,6 +108,7 @@ const view = (values) => {
       roster_field: values && values.option ? "0" : "*", //business_name,owner_name
       result: result, //business_name,owner_name
       option: values && values.option ? values.option : "",
+      service_id: service_id
     };
   }
   const data = staffdata;

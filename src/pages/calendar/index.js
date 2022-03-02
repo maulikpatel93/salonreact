@@ -126,7 +126,7 @@ const Calendar = () => {
     dispatch(clientSearchName(""));
     dispatch(closeClientSearchList());
     dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
-    dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+    // dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
   const handleClientDrawer = () => {
     dispatch(openAddClientForm());
