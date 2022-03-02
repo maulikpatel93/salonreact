@@ -55,10 +55,6 @@ const Roster = () => {
     //     let day = date.toLocaleString("en-Us", { weekday: "short", day: "numeric", year: "numeric", month: "short" });
     week.push(date);
   }
-
-  // console.log(moment().day(2));
-  // console.log(getselectedDate);
-
   const handleRosterDelete = (e) => {
     const obj = JSON.parse(e.currentTarget.dataset.obj);
     dispatch(rosterDeleteApi({ id: obj.id })).then((action) => {

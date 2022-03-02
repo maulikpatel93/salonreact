@@ -16,7 +16,6 @@ import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
-import moment from "moment";
 
 const StaffAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -167,7 +166,6 @@ const StaffAddForm = () => {
   });
   yupconfig();
 
-  console.log(moment("01:00:00", "HH:mm:ss").isAfter("02:00:00"));
   const handleStaffSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
@@ -310,8 +308,6 @@ const StaffAddForm = () => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
                               let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff;
-                              // console.log(formik.values.working_hours[i].start_time);
-                              console.log(errors_hour);
                               return (
                                 <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>

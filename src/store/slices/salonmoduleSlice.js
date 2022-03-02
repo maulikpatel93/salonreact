@@ -64,17 +64,7 @@ const salonmoduleSlice = createSlice({
       }
       // console.log(changes);
       // state.isAddonServices = action.payload;
-    },
-    checkaccess: (state, action) => {
-      const payload = action.payload;
-      const salonmodule = state.isAccessView;
-      const salonaccess = salonmodule
-        .filter((list) => list.id === payload.module_id)
-        .map((list) => {
-          console.log(list.salonpermission.id);
-        });
-      console.log(salonaccess);
-    },
+    }
   },
   extraReducers: {
     [salonmoduleListViewApi.pending]: () => {},
@@ -109,5 +99,5 @@ const salonmoduleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, salonModuleAccessAction, checkaccess } = salonmoduleSlice.actions;
+export const { reset, salonModuleAccessAction } = salonmoduleSlice.actions;
 export default salonmoduleSlice.reducer;

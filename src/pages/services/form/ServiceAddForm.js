@@ -165,13 +165,11 @@ const ServiceAddForm = () => {
             if (isAddonServices) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
-                // console.log(!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true));
                 if (addonservicesData) {
                   Object.keys(addonservicesData).map((itemservice) => {
                     let service_id = addonservicesData[itemservice].id;
                     let isServiceChecked = addonservicesData[itemservice].isServiceChecked;
                     // let service_name = addonservicesData[itemservice].name;
-                    // console.log(service_name + " " + addonservicesData[itemservice]?.isServiceChecked || false);
                     formik.setFieldValue("add_on_services[" + item + "][" + itemservice + "]", isServiceChecked ? service_id : "", false);
                   });
                 }

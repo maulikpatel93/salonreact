@@ -67,7 +67,6 @@ const Calendar = () => {
   const resources = [];
   dateAppointmentListView &&
     Object.keys(dateAppointmentListView).map((item) => {
-      // console.log(dateAppointmentListView[item]);
       let id = dateAppointmentListView[item].id;
       let date = dateAppointmentListView[item].date;
       let start_time = dateAppointmentListView[item].start_time;
@@ -276,7 +275,6 @@ const Calendar = () => {
 
   function handleDateSelect(selectInfo) {
     let calendarApi = selectInfo.view.calendar;
-    // console.log(selectInfo);
     // let title = prompt("Please enter a new title for your event");
     calendarApi.unselect(); // clear date selection
     // if (title) {
@@ -354,10 +352,6 @@ const Calendar = () => {
                                       dispatch(calendarStaffFilter({ id, name }));
                                       dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: id }));
                                       dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: id }));
-                                      // setTimeout(() => {
-                                      //   console.log(isRangeInfo);
-                                      // }, 500);
-
                                       // let dateYMD = moment(isRangeInfo.start_date).format("YYYY-MM-DD");
                                       // let calendarApi = calendarRef.current.getApi();
                                       // calendarApi.gotoDate(dateYMD);
@@ -511,28 +505,6 @@ const Calendar = () => {
               select={handleDateSelect}
               events={events}
               resources={resources}
-              // eventDidMount={function (eventInfo, element) {
-              //   console.log(element);
-              //   let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
-              //   let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
-              //   let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
-              //   let description = "";
-              //   if (client && service && staff) {
-              //     description = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
-              //   }
-              //   var tooltip = (props) => (
-              //     <Tooltip id="button-tooltip" {...props}>
-              //       {description}
-              //     </Tooltip>
-              //   )
-              //   // var tooltip = new Tooltip(eventInfo.el, {
-              //   //   title: description,
-              //   //   // placement: "bottom",
-              //   //   trigger: "hover",
-              //   //   container: false,
-              //   //   html: true,
-              //   // });
-              // }}
               eventContent={renderEventContent} // custom render function
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}

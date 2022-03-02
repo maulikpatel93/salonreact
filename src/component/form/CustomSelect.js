@@ -17,7 +17,6 @@ import { staffOptions } from "store/slices/staffSlice";
 // }
 
 export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
-  console.log(options);
   const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {

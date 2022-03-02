@@ -253,8 +253,6 @@ const StaffEditForm = () => {
               });
             }
           }, [detail, isAddonServices]);
-
-          // console.log(formik.errors);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 addstaff-member " : "") + rightDrawerOpened} id="addstaff-member-drawer">
               <div className="drawer-wrp position-relative">

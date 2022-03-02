@@ -16,7 +16,6 @@ const actionMiddleware = (store) => (next) => (action) => {
     if (action.type == "auth/logout/fulfilled") {
       persistStore(store).purge();
     }
-    // console.log(action);
   }
   // store.dispatch({ type: "client/view/fulfilled" });
   return next(action);

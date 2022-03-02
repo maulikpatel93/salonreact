@@ -29,7 +29,6 @@ const AppointmentRescheduleForm = (props) => {
   const page = props.page;
 
   const detail = useSelector((state) => state.appointment.isDetailData);
-  console.log(detail);
   const handlecloseRescheduleAppointmentForm = () => {
     dispatch(closeRescheduleAppointmentForm());
   };

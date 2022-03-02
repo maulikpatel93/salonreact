@@ -147,7 +147,6 @@ const rosterSlice = createSlice({
     },
     [rosterUpdateApi.rejected]: () => {},
     [rosterListViewApi.fulfilled]: (state, action) => {
-      console.log(checkobject(action.payload));
       if (checkobject(action.payload) === true) {
         state.isListView = [action.payload];
       } else {
