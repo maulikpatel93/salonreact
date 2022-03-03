@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
-import { swalConfirm } from "../../../component/Sweatalert2";
+import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 import { serviceDeleteApi, serviceDetailApi, openEditServiceForm, addonservices, addonstaff } from "../../../store/slices/serviceSlice";
 import { categoryOptions } from "../../../store/slices/categorySlice";
 import { taxOptions } from "../../../store/slices/taxSlice";
@@ -27,7 +27,15 @@ const ServiceListView = (props) => {
     const name = ucfirst(props.name);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this service?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(serviceDeleteApi({ id: props.id }));
+      dispatch(serviceDeleteApi({ id: props.id })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          const status = action.payload && action.payload.status;
+          const appointment = action.payload && action.payload.message && action.payload.message.appointment;
+          if (status === 410) {
+            sweatalert({ title: `<h4 class="text-danger">${t("This service has not been deleted as {{ appointmenttotal }} appointments have already been booked for this service.", {appointmenttotal:appointment})}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
+          }
+        }
+      });
     }
   };
 

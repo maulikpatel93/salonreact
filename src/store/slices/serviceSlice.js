@@ -24,7 +24,7 @@ export const serviceUpdateApi = createAsyncThunk("service/update", async (formva
       .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString(); 
     return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
   }
 });
@@ -239,7 +239,7 @@ const serviceSlice = createSlice({
     [serviceUpdateApi.pending]: () => {},
     [serviceUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
+      const existingData = state.isListView && state.isListView.data && state.isListView.data.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
-import { swalConfirm } from "../../../component/Sweatalert2";
+import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 import { staffDeleteApi, openEditStaffForm, staffDetailApi, addonservices } from "../../../store/slices/staffSlice";
 import { pricetierOptions } from "../../../store/slices/pricetierSlice";
 
@@ -29,7 +29,15 @@ const StaffGridView = (props) => {
     const name = ucfirst(props.first_name + " " + props.last_name);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this staff?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(staffDeleteApi({ id: props.id }));
+      dispatch(staffDeleteApi({ id: props.id })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          const status = action.payload && action.payload.status;
+          const appointment = action.payload && action.payload.message && action.payload.message.appointment;
+          if (status === 410) {
+            sweatalert({ title: `<h4 class="text-danger">${t("This staff has not been deleted as {{ appointmenttotal }} appointments have already been booked for this staff.", { appointmenttotal: appointment })}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
+          }
+        }
+      });
     }
   };
   const handleStaffEditForm = (e) => {

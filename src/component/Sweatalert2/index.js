@@ -4,7 +4,7 @@ const sweatalert = (props) => {
   Swal.fire({
     title: props.title,
     text: props.messsage,
-    type: props.icon,
+    icon: props.icon,
   });
 };
 
@@ -12,7 +12,7 @@ const swalSuccess = (props) => {
   Swal.fire({
     title: props.title,
     text: props.messsage,
-    type: "success",
+    icon: "success",
   });
 };
 
@@ -20,7 +20,7 @@ const swalError = (props) => {
   Swal.fire({
     title: props.title,
     text: props.messsage,
-    type: "error",
+    icon: "error",
   });
 };
 
@@ -32,7 +32,7 @@ const swalConfirm = (btn, props) => {
   Swal.fire({
     title: `<h5 class="mb-0">${props.title}</h5>`,
     text: props.message,
-    type: "warning",
+    icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",

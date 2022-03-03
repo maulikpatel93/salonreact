@@ -14,6 +14,7 @@ import { ucfirst } from "helpers/functions";
 import { closeEditStaffForm, staffUpdateApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
+import Swal from "sweetalert2";
 
 const StaffEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -177,8 +178,35 @@ const StaffEditForm = () => {
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          const data = action.payload && action.payload.message && action.payload.message.appointmentMatchAll;
+          if (status === 422) {
             setErrors(errors);
+          } else if (status === 410) {
+            setLoading(false);
+            let htmlAppointmentMatchAll = "";
+            if (data) {
+              htmlAppointmentMatchAll += `<p class="text-danger text-justify">${t("You cannot remove / update this service because these staff services have already booked an appointment.")}</p><div class="table-respoinsive"><table class="table appointmentStaffList"><thead><tr><th class="text-start">${t('Service')}</th><th>${t('Total Appointment')}</th></tr></thead><tbody>`;
+              Object.keys(data).map((item, i) => {
+                let service_name = data[item].service.name;
+                let appointmentcount = data[item].appointmentcount;
+                htmlAppointmentMatchAll += `<tr><td class="text-start">${ucfirst(service_name)}</td><td>${appointmentcount}</td></tr>`;
+              });
+              htmlAppointmentMatchAll += "<tbody></tbody></table></div>";
+            }
+            Swal.fire({
+              title: "Do you want to save the changes?",
+              showDenyButton: false,
+              showCancelButton: true,
+              confirmButtonText: "Save",
+              // denyButtonText: 'No',
+              html: htmlAppointmentMatchAll,
+            }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                values.pagetype = "appointmentpopup";
+                handleStaffSubmit(values, { setErrors, setStatus, setSubmitting, resetForm });
+              }
+            });
           }
           setStatus({ success: false });
           setSubmitting(false);

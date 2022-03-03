@@ -215,7 +215,7 @@ const ServiceAddForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Price")}</h4>
-                          <p className="text-sm">{t("Price_note_service")}</p>
+                          <p className="text-sm">{t("Add the pricing options of the service. If you wish to offer this service at a special price when booked with another service, enter an add-on price for it.")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
@@ -269,7 +269,7 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t("Included in price")+')'} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -278,14 +278,14 @@ const ServiceAddForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Online bookings")}</h4>
-                          <p>{t("Online bookings_note_service")}</p>
+                          <p>{t("Choose if this service can be booked online")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-12">
                               <SwitchField
                                 name="service_booked_online"
-                                label={t("Service_booked_online")}
+                                label={t("Service can be booked online")}
                                 controlId="serviceForm-service_booked_online"
                                 value={"1"}
                                 onChange={(e) => {
@@ -441,8 +441,8 @@ const ServiceAddForm = () => {
                           <hr className="drawer-category-hr"></hr>
                           <div className="row mx-0 addstaff-member pb-0">
                             <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                              <h4 className="fw-semibold mb-2">{t("Add on Servicess")}</h4>
-                              <p>{t("Add on Servicess_note")}</p>
+                              <h4 className="fw-semibold mb-2">{t("Add-on Services")}</h4>
+                              <p>{t("Select which service you would like to offer as add-ons when this service is booked.")}</p>
                             </div>
                             <div className="col-md-6 pe-md-0 service mt-0 pt-0">
                               <ul className="list-unstyled mb-0 p-0 m-0">

@@ -90,7 +90,7 @@ const CategoryEditForm = () => {
                     <img src={config.imagepath + "close-icon.svg"} alt="" />
                   </button>
                   <div className="modal-body p-md-4 p-3">
-                    <h4 className="mb-2">{t("Edit_category")}</h4>
+                    <h4 className="mb-2">{t("Edit Category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
                       <InputField type="text" name="name" value={formik.values.name} label={t("Category_name")} controlId="categoryForm-name" />
                       <div className="text-center mt-3">

@@ -9,6 +9,7 @@ import { InputField, SwitchField, TextareaField, ReactSelectField } from "../../
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
 import { ucfirst } from "helpers/functions";
+import Swal from "sweetalert2";
 
 import { closeEditServiceForm, serviceUpdateApi, addonservices, addonservicesAction, addonstaffAction } from "../../../store/slices/serviceSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
@@ -62,6 +63,7 @@ const ServiceEditForm = () => {
     add_on_category: [],
     add_on_price_tier: [],
     add_on_staff: [],
+    pagetype: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -109,11 +111,40 @@ const ServiceEditForm = () => {
           dispatch(closeEditServiceForm());
           dispatch(addonservices({ isNotId: action.payload.id }));
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          const data = action.payload && action.payload.message && action.payload.message.appointmentMatchAll;
+          if (status === 422) {
             setErrors(errors);
+          } else if (status === 410) {
+            setLoading(false);
+            let htmlAppointmentMatchAll = "";
+            if (data) {
+              htmlAppointmentMatchAll += `<p class="text-danger text-justify">${t("You cannot remove / update this staff because these staff services have already booked an appointment.")}</p><div class="table-respoinsive"><table class="table appointmentStaffList"><thead><tr><th class="text-start">${t("Staff")}</th><th>${t("Total Appointment")}</th></tr></thead><tbody>`;
+              Object.keys(data).map((item, i) => {
+                let first_name = data[item].staff.first_name;
+                let last_name = data[item].staff.last_name;
+                let email = data[item].staff.email;
+                let appointmentcount = data[item].appointmentcount;
+                htmlAppointmentMatchAll += `<tr><td class="text-start">${ucfirst(first_name + " " + last_name)}<br>${email}</td><td>${appointmentcount}</td></tr>`;
+              });
+              htmlAppointmentMatchAll += "<tbody></tbody></table></div>";
+            }
+            Swal.fire({
+              title: "Do you want to save the changes?",
+              showDenyButton: false,
+              showCancelButton: true,
+              confirmButtonText: "Save",
+              // denyButtonText: 'No',
+              html: htmlAppointmentMatchAll,
+            }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                values.pagetype = "appointmentpopup";
+                handlecategoriesubmit(values, { setErrors, setStatus, setSubmitting, resetForm });
+              }
+            });
           }
           setStatus({ success: false });
           setSubmitting(false);
@@ -205,7 +236,7 @@ const ServiceEditForm = () => {
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t("Edit_service")}</h3>
+                    <h3 className="mb-0 fw-semibold">{t("Edit Service")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditCategoryForm}>
                         {t("Cancel")}
@@ -239,7 +270,7 @@ const ServiceEditForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Price")}</h4>
-                          <p className="text-sm">{t("Price_note_service")}</p>
+                          <p className="text-sm">{t("Add the pricing options of the service. If you wish to offer this service at a special price when booked with another service, enter an add-on price for it.")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
@@ -293,7 +324,7 @@ const ServiceEditForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t('included_in_price')+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax") + " (" + t("Included in price") + ")"} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -302,14 +333,14 @@ const ServiceEditForm = () => {
                       <div className="row mx-0">
                         <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Online bookings")}</h4>
-                          <p>{t("Online bookings_note_service")}</p>
+                          <p>{t("Choose if this service can be booked online")}</p>
                         </div>
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-12">
                               <SwitchField
                                 name="service_booked_online"
-                                label={t("Service_booked_online")}
+                                label={t("Service can be booked online")}
                                 controlId="serviceForm-service_booked_online"
                                 value={"1"}
                                 onChange={(e) => {
@@ -466,8 +497,8 @@ const ServiceEditForm = () => {
                           <hr className="drawer-category-hr"></hr>
                           <div className="row mx-0 addstaff-member pb-0">
                             <div className="col-md-6 ps-md-0 mb-md-0 mb-3">
-                              <h4 className="fw-semibold mb-2">{t("Add on Servicess")}</h4>
-                              <p>{t("Add on Servicess_note")}</p>
+                              <h4 className="fw-semibold mb-2">{t("Add-on Services")}</h4>
+                              <p>{t("Select which service you would like to offer as add-ons when this service is booked.")}</p>
                             </div>
                             <div className="col-md-6 pe-md-0 service mt-0 pt-0">
                               <ul className="list-unstyled mb-0 p-0 m-0">
