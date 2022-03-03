@@ -256,3 +256,8 @@ header {
 .fc .fc-col-header-cell-cushion {
     padding: 20px 4px !important;
 }
+
+.fc .fc-col-header-cell.active {
+    background: $primary;
+    color: #fff;
+}

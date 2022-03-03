@@ -21,6 +21,7 @@ import FullCalendar from "@fullcalendar/react";
 import momentPlugin from "@fullcalendar/moment";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import scrollGridPlugin from "@fullcalendar/scrollgrid";
 import moment from "moment";
 import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo } from "store/slices/calendarSlice";
 import AppointmentEditForm from "./Form/AppointmentEditForm";
@@ -105,13 +106,14 @@ const Calendar = () => {
         },
       });
     });
-  const uniqueclients = uniqueArrayofObject(staffs, ["id"]);
-  uniqueclients &&
-    Object.keys(uniqueclients).map((item) => {
-      let id = uniqueclients[item].id;
-      let first_name = uniqueclients[item].first_name;
-      let last_name = uniqueclients[item].last_name;
-      let profile_photo_url = uniqueclients[item].profile_photo_url;
+  // const uniquestaff = uniqueArrayofObject(staffs, ["id"]);
+  const uniquestaff = isStaffOptionDropdown;
+  uniquestaff &&
+    Object.keys(uniquestaff).map((item) => {
+      let id = uniquestaff[item].id;
+      let first_name = uniquestaff[item].first_name;
+      let last_name = uniquestaff[item].last_name;
+      let profile_photo_url = uniquestaff[item].profile_photo_url;
       let profile_photo_content = profile_photo_url ? '<img class="" src="' + profile_photo_url + '" alt=""/>' : '<div class="user-initial">' + first_name.charAt(0) + "" + last_name.charAt(0) + "</div>";
       // resources.push({ id: id, title: first_name + " " + last_name });
       resources.push({ id: id, html: '<div class="calenderProfileImg">' + profile_photo_content + '<div class="image-content">' + first_name + " " + last_name + "</div></div>" });
@@ -474,7 +476,7 @@ const Calendar = () => {
             <FullCalendar
               ref={calendarRef}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
-              plugins={[momentPlugin, resourceTimeGridPlugin, interactionPlugin]}
+              plugins={[scrollGridPlugin, momentPlugin, resourceTimeGridPlugin, interactionPlugin]}
               headerToolbar={false}
               buttonText={{ today: t("Today"), week: t("Week"), day: t("Day") }}
               initialView={calendarTab && calendarTab === "week" ? "timeGridWeek" : "resourceTimeGridDay"}
@@ -492,6 +494,7 @@ const Calendar = () => {
                 hour12: false,
               }}
               height="auto"
+              dayMinWidth={calendarTab && calendarTab === "week" ? "100" : "300"}
               nowIndicator={true}
               allDaySlot={false}
               editable={true}
@@ -514,6 +517,14 @@ const Calendar = () => {
               timeFormat={"H:mm"}
               resourceLabelContent={function (arg) {
                 return { html: arg.resource.extendedProps.html };
+              }}
+              resourceLabelClassNames={function (arg) {
+                let staff_id = isStaffFilter && isStaffFilter.id;
+                if (arg.resource.id == staff_id) {
+                  return ["active"];
+                } else {
+                  return [];
+                }
               }}
             />
           </div>

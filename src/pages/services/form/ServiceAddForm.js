@@ -106,6 +106,9 @@ const ServiceAddForm = () => {
           dispatch(removeImage());
           dispatch(closeAddServiceForm());
           sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          if (scriptedRef.current) {
+            setLoading(false);
+          }
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -114,11 +117,10 @@ const ServiceAddForm = () => {
           }
           setStatus({ success: false });
           setSubmitting(false);
+          setLoading(false);
         }
       });
-      if (scriptedRef.current) {
-        setLoading(false);
-      }
+      
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);
