@@ -219,7 +219,7 @@ const staffSlice = createSlice({
     [staffUpdateApi.pending]: () => {},
     [staffUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isGridView.data.find((event) => event.id === id);
+      const existingData = state.isGridView && state.isGridView.data && state.isGridView.data.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];

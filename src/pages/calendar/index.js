@@ -154,7 +154,7 @@ const Calendar = () => {
                 <li className={status === "Confirmed" ? "text-dark" : ""}>
                   <b>{eventInfo.event.title}</b>
                 </li>
-                <li className={status === "Confirmed" ? "text-dark" : ""}>{service.name}</li>
+                <li className={status === "Confirmed" ? "text-dark" : ""}>{eventInfo.view && eventInfo.view.type === "timeGridWeek" ? t("{{service}} with {{staff}}", { service: service.name, staff: ucfirst(staff.first_name + " " + staff.last_name) }) : service.name}</li>
                 <li className={status === "Confirmed" ? "text-dark align-self-center" : "align-self-center"}>
                   <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
                 </li>
