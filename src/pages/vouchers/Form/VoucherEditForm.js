@@ -39,6 +39,7 @@ const VoucherEditForm = (props) => {
     used_online: "",
     limit_uses: "",
     limit_uses_value: "",
+    terms_and_conditions: "",
     service_id: [],
   };
   const validationSchema = Yup.object().shape({
@@ -48,6 +49,7 @@ const VoucherEditForm = (props) => {
     valid: Yup.string().trim().label(t("Valid For")).required(),
     used_online: Yup.mixed().nullable(),
     limit_uses: Yup.mixed().nullable(),
+    terms_and_conditions: Yup.string().trim().label(t("Terms and Conditions")).required(),
     limit_uses_value: Yup.string()
       .nullable()
       .when("limit_uses", {
@@ -125,7 +127,7 @@ const VoucherEditForm = (props) => {
           useEffect(() => {
             // formik.setFieldValue("service_id", [6, 13]);
             if (detail) {
-              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value"];
+              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value", 'terms_and_conditions'];
               fields.forEach((field) => {
                 if (["used_online", "limit_uses"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);
@@ -140,7 +142,6 @@ const VoucherEditForm = (props) => {
             }
           }, [detail]);
           getformValues(formik.values);
-          //     console.log(formik.values.service_id);
           return (
             <div className="voucher-form d-flex flex-column">
               <div className="">
@@ -217,8 +218,7 @@ const VoucherEditForm = (props) => {
                   <ReactSelectField name="service_id" placeholder={t("Search...")} value={formik.values.service_id} options={serviceOptionsData} label={t("Services Included")} controlId="voucherForm-service_id" isMulti={true} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="">{t("Terms and Conditions")}</label>
-                  <p>{t(config.voucher_terms_condition)}</p>
+                  <TextareaField name="terms_and_conditions" placeholder={t("Terms and Conditions")} value={formik.values.terms_and_conditions} label={t("Terms and Conditions")} controlId="voucherForm-terms_and_conditions" />
                 </div>
                 <div className="drawer-footer mt-auto">
                   <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>

@@ -37,6 +37,7 @@ const VoucherAddForm = (props) => {
     used_online: "",
     limit_uses: "",
     limit_uses_value: "",
+    terms_and_conditions:t('This voucher is valid until the expiry date specified and cannot be redeemed or replaced after this date. Aura is not responsible for lost / stolen vouchers, and is not responsible for replacing a voucher that has been lost /stolen. This voucher is non-refundable and cannot be exchanged for cash. This voucher is not valid with any other offer and / or special at Aura. This voucher must be used by one person in one visit.'),
     service_id: [],
   };
   const validationSchema = Yup.object().shape({
@@ -52,6 +53,7 @@ const VoucherAddForm = (props) => {
         is: 1,
         then: Yup.string().trim().label(t("Limit")).required().test("Digits only", t("The field should have digits only"), decimalOnly),
       }),
+    terms_and_conditions: Yup.string().trim().label(t("Terms and Conditions")).required(),
     service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().label(t("Service")).min(1).required() : Yup.string().nullable().label(t("Service")).required())),
   });
   yupconfig();
@@ -195,8 +197,7 @@ const VoucherAddForm = (props) => {
                   <ReactSelectField name="service_id" placeholder={t("Search...")} value={formik.values.service_id} options={serviceOptionsData} label={t("Services Included")} controlId="voucherForm-service_id" isMulti={true} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="">{t("Terms and Conditions")}</label>
-                  <p>{t(config.voucher_terms_condition)}</p>
+                  <TextareaField name="terms_and_conditions" placeholder={t("Terms and Conditions")} value={formik.values.terms_and_conditions} label={t("Terms and Conditions")} controlId="voucherForm-terms_and_conditions" />
                 </div>
                 <div className="drawer-footer mt-auto">
                   <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>

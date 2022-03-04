@@ -13,6 +13,9 @@ const Vouchers = () => {
   SalonModule();
   // const { t } = useTranslation();
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+
   const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const isVoucherPreview = useSelector((state) => state.voucher.isVoucherPreview);
   const isOpenedAddForm = useSelector((state) => state.voucher.isOpenedAddForm);
@@ -32,7 +35,7 @@ const Vouchers = () => {
             <VoucherList />
             {isOpenedAddForm && <VoucherAddForm service={isServiceOption} />}
             {isOpenedEditForm && <VoucherEditForm service={isServiceOption} />}
-            <VoucherPreview preview={isVoucherPreview} service={isServiceOption} />
+            <VoucherPreview preview={isVoucherPreview} service={isServiceOption} currentUser={currentUser} />
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import config from "../../../config";
 const VoucherPreview = (props) => {
   const { t } = useTranslation();
 
+  const currentUser = props.currentUser;
   const preview = props.preview;
   const service = props.service;
   let matchServicesData = [];
@@ -16,6 +17,8 @@ const VoucherPreview = (props) => {
       return matchServicesData;
     }
   });
+
+  console.log(currentUser);
   return (
     <>
       <div className="voucher-preview">
@@ -28,7 +31,7 @@ const VoucherPreview = (props) => {
               <h4 className="text-justify white-space-pre-line">{preview.description ? preview.description : t("Description")}</h4>
             </div>
             <div className="col-3 ps-3">
-              <img src={config.imagepath + "aura.png"} alt="" />
+              <img src={currentUser.salon && currentUser.salon.logo_url ? currentUser.salon.logo_url : config.imagepath + "logo.png"} alt="" />
             </div>
           </div>
           <div className="mb-md-4 mb-3">
@@ -44,11 +47,11 @@ const VoucherPreview = (props) => {
             <p>xxxxxxxxxx</p>
             <label>Redeem on:</label>
             <p>{matchServicesData.length > 0 ? matchServicesData.join(", ") : "---"}</p>
-            <label className="h4 mb-1">{config.siteName}</label>
-            <p>{config.siteAddress}</p>
+            <label className="h4 mb-1">{currentUser.salon.business_name}</label>
+            <p>{currentUser.salon.business_address}</p>
           </div>
           <div className="desc">
-            <p className="text-justify">{config.voucher_terms_condition}</p>
+            <p className="text-justify">{preview.terms_and_conditions}</p>
           </div>
         </div>
       </div>
@@ -56,6 +59,7 @@ const VoucherPreview = (props) => {
   );
 };
 VoucherPreview.propTypes = {
+  currentUser: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   preview: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   service: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };

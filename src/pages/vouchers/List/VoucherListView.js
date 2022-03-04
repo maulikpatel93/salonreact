@@ -49,7 +49,7 @@ const VoucherListView = (props) => {
                   <h5 className="fw-semibold mb-md-3 mb-2">{t("{{amount}} off {{name}}", { amount: "$" + amount, name: name })}</h5>
                 </div>
                 <div className="col-3">
-                  <h5 className="fw-semibold text-end mb-md-3 mb-2">$25</h5>
+                  <h5 className="fw-semibold text-end mb-md-3 mb-2">${amount}</h5>
                 </div>
               </div>
               <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
