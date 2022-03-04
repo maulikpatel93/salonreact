@@ -122,7 +122,7 @@ const ServiceEditForm = () => {
             let htmlAppointmentMatchAll = "";
             if (data) {
               htmlAppointmentMatchAll += `<p class="text-danger text-justify">${t("You cannot remove / update this staff because these staff services have already booked an appointment.")}</p><div class="table-respoinsive"><table class="table appointmentStaffList"><thead><tr><th class="text-start">${t("Staff")}</th><th>${t("Total Appointment")}</th></tr></thead><tbody>`;
-              Object.keys(data).map((item, i) => {
+              Object.keys(data).map((item) => {
                 let first_name = data[item].staff.first_name;
                 let last_name = data[item].staff.last_name;
                 let email = data[item].staff.email;

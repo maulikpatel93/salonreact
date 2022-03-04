@@ -176,6 +176,9 @@ const StaffAddForm = () => {
           dispatch(removeImage());
           dispatch(closeAddStaffForm());
           sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          if (scriptedRef.current) {
+            setLoading(false);
+          }
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -184,11 +187,11 @@ const StaffAddForm = () => {
           }
           setStatus({ success: false });
           setSubmitting(false);
+          if (scriptedRef.current) {
+            setLoading(false);
+          }
         }
       });
-      if (scriptedRef.current) {
-        setLoading(false);
-      }
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);

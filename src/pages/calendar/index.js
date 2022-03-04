@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
-import { checkaccess, ucfirst, uniqueArrayofObject } from "helpers/functions";
+import { checkaccess, ucfirst } from "helpers/functions";
 import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { openAddBusytimeForm } from "store/slices/busytimeSlice";
 import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
@@ -23,11 +23,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import scrollGridPlugin from "@fullcalendar/scrollgrid";
 import moment from "moment";
-import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo } from "store/slices/calendarSlice";
+import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo, calendarStaffList } from "store/slices/calendarSlice";
 import AppointmentEditForm from "./Form/AppointmentEditForm";
 import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
 import { calendarResetStaffFilter, calendarStaffFilter } from "store/slices/calendarSlice";
+// import InfiniteScroll from "react-infinite-scroll-component";
+// import PaginationLoader from "component/PaginationLoader";
+
 const Calendar = () => {
   SalonModule();
   const { t } = useTranslation();
@@ -50,12 +53,14 @@ const Calendar = () => {
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
   const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
   const isStaffOptionDropdown = useSelector((state) => state.staff.isStaffOptionDropdown);
+  const isCalendarStaffList = useSelector((state) => state.calendar.isCalendarStaffList);
   const isRangeInfo = useSelector((state) => state.calendar.isRangeInfo);
   const calendarTab = useSelector((state) => state.calendar.isTabView);
   const isStaffFilter = useSelector((state) => state.calendar.isStaffFilter);
 
   useEffect(() => {
     dispatch(staffOptionsDropdown({ dropdown: true }));
+    dispatch(calendarStaffList());
     if (isStaffFilter) {
       dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: isStaffFilter && isStaffFilter.id }));
       //dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: isStaffFilter && isStaffFilter.id }));
@@ -107,7 +112,8 @@ const Calendar = () => {
       });
     });
   // const uniquestaff = uniqueArrayofObject(staffs, ["id"]);
-  const uniquestaff = isStaffOptionDropdown;
+  // const uniquestaff = isStaffList && isStaffList.data;
+  const uniquestaff = Array.isArray(isCalendarStaffList) === false ? [isCalendarStaffList] : isCalendarStaffList;
   uniquestaff &&
     Object.keys(uniquestaff).map((item) => {
       let id = uniquestaff[item].id;
@@ -313,7 +319,9 @@ const Calendar = () => {
 
   const getselectedDatePicker = selectedDate;
   const getselectedDatePickerRange = selectedDateRange;
-
+  // const fetchDataGrid = () => {
+  //   console.log("next");
+  // };
   return (
     <>
       <div className="page-content">
@@ -332,6 +340,7 @@ const Calendar = () => {
                         onClick={() => {
                           dispatch(calendarResetStaffFilter());
                           dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: "" }));
+                          dispatch(calendarStaffList());
                           dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: "" }));
                         }}
                       >
@@ -353,6 +362,7 @@ const Calendar = () => {
                                     onClick={() => {
                                       dispatch(calendarStaffFilter({ id, name }));
                                       dispatch(calendarRangeInfo({ ...isRangeInfo, staff_id: id }));
+                                      dispatch(calendarStaffList({ id }));
                                       dispatch(appointmentListViewApi({ ...isRangeInfo, staff_id: id }));
                                       // let dateYMD = moment(isRangeInfo.start_date).format("YYYY-MM-DD");
                                       // let calendarApi = calendarRef.current.getApi();
@@ -473,6 +483,7 @@ const Calendar = () => {
             </div>
           </div>
           <div className="container mt-4">
+            {/* <InfiniteScroll className="row" dataLength={isStaffList.data && isStaffList.data.length ? isStaffList.data.length : "0"} next={fetchDataGrid} scrollableTarget="fc-timegrid-body" hasMore={calendarTab && calendarTab === "day" && isStaffList.next_page_url ? true : false} loader={<PaginationLoader />}> */}
             <FullCalendar
               ref={calendarRef}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
@@ -520,13 +531,15 @@ const Calendar = () => {
               }}
               resourceLabelClassNames={function (arg) {
                 let staff_id = isStaffFilter && isStaffFilter.id;
-                if (arg.resource.id == staff_id) {
-                  return ["active"];
-                } else {
-                  return [];
-                }
+                // if (arg.resource.id == staff_id) {
+                //   return ["active"];
+                // } else {
+                //   return [];
+                // }
+                return [];
               }}
             />
+            {/* </InfiniteScroll> */}
           </div>
         </section>
         {checkaccess({ name: "view", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedDetailModal ? <AppointmentDetailDrawer isRangeInfo={isRangeInfo} /> : ""}

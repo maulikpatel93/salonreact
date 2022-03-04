@@ -1,6 +1,5 @@
 import Unauthorized from "./Unauthorized";
 import { setMessage } from "./slices/message";
-import Swal from "sweetalert2";
 
 const HandleError = (thunkAPI, error, type) => {
   if (error.response && error.response.status === 422) {
