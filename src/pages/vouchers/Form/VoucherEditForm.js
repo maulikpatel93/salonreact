@@ -12,7 +12,7 @@ import { decimalOnly } from "../../../component/form/Validation";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { openAddVoucherForm, setVoucherPreview, voucherStoreApi } from "store/slices/voucherSlice";
+import { openAddVoucherForm, setVoucherPreview, voucherListViewApi, voucherUpdateApi } from "store/slices/voucherSlice";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
@@ -21,6 +21,8 @@ const VoucherEditForm = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
+
+  const detail = useSelector((state) => state.voucher.isDetailData);
 
   const service = props.service;
   const getformValues = (values) => {
@@ -59,11 +61,13 @@ const VoucherEditForm = (props) => {
   const handlevoucherSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(voucherStoreApi(values)).then((action) => {
+      dispatch(voucherUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           resetForm();
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
+          dispatch(openAddVoucherForm());
+          dispatch(voucherListViewApi());
           if (scriptedRef.current) {
             setLoading(false);
           }
@@ -120,7 +124,21 @@ const VoucherEditForm = (props) => {
         {(formik) => {
           useEffect(() => {
             // formik.setFieldValue("service_id", [6, 13]);
-          }, []);
+            if (detail) {
+              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value"];
+              fields.forEach((field) => {
+                if (["used_online", "limit_uses"].includes(field)) {
+                  formik.setFieldValue(field, parseInt(detail[field]), false);
+                } else {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                }
+              });
+              let services = detail.voucherservices && detail.voucherservices.map((obj) => obj.id);
+              if (services.length > 0) {
+                formik.setFieldValue("service_id", services);
+              }
+            }
+          }, [detail]);
           getformValues(formik.values);
           //     console.log(formik.values.service_id);
           return (

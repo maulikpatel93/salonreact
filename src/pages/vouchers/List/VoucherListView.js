@@ -19,24 +19,26 @@ const VoucherListView = (props) => {
 
   const objectData = view && view.data ? view.data : view;
   const handleVoucherDelete = (e) => {
-    const props = JSON.parse(e.currentTarget.dataset.obj);
-    const name = ucfirst(props.name);
+    const propsobj = JSON.parse(e.currentTarget.dataset.obj);
+    const name = ucfirst(propsobj.name);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this voucher?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(voucherDeleteApi({ id: props.id }));
+      dispatch(voucherDeleteApi({ id: propsobj.id }));
     }
   };
 
   const handleEditForm = (e) => {
     const id = e.currentTarget.closest(".voucher-action").dataset.id;
-    dispatch(openEditVoucherForm());
-    dispatch(voucherDetailApi({ id }));
+    dispatch(voucherDetailApi({ id })).then((action) => {
+      if (action.meta.requestStatus == "fulfilled") {
+        dispatch(openEditVoucherForm());
+      }
+    });
   };
   return (
     <>
       {objectData &&
         Object.keys(objectData).map((item) => {
-          console.log(objectData[item]);
           let id = objectData[item].id;
           let name = objectData[item].name;
           let amount = objectData[item].amount;

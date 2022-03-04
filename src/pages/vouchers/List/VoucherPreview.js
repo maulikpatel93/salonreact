@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -7,12 +6,11 @@ import config from "../../../config";
 
 const VoucherPreview = (props) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const preview = props.preview;
   const service = props.service;
   let matchServicesData = [];
-  const matchServices = service.filter(function (item) {
+  service.filter(function (item) {
     if (preview && preview.service_id && preview.service_id.indexOf(item.value) != -1) {
       matchServicesData.push(item.label);
       return matchServicesData;
