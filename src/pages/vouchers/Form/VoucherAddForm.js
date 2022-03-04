@@ -12,7 +12,7 @@ import { decimalOnly } from "../../../component/form/Validation";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { setVoucherPreview, voucherStoreApi } from "store/slices/voucherSlice";
+import { setVoucherPreview, voucherListViewApi, voucherStoreApi } from "store/slices/voucherSlice";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
@@ -64,6 +64,7 @@ const VoucherAddForm = (props) => {
           setStatus({ success: true });
           resetForm();
           sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          dispatch(voucherListViewApi());
           if (scriptedRef.current) {
             setLoading(false);
           }

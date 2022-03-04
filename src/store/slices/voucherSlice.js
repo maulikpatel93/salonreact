@@ -131,22 +131,22 @@ const voucherSlice = createSlice({
   extraReducers: {
     [voucherStoreApi.pending]: () => {},
     [voucherStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
-      } else {
-        state.isListView = { data: [action.payload] };
-      }
+      // if (state.isListView && state.isListView.data) {
+      //   state.isListView.data = [action.payload, ...state.isListView.data];
+      // } else {
+      //   state.isListView = { data: [action.payload] };
+      // }
     },
     [voucherStoreApi.rejected]: () => {},
     [voucherUpdateApi.pending]: () => {},
     [voucherUpdateApi.fulfilled]: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
+      // const { id, ...changes } = action.payload;
+      // const existingData = state.isListView.data.find((event) => event.id === id);
+      // if (existingData) {
+      //   Object.keys(changes).map((keyName) => {
+      //     existingData[keyName] = changes[keyName];
+      //   });
+      // }
     },
     [voucherUpdateApi.rejected]: () => {},
     [voucherListViewApi.pending]: () => {},
