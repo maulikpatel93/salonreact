@@ -20,7 +20,7 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
   const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {
-    if (field.name === "service_id") {
+    if (field.name === "service_id" && controlId === "appointmentForm-service_id") {
       dispatch(servicePriceApi({ service_id: option && option.value })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           let service = action.payload;

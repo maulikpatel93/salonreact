@@ -247,8 +247,8 @@ const ReactSelectField = ({ label, controlId, options, ...props }) => {
     <>
       <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        <Field {...field} {...props} options={options} component={CustomSelect} isInvalid={!!meta.error} className={"custom-select " + (meta.touched && meta.error ? "is-invalid" : "")} />
-        <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
+        <Field {...field} {...props} options={options} component={CustomSelect} isInvalid={!!meta.error} className={"custom-select " + (meta.touched && meta.error ? "is-invalid" : "")} controlId={controlId}/>
+        <Form.Control.Feedback type="invalid" className="d-block">{meta.error}</Form.Control.Feedback>
       </Form.Group>
     </>
   );

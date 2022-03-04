@@ -32,7 +32,8 @@
 
 const config = {
   // basename or basePath: only at build time to set, and Don't add '/' at end off BASENAME for breadcrumbs, also Don't put only '/' use blank('') instead,
-  siteName: "Beauty",
+  siteName: "Aura Beauty Salon",
+  siteAddress: "3/100 Sunshine Road Brisbane 4000 07 3000 000",
   baseUrl: process.env.PUBLIC_URL,
   basePath: "",
   basename: "/login",
@@ -46,6 +47,7 @@ const config = {
   duration_HM_error: "Only Allow hours and Minutes",
   google_api_key: "AIzaSyDtEOPPr627_yGNQJaZaBLFrKUF_GVNpvw",
   bing_api_key: "AisIvzcLWeb3W3FZt45Al5-dT3BQUh6bMbtEiTHXwZlfAw8lH4wCxuldUuX-lgX1",
+  voucher_terms_condition: "This voucher is valid until the expiry date specified and cannot be redeemed or replaced after this date. Aura is not responsible for lost / stolen vouchers, and is not responsible for replacing a voucher that has been lost /stolen. This voucher is non-refundable and cannot be exchanged for cash. This voucher is not valid with any other offer and / or special at Aura. This voucher must be used by one person in one visit.",
 };
 
 export default config;

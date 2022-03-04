@@ -23,6 +23,7 @@ import salonaccessReducer from "../store/slices/salonaccessSlice";
 import busytimeReducer from "../store/slices/busytimeSlice";
 import appointmentReducer from "../store/slices/appointmentSlice";
 import calendarReducer from "../store/slices/calendarSlice";
+import voucherReducer from "../store/slices/voucherSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -215,6 +216,16 @@ const reducer = combineReducers({
       whitelist: ["isTabView"],
     },
     calendarReducer,
+  ),
+  voucher: persistReducer(
+    {
+      key: "voucher",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000
+    },
+    voucherReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,
