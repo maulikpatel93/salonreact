@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
-import { swalConfirm } from "../../../component/Sweatalert2";
+import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 import { pricetierDeleteApi, openEditPriceTierForm, pricetierDetailApi } from "../../../store/slices/pricetierSlice";
 import PropTypes from "prop-types";
 import { checkaccess } from "helpers/functions";
@@ -22,9 +22,17 @@ const PriceTierGridView = (props) => {
   const handlePriceTierDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
     const name = ucfirst(props.name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this pricetier?"), message: name, confirmButtonText: t("Yes, delete it!") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to delete this price-tier which includes all staff in this price-tier?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(pricetierDeleteApi({ id: props.id }));
+      dispatch(pricetierDeleteApi({ id: props.id })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          const status = action.payload && action.payload.status;
+          const appointment = action.payload && action.payload.message && action.payload.message.appointment;
+          if (status === 410) {
+            sweatalert({ title: `<h4 class="text-danger">${t("This price-tire has not been deleted as {{ appointmenttotal }} appointments have already been booked for the staff of this price-tire.", { appointmenttotal: appointment })}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
+          }
+        }
+      });
     }
   };
 

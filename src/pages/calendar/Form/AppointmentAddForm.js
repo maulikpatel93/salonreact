@@ -21,6 +21,7 @@ import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { MinutesToHours, getHours, getMinutes, ucfirst } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
+import { busytimeListViewApi } from "store/slices/busytimeSlice";
 
 const AppointmentAddForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -117,6 +118,7 @@ const AppointmentAddForm = (props) => {
           dispatch(clientAppointmentListViewApi({ client: values.client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
+            dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Booked"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
@@ -147,7 +149,7 @@ const AppointmentAddForm = (props) => {
 
   const serviceOptionsData = isServiceOption;
   const staffOptionsData = isStaffOption.length > 0 ? isStaffOption : null;
- 
+
   const repeatsOptionsData = [
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
@@ -207,7 +209,7 @@ const AppointmentAddForm = (props) => {
                           type="text"
                           name="client_name"
                           id="appointmentForm-client_name"
-                          className={(formik.errors && formik.errors.client_id ? "is-invalid" : "") + " form-control search-input"}
+                          className={(formik.touched && formik.touched.client_id && formik.errors && formik.errors.client_id ? "is-invalid" : "") + " form-control search-input"}
                           placeholder={t("Search")}
                           value={isSearchName}
                           onInput={(e) => {
@@ -246,7 +248,7 @@ const AppointmentAddForm = (props) => {
                         name="date"
                         id="appointmentForm-date"
                         value={formik.values.date}
-                        inputClass={(formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                        inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
                         minDate={new Date()}
@@ -255,7 +257,7 @@ const AppointmentAddForm = (props) => {
                           formik.setFieldValue("date", getselectedDatePicker);
                         }}
                       />
-                      {formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                      {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-4 mb-3">

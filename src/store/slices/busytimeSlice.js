@@ -30,12 +30,12 @@ export const busytimeUpdateApi = createAsyncThunk("busytime/update", async (form
   }
 });
 
-export const busytimeListViewApi = createAsyncThunk("busytime/gridview", async (formValues, thunkAPI) => {
+export const busytimeListViewApi = createAsyncThunk("busytime/listview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await busytimeApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "gridview"))
-      .catch((error) => HandleError(thunkAPI, error, "gridview"));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -99,7 +99,7 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isListView: [],
-  isDetailData: ""
+  isDetailData: "",
 };
 
 const busytimeSlice = createSlice({
@@ -122,27 +122,27 @@ const busytimeSlice = createSlice({
     closeEditBusytimeForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
-    }
+    },
   },
   extraReducers: {
     [busytimeStoreApi.pending]: () => {},
     [busytimeStoreApi.fulfilled]: (state, action) => {
-      if (state.isListView && state.isListView.data) {
-        state.isListView.data = [action.payload, ...state.isListView.data];
-      } else {
-        state.isListView = { data: [action.payload] };
-      }
+      // if (state.isListView && state.isListView.data) {
+      //   state.isListView.data = [action.payload, ...state.isListView.data];
+      // } else {
+      //   state.isListView = { data: [action.payload] };
+      // }
     },
     [busytimeStoreApi.rejected]: () => {},
     [busytimeUpdateApi.pending]: () => {},
     [busytimeUpdateApi.fulfilled]: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isListView.data.find((event) => event.id === id);
-      if (existingData) {
-        Object.keys(changes).map((keyName) => {
-          existingData[keyName] = changes[keyName];
-        });
-      }
+      // const { id, ...changes } = action.payload;
+      // const existingData = state.isListView.data && state.isListView.data.find((event) => event.id === id);
+      // if (existingData) {
+      //   Object.keys(changes).map((keyName) => {
+      //     existingData[keyName] = changes[keyName];
+      //   });
+      // }
     },
     [busytimeUpdateApi.rejected]: () => {},
     [busytimeListViewApi.pending]: () => {},
@@ -172,7 +172,7 @@ const busytimeSlice = createSlice({
       const { id } = action.payload;
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [busytimeDeleteApi.rejected]: () => {}
+    [busytimeDeleteApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

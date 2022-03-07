@@ -34,11 +34,11 @@ const VoucherList = () => {
 
   return (
     <>
-      <div className="voucher-avilable">
+      <div className="voucher-avilable" id="voucher-avilable">
         {ListView.length > 0 || ListView.data ? (
           <section className="services-table">
             <div className="" id="scrollableGridView">
-              <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-voucher" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />}>
+              <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="voucher-avilable" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />}>
                 <VoucherListView currentUser={currentUser} view={ListView} role_id={role_id} access={access} />
                 {!isFetching && ListView.next_page_url && (
                   <div className="col-2 m-auto text-center">

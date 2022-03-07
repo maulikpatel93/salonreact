@@ -370,5 +370,21 @@
     "From": "From",
     "Expiry": "Expiry",
     "Voucher code:": "Voucher code:",
-    "A message added to the voucher.": "A message added to the voucher."
+    "A message added to the voucher.": "A message added to the voucher.",
+    "This price-tire has not been deleted as {{ appointmenttotal }} appointments have already been booked for the staff of this price-tire.": "This price-tire has not been deleted as {{ appointmenttotal }} appointments have already been booked for the staff of this price-tire.",
+    "This category has not been deleted as {{ appointmenttotal }} appointments have already been booked for services in this category.": "This category has not been deleted as {{ appointmenttotal }} appointments have already been booked for services in this category.",
+    "Are you sure you want to delete this category which includes all services in this category?": "Are you sure you want to delete this category which includes all services in this category?",
+    "Are you sure you want to delete this price-tier which includes all staff in this price-tier?": "Are you sure you want to delete this price-tier which includes all staff in this price-tier?",
+    "Repeat time": "Repeat time",
+    "Repeat time option": "Repeat time option",
+    "Ending (Optional)": "Ending (Optional)",
+    "Repeat this every": "Repeat this every",
+    "Week(s)": "Week(s)",
+    "Month(s)": "Month(s)",
+    "Year(s)": "Year(s)",
+    "Required": "Required",
+    "Digits only": "Digits only",
+    "Busy Time": "Busy Time",
+    "Edit Busy Time": "Edit Busy Time",
+    "Create": "Create"
 }

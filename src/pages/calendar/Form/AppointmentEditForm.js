@@ -17,6 +17,7 @@ import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
+import { busytimeListViewApi } from "store/slices/busytimeSlice";
 
 const AppointmentEditForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -79,6 +80,7 @@ const AppointmentEditForm = (props) => {
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+            dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
@@ -170,7 +172,7 @@ const AppointmentEditForm = (props) => {
                         name="date"
                         id="appointmentForm-date"
                         value={formik.values.date}
-                        inputClass={(formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                        inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
                         minDate={new Date()}
@@ -179,7 +181,7 @@ const AppointmentEditForm = (props) => {
                           formik.setFieldValue("date", getselectedDatePicker);
                         }}
                       />
-                      {formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                      {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-4 mb-3">

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
-import { swalConfirm } from "../../../component/Sweatalert2";
+import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
 import { openEditCategoryForm, categoryDeleteApi, categoryDetailApi } from "../../../store/slices/categorySlice";
 import { checkaccess } from "helpers/functions";
 
@@ -21,10 +21,18 @@ const CategoryListView = (props) => {
   const objectData = view && view.data ? view.data : view;
   const handleCategoryDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
-    const name = ucfirst(props.first_name + " " + props.last_name);
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this category?"), message: name, confirmButtonText: t("Yes, delete it!") });
+    const name = ucfirst(props.name);
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to delete this category which includes all services in this category?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(categoryDeleteApi({ id: props.id }));
+      dispatch(categoryDeleteApi({ id: props.id })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          const status = action.payload && action.payload.status;
+          const appointment = action.payload && action.payload.message && action.payload.message.appointment;
+          if (status === 410) {
+            sweatalert({ title: `<h4 class="text-danger">${t("This category has not been deleted as {{ appointmenttotal }} appointments have already been booked for services in this category.", { appointmenttotal: appointment })}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
+          }
+        }
+      });
     }
   };
 

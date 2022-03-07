@@ -261,3 +261,8 @@ header {
     background: $primary;
     color: #fff;
 }
+
+.voucher-avilable {
+    overflow-y: auto;
+    height: calc(100vh - 81px);
+}

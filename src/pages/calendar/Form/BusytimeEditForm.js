@@ -11,15 +11,16 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeAddBusytimeForm, busytimeStoreApi } from "../../../store/slices/busytimeSlice";
+import { closeEditBusytimeForm, busytimeUpdateApi, busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { decimalOnly } from "../../../component/form/Validation";
 import { appointmentListViewApi } from "store/slices/appointmentSlice";
 
-const BusytimeAddForm = (props) => {
+const BusytimeEditForm = (props) => {
   const [loading, setLoading] = useState(false);
-  const rightDrawerOpened = useSelector((state) => state.busytime.isOpenedAddForm);
+
+  const rightDrawerOpened = useSelector((state) => state.busytime.isOpenedEditForm);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -27,9 +28,10 @@ const BusytimeAddForm = (props) => {
   const isRangeInfo = props.isRangeInfo;
 
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
+  const detail = useSelector((state) => state.busytime.isDetailData);
 
-  const handlecloseAddBusytimeForm = () => {
-    dispatch(closeAddBusytimeForm());
+  const handlecloseEditBusytimeForm = () => {
+    dispatch(closeEditBusytimeForm());
   };
 
   const initialValues = {
@@ -100,16 +102,16 @@ const BusytimeAddForm = (props) => {
   const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(busytimeStoreApi(values)).then((action) => {
+      dispatch(busytimeUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus == "fulfilled") {
           setStatus({ success: true });
           resetForm();
-          dispatch(closeAddBusytimeForm());
+          dispatch(closeEditBusytimeForm());
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(busytimeListViewApi(isRangeInfo));
           }
-          sweatalert({ title: t("Added"), text: t("Added Successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus == "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -148,15 +150,28 @@ const BusytimeAddForm = (props) => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleClientSubmit}>
         {(formik) => {
           useEffect(() => {
-            formik.setFieldValue("repeats", "No");
-          }, []);
+            if (detail) {
+              const fields = ["id", "staff_id", "date", "start_time", "end_time", "repeats", "repeat_time", "repeat_time_option", "ending", "reason"];
+              fields.forEach((field) => {
+                if (["date"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
+                } else if (["ending"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "", false);
+                } else if (["repeats"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "No", false);
+                } else {
+                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                }
+              });
+            }
+          }, [detail]);
           return (
             <>
               <div className={"drawer busytime-drawer " + rightDrawerOpened} id="addbusytime-drawer">
                 <div className="drawer-wrp position-relative">
                   <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 pe-3">{t("Add Busy Time")}</h2>
-                    <a className="close-drawer cursor-pointer" onClick={handlecloseAddBusytimeForm}>
+                    <h2 className="mb-4 pe-md-5 pe-3">{t("Edit Busy Time")}</h2>
+                    <a className="close-drawer cursor-pointer" onClick={handlecloseEditBusytimeForm}>
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
                   </div>
@@ -247,7 +262,7 @@ const BusytimeAddForm = (props) => {
     </>
   );
 };
-BusytimeAddForm.propTypes = {
+BusytimeEditForm.propTypes = {
   isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
-export default BusytimeAddForm;
+export default BusytimeEditForm;

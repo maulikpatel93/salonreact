@@ -44,12 +44,20 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const result = values && values.result ? values.result : "";
+
+  //Busy time Calender view parameter
+  const start_date = values && values.start_date ? values.start_date : "";
+  const end_date = values && values.end_date ? values.end_date : "";
+  const timezone = values && values.timezone ? values.timezone : "";
+  const type = values && values.type ? values.type : "";
+  const staff_id = values && values.staff_id ? values.staff_id : "";
+  //Busy time Calender view parameter close
   let sortstring = "";
   if (sort) {
     let sortArray = [];
     Object.keys(sort).map(function (key, index) {
-      return sortArray[index] = `sort[${key}]=${sort[key]}`;
+      return (sortArray[index] = `sort[${key}]=${sort[key]}`);
     });
     if (sortArray.length > 0) {
       let jsort = sortArray.join("&");
@@ -62,12 +70,18 @@ const view = (values) => {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
-    pagination: values && values.id ? false : pagination, //true or false
+    pagination: values && (values.id || start_date) ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name", // first_name,last_name,email
+    field: values && values.id ? "" : "date,start_time,end_time,repeats,repeat_time,repeat_time_option,ending,reason", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
-    option: values && values.option ? values.option : ''
+    option: values && values.option ? values.option : "",
+    client_id: values && values.client_id ? values.client_id : "",
+    start_date: start_date,
+    end_date: end_date,
+    timezone: timezone,
+    type: type,
+    staff_id: staff_id,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
@@ -87,6 +101,6 @@ const busytimeApiController = {
   create,
   update,
   view,
-  deleted
+  deleted,
 };
 export default busytimeApiController;

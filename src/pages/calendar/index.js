@@ -5,8 +5,8 @@ import { SalonModule } from "pages";
 import config from "../../config";
 import { checkaccess, ucfirst } from "helpers/functions";
 import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
-import { openAddBusytimeForm } from "store/slices/busytimeSlice";
-import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
+import { busytimeDetailApi, busytimeListViewApi, closeAddBusytimeForm, closeEditBusytimeForm, openAddBusytimeForm, openEditBusytimeForm } from "store/slices/busytimeSlice";
+import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, closeAppointmentDetailModal, closeEditAppointmentForm, closeRescheduleAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import AppointmentAddForm from "./Form/AppointmentAddForm";
 import BusytimeAddForm from "./Form/BusytimeAddForm";
@@ -28,6 +28,7 @@ import AppointmentEditForm from "./Form/AppointmentEditForm";
 import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
 import { calendarResetStaffFilter, calendarStaffFilter } from "store/slices/calendarSlice";
+import BusytimeEditForm from "./Form/BusytimeEditForm";
 // import InfiniteScroll from "react-infinite-scroll-component";
 // import PaginationLoader from "component/PaginationLoader";
 
@@ -51,7 +52,9 @@ const Calendar = () => {
   const appointmentIsOpenedRescheduleForm = useSelector((state) => state.appointment.isOpenedRescheduleForm);
   const appointmentIsOpenedDetailModal = useSelector((state) => state.appointment.isOpenedDetailModal);
   const busytimeIsOpenedAddForm = useSelector((state) => state.busytime.isOpenedAddForm);
+  const busytimeIsOpenedEditForm = useSelector((state) => state.busytime.isOpenedEditForm);
   const dateAppointmentListView = useSelector((state) => state.appointment.isListView);
+  const dateBusytimeListView = useSelector((state) => state.busytime.isListView);
   const isStaffOptionDropdown = useSelector((state) => state.staff.isStaffOptionDropdown);
   const isCalendarStaffList = useSelector((state) => state.calendar.isCalendarStaffList);
   const isRangeInfo = useSelector((state) => state.calendar.isRangeInfo);
@@ -68,48 +71,69 @@ const Calendar = () => {
     //dispatch(calendarResetStaffFilter());
   }, []);
 
+  const MergeListview = [...dateAppointmentListView, ...dateBusytimeListView];
   const events = [];
   const staffs = [];
   const resources = [];
-  dateAppointmentListView &&
-    Object.keys(dateAppointmentListView).map((item) => {
-      let id = dateAppointmentListView[item].id;
-      let date = dateAppointmentListView[item].date;
-      let start_time = dateAppointmentListView[item].start_time;
-      let status = dateAppointmentListView[item].status;
-      let client = dateAppointmentListView[item].client;
-      let service = dateAppointmentListView[item].service;
-      let staff = dateAppointmentListView[item].staff;
-      let client_name = client.first_name + " " + client.last_name;
-      let backgroundColor = "#8f807d";
-      let borderColor = "#8f807d";
-      if (status === "Scheduled") {
-        backgroundColor = "#8f807d";
-        borderColor = "#8f807d";
-      } else if (status === "Confirmed") {
-        backgroundColor = "#ecd078";
-        borderColor = "#ecd078";
-      } else if (status === "Completed") {
-        backgroundColor = "#59ba41";
-        borderColor = "#59ba41";
-      } else if (status === "Cancelled") {
-        backgroundColor = "#c02942";
-        borderColor = "#c02942";
-      }
+  MergeListview &&
+    Object.keys(MergeListview).map((item) => {
+      let listview = MergeListview[item].listview;
+      let id = MergeListview[item].id;
+      let date = MergeListview[item].date;
+      let start_time = MergeListview[item].start_time && MergeListview[item].start_time;
+      let end_time = MergeListview[item].end_time && MergeListview[item].end_time;
+      let status = MergeListview[item].status;
+      let staff = MergeListview[item].staff;
       staffs.push(staff);
-      events.push({
-        resourceId: staff.id,
-        start: date + "T" + start_time,
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        title: client_name,
-        extendedProps: {
-          appointment: { id, status },
-          client: client,
-          service: service,
-          staff: staff,
-        },
-      });
+      if (listview === "Appointment") {
+        let service = MergeListview[item].service && MergeListview[item].service;
+        let client = MergeListview[item].client && MergeListview[item].client;
+        let title = client && client.first_name + " " + client.last_name;
+        let backgroundColor = "#8f807d";
+        let borderColor = "#8f807d";
+        if (status === "Scheduled") {
+          backgroundColor = "#8f807d";
+          borderColor = "#8f807d";
+        } else if (status === "Confirmed") {
+          backgroundColor = "#ecd078";
+          borderColor = "#ecd078";
+        } else if (status === "Completed") {
+          backgroundColor = "#59ba41";
+          borderColor = "#59ba41";
+        } else if (status === "Cancelled") {
+          backgroundColor = "#c02942";
+          borderColor = "#c02942";
+        }
+        events.push({
+          resourceId: staff.id,
+          start: date + "T" + start_time,
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+          title: title,
+          extendedProps: {
+            listview: listview,
+            appointment: { id, status },
+            client: client,
+            service: service,
+            staff: staff,
+          },
+        });
+      } else if (listview === "BusyTime") {
+        let reason = MergeListview[item].reason;
+        events.push({
+          resourceId: staff.id,
+          start: date + "T" + start_time,
+          end: date + "T" + end_time,
+          backgroundColor: "#A2A7AE",
+          borderColor: "#A2A7AE",
+          title: t("Busy Time"),
+          extendedProps: {
+            listview: listview,
+            busytime: { id, reason },
+            staff: staff,
+          },
+        });
+      }
     });
   // const uniquestaff = uniqueArrayofObject(staffs, ["id"]);
   // const uniquestaff = isStaffList && isStaffList.data;
@@ -141,11 +165,12 @@ const Calendar = () => {
 
   const renderEventContent = (eventInfo) => {
     if (eventInfo.event) {
+      let listview = eventInfo.event.extendedProps && eventInfo.event.extendedProps.listview;
+      let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
       let client = eventInfo.event.extendedProps && eventInfo.event.extendedProps.client;
       let service = eventInfo.event.extendedProps && eventInfo.event.extendedProps.service;
-      let staff = eventInfo.event.extendedProps && eventInfo.event.extendedProps.staff;
-      let status = eventInfo.event.extendedProps && eventInfo.event.extendedProps.appointment && eventInfo.event.extendedProps.appointment.status;
-      if (client && service && staff) {
+      if (listview === "Appointment" && client && service && staff) {
+        let status = eventInfo.event.extendedProps && eventInfo.event.extendedProps.appointment && eventInfo.event.extendedProps.appointment.status;
         let popover = `<div class="text-start">${eventInfo.event.title}<br>${t("{{service_name}} with {{staff_name}}", { service_name: service.name, staff_name: ucfirst(staff.first_name + " " + staff.last_name) })} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
         return (
           <>
@@ -164,6 +189,32 @@ const Calendar = () => {
                 </li>
                 <li className={status === "Confirmed" ? "text-dark" : ""}>{eventInfo.view && eventInfo.view.type === "timeGridWeek" ? t("{{service}} with {{staff}}", { service: service.name, staff: ucfirst(staff.first_name + " " + staff.last_name) }) : service.name}</li>
                 <li className={status === "Confirmed" ? "text-dark align-self-center" : "align-self-center"}>
+                  <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
+                </li>
+              </ul>
+            </OverlayTrigger>
+          </>
+        );
+      } else if (listview === "BusyTime" && staff) {
+        let reason = eventInfo.event.extendedProps && eventInfo.event.extendedProps.busytime && eventInfo.event.extendedProps.busytime.reason;
+        let popover = `<div class="text-start">${eventInfo.event.title}<br>${reason} <br><i class="far fa-clock me-1"></i> ${eventInfo.timeText}`;
+        return (
+          <>
+            <OverlayTrigger
+              placement="top-start"
+              delay={{ show: 250, hide: 400 }}
+              overlay={(props) => (
+                <Tooltip id="Description__tooltip" {...props}>
+                  <div dangerouslySetInnerHTML={{ __html: popover }} />
+                </Tooltip>
+              )}
+            >
+              <ul className="list-unstyled p-2 calendar_event_content cursor-pointer">
+                <li className={""}>
+                  <b>{eventInfo.event.title}</b>
+                </li>
+                <li className={""}>{reason}</li>
+                <li className={"align-self-center"}>
                   <i className="far fa-clock me-1"></i> <b>{eventInfo.timeText}</b>
                 </li>
               </ul>
@@ -189,6 +240,7 @@ const Calendar = () => {
     }
     dispatch(calendarRangeInfo({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type, staff_id: isStaffFilter && isStaffFilter.id }));
     dispatch(appointmentListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type, staff_id: isStaffFilter && isStaffFilter.id }));
+    dispatch(busytimeListViewApi({ start_date: rangeInfo.startStr, end_date: rangeInfo.endStr, timezone: timezone, type: type, staff_id: isStaffFilter && isStaffFilter.id }));
   }
 
   function handleClickPrev() {
@@ -225,20 +277,46 @@ const Calendar = () => {
 
   function handleEventClick(clickInfo) {
     if (clickInfo.event && clickInfo.event.extendedProps) {
-      let id = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.id;
-      let client_id = clickInfo.event.extendedProps.client && clickInfo.event.extendedProps.client.id;
-      dispatch(closeAddAppointmentForm());
-      dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
-        if (action.meta.requestStatus === "fulfilled") {
-          dispatch(openAppointmentDetailModal());
-        } else if (action.meta.requestStatus === "rejected") {
-          if (action.payload.status === 422) {
-            let error = action.payload;
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-            sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+      let listview = clickInfo.event.extendedProps.listview && clickInfo.event.extendedProps.listview;
+
+      if (listview === "Appointment") {
+        let id = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.id;
+        let client_id = clickInfo.event.extendedProps.client && clickInfo.event.extendedProps.client.id;
+        dispatch(closeAddAppointmentForm());
+        dispatch(closeAddBusytimeForm());
+        dispatch(closeEditBusytimeForm());
+        dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+          if (action.meta.requestStatus === "fulfilled") {
+            dispatch(openAppointmentDetailModal());
+          } else if (action.meta.requestStatus === "rejected") {
+            if (action.payload.status === 422) {
+              let error = action.payload;
+              const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+              sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+            }
           }
-        }
-      });
+        });
+      } else if (listview === "BusyTime") {
+        let id = clickInfo.event.extendedProps.busytime && clickInfo.event.extendedProps.busytime.id;
+        dispatch(closeAddAppointmentForm());
+        dispatch(closeEditAppointmentForm());
+        dispatch(closeRescheduleAppointmentForm());
+        dispatch(closeAppointmentDetailModal());
+        dispatch(closeAddBusytimeForm());
+        dispatch(busytimeDetailApi({ id })).then((action) => {
+          if (action.meta.requestStatus === "fulfilled") {
+            dispatch(openEditBusytimeForm());
+            dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
+          } else if (action.meta.requestStatus === "rejected") {
+            if (action.payload.status === 422) {
+              let error = action.payload;
+              const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+              sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+            }
+          }
+        });
+      }
+
       // if (status === "Scheduled") {
       //   dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
       //     if (action.meta.requestStatus === "fulfilled") {
@@ -445,7 +523,8 @@ const Calendar = () => {
                   </a>
                   <div className="dropdown d-inline-block create-dropdown">
                     <button className="dropdown-toggle dropdown-toggle-icon-none btn btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i className="fal fa-plus"></i>Create
+                      <i className="fal fa-plus"></i>
+                      {t("Create")}
                     </button>
                     <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
                       <ul className="p-0 m-0 list-unstyled">
@@ -546,7 +625,8 @@ const Calendar = () => {
         {checkaccess({ name: "update", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedEditForm ? <AppointmentEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedAddForm ? <AppointmentAddForm isRangeInfo={isRangeInfo} /> : ""}
         {checkaccess({ name: "reschedule", role_id: role_id, controller: "appointment", access }) && appointmentIsOpenedRescheduleForm ? <AppointmentRescheduleForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
-        {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm isRangeInfo={isRangeInfo} /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedEditForm ? <BusytimeEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
       </div>
     </>

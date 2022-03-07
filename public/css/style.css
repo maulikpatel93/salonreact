@@ -2742,6 +2742,9 @@ table .pro-title {
     .calendar-header .staff-dropdown .dropdown-toggle {
         line-height: normal;
     }
+    .drawer.busytime-drawer {
+        width: 450px;
+    }
 }
 
 @media only screen and (max-width: 1599px) {

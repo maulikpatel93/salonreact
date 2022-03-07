@@ -137,7 +137,7 @@ const AppointmentRescheduleForm = (props) => {
                         name="date"
                         id="appointmentForm-date"
                         value={formik.values.date}
-                        inputClass={(formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                        inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
                         minDate={new Date()}
@@ -146,7 +146,7 @@ const AppointmentRescheduleForm = (props) => {
                           formik.setFieldValue("date", getselectedDatePicker);
                         }}
                       />
-                      {formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                      {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-4 mb-3">
