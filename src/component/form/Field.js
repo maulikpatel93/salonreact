@@ -145,11 +145,11 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
         <Form.Group className="" controlId={controlId}>
           <div className="insert-photo d-flex flex-column justify-content-center align-items-center ms-md-auto">
             <img src={image && image.selected ? image.url : config.imagepath + "addphoto-box.png"} alt="" className={image && image.selected ? "image-preview mb-3" : "mb-3"} />
-            <button type="button" className={image && image.selected ? "d-none" : "btn btn-sm position-relative"}>
+            <button type="button" className={image && image.selected ? "d-none" : "btn btn-primary btn-sm position-relative"}>
               <Form.Control type="file" onChange={field.onChange} {...props} isInvalid={meta.touched && !!meta.error} />
               {label}
             </button>
-            <button type="button" className={image && image.selected ? "btn btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
+            <button type="button" className={image && image.selected ? "btn btn-primary btn-sm position-relative" : "d-none"} onClick={removeSelectedImage}>
               {t("Remove")}
             </button>
             {meta.touched && (
