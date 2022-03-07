@@ -200,6 +200,7 @@
     "All Services": "All Services",
     "All Staff": "All Staff",
     "Dashboard": "Dashboard",
+    "dashboard": "dashboard",
     "Calendar": "Calendar",
     "calendar": "Calendar",
     "Sales": "Sales",
@@ -363,5 +364,11 @@
     "This voucher is valid until the expiry date specified and cannot be redeemed or replaced after this date. Aura is not responsible for lost / stolen vouchers, and is not responsible for replacing a voucher that has been lost /stolen. This voucher is non-refundable and cannot be exchanged for cash. This voucher is not valid with any other offer and / or special at Aura. This voucher must be used by one person in one visit.": "This voucher is valid until the expiry date specified and cannot be redeemed or replaced after this date. Aura is not responsible for lost / stolen vouchers, and is not responsible for replacing a voucher that has been lost /stolen. This voucher is non-refundable and cannot be exchanged for cash. This voucher is not valid with any other offer and / or special at Aura. This voucher must be used by one person in one visit.",
     "{{amount}} off {{name}}": "{{amount}} off {{name}}",
     "Sell": "Sell",
-    "Edit Voucher": "Edit Voucher"
+    "Edit Voucher": "Edit Voucher",
+    "Redeem on:": "Redeem on:",
+    "To": "To",
+    "From": "From",
+    "Expiry": "Expiry",
+    "Voucher code:": "Voucher code:",
+    "A message added to the voucher.": "A message added to the voucher."
 }

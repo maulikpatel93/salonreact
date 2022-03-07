@@ -127,7 +127,7 @@ const VoucherEditForm = (props) => {
           useEffect(() => {
             // formik.setFieldValue("service_id", [6, 13]);
             if (detail) {
-              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value", 'terms_and_conditions'];
+              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value", "terms_and_conditions"];
               fields.forEach((field) => {
                 if (["used_online", "limit_uses"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);

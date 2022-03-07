@@ -17,8 +17,6 @@ const VoucherPreview = (props) => {
       return matchServicesData;
     }
   });
-
-  console.log(currentUser);
   return (
     <>
       <div className="voucher-preview">
@@ -35,17 +33,17 @@ const VoucherPreview = (props) => {
             </div>
           </div>
           <div className="mb-md-4 mb-3">
-            <label>To</label>
+            <label>{t("To")}</label>
             <p>-----</p>
-            <label>From</label>
+            <label>{t("From")}</label>
             <p>-----</p>
-            <label>Note</label>
-            <p>A message added to the voucher.</p>
-            <label>Expiry</label>
+            <label>{t("Note")}</label>
+            <p>{t("A message added to the voucher.")}</p>
+            <label>{t("Expiry")}</label>
             <p>{t("Valid for {{ months }} month(s)", { months: preview.valid ? preview.valid : 0 })}</p>
-            <label>Voucher code:</label>
+            <label>{t("Voucher code:")}</label>
             <p>xxxxxxxxxx</p>
-            <label>Redeem on:</label>
+            <label>{t("Redeem on:")}</label>
             <p>{matchServicesData.length > 0 ? matchServicesData.join(", ") : "---"}</p>
             <label className="h4 mb-1">{currentUser.salon.business_name}</label>
             <p>{currentUser.salon.business_address}</p>
