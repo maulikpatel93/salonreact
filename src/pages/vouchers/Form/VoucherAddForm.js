@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
-import config from "../../../config";
+// import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField, SelectField, ReactSelectField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
@@ -62,7 +62,7 @@ const VoucherAddForm = (props) => {
     setLoading(true);
     try {
       dispatch(voucherStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
@@ -70,10 +70,10 @@ const VoucherAddForm = (props) => {
           if (scriptedRef.current) {
             setLoading(false);
           }
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
           }
           setStatus({ success: false });

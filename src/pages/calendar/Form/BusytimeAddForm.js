@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeAddBusytimeForm, busytimeStoreApi } from "../../../store/slices/busytimeSlice";
+import { closeAddBusytimeForm, busytimeStoreApi, busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { decimalOnly } from "../../../component/form/Validation";
@@ -101,7 +101,7 @@ const BusytimeAddForm = (props) => {
     setLoading(true);
     try {
       dispatch(busytimeStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(closeAddBusytimeForm());
@@ -110,13 +110,16 @@ const BusytimeAddForm = (props) => {
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Added"), text: t("Added Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
+            setStatus({ success: false });
+          }else if (status === 410) {
+            setStatus({ warning: action.payload && action.payload.message });
+            setLoading(false);
           }
-          setStatus({ success: false });
           setSubmitting(false);
         }
       });
@@ -232,6 +235,7 @@ const BusytimeAddForm = (props) => {
                       <div className="mb-3">
                         <TextareaField type="text" name="reason" placeholder={t("e.g. Training, lunch break etc")} value={formik.values.reason} label={t("Reason")} controlId="busytimeForm-reason" />
                       </div>
+                      {formik.status && formik.status.warning && <p className="text-danger mb-2 pt-1 pb-1">{formik.status.warning}</p>}
                       <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("Save")}

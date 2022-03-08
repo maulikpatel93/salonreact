@@ -61,7 +61,7 @@ const AppointmentRescheduleForm = (props) => {
       }).then((result) => {
         if (result.value) {
           dispatch(appointmentRescheduleApi(values)).then((action) => {
-            if (action.meta.requestStatus == "fulfilled") {
+            if (action.meta.requestStatus === "fulfilled") {
               setStatus({ success: true });
               resetForm();
               dispatch(closeRescheduleAppointmentForm());
@@ -71,10 +71,10 @@ const AppointmentRescheduleForm = (props) => {
                 dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
               }
               sweatalert({ title: t("Appointment reschedule successfully"), text: t("Appointment reschedule successfully"), icon: "success" });
-            } else if (action.meta.requestStatus == "rejected") {
+            } else if (action.meta.requestStatus === "rejected") {
               const status = action.payload && action.payload.status;
               const errors = action.payload && action.payload.message && action.payload.message.errors;
-              if (status == 422) {
+              if (status === 422) {
                 setErrors(errors);
               }
               setStatus({ success: false });

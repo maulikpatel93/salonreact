@@ -104,7 +104,7 @@ const Services = () => {
     if (q && q.length > 0) {
       dispatch(openServiceSearchList());
       dispatch(serviceSuggetionListApi({ q: q })).then((action) => {
-        if (action.meta.requestStatus == "rejected") {
+        if (action.meta.requestStatus === "rejected") {
           // dispatch(closeCategorysearchList());
         }
       });
@@ -142,7 +142,7 @@ const Services = () => {
     if (q && q.length > 0) {
       dispatch(openCategorySearchList());
       dispatch(categorySuggetionListApi({ q: q })).then((action) => {
-        if (action.meta.requestStatus == "rejected") {
+        if (action.meta.requestStatus === "rejected") {
           // dispatch(closeCategorysearchList());
         }
       });

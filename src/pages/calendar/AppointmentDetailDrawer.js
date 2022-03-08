@@ -106,7 +106,7 @@ const AppointmentDetailDrawer = (props) => {
     if (confirmbtn === true) {
       setChangeStatus(e.currentTarget.value);
       dispatch(appointmentUpdateApi({ id: id, client_id: client_id, status: "Confirmed", clickEvent: "statusupdate" })).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(clientAppointmentListViewApi({ client: client_id }));
           if (isRangeInfo) {

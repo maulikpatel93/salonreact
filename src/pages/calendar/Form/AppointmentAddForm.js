@@ -108,7 +108,7 @@ const AppointmentAddForm = (props) => {
     setLoading(true);
     try {
       dispatch(appointmentStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           // let data = action.payload;
           // let startdate = data.date + "T" + data.start_time;
           setStatus({ success: true });
@@ -121,13 +121,16 @@ const AppointmentAddForm = (props) => {
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Booked"), text: t("Appointment Booked Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
+            setStatus({ success: false });
+          }else if (status === 410) {
+            setStatus({ warning: action.payload && action.payload.message });
+            setLoading(false);
           }
-          setStatus({ success: false });
           setSubmitting(false);
         }
       });
@@ -287,6 +290,7 @@ const AppointmentAddForm = (props) => {
                     <div className="mb-3">
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
+                    {formik.status && formik.status.warning && <p className="text-danger mb-0 pt-1 pb-1">{formik.status.warning}</p>}
                   </div>
                   <div className="drawer-footer">
                     <div className="row justify-content-between">

@@ -39,7 +39,7 @@ const NoteUpdate = (props) => {
       } else if (action.meta.requestStatus === "rejected") {
         const status = action.payload && action.payload.status;
         const errors = action.payload && action.payload.message && action.payload.message.errors;
-        if (status == 422) {
+        if (status === 422) {
           setErrors(errors);
         }
         setStatus({ success: false });

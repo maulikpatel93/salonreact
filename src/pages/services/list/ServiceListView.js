@@ -43,7 +43,7 @@ const ServiceListView = (props) => {
     const id = e.currentTarget.closest(".service-view-tr").dataset.id;
     dispatch(openEditServiceForm());
     dispatch(serviceDetailApi({ id })).then((action) => {
-      if (action.meta.requestStatus == "fulfilled") {
+      if (action.meta.requestStatus === "fulfilled") {
         const detail = action.payload;
         if (detail.image) {
           dispatch(selectImage({ name: detail.image, size: "", type: "", url: detail.image_url }));

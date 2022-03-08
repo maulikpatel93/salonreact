@@ -44,7 +44,7 @@ const StaffGridView = (props) => {
     const id = e.currentTarget.closest(".box-image-cover").dataset.id;
     dispatch(openEditStaffForm());
     dispatch(staffDetailApi({ id })).then((action) => {
-      if (action.meta.requestStatus == "fulfilled") {
+      if (action.meta.requestStatus === "fulfilled") {
         const detail = action.payload;
         if (detail.profile_photo) {
           dispatch(selectImage({ name: detail.profile_photo, size: "", type: "", url: detail.profile_photo_url }));

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 const sweatalert = (props) => {
   Swal.fire({
     title: props.title,
-    text: props.messsage,
+    text: props.text,
     icon: props.icon,
   });
 };
@@ -11,7 +11,7 @@ const sweatalert = (props) => {
 const swalSuccess = (props) => {
   Swal.fire({
     title: props.title,
-    text: props.messsage,
+    text: props.text,
     icon: "success",
   });
 };
@@ -19,7 +19,7 @@ const swalSuccess = (props) => {
 const swalError = (props) => {
   Swal.fire({
     title: props.title,
-    text: props.messsage,
+    text: props.text,
     icon: "error",
   });
 };

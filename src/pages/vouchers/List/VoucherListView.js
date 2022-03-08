@@ -30,7 +30,7 @@ const VoucherListView = (props) => {
   const handleEditForm = (e) => {
     const id = e.currentTarget.closest(".voucher-action").dataset.id;
     dispatch(voucherDetailApi({ id })).then((action) => {
-      if (action.meta.requestStatus == "fulfilled") {
+      if (action.meta.requestStatus === "fulfilled") {
         dispatch(openEditVoucherForm());
       }
     });

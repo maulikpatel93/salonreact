@@ -88,16 +88,16 @@ const ProductEditForm = () => {
     setLoading(true);
     try {
       dispatch(productUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditProductForm());
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
           }
           setStatus({ success: false });

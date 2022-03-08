@@ -103,7 +103,7 @@ const BusytimeEditForm = (props) => {
     setLoading(true);
     try {
       dispatch(busytimeUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(closeEditBusytimeForm());
@@ -112,13 +112,16 @@ const BusytimeEditForm = (props) => {
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
+            setStatus({ success: false });
+          } else if (status === 410) {
+            setStatus({ warning: action.payload && action.payload.message });
+            setLoading(false);
           }
-          setStatus({ success: false });
           setSubmitting(false);
         }
       });
@@ -155,6 +158,8 @@ const BusytimeEditForm = (props) => {
               fields.forEach((field) => {
                 if (["date"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
+                } else if (["start_time", "end_time"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail["date"] + "T" + detail[field]).format("HH:mm") : "", false);
                 } else if (["ending"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "", false);
                 } else if (["repeats"].includes(field)) {
@@ -247,6 +252,7 @@ const BusytimeEditForm = (props) => {
                       <div className="mb-3">
                         <TextareaField type="text" name="reason" placeholder={t("e.g. Training, lunch break etc")} value={formik.values.reason} label={t("Reason")} controlId="busytimeForm-reason" />
                       </div>
+                      {formik.status && formik.status.warning && <p className="text-danger mb-2 pt-1 pb-1">{formik.status.warning}</p>}
                       <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                         {loading && <span className="spinner-border spinner-border-sm"></span>}
                         {t("Save")}

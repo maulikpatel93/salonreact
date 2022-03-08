@@ -38,14 +38,14 @@ const AccessForm = () => {
     setLoading(true);
     try {
       dispatch(salonModuleAccessUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           dispatch(salonmoduleListViewApi({ role_id: 5 }));
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
           }
           setStatus({ success: false });

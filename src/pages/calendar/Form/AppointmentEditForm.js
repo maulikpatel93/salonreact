@@ -71,7 +71,7 @@ const AppointmentEditForm = (props) => {
     setLoading(true);
     try {
       dispatch(appointmentUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
@@ -83,13 +83,16 @@ const AppointmentEditForm = (props) => {
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status == 422) {
+          if (status === 422) {
             setErrors(errors);
+            setStatus({ success: false });
+          } else if (status === 410) {
+            setStatus({ warning: action.payload && action.payload.message });
+            setLoading(false);
           }
-          setStatus({ success: false });
           setSubmitting(false);
         }
       });
@@ -125,6 +128,8 @@ const AppointmentEditForm = (props) => {
               fields.forEach((field) => {
                 if (["date"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
+                } else if (["start_time"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail["date"] + "T" + detail[field]).format("HH:mm") : "", false);
                 } else if (["duration"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
                 } else if (["status_manage"].includes(field)) {
@@ -211,6 +216,7 @@ const AppointmentEditForm = (props) => {
                     <div className="mb-3">
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
+                    {formik.status && formik.status.warning && <p className="text-danger mb-0 pt-1 pb-1">{formik.status.warning}</p>}
                   </div>
                   <div className="drawer-footer pt-0">
                     <div className="row gx-2 align-items-center footer-top">
@@ -252,7 +258,7 @@ const AppointmentEditForm = (props) => {
                             let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to cancel the appointment?"), message: "", confirmButtonText: t("Yes, cancelled it!") });
                             if (confirmbtn == true) {
                               dispatch(appointmentUpdateApi({ id: formik.values.id, client_id: formik.values.client_id, status: "Cancelled", clickEvent: "statusupdate" })).then((action) => {
-                                if (action.meta.requestStatus == "fulfilled") {
+                                if (action.meta.requestStatus === "fulfilled") {
                                   formik.setStatus({ success: true });
                                   formik.resetForm();
                                   dispatch(servicePriceApi({ service_id: "" }));

@@ -169,13 +169,13 @@ const StaffEditForm = () => {
     setLoading(true);
     try {
       dispatch(staffUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditStaffForm());
           sweatalert({ title: t("Updated"), text: t("Created Successfully"), icon: "success" });
-        } else if (action.meta.requestStatus == "rejected") {
+        } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
           const data = action.payload && action.payload.message && action.payload.message.appointmentMatchAll;

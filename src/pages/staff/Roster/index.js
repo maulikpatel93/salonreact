@@ -58,7 +58,7 @@ const Roster = () => {
   const handleRosterDelete = (e) => {
     const obj = JSON.parse(e.currentTarget.dataset.obj);
     dispatch(rosterDeleteApi({ id: obj.id })).then((action) => {
-      if (action.meta.requestStatus == "fulfilled") {
+      if (action.meta.requestStatus === "fulfilled") {
         dispatch(closeAddRosterForm());
         dispatch(closeEditRosterForm());
         dispatch(closeDeleteModal());

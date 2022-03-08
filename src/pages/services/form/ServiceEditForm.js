@@ -104,7 +104,7 @@ const ServiceEditForm = () => {
     setLoading(true);
     try {
       dispatch(serviceUpdateApi(values)).then((action) => {
-        if (action.meta.requestStatus == "fulfilled") {
+        if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(removeImage());

@@ -33,7 +33,6 @@ const update = (values) => {
   const action = "afterlogin/busytime/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
-  formData.append("role_id", 6);
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
