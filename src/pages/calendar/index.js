@@ -22,6 +22,7 @@ import momentPlugin from "@fullcalendar/moment";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import scrollGridPlugin from "@fullcalendar/scrollgrid";
+import rrulePlugin from "@fullcalendar/rrule";
 import moment from "moment";
 import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo, calendarStaffList } from "store/slices/calendarSlice";
 import AppointmentEditForm from "./Form/AppointmentEditForm";
@@ -79,7 +80,7 @@ const Calendar = () => {
     Object.keys(MergeListview).map((item) => {
       let listview = MergeListview[item].listview;
       let id = MergeListview[item].id;
-      let date = MergeListview[item].date;
+      let dateof = MergeListview[item].dateof;
       let start_time = MergeListview[item].start_time && MergeListview[item].start_time;
       let end_time = MergeListview[item].end_time && MergeListview[item].end_time;
       let status = MergeListview[item].status;
@@ -106,7 +107,7 @@ const Calendar = () => {
         }
         events.push({
           resourceId: staff.id,
-          start: date + "T" + start_time,
+          start: dateof + "T" + start_time,
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           title: title,
@@ -120,10 +121,16 @@ const Calendar = () => {
         });
       } else if (listview === "BusyTime") {
         let reason = MergeListview[item].reason;
+        let repeats = MergeListview[item].repeats;
+        let repeat_time = MergeListview[item].repeat_time;
+        let repeat_time_option = MergeListview[item].repeat_time_option;
+        let ending = MergeListview[item].ending;
+        let showdate = MergeListview[item].showdate;
+
         events.push({
           resourceId: staff.id,
-          start: date + "T" + start_time,
-          end: date + "T" + end_time,
+          start: showdate + "T" + start_time,
+          end: showdate + "T" + end_time,
           backgroundColor: "#A2A7AE",
           borderColor: "#A2A7AE",
           title: t("Busy Time"),
@@ -133,6 +140,74 @@ const Calendar = () => {
             staff: staff,
           },
         });
+        // console.log(isRangeInfo);
+       /* if (repeats === "Yes" && repeat_time && repeat_time_option) {
+          let endingRule = "";
+          if (ending) {
+            endingRule = {
+              freq: repeat_time_option,
+              interval: repeat_time,
+              dtstart: dateof + "T" + start_time,
+              until: ending,
+            };
+          } else {
+            endingRule = {
+              freq: repeat_time_option,
+              interval: repeat_time,
+              dtstart: dateof + "T" + start_time,
+            };
+          }
+          events.push({
+            resourceId: staff.id,
+            groupId: id,
+            backgroundColor: "#A2A7AE",
+            borderColor: "#A2A7AE",
+            title: t("Busy Time"),
+            rrule: endingRule,
+            exrule: {
+              // will also accept an array of these objects
+              freq: repeat_time_option,
+              dtstart: moment(isRangeInfo.start_date).format("YYYY-MM-DD"),
+              until: moment(isRangeInfo.end_date).format("YYYY-MM-DD"),
+            },
+            extendedProps: {
+              listview: listview,
+              busytime: { id, reason },
+              staff: staff,
+            },
+          });
+          // events.push({
+          //   resourceId: staff.id,
+          //   groupId: id,
+          //   daysOfWeek:[1,4],
+          //   startTime: start_time,
+          //   endTime: end_time,
+          //   startRecur:dateof,
+          //   endRecur:ending,
+          //   backgroundColor: "#A2A7AE",
+          //   borderColor: "#A2A7AE",
+          //   title: t("Busy Time"),
+          //   extendedProps: {
+          //     listview: listview,
+          //     busytime: { id, reason },
+          //     staff: staff,
+          //   },
+          // });
+        } else {
+          events.push({
+            resourceId: staff.id,
+            start: showdate + "T" + start_time,
+            end: showdate + "T" + end_time,
+            backgroundColor: "#A2A7AE",
+            borderColor: "#A2A7AE",
+            title: t("Busy Time"),
+            extendedProps: {
+              listview: listview,
+              busytime: { id, reason },
+              staff: staff,
+            },
+          });
+        }*/
       }
     });
   // const uniquestaff = uniqueArrayofObject(staffs, ["id"]);
@@ -566,7 +641,7 @@ const Calendar = () => {
             <FullCalendar
               ref={calendarRef}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
-              plugins={[scrollGridPlugin, momentPlugin, resourceTimeGridPlugin, interactionPlugin]}
+              plugins={[scrollGridPlugin, momentPlugin, resourceTimeGridPlugin, interactionPlugin, rrulePlugin]}
               headerToolbar={false}
               buttonText={{ today: t("Today"), week: t("Week"), day: t("Day") }}
               initialView={calendarTab && calendarTab === "week" ? "timeGridWeek" : "resourceTimeGridDay"}

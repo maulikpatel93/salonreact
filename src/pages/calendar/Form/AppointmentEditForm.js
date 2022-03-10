@@ -43,7 +43,7 @@ const AppointmentEditForm = (props) => {
     client_id: "",
     service_id: "",
     staff_id: "",
-    date: "",
+    dateof: "",
     start_time: "",
     duration: "",
     cost: "",
@@ -57,7 +57,7 @@ const AppointmentEditForm = (props) => {
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Service")).required())),
     staff_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Staff")).required())),
-    date: Yup.date().label(t("Date")).required(),
+    dateof: Yup.date().label(t("Date")).required(),
     // .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
     start_time: Yup.string().trim().label(t("Start Time")).required(),
     duration: Yup.string().trim().matches(config.duration_pattern, t(config.duration_HM_error)).label(t("Duration")).required(),
@@ -124,12 +124,12 @@ const AppointmentEditForm = (props) => {
         {(formik) => {
           useEffect(() => {
             if (typeof isServicePrice !== "undefined" && Array.isArray(isServicePrice) && isServicePrice.length === 0 && detail) {
-              const fields = ["id", "client_id", "service_id", "staff_id", "date", "start_time", "duration", "cost", "repeats", "booking_notes", "status", "status_manage"];
+              const fields = ["id", "client_id", "service_id", "staff_id", "dateof", "start_time", "duration", "cost", "repeats", "booking_notes", "status", "status_manage"];
               fields.forEach((field) => {
-                if (["date"].includes(field)) {
+                if (["dateof"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
                 } else if (["start_time"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? moment(detail["date"] + "T" + detail[field]).format("HH:mm") : "", false);
+                  formik.setFieldValue(field, detail[field] ? moment(detail["dateof"] + "T" + detail[field]).format("HH:mm") : "", false);
                 } else if (["duration"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
                 } else if (["status_manage"].includes(field)) {
@@ -174,19 +174,19 @@ const AppointmentEditForm = (props) => {
                       {/* <InputField type="date" name="date" value={formik.values.date_of_birth} label={t("Date")} controlId="appointmentForm-date" placeholder={t("Select Date")}/> */}
                       <label htmlFor="">{t("Date")}</label>
                       <DatePicker
-                        name="date"
-                        id="appointmentForm-date"
-                        value={formik.values.date}
-                        inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                        name="dateof"
+                        id="appointmentForm-dateof"
+                        value={formik.values.dateof}
+                        inputClass={(formik.touched && formik.touched.dateof && formik.errors && formik.errors.dateof ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
                         minDate={new Date()}
                         onChange={(e) => {
                           let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("dddd, DD MMMM YYYY") : "";
-                          formik.setFieldValue("date", getselectedDatePicker);
+                          formik.setFieldValue("dateof", getselectedDatePicker);
                         }}
                       />
-                      {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                      {formik.touched && formik.touched.dateof && formik.errors && formik.errors.dateof && <div className="invalid-feedback d-block">{formik.errors.dateof}</div>}
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-4 mb-3">

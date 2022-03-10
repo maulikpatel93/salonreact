@@ -35,13 +35,13 @@ const AppointmentRescheduleForm = (props) => {
 
   const initialValues = {
     client_id: "",
-    date: "",
+    dateof: "",
     start_time: "",
   };
 
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
-    date: Yup.date().label(t("Date")).required(),
+    dateof: Yup.date().label(t("Date")).required(),
     // .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
     start_time: Yup.string().trim().label(t("Start Time")).required(),
   });
@@ -103,9 +103,9 @@ const AppointmentRescheduleForm = (props) => {
         {(formik) => {
           useEffect(() => {
             if (detail) {
-              const fields = ["id", "client_id", "date", "start_time"];
+              const fields = ["id", "client_id", "dateof", "start_time"];
               fields.forEach((field) => {
-                if (["date"].includes(field)) {
+                if (["dateof"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
                 } else {
                   formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
@@ -134,19 +134,19 @@ const AppointmentRescheduleForm = (props) => {
                       {/* <InputField type="date" name="date" value={formik.values.date_of_birth} label={t("Date")} controlId="appointmentForm-date" placeholder={t("Select Date")}/> */}
                       <label htmlFor="">{t("Date")}</label>
                       <DatePicker
-                        name="date"
-                        id="appointmentForm-date"
+                        name="dateof"
+                        id="appointmentForm-dateof"
                         value={formik.values.date}
-                        inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                        inputClass={(formik.touched && formik.touched.dateof && formik.errors && formik.errors.dateof ? "is-invalid" : "") + " form-control date"}
                         placeholder={t("Select Date")}
                         format={"dddd, DD MMMM YYYY"}
                         minDate={new Date()}
                         onChange={(e) => {
                           let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("dddd, DD MMMM YYYY") : "";
-                          formik.setFieldValue("date", getselectedDatePicker);
+                          formik.setFieldValue("dateof", getselectedDatePicker);
                         }}
                       />
-                      {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                      {formik.touched && formik.touched.date && formik.errors && formik.errors.dateof && <div className="invalid-feedback d-block">{formik.errors.dateof}</div>}
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-4 mb-3">

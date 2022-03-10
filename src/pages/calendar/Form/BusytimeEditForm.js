@@ -36,7 +36,7 @@ const BusytimeEditForm = (props) => {
 
   const initialValues = {
     staff_id: "",
-    date: "",
+    dateof: "",
     start_time: "",
     end_time: "",
     repeats: "",
@@ -48,7 +48,7 @@ const BusytimeEditForm = (props) => {
 
   const validationSchema = Yup.object().shape({
     staff_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Staff")).required())),
-    date: Yup.date().label(t("Date")).required(),
+    dateof: Yup.date().label(t("Date")).required(),
     start_time: Yup.string()
       .trim()
       .label(t("Start Time"))
@@ -143,9 +143,9 @@ const BusytimeEditForm = (props) => {
     { value: "Yes", label: t("Yes") },
   ];
   const repeattimeOptionsData = [
-    { value: "week", label: t("Week(s)") },
-    // { value: "month", label: t("Month(s)") },
-    // { value: "year", label: t("Year(s)") },
+    { value: "Weekly", label: t("Week(s)") },
+    { value: "Monthly", label: t("Month(s)") },
+    //{ value: "Yearly", label: t("Year(s)") },
   ];
 
   return (
@@ -154,12 +154,12 @@ const BusytimeEditForm = (props) => {
         {(formik) => {
           useEffect(() => {
             if (detail) {
-              const fields = ["id", "staff_id", "date", "start_time", "end_time", "repeats", "repeat_time", "repeat_time_option", "ending", "reason"];
+              const fields = ["id", "staff_id", "dateof", "start_time", "end_time", "repeats", "repeat_time", "repeat_time_option", "ending", "reason"];
               fields.forEach((field) => {
-                if (["date"].includes(field)) {
+                if (["dateof"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
                 } else if (["start_time", "end_time"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? moment(detail["date"] + "T" + detail[field]).format("HH:mm") : "", false);
+                  formik.setFieldValue(field, detail[field] ? moment(detail["dateof"] + "T" + detail[field]).format("HH:mm") : "", false);
                 } else if (["ending"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "", false);
                 } else if (["repeats"].includes(field)) {
@@ -190,19 +190,19 @@ const BusytimeEditForm = (props) => {
                           {/* <InputField type="date" name="date" value={formik.values.date_of_birth} label={t("Date")} controlId="appointmentForm-date" placeholder={t("Select Date")}/> */}
                           <label htmlFor="">{t("Date")}</label>
                           <DatePicker
-                            name="date"
-                            id="busytimeForm-date"
-                            value={formik.values.date}
-                            inputClass={(formik.touched && formik.touched.date && formik.errors && formik.errors.date ? "is-invalid" : "") + " form-control date"}
+                            name="dateof"
+                            id="busytimeForm-dateof"
+                            value={formik.values.dateof}
+                            inputClass={(formik.touched && formik.touched.dateof && formik.errors && formik.errors.dateof ? "is-invalid" : "") + " form-control date"}
                             placeholder={t("Select Date")}
                             format={"dddd, DD MMMM YYYY"}
                             minDate={new Date()}
                             onChange={(e) => {
                               let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("dddd, DD MMMM YYYY") : "";
-                              formik.setFieldValue("date", getselectedDatePicker);
+                              formik.setFieldValue("dateof", getselectedDatePicker);
                             }}
                           />
-                          {formik.touched && formik.touched.date && formik.errors && formik.errors.date && <div className="invalid-feedback d-block">{formik.errors.date}</div>}
+                          {formik.touched && formik.touched.dateof && formik.errors && formik.errors.dateof && <div className="invalid-feedback d-block">{formik.errors.dateof}</div>}
                         </div>
                       </div>
                       <div className="row gx-3">
