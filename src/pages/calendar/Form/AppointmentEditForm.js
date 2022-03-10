@@ -51,6 +51,10 @@ const AppointmentEditForm = (props) => {
     booking_notes: "",
     status: "",
     status_manage: "",
+    repeats: "",
+    repeat_time: "",
+    repeat_time_option: "",
+    ending: "",
   };
 
   const validationSchema = Yup.object().shape({

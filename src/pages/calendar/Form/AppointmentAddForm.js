@@ -86,6 +86,10 @@ const AppointmentAddForm = (props) => {
     repeats: "",
     booking_notes: "",
     client_name: "",
+    repeats: "",
+    repeat_time: "",
+    repeat_time_option: "",
+    ending: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -127,7 +131,7 @@ const AppointmentAddForm = (props) => {
           if (status === 422) {
             setErrors(errors);
             setStatus({ success: false });
-          }else if (status === 410) {
+          } else if (status === 410) {
             setStatus({ warning: action.payload && action.payload.message });
             setLoading(false);
           }
@@ -287,6 +291,39 @@ const AppointmentAddForm = (props) => {
                         Add Another Service
                       </a> */}
                     </div>
+                    {formik.values.repeats && formik.values.repeats === "Yes" && (
+                      <div className="row mb-3">
+                        <div className="col-6">
+                          <div className="col-12">
+                            <label className="mb-0">{t("Repeat this every")}</label>
+                          </div>
+                          <div className="row">
+                            <div className="col-md-4">
+                              <InputField type="text" name="repeat_time" value={formik.values.repeat_time} label={""} controlId="appointmentForm-repeat_time" />
+                            </div>
+                            <div className="col-md-8">
+                              <SelectField name="repeat_time_option" placeholder={t("--Select--")} value={formik.values.repeat_time_option} options={repeattimeOptionsData} label={""} controlId="appointmentForm-repeat_time_option" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <label htmlFor="">{t("Ending (Optional)")}</label>
+                          <DatePicker
+                            name="ending"
+                            id="appointmentForm-ending"
+                            value={formik.values.ending}
+                            inputClass={"form-control ending"}
+                            placeholder={t("Select Date")}
+                            format={"DD MMMM YYYY"}
+                            minDate={new Date()}
+                            onChange={(e) => {
+                              let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("DD MMMM YYYY") : "";
+                              formik.setFieldValue("ending", getselectedDatePicker);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div className="mb-3">
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
