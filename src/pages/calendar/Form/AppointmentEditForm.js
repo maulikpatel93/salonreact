@@ -18,6 +18,7 @@ import moment from "moment";
 import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
 import { busytimeListViewApi } from "store/slices/busytimeSlice";
+import { Notify } from "component/Toastr";
 
 const AppointmentEditForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -111,6 +112,23 @@ const AppointmentEditForm = (props) => {
             setErrors(errors);
             setStatus({ success: false });
           } else if (status === 410) {
+            const NotifyContent = () => {
+              return (
+                <>
+                  <p className="mb-2 text-danger text-justify">{response && response.message}</p>
+                  {response && response.booked && (
+                    <ul>
+                      {response.booked.map((a, n) => (
+                        <li key={n} className="text-light">
+                          {a.start_time} {t("to")} {a.end_time}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              );
+            };
+            Notify({ text: <NotifyContent />, title: response && response.message, type: "error" });
             setStatus({ warning: response && response.message, booked: response && response.booked });
             setLoading(false);
           }
@@ -277,7 +295,7 @@ const AppointmentEditForm = (props) => {
                     <div className="mb-3">
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>
-                    {formik.status && formik.status.warning && <p className="text-danger mb-0 pt-1 pb-1">{formik.status.warning}</p>}
+                    {formik.status && formik.status.warning && <p className="text-danger mb-0 pt-1 pb-1"> {formik.status.warning}</p>}
                   </div>
                   <div className="drawer-footer pt-0">
                     <div className="row gx-2 align-items-center footer-top">

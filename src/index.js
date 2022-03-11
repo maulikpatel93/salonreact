@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./assets/css/font-awsome.css";
 import "./assets/scss/react-bootstrap.scss";
 import "./assets/scss/custom.scss";
+import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import { BrowserRouter } from "react-router-dom";
@@ -14,10 +15,11 @@ import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
 import "./i18n";
 // import NavigationScroll from 'layout/NavigationScroll';
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from "./serviceWorker";
 // import config from "./config";
 
 import { store, persister } from "./store";
+import { ToastContainer } from "react-toastify";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,7 +28,8 @@ ReactDOM.render(
         <BrowserRouter forceRefresh={true}>
           <HelmetProvider>
             {/* <NavigationScroll> */}
-            <App /> 
+            <App />
+            <ToastContainer position="bottom-center" autoClose={false} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
             {/* </NavigationScroll> */}
           </HelmetProvider>
         </BrowserRouter>

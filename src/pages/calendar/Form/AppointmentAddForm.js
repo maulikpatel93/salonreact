@@ -22,6 +22,7 @@ import moment from "moment";
 import { MinutesToHours, getHours, getMinutes, ucfirst } from "helpers/functions";
 import { decimalOnly } from "../../../component/form/Validation";
 import { busytimeListViewApi } from "store/slices/busytimeSlice";
+import { Notify } from "component/Toastr";
 
 const AppointmentAddForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -149,6 +150,23 @@ const AppointmentAddForm = (props) => {
             setErrors(errors);
             setStatus({ success: false });
           } else if (status === 410) {
+            const NotifyContent = () => {
+              return (
+                <>
+                  <p className="mb-2">{response && response.message}</p>
+                  {response && response.booked && (
+                    <ul>
+                      {response.booked.map((a, n) => (
+                        <li key={n}>
+                          {a.start_time} {t("to")} {a.end_time}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              );
+            };
+            Notify({ text: <NotifyContent />, title: response && response.message, type: "error" });
             setStatus({ warning: response && response.message, booked: response && response.booked });
             setLoading(false);
           }
