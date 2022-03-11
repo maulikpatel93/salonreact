@@ -106,11 +106,12 @@ const AppointmentEditForm = (props) => {
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
+          const response = action.payload && action.payload.message && action.payload.message;
           if (status === 422) {
             setErrors(errors);
             setStatus({ success: false });
           } else if (status === 410) {
-            setStatus({ warning: action.payload && action.payload.message });
+            setStatus({ warning: response && response.message, booked: response && response.booked });
             setLoading(false);
           }
           setSubmitting(false);

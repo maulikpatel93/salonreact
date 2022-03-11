@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField } from "../../../component/form/Field";
-import { sweatalert } from "../../../component/Sweatalert2";
+import { sweatalert, swalConfirm } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
@@ -29,11 +29,11 @@ const BusytimeEditForm = (props) => {
 
   const isStaffOption = useSelector((state) => state.staff.isStaffOption);
   const detail = useSelector((state) => state.busytime.isDetailData);
-
+  const id = detail.id;
   const handlecloseEditBusytimeForm = () => {
     dispatch(closeEditBusytimeForm());
   };
-  
+
   const initialValues = {
     staff_id: "",
     dateof: "",
@@ -115,11 +115,12 @@ const BusytimeEditForm = (props) => {
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
+          const response = action.payload && action.payload.message && action.payload.message;
           if (status === 422) {
             setErrors(errors);
             setStatus({ success: false });
           } else if (status === 410) {
-            setStatus({ warning: action.payload && action.payload.message });
+            setStatus({ warning: response && response.message, booked: response && response.booked });
             setLoading(false);
           }
           setSubmitting(false);
@@ -138,11 +139,12 @@ const BusytimeEditForm = (props) => {
   };
 
   const handleDeleteBusytime = (e) => {
-    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this appointment?"), message: "", confirmButtonText: t("Yes, delete it!") });
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this busy time?"), message: "", confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(busytimeDeleteApi({ id })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           if (isRangeInfo) {
+            dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(busytimeListViewApi(isRangeInfo));
             dispatch(closeEditBusytimeForm());
           }
@@ -274,7 +276,11 @@ const BusytimeEditForm = (props) => {
                       </div>
                       {formik.status && formik.status.warning && <p className="text-danger mb-2 pt-1 pb-1">{formik.status.warning}</p>}
                       <div className="row">
-                        <div className="col-6"><a className="btn btn-dark w-100 btn-lg" onClick={handleDeleteBusytime}>{t("Remove")}</a></div>
+                        <div className="col-6">
+                          <a className="btn btn-dark w-100 btn-lg" onClick={handleDeleteBusytime}>
+                            {t("Remove")}
+                          </a>
+                        </div>
                         <div className="col-6">
                           <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
                             {loading && <span className="spinner-border spinner-border-sm"></span>}

@@ -168,10 +168,7 @@ const busytimeSlice = createSlice({
       state.isDetailData = "";
     },
     [busytimeDeleteApi.pending]: () => {},
-    [busytimeDeleteApi.fulfilled]: (state, action) => {
-      const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
-    },
+    [busytimeDeleteApi.fulfilled]: () => {},
     [busytimeDeleteApi.rejected]: () => {},
   },
 });

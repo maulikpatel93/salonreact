@@ -387,5 +387,6 @@
     "Busy Time": "Busy Time",
     "Edit Busy Time": "Edit Busy Time",
     "Create": "Create",
-    "Warning": "Warning"
+    "Warning": "Warning",
+    "Are you sure want to delete this busy time?": "Are you sure want to delete this busy time?"
 }

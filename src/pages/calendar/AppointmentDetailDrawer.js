@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
@@ -13,8 +13,6 @@ import PropTypes from "prop-types";
 import { clientSearchName, closeClientSearchList } from "store/slices/clientSlice";
 
 const AppointmentDetailDrawer = (props) => {
-  const [changeStatus, setChangeStatus] = useState("");
-  console.log(changeStatus);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -48,10 +46,6 @@ const AppointmentDetailDrawer = (props) => {
     // { value: "Completed", label: t("Completed") },
     // { value: "Cancelled", label: t("Cancelled") },
   ];
-  useEffect(() => {
-    setChangeStatus(status);
-  }, []);
-
   let textColor = "";
   if (status === "Scheduled") {
     textColor = "";
@@ -105,7 +99,6 @@ const AppointmentDetailDrawer = (props) => {
     }
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to {{ status }} the appointment?", { status: statusmsg }), message: "statusupdate", confirmButtonText: t("Yes, {{ status }} it!", { status: statusmsg }) });
     if (confirmbtn === true) {
-      setChangeStatus(e.currentTarget.value);
       dispatch(appointmentUpdateApi({ id: id, client_id: client_id, status: "Confirmed", clickEvent: "statusupdate" })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           dispatch(servicePriceApi({ service_id: "" }));
