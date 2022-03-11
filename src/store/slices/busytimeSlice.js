@@ -126,7 +126,7 @@ const busytimeSlice = createSlice({
   },
   extraReducers: {
     [busytimeStoreApi.pending]: () => {},
-    [busytimeStoreApi.fulfilled]: (state, action) => {
+    [busytimeStoreApi.fulfilled]: () => {
       // if (state.isListView && state.isListView.data) {
       //   state.isListView.data = [action.payload, ...state.isListView.data];
       // } else {
@@ -135,7 +135,7 @@ const busytimeSlice = createSlice({
     },
     [busytimeStoreApi.rejected]: () => {},
     [busytimeUpdateApi.pending]: () => {},
-    [busytimeUpdateApi.fulfilled]: (state, action) => {
+    [busytimeUpdateApi.fulfilled]: () => {
       // const { id, ...changes } = action.payload;
       // const existingData = state.isListView.data && state.isListView.data.find((event) => event.id === id);
       // if (existingData) {

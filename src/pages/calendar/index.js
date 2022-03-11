@@ -80,7 +80,8 @@ const Calendar = () => {
     Object.keys(MergeListview).map((item) => {
       let listview = MergeListview[item].listview;
       let id = MergeListview[item].id;
-      let dateof = MergeListview[item].dateof;
+      // let dateof = MergeListview[item].dateof;
+      let showdate = MergeListview[item].showdate;
       let start_time = MergeListview[item].start_time && MergeListview[item].start_time;
       let end_time = MergeListview[item].end_time && MergeListview[item].end_time;
       let status = MergeListview[item].status;
@@ -107,7 +108,7 @@ const Calendar = () => {
         }
         events.push({
           resourceId: staff.id,
-          start: dateof + "T" + start_time,
+          start: showdate + "T" + start_time,
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           title: title,
@@ -121,10 +122,10 @@ const Calendar = () => {
         });
       } else if (listview === "BusyTime") {
         let reason = MergeListview[item].reason;
-        let repeats = MergeListview[item].repeats;
-        let repeat_time = MergeListview[item].repeat_time;
-        let repeat_time_option = MergeListview[item].repeat_time_option;
-        let ending = MergeListview[item].ending;
+        // let repeats = MergeListview[item].repeats;
+        // let repeat_time = MergeListview[item].repeat_time;
+        // let repeat_time_option = MergeListview[item].repeat_time_option;
+        // let ending = MergeListview[item].ending;
         let showdate = MergeListview[item].showdate;
         events.push({
           resourceId: staff.id,
@@ -665,8 +666,8 @@ const Calendar = () => {
               resourceLabelContent={function (arg) {
                 return { html: arg.resource.extendedProps.html };
               }}
-              resourceLabelClassNames={function (arg) {
-                let staff_id = isStaffFilter && isStaffFilter.id;
+              resourceLabelClassNames={function () {
+                // let staff_id = isStaffFilter && isStaffFilter.id;
                 // if (arg.resource.id == staff_id) {
                 //   return ["active"];
                 // } else {

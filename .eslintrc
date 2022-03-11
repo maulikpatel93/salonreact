@@ -13,13 +13,17 @@
   },
   "parser": "@babel/eslint-parser",
   "parserOptions": {
+    "requireConfigFile": false,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
       "impliedStrict": true
     },
-    "ecmaVersion": 12
+    "ecmaVersion": "latest",
+    "babelOptions": {
+      "presets": ["@babel/preset-react", "@babel/preset-flow"]
+    }
   },
-  "plugins": ["react-hooks"],
+  "plugins": ["react-hooks", "@babel"],
   "rules": {
     "react/jsx-filename-extension": 0,
     "no-param-reassign": 0,

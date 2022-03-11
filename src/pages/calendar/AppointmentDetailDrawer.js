@@ -14,6 +14,7 @@ import { clientSearchName, closeClientSearchList } from "store/slices/clientSlic
 
 const AppointmentDetailDrawer = (props) => {
   const [changeStatus, setChangeStatus] = useState("");
+  console.log(changeStatus);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

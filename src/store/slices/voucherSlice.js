@@ -130,7 +130,7 @@ const voucherSlice = createSlice({
   },
   extraReducers: {
     [voucherStoreApi.pending]: () => {},
-    [voucherStoreApi.fulfilled]: (state, action) => {
+    [voucherStoreApi.fulfilled]: () => {
       // if (state.isListView && state.isListView.data) {
       //   state.isListView.data = [action.payload, ...state.isListView.data];
       // } else {
@@ -139,7 +139,7 @@ const voucherSlice = createSlice({
     },
     [voucherStoreApi.rejected]: () => {},
     [voucherUpdateApi.pending]: () => {},
-    [voucherUpdateApi.fulfilled]: (state, action) => {
+    [voucherUpdateApi.fulfilled]: () => {
       // const { id, ...changes } = action.payload;
       // const existingData = state.isListView.data.find((event) => event.id === id);
       // if (existingData) {

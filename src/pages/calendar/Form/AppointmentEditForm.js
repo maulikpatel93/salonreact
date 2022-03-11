@@ -68,6 +68,22 @@ const AppointmentEditForm = (props) => {
     cost: Yup.string().trim().label(t("Cost")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     repeats: Yup.string().trim().label(t("Repeats")).required(),
     booking_notes: Yup.string().trim().label(t("Booking Notes")),
+    repeats: Yup.string().trim().label(t("Repeats")).required(),
+    repeat_time: Yup.string()
+      .nullable()
+      .when("repeats", {
+        is: "Yes",
+        then: Yup.string().trim().label(t("Repeat time")).required(t("Required")).test("Digits only", t("Digits only"), decimalOnly),
+      }),
+    repeat_time_option: Yup.string()
+      .nullable()
+      .when("repeats", {
+        is: "Yes",
+        then: Yup.string().trim().label(t("Repeat time option")).required(t("Required")),
+      }),
+    ending: Yup.date()
+      .label(t("Ending (Optional)"))
+      .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
   });
   yupconfig();
 
@@ -118,6 +134,11 @@ const AppointmentEditForm = (props) => {
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
   ];
+  const repeattimeOptionsData = [
+    { value: "Weekly", label: t("Week(s)") },
+    { value: "Monthly", label: t("Month(s)") },
+    // { value: "Yearly", label: t("Year(s)") },
+  ];
   const statusmanageOptionsData = [
     { value: "Not Started", label: t("Not Started") },
     { value: "Started", label: t("Started") },
@@ -128,12 +149,14 @@ const AppointmentEditForm = (props) => {
         {(formik) => {
           useEffect(() => {
             if (typeof isServicePrice !== "undefined" && Array.isArray(isServicePrice) && isServicePrice.length === 0 && detail) {
-              const fields = ["id", "client_id", "service_id", "staff_id", "dateof", "start_time", "duration", "cost", "repeats", "booking_notes", "status", "status_manage"];
+              const fields = ["id", "client_id", "service_id", "staff_id", "dateof", "start_time", "duration", "cost", "repeats", "repeat_time", "repeat_time_option", "ending", "booking_notes", "status", "status_manage"];
               fields.forEach((field) => {
                 if (["dateof"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
                 } else if (["start_time"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? moment(detail["dateof"] + "T" + detail[field]).format("HH:mm") : "", false);
+                } else if (["ending"].includes(field)) {
+                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "", false);
                 } else if (["duration"].includes(field)) {
                   formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
                 } else if (["status_manage"].includes(field)) {
@@ -217,6 +240,39 @@ const AppointmentEditForm = (props) => {
                         Add Another Service
                       </a> */}
                     </div>
+                    {formik.values.repeats && formik.values.repeats === "Yes" && (
+                      <div className="row mb-3">
+                        <div className="col-6">
+                          <div className="col-12">
+                            <label className="mb-0">{t("Repeat this every")}</label>
+                          </div>
+                          <div className="row">
+                            <div className="col-md-4">
+                              <InputField type="text" name="repeat_time" value={formik.values.repeat_time} label={""} controlId="busytimeForm-repeat_time" />
+                            </div>
+                            <div className="col-md-8">
+                              <SelectField name="repeat_time_option" placeholder={t("--Select--")} value={formik.values.repeat_time_option} options={repeattimeOptionsData} label={""} controlId="busytimeForm-repeat_time_option" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <label htmlFor="">{t("Ending (Optional)")}</label>
+                          <DatePicker
+                            name="ending"
+                            id="busytimeForm-ending"
+                            value={formik.values.ending}
+                            inputClass={"form-control ending"}
+                            placeholder={t("Select Date")}
+                            format={"DD MMMM YYYY"}
+                            minDate={new Date()}
+                            onChange={(e) => {
+                              let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("DD MMMM YYYY") : "";
+                              formik.setFieldValue("ending", getselectedDatePicker);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div className="mb-3">
                       <TextareaField type="text" name="booking_notes" placeholder={t("Add any notes about the appointment")} value={formik.values.booking_notes} label={t("Booking notes")} controlId="appointmentForm-booking_notes" />
                     </div>

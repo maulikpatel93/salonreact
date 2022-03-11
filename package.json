@@ -93,5 +93,10 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "@babel/eslint-plugin": "^7.16.5",
+        "@babel/preset-flow": "^7.16.7",
+        "@babel/preset-react": "^7.16.7"
     }
 }

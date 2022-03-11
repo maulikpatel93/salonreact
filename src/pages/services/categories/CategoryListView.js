@@ -21,7 +21,6 @@ const CategoryListView = (props) => {
   const objectData = view && view.data ? view.data : view;
   const handleCategoryDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
-    const name = ucfirst(props.name);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to delete this category which includes all services in this category?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
       dispatch(categoryDeleteApi({ id: props.id })).then((action) => {

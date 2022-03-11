@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
@@ -106,6 +106,22 @@ const AppointmentAddForm = (props) => {
     repeats: Yup.string().trim().label(t("Repeats")).required(),
     booking_notes: Yup.string().trim().label(t("Booking Notes")),
     client_name: Yup.string().trim().label(t("Client")),
+    repeats: Yup.string().trim().label(t("Repeats")).required(),
+    repeat_time: Yup.string()
+      .nullable()
+      .when("repeats", {
+        is: "Yes",
+        then: Yup.string().trim().label(t("Repeat time")).required(t("Required")).test("Digits only", t("Digits only"), decimalOnly),
+      }),
+    repeat_time_option: Yup.string()
+      .nullable()
+      .when("repeats", {
+        is: "Yes",
+        then: Yup.string().trim().label(t("Repeat time option")).required(t("Required")),
+      }),
+    ending: Yup.date()
+      .label(t("Ending (Optional)"))
+      .min(new Date(Date.now() - 86400000), t("Date cannot be in the past")),
   });
   yupconfig();
   const handleAppointmentSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
@@ -161,6 +177,12 @@ const AppointmentAddForm = (props) => {
     { value: "No", label: t("No") },
     { value: "Yes", label: t("Yes") },
   ];
+  const repeattimeOptionsData = [
+    { value: "Weekly", label: t("Week(s)") },
+    { value: "Monthly", label: t("Month(s)") },
+    // { value: "Yearly", label: t("Year(s)") },
+  ];
+
   // useEffect(() => {
   //   props.apicall('2022-02-16');
   // }, [props.isRangeInfo]);

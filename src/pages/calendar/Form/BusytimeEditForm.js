@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeEditBusytimeForm, busytimeUpdateApi, busytimeListViewApi } from "../../../store/slices/busytimeSlice";
+import { closeEditBusytimeForm, busytimeUpdateApi, busytimeListViewApi, busytimeDeleteApi } from "../../../store/slices/busytimeSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import { decimalOnly } from "../../../component/form/Validation";
@@ -33,7 +33,7 @@ const BusytimeEditForm = (props) => {
   const handlecloseEditBusytimeForm = () => {
     dispatch(closeEditBusytimeForm());
   };
-
+  
   const initialValues = {
     staff_id: "",
     dateof: "",
@@ -134,6 +134,26 @@ const BusytimeEditForm = (props) => {
       }
       setStatus({ success: false });
       setLoading(false);
+    }
+  };
+
+  const handleDeleteBusytime = (e) => {
+    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this appointment?"), message: "", confirmButtonText: t("Yes, delete it!") });
+    if (confirmbtn == true) {
+      dispatch(busytimeDeleteApi({ id })).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          if (isRangeInfo) {
+            dispatch(busytimeListViewApi(isRangeInfo));
+            dispatch(closeEditBusytimeForm());
+          }
+        } else if (action.meta.requestStatus === "rejected") {
+          if (action.payload.status === 422) {
+            let error = action.payload;
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            sweatalert({ title: message.errors.document[0], text: message.errors.document, icon: "error" });
+          }
+        }
+      });
     }
   };
 
@@ -253,10 +273,15 @@ const BusytimeEditForm = (props) => {
                         <TextareaField type="text" name="reason" placeholder={t("e.g. Training, lunch break etc")} value={formik.values.reason} label={t("Reason")} controlId="busytimeForm-reason" />
                       </div>
                       {formik.status && formik.status.warning && <p className="text-danger mb-2 pt-1 pb-1">{formik.status.warning}</p>}
-                      <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
-                        {loading && <span className="spinner-border spinner-border-sm"></span>}
-                        {t("Save")}
-                      </button>
+                      <div className="row">
+                        <div className="col-6"><a className="btn btn-dark w-100 btn-lg" onClick={handleDeleteBusytime}>{t("Remove")}</a></div>
+                        <div className="col-6">
+                          <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
+                            {loading && <span className="spinner-border spinner-border-sm"></span>}
+                            {t("Save")}
+                          </button>
+                        </div>
+                      </div>
                     </form>
                   </div>
                 </div>
