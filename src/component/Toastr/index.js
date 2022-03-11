@@ -17,13 +17,13 @@ const Notify = (props) => {
   let type = props.type ? props.type : "";
   // toastr.warning('My name is Inigo Montoya. You killed my father, prepare to die!')
   if (type === "success") {
-    toast.success(text, option);
+    toast.success(text);
   } else if (type === "warning") {
-    toast.warn(text, option);
+    toast.warn(text);
   } else if (type === "error") {
-    toast.error(text, option);
+    toast.error(text);
   } else if (type === "info") {
-    toast.info(text, option);
+    toast.info(text);
   }
   // toast("Wow so easy !");
 };
