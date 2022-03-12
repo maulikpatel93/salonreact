@@ -323,6 +323,12 @@ const Calendar = () => {
     let calendarApi = calendarRef.current.getApi();
     calendarApi.changeView("resourceTimeGridDay");
     dispatch(calendarTabDayView());
+    dispatch(closeAddBusytimeForm());
+    dispatch(closeEditBusytimeForm());
+    dispatch(closeAddAppointmentForm());
+    dispatch(closeEditAppointmentForm());
+    dispatch(closeRescheduleAppointmentForm());
+    dispatch(closeAppointmentDetailModal());
     someMethod();
   }
 

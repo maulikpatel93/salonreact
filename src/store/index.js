@@ -8,12 +8,12 @@ import reducer from "./reducer";
 const actionMiddleware = (store) => (next) => (action) => {
   // store.dispatch({ type: "client/view/reset" })
   if (action !== undefined) {
-    if (action.payload && action.payload.status && action.payload.status == 401) {
+    if (action.payload && action.payload.status && action.payload.status === 401) {
       // storage.removeItem(`salon-auth`);
       // storage.removeItem(`salon-client`);
       persistStore(store).purge();
     }
-    if (action.type == "auth/logout/fulfilled") {
+    if (action.type === "auth/logout/fulfilled") {
       persistStore(store).purge();
     }
   }
