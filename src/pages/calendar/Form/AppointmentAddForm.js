@@ -153,12 +153,12 @@ const AppointmentAddForm = (props) => {
             const NotifyContent = () => {
               return (
                 <>
-                  <p className="mb-2">{response && response.message}</p>
+                  <p className="mb-2 text-danger text-justify">{response && response.message}</p>
                   {response && response.booked && (
-                    <ul>
+                    <ul className="list-unstyled">
                       {response.booked.map((a, n) => (
-                        <li key={n}>
-                          {a.start_time} {t("to")} {a.end_time}
+                        <li key={n} className="text-light form-text">
+                          <Moment format="MMMM DD YYYY">{a.showdate}</Moment>, <Moment format="hh:mm A">{a.showdate + "T" + a.start_time}</Moment> - <Moment format="hh:mm A">{a.showdate + "T" + a.end_time}</Moment>
                         </li>
                       ))}
                     </ul>
