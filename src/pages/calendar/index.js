@@ -641,6 +641,11 @@ const Calendar = () => {
                 minute: "2-digit",
                 hour12: false,
               }}
+              eventTimeFormat={{
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              }}
               height="auto"
               dayMinWidth={calendarTab && calendarTab === "week" ? "100" : "300"}
               nowIndicator={true}
