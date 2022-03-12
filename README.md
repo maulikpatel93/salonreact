@@ -68,3 +68,132 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+==================
+https://github.com/eslint/eslint/issues/11183
+===================
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "airbnb",
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": [
+    "babel",
+    "react",
+    "flowtype"
+  ],
+  "rules": {
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/react-in-jsx-scope": 1,
+  
+    // Indent with 4 spaces
+    "indent": [
+      "error",
+      4
+    ],
+    // Indent JSX with 4 spaces
+    "react/jsx-indent": [
+      "error",
+      4
+    ],
+    // Indent props with 4 spaces
+    "react/jsx-indent-props": [
+      "error",
+      4
+    ],
+    // TODO: Remove all of these exceptions
+    // We have code that violates each one of these rules.
+    // We should fix the style then remove the rules when we can.
+    "consistent-return": "off",
+    "flowtype/no-types-missing-file-annotation": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
+    "import/prefer-default-export": "off",
+    "react/default-props-match-prop-types": "off",
+    "react/forbid-prop-types": "off",
+    "react/jsx-closing-tag-location": "off",
+    "react/jsx-filename-extension": "off",
+    "react/no-string-refs": "off",
+    "react/no-unused-prop-types": "off",
+    "react/no-unused-state": "off",
+    "react/prefer-stateless-function": "off",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/sort-comp": "off",
+    "max-len": "off",
+    "no-case-declarations": "off",
+    "no-console": "off",
+    "no-mixed-operators": "off",
+    "no-nested-ternary": "off",
+    "no-shadow": "off",
+    "no-use-before-define": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "prefer-promise-reject-errors": "off"
+  },
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "fetch": false,
+    "Response": false,
+    "React": true
+  }
+}
+================================
+
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "impliedStrict": true
+    },
+    "ecmaVersion": "latest",
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/react-in-jsx-scope": 1,
+    "react/jsx-filename-extension": 0,
+    "no-param-reassign": 0,
+    "react/prop-types": 1,
+    "react/require-default-props": 0,
+    "react/no-array-index-key": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/forbid-prop-types": 0,
+    "import/order": 0,
+    "no-console": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "prefer-destructuring": 0,
+    "no-shadow": 0,
+    "no-unused-vars": [
+      1,
+      {
+        "ignoreRestSiblings": false
+      }
+    ]
+  }
+}
+
