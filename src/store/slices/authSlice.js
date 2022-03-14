@@ -3,6 +3,7 @@ import { setMessage } from "./message";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 import AuthService from "../../services/auth.service";
+import userApiController from "../../services/user.service";
 
 export const register = createAsyncThunk("auth/register", async ({ username, email, password }, thunkAPI) => {
   try {
@@ -53,6 +54,19 @@ export const logout = createAsyncThunk("auth/logout", async (thunkAPI) => {
   }
 });
 
+export const GetUser = createAsyncThunk("auth/user", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await userApiController
+      .getUser(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "user"))
+      .catch((error) => HandleError(thunkAPI, error, "user"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   token: "",
   isLoggedIn: false,
@@ -89,6 +103,13 @@ const authSlice = createSlice({
     [logout.fulfilled]: (state) => {
       state.isLoggedIn = false;
       state.token = "";
+      state.user = null;
+    },
+    [GetUser.pending]: () => {},
+    [GetUser.fulfilled]: (state, action) => {
+      state.user = action.payload;
+    },
+    [GetUser.rejected]: (state) => {
       state.user = null;
     },
   },

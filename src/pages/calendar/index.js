@@ -44,7 +44,7 @@ const Calendar = () => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
-
+  const working_hours = currentUser.salon && currentUser.salon.working_hours;
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
   const clientIsOpenedAddForm = useSelector((state) => state.client.isOpenedAddForm);
@@ -76,6 +76,7 @@ const Calendar = () => {
   const events = [];
   const staffs = [];
   const resources = [];
+  const businessHours = [];
   MergeListview &&
     Object.keys(MergeListview).map((item) => {
       let listview = MergeListview[item].listview;
@@ -204,7 +205,25 @@ const Calendar = () => {
       let profile_photo_url = uniquestaff[item].profile_photo_url;
       let profile_photo_content = profile_photo_url ? '<img class="" src="' + profile_photo_url + '" alt=""/>' : '<div class="user-initial">' + first_name.charAt(0) + "" + last_name.charAt(0) + "</div>";
       // resources.push({ id: id, title: first_name + " " + last_name });
-      resources.push({ id: id, html: '<div class="calenderProfileImg">' + profile_photo_content + '<div class="image-content">' + first_name + " " + last_name + "</div></div>" });
+      resources.push({
+        id: id,
+        html: '<div class="calenderProfileImg">' + profile_photo_content + '<div class="image-content">' + first_name + " " + last_name + "</div></div>",
+      });
+    });
+
+  working_hours &&
+    Object.keys(working_hours).map((item) => {
+      let dayoff = working_hours[item].dayoff;
+      let days = working_hours[item].days;
+      let start_time = working_hours[item].start_time;
+      let end_time = working_hours[item].end_time;
+      if (dayoff === "1") {
+        businessHours.push({
+          daysOfWeek: [moment().day(days).days()],
+          startTime: start_time,
+          endTime: end_time,
+        });
+      }
     });
   const handleBusytimeDrawer = () => {
     dispatch(openAddBusytimeForm());
@@ -652,6 +671,7 @@ const Calendar = () => {
                 minute: "2-digit",
                 hour12: true,
               }}
+              businessHours={businessHours}
               height="auto"
               dayMinWidth={calendarTab && calendarTab === "week" ? "100" : "300"}
               nowIndicator={true}
