@@ -34,7 +34,7 @@ const SignupForm = () => {
     business_address: "",
     salon_type: "",
     business_phone_number: "",
-    numberofstaff: "",
+    number_of_staff: "",
     working_hours: [
       { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
       { dayoff: "1", days: "Monday", start_time: "", end_time: "", break_time: [] },
@@ -67,7 +67,7 @@ const SignupForm = () => {
     business_phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Business Phone Number")).required(),
   });
   const Step4Schema = Yup.object().shape({
-    numberofstaff: Yup.string().trim().max(50).label(t("First Name")).required(),
+    number_of_staff: Yup.string().trim().max(50).label(t("First Name")).required(),
   });
   const Step5Schema = Yup.object().shape({
     working_hours: Yup.array().of(
