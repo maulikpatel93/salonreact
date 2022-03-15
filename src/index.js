@@ -5,8 +5,9 @@ import reportWebVitals from "./reportWebVitals";
 
 import "./assets/css/font-awsome.css";
 import "./assets/scss/react-bootstrap.scss";
-import "./assets/scss/custom.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "./assets/css/style.css";
+import "./assets/scss/custom.scss";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import { BrowserRouter } from "react-router-dom";

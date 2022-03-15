@@ -3,6 +3,7 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import authReducer from "./slices/authSlice";
+import signupReducer from "./slices/signupSlice";
 import messageReducer from "./slices/message";
 import imageReducer from "../store/slices/imageSlice";
 import clientReducer from "../store/slices/clientSlice";
@@ -42,6 +43,17 @@ const reducer = combineReducers({
       timeout: 20000,
     },
     authReducer,
+  ),
+  signup: persistReducer(
+    {
+      key: "signup",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    signupReducer,
   ),
   message: messageReducer,
   client: persistReducer(

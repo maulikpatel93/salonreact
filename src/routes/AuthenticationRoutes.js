@@ -7,6 +7,7 @@ import GuestGuard from "./../utils/route-guard/GuestGuard";
 import config from "./../config";
 // login option 3 routing
 const Login = Loadable(lazy(() => import("../pages/auth/Login")));
+const Signup = Loadable(lazy(() => import("../pages/Signup")));
 const NoMatch = Loadable(lazy(() => import("../pages/errors/NoMatch")));
 
 // import { useSelector } from "react-redux";
@@ -21,6 +22,7 @@ const AuthenticationRoutes = {
   ),
   children: [
     { path: config.basePath + "/login", element: <Login /> },
+    { path: config.basePath + "/signup", element: <Signup /> },
     { path: "*", element: <NoMatch /> },
   ],
 };

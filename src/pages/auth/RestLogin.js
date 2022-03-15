@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import { useTranslation } from "react-i18next";
 
 // validation Formik
@@ -57,9 +56,6 @@ const RestLogin = () => {
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
       {(formik) => (
         <form noValidate onSubmit={formik.handleSubmit}>
-          <div className="d-flex flex-row align-items-center justify-content-center mb-5">
-            <h1 className="fw-normal mb-0 me-3">{t("Sign In")}</h1>
-          </div>
           <div className="mb-3">
             <FloatLabelInputField name="email" type="text" placeholder="" label={t("Email Address")} controlId="login-email" />
           </div>
@@ -77,6 +73,7 @@ const RestLogin = () => {
               name="remember_me"
               label={t("Remember me")}
               controlId="login-remember_me"
+              bsPrefix="checkbox"
               onChange={(e) => {
                 if (e.currentTarget.checked) {
                   // setTimeout(() => {
@@ -100,7 +97,7 @@ const RestLogin = () => {
             </Link>
           </div>
           <div className="text-center text-lg-start mt-4 pt-2">
-            <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+            <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
               {loading && <span className="spinner-border spinner-border-sm"></span>}
               {t("Login")}
             </button>

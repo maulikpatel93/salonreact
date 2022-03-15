@@ -1,30 +1,48 @@
 import React from "react";
-
-import config from "../../config";
+import { useTranslation } from "react-i18next";
+// import config from "../../config";
 import Language from "../../component/Language";
-
 import RestLogin from "./RestLogin";
 
 const Login = () => {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
-      <section className="vh-100">
-        <div className="container py-5 h-custom">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-md-9 col-lg-6 col-xl-5 text-center">
-              <img src={config.logopath} className="img-fluid" alt="Sample image" />
-            </div>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <RestLogin />
-            </div>
-          </div>
-          <div className="row d-flex justify-content-center align-items-center">
-            <div className="col-md-12 text-center">
-              <Language />
+      <div className="signup-content">
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div className="container">
+          <div className="steps step-one active">
+            <div className="row gx-md-5">
+              <div className="col-md-6 mb-md-0 mb-4">
+                <h1>
+                  {t("Try Beauti")}
+                  <br />
+                  <b>{t("for free")}</b>
+                </h1>
+                <p className="">{t("Beauti is everything you need to run and grow your business: Appointment scheduling, client & staff management, product inventory, marketing and more Try it now for free.")}</p>
+                <ul>
+                  <li>{t("14 day free trial")}</li>
+                  <li>{t("No contracts")}</li>
+                  <li>{t("No credit card required")}</li>
+                </ul>
+              </div>
+              <div className="col-md-6">
+                <div className="signup-form">
+                  <h3 className="form-title">{t("Sign In")}</h3>
+                  <RestLogin />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+        <div className="row d-flex justify-content-center align-items-center">
+          <div className="col-md-12 text-center mt-5">
+            <Language />
+          </div>
+        </div>
+      </div>
     </React.Fragment>
   );
 };

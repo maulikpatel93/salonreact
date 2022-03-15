@@ -248,8 +248,8 @@ textarea.form-control::placeholder {
 
 .btn-dark {
     color: #fff;
-    background-color: #3A3432;
-    border: 1px solid #3A3432;
+    background-color: #3a3432;
+    border: 1px solid #3a3432;
     /* box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 6px;
     font-weight: 600;
@@ -262,7 +262,7 @@ textarea.form-control::placeholder {
 
 .btn-dark:hover {
     background-color: transparent;
-    color: #3A3432;
+    color: #3a3432;
 }
 
 .btn.btn-outline-primary {
@@ -1535,7 +1535,7 @@ header .search .search-wrapper.open {
 }
 
 .mega-menu ul li a span {
-    display: inline-block;
+    display: block;
     float: right;
 }
 
@@ -2726,6 +2726,461 @@ table .pro-title {
 }
 
 
+/* signup page css  */
+
+.signup-page {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.signup-page .signup-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    padding: 35px;
+    z-index: 1;
+}
+
+.signup-page .signup-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    min-height: 100vh;
+    position: relative;
+    padding: 277px 0 100px;
+}
+
+.signup-page .signup-header-right .already-login {
+    margin-bottom: 0;
+}
+
+.signup-page .signup-header-right .already-login,
+.signup-page .signup-header-right .already-login a {
+    display: inline-block;
+    font-family: "Urbanist", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.signup-page .signup-header-right .already-login a {
+    color: #8c1c4d;
+    margin-left: 5px;
+    text-decoration: none;
+}
+
+.signup-page .container {
+    max-width: 1040px;
+}
+
+.signup-page h1 {
+    font-weight: 600;
+    font-size: 70px;
+    color: #8c1c4d;
+    font-family: "Urbanist", sans-serif;
+}
+
+.signup-page p {
+    font-weight: 500;
+    font-size: 18px;
+    color: #000;
+    font-family: "Urbanist", sans-serif;
+    margin-bottom: 20px;
+}
+
+.signup-page ul {
+    list-style: none;
+    padding: 0;
+}
+
+.signup-page ul li {
+    font-weight: 600;
+    font-size: 18px;
+    color: #8c1c4d;
+    font-family: "Urbanist", sans-serif;
+    background-image: url(../images/listing.png);
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    margin-bottom: 10px;
+}
+
+.signup-form {
+    border-radius: 30px;
+    background-color: #fff;
+    padding: 35px;
+}
+
+.signup-form .form-title {
+    color: #8c1c4d;
+    font-family: "Urbanist", sans-serif;
+    font-weight: 800;
+    text-align: center;
+}
+
+.signup-page .progress {
+    height: 4px;
+    background-color: transparent;
+    position: relative;
+    top: -166px;
+}
+
+.signup-form .form-control {
+    border: 1px solid #fbd2c3;
+    border-radius: 8px;
+    padding: 12px 15px;
+}
+
+.signup-form label {
+    font-size: 16px;
+    font-weight: normal;
+    font-family: "Source Sans Pro", sans-serif;
+    color: #000;
+}
+
+.signup-form .btn {
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: #bb5876;
+    border-color: #bb5876;
+    font-size: 19px;
+    color: #fff;
+}
+
+.signup-form .btn:hover {
+    border-color: #8c1c4d;
+    color: #fff;
+    background-color: #8c1c4d;
+}
+
+.signup-form .checkbox label {
+    font-family: "Urbanist", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.signup-form .checkbox label a {
+    color: #8c1c4d;
+    text-decoration: underline;
+    font-size: inherit;
+}
+
+.signup-form .btn.previous {
+    background-color: #3a3432;
+    border-color: #3a3432;
+}
+
+.signup-form .btn.previous:hover {
+    background-color: #000;
+    border-color: #000;
+}
+
+.signup-form .checkbox label:before {
+    border-color: #fbd2c3;
+}
+
+.signup-form .checkbox input[type="checkbox"]:checked+label:before {
+    border-color: #8c1c4d;
+}
+
+.signup-form .staff-box {
+    text-align: center;
+    position: relative;
+    padding: 15px;
+}
+
+.staff-box input[type="radio"] {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    appearance: none;
+    border: 1px solid #cacaca;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.staff-box input[type="radio"]:checked {
+    border: 1px solid #8c1c4d;
+}
+
+.signup-form .staff-box label {
+    font-size: 18px;
+    color: #999999;
+    font-weight: 800;
+    margin: 10px 0 0;
+    line-height: normal;
+}
+
+.signup-page .stepsbox {
+    max-width: 560px;
+}
+
+.signup-form.opening-hours .btn {
+    min-width: 175px;
+}
+
+.signup-form.opening-hours {
+    padding: 30px 0;
+}
+
+.signup-form.opening-hours .form-body {
+    border-top: 1px solid #eee;
+    margin: 25px 0;
+}
+
+.signup-form.opening-hours .form-switch span {
+    font-size: 18px;
+    font-family: "Source Sans Pro", sans-serif;
+    padding-left: 25px;
+}
+
+.signup-form.opening-hours .hours-box {
+    border-bottom: 1px solid #eee;
+    padding: 15px 40px;
+}
+
+.signup-form.opening-hours .form-control {
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 8px 15px;
+}
+
+.signup-form.opening-hours .form-check {
+    margin: 0;
+}
+
+.signup-form .business-location {
+    background-image: url(../images/form-location.png);
+    background-repeat: no-repeat;
+    background-position: 12px center;
+}
+
+.signup-form.opening-hours .hrs-close {
+    font-size: 18px;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.signup-form.opening-hours .totext {
+    color: #999;
+    font-size: 16px;
+}
+
+.signup-page .steps {
+    display: none;
+}
+
+.signup-page .steps.active {
+    display: block;
+}
+
+
+/* aacount setup page css  */
+
+.ac-setup .acsetup-left {
+    padding: 15px;
+    padding: 18px 20px;
+    width: 230px;
+    height: 100%;
+}
+
+.ac-setup .acsetup-right {
+    width: calc(100% - 230px);
+    position: relative;
+    height: 100%;
+}
+
+.ac-setup .acsetup-right .alltab-box {
+    padding: 35px 40px;
+    background-color: #f9f6f4;
+    height: 100%;
+}
+
+.ac-setup .acsetup-left .nav-link {
+    font-size: 16px;
+    color: #333;
+    padding: 9px 0;
+    display: block;
+    text-align: left;
+    width: 100%;
+}
+
+.ac-setup .alltab-box .box-image-cover {
+    min-height: 220px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: flex-end
+}
+
+.ac-setup .alltab-box .box-image-cover h6 {
+    color: #374151;
+    font-weight: 600;
+    margin: 0;
+}
+
+.ac-setup .acsetup-right .alltab-box .row {
+    width: calc(100% + 30px);
+    margin: 0 -15px;
+}
+
+.ac-setup .acsetup-right .tab-content {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    border-left: 1px solid #eee;
+    height: 100%;
+    display: none;
+}
+
+.ac-setup .acsetup-right .tab-content .tab-pane {
+    padding: 35px 40px;
+}
+
+.ac-setup .acsetup-right .tab-content.open {
+    display: block;
+}
+
+.ac-setup-page.page-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    min-height: 100vh;
+}
+
+.ac-setup {
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.ac-setup .acsetup-left .nav-link.active {
+    background-color: transparent;
+    color: #333;
+    font-weight: 600;
+}
+
+.ac-setup #v-pills-businessdetails p {
+    color: #999999;
+    font-size: 16px;
+}
+
+.ac-setup .input-field:not(:last-child) {
+    border-bottom: 1px solid #eee;
+    padding: 0 0 20px;
+    margin: 0 0 30px;
+}
+
+.ac-setup .tab-content .input-file {
+    border-radius: 5px;
+    height: 200px;
+    width: 200px;
+}
+
+.ac-setup #v-pills-businessdetails .btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 13px;
+    min-width: 115px;
+    padding: 10px 15px;
+}
+
+.ac-setup .inti-box {
+    border: 1px solid #d4d4d4;
+    background-color: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    height: 100%;
+    padding: 40px 30px 70px;
+    position: relative;
+}
+
+.ac-setup #v-pills-Integrations {
+    height: 100%;
+    background-color: #f9f6f4;
+}
+
+.ac-setup .inti-box .img-wrp {
+    min-height: 130px;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ac-setup .inti-box .btn {
+    min-width: 115px;
+    border-radius: 2px;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ac-setup .inti-box p {
+    font-size: 16px;
+}
+
+.newsale-probox .qty {
+    width: auto;
+}
+
+.newsale-probox .qty input {
+    width: 62px;
+}
+
+.newsale-probox .pro-img img {
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+}
+
+.newsale-probox .pro-content {
+    width: calc(100% - 70px);
+    padding-left: 10px;
+}
+
+.newsale-probox .product-box .close {
+    opacity: 1;
+    visibility: visible;
+}
+
+.payment-option .pay-voucher {
+    background-color: #8f807d;
+    border-color: #8f807d;
+}
+
+.payment-option .pay-voucher:hover {
+    border-color: #8f807d;
+    background-color: transparent;
+    color: #8f807d;
+}
+
+#salevoucher-drawer .drawer-body .left-col {
+    background-color: #f9f6f4;
+}
+
+#salecomplete-invoice-drawer .full-screen-drawer-footer .form-control {
+    padding: 22px 15px;
+}
+
+#salecomplete-invoice-drawer .full-screen-drawer-footer .btn-dark {
+    padding: 18px 15px;
+    min-width: 130px;
+    font-size: 20px;
+}
+
+.product-box .price-input input {
+    width: 80px;
+}
+
+.payment-option .btn-lg {
+    height: 100%;
+}
+
+
 /* Media query */
 
 @media only screen and (min-width: 768px) {
@@ -2788,6 +3243,12 @@ table .pro-title {
     }
     .box-image-cover {
         width: calc(25% - 30px);
+    }
+    .signup-page .signup-content {
+        padding: 200px 0 100px;
+    }
+    .signup-page h1 {
+        font-size: 60px;
     }
 }
 
@@ -2952,6 +3413,42 @@ table .pro-title {
     }
     .calendar-header .custom-tab .list-group-item {
         min-width: 60px;
+    }
+    .signup-page .signup-header {
+        padding: 20px;
+    }
+    .ac-setup .acsetup-right .alltab-box,
+    .ac-setup .acsetup-right .tab-content .tab-pane {
+        padding: 30px;
+    }
+    .ac-setup #v-pills-businessdetails p {
+        font-size: 14px;
+        line-height: normal;
+    }
+    .ac-setup .acsetup-left {
+        width: 200px;
+    }
+    .ac-setup .acsetup-right {
+        width: calc(100% - 200px);
+    }
+    .ac-setup #v-pills-businessdetails .btn {
+        min-width: 100px;
+    }
+    .ac-setup .inti-box p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .ac-setup .inti-box {
+        padding: 25px 15px 65px;
+    }
+    .ac-setup .inti-box .btn {
+        bottom: 25px;
+    }
+    .ac-setup .inti-box .img-wrp img {
+        max-width: 110px;
+    }
+    .ac-setup .inti-box .img-wrp {
+        min-height: 110px;
     }
 }
 
@@ -3178,6 +3675,36 @@ table .pro-title {
     }
     .client-drawer#addclient-drawer {
         width: 100%;
+    }
+    .signup-page .signup-content {
+        padding: 150px 0 70px;
+    }
+    .signup-form {
+        border-radius: 25px;
+        padding: 25px;
+    }
+    .signup-page h1 {
+        font-size: 50px;
+    }
+    .signup-form .checkbox label {
+        font-size: 14px;
+    }
+    .signup-form .btn,
+    .signup-page p {
+        font-size: 16px;
+    }
+    .signup-page ul li {
+        background-size: 20px;
+        padding-left: 35px;
+        font-size: 16px;
+    }
+    .ac-setup .alltab-box .box-image-cover {
+        padding: 15px;
+        min-height: 160px;
+    }
+    .ac-setup #v-pills-businessdetails .btn {
+        position: static;
+        margin-top: 15px;
     }
 }
 
@@ -3554,6 +4081,83 @@ table .pro-title {
     #product table {
         width: 700px;
     }
+    .signup-page .signup-header {
+        padding: 15px;
+    }
+    .signup-logo img {
+        max-width: 110px;
+    }
+    .signup-page .signup-header-right .already-login {
+        width: 130px;
+    }
+    .signup-page .signup-header-right .already-login,
+    .signup-page .signup-header-right .already-login a {
+        font-size: 11px;
+        line-height: normal;
+        text-align: right;
+    }
+    .signup-page .close-btn img {
+        vertical-align: top;
+        max-width: 17px;
+    }
+    .signup-page .close-btn {
+        vertical-align: top;
+        margin: 5px 0 0 3px;
+    }
+    .signup-page .signup-content {
+        padding: 90px 0 40px;
+    }
+    .signup-page h1 {
+        font-size: 40px;
+    }
+    .signup-page p {
+        font-size: 14px;
+    }
+    .signup-page ul li {
+        font-size: 14px;
+        background-size: 16px;
+        padding-left: 30px;
+    }
+    .signup-form.opening-hours .hours-box {
+        padding: 15px 22px;
+    }
+    .signup-form.opening-hours .form-check {
+        margin: 0 0 10px;
+    }
+    .signup-form.opening-hours .btn {
+        min-width: auto;
+        width: 100%;
+    }
+    .ac-setup .acsetup-left {
+        width: 100%;
+        height: auto;
+        display: block;
+        padding: 15px 7px;
+        text-align: center;
+    }
+    .ac-setup .acsetup-left .nav-link {
+        display: inline-block;
+        width: auto;
+        padding: 0px 10px;
+        font-size: 14px;
+    }
+    .ac-setup .acsetup-right {
+        width: 100%;
+        height: auto;
+    }
+    .ac-setup .acsetup-right .alltab-box {
+        padding: 23px;
+    }
+    .ac-setup .alltab-box .box-image-cover {
+        min-height: 140px;
+    }
+    .ac-setup .acsetup-right .tab-content .tab-pane {
+        padding: 17px;
+    }
+    .ac-setup .input-field:not(:last-child) {
+        padding: 0 0 10px;
+        margin: 0 0 23px;
+    }
 }
 
 @media only screen and (max-width: 575px) {
@@ -3585,6 +4189,9 @@ table .pro-title {
     .calendar-header .staff-dropdown {
         width: 100%;
         display: block;
+    }
+    .signup-page h1 {
+        font-size: 36px;
     }
 }
 

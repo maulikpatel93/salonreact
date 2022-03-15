@@ -33,7 +33,7 @@ const InputField = ({ label, controlId, ...props }) => {
     <>
       <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
-        {field.name === "phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} />}
+        {field.name === "phone_number" || field.name === "business_phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} />}
         {meta.touched && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
       </Form.Group>
     </>
@@ -87,7 +87,14 @@ const CheckboxField = ({ label, controlId, ...props }) => {
   return (
     <>
       <Form.Group className="" controlId={controlId}>
-        <Form.Check {...field} {...props} label={label} type="checkbox" id={controlId} checked={checked} />
+        {props.bsPrefix && props.bsPrefix !== undefined ? (
+          <Form.Check type={"checkbox"} id={controlId} bsPrefix={props.bsPrefix}>
+            <Form.Check.Input {...field} {...props} label={label} checked={checked} />
+            <Form.Check.Label>{label}</Form.Check.Label>
+          </Form.Check>
+        ) : (
+          <Form.Check.Input {...field} {...props} label={label} type="checkbox" id={controlId} checked={checked} />
+        )}
       </Form.Group>
     </>
   );
@@ -331,6 +338,7 @@ CheckboxField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
   className: PropTypes.string,
+  bsPrefix: PropTypes.string,
 };
 
 InputCheckbox.propTypes = {
