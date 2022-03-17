@@ -34,6 +34,8 @@ const Step1 = ({ formik, loading }) => {
               <div className="col-md-12 mb-4">
                 <InputField type="text" name="phone_number" value={formik.values.phone_number} mask="999-999-9999" label={t("Mobile")} controlId="signupForm-phone_number" />
               </div>
+              {formik.values.email_otp && <InputField type="text" name="email_otp" value={formik.values.email_otp} label={t("Email Otp")} controlId="signupForm-email_otp" />}
+              
               <div className="col-md-12">
                 <button type="submit" className="btn w-100 next btn-lg" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
@@ -50,6 +52,6 @@ const Step1 = ({ formik, loading }) => {
 
 Step1.propTypes = {
   formik: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
 export default Step1;

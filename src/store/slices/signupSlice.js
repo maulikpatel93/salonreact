@@ -1,15 +1,28 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import calendarApiController from "services/calendar.service";
+import signupApiController from "services/signup.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 export const usersAdapter = createEntityAdapter();
 
 export const SignupStoreApi = createAsyncThunk("signup/create", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await calendarApiController
-      .view(formValues, thunkAPI)
+    const resposedata = await signupApiController
+      .create(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "create"))
       .catch((error) => HandleError(thunkAPI, error, "create"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const CheckExistApi = createAsyncThunk("signup/check", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await signupApiController
+      .checkexist(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "check"))
+      .catch((error) => HandleError(thunkAPI, error, "check"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -37,6 +50,9 @@ const signupSlice = createSlice({
     [SignupStoreApi.pending]: () => {},
     [SignupStoreApi.fulfilled]: () => {},
     [SignupStoreApi.rejected]: () => {},
+    [CheckExistApi.pending]: () => {},
+    [CheckExistApi.fulfilled]: () => {},
+    [CheckExistApi.rejected]: () => {},
   },
 });
 

@@ -1,12 +1,18 @@
+import React, { useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
 import { Helmet } from "react-helmet-async";
 // ==============================|| MINIMAL LAYOUT ||============================== //
 
 const MinimalLayout = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const location = useLocation();
+  useEffect(() => {
+    dispatch({ type: "signup/reset" });
+  }, []);
   return (
     <>
       <Helmet>
@@ -18,14 +24,14 @@ const MinimalLayout = () => {
           <div className="signup-header bg-white">
             <div className="row align-items-center">
               <div className="signup-header-left col-auto">
-                <a href="#" className="signup-logo">
+                <Link to={"/login"} className="signup-logo">
                   <img src={`${config.imagepath}beautilogo-new.png`} alt="" />
-                </a>
+                </Link>
               </div>
               <div className="signup-header-right col-auto ms-auto">
                 <p className="already-login">
                   {location && location.pathname === "/login" && (
-                    <Link to="/signup" className="cursor-pointer">
+                    <Link to="/signup" className="cursor-pointer" onClick={() => dispatch({ type: "signup/reset" })}>
                       {t("Create Account")}
                     </Link>
                   )}

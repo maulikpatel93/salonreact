@@ -5,12 +5,11 @@ import PropTypes from "prop-types";
 // import { InputField } from "component/form/Field";
 import { PreviewStep } from "store/slices/signupSlice";
 import config from "../../config";
-import { Field } from "formik";
+import { ErrorMessage, Field } from "formik";
 
-const Step4 = ({ formik, loading, isSignupStep }) => {
+const Step4 = ({ loading, isSignupStep }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  console.log(formik.values);
   return (
     <React.Fragment>
       <div className="row gx-md-5">
@@ -22,29 +21,32 @@ const Step4 = ({ formik, loading, isSignupStep }) => {
                 <div className="staff-box">
                   <img src={`${config.imagepath}user-one.svg`} alt="" />
                   <label htmlFor="">{t("Just Me")}</label>
-                  <Field type="radio" name="numberofstaff" value="Just Me" />
+                  <Field type="radio" name="number_of_staff" value="Just Me" />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="staff-box">
                   <img src={`${config.imagepath}five-user.png`} alt="" />
                   <label htmlFor="">2-5</label>
-                  <Field type="radio" name="numberofstaff" value="2-5" />
+                  <Field type="radio" name="number_of_staff" value="2-5" />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="staff-box">
                   <img src={`${config.imagepath}nine-user-svg.png`} alt="" />
                   <label htmlFor="">6-10</label>
-                  <Field type="radio" name="numberofstaff" value="6-10" />
+                  <Field type="radio" name="number_of_staff" value="6-10" />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="staff-box">
                   <img src={`${config.imagepath}nineteen-svg.png`} alt="" />
                   <label htmlFor="">10+</label>
-                  <Field type="radio" name="numberofstaff" value="10+" />
+                  <Field type="radio" name="number_of_staff" value="10+" />
                 </div>
+              </div>
+              <div className="col-md-12 mb-4">
+                <ErrorMessage name="number_of_staff" component="div" className="invalid-feedback d-block text-center" />
               </div>
               <div className="col-md-6 mb-md-0 mb-2">
                 <button type="button" className="btn w-100 previous" onClick={() => dispatch(PreviewStep(isSignupStep))}>

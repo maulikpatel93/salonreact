@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { InputField } from "component/form/Field";
 import { PreviewStep } from "store/slices/signupSlice";
 import { Field } from "formik";
 
@@ -18,6 +17,7 @@ const Step5 = ({ formik, loading, isSignupStep }) => {
     { days: "Friday", start_time: "", end_time: "", break_time: [] },
     { days: "Saturday", start_time: "", end_time: "", break_time: [] },
   ];
+
   return (
     <React.Fragment>
       <div className="stepsbox mx-auto">
@@ -71,6 +71,12 @@ const Step5 = ({ formik, loading, isSignupStep }) => {
                         <Field type="time" name={`working_hours[${i}][end_time]`} className={(errors_hour && errors_hour.end_time ? "is-invalid" : "") + " form-control input me-xxl-4 me-2 "} id={`staffForm-end_time-${i}`} style={{ display: dayoff ? "block" : "none" }} />
                       </div>
                     </div>
+                    {/* <div className="row align-items-center">
+                      <div className="col-md-12 text-end">
+                        <ErrorMessage name={`working_hours[${i}][start_time]`} component="div" className="invalid-feedback d-block" />
+                        <ErrorMessage name={`working_hours[${i}][end_time]`} component="div" className="invalid-feedback d-block" />
+                      </div>
+                    </div> */}
                   </div>
                 );
               })}

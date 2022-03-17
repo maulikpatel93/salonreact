@@ -30,7 +30,7 @@ ReactDOM.render(
           <HelmetProvider>
             {/* <NavigationScroll> */}
             <App />
-            <ToastContainer position="top-right" autoClose={5000} icon={false} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
+            <ToastContainer position="top-right" autoClose={5000} icon={false} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
             {/* </NavigationScroll> */}
           </HelmetProvider>
         </BrowserRouter>

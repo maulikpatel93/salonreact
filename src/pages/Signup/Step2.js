@@ -9,7 +9,6 @@ import { ErrorMessage, Field } from "formik";
 const Step2 = ({ formik, loading, isSignupStep }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  console.log(formik.errors);
   return (
     <React.Fragment>
       <div className="row gx-md-5">

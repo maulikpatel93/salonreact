@@ -24,12 +24,5 @@ const Notify = (props) => {
   } else if (type === "info") {
     toast.info(text);
   }
-
-  toast.configure({
-    position: "bottom-center",
-    autoClose: false,
-    //same as ToastContainer props
-  })
-  // toast("Wow so easy !");
 };
 export { Notify };

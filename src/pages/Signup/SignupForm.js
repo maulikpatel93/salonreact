@@ -12,7 +12,11 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
-import { NextStep, PreviewStep, SignupStoreApi } from "store/slices/signupSlice";
+import { CheckExistApi, NextStep, SignupStoreApi } from "store/slices/signupSlice";
+import { sweatalert } from "component/Sweatalert2";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+// import { Notify } from "component/Toastr";
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
@@ -27,6 +31,8 @@ const SignupForm = () => {
     last_name: "",
     phone_number: "",
     email: "",
+    email_otp: "",
+    email_verified: "",
     password: "",
     confirmpassword: "",
     terms: false,
@@ -55,6 +61,8 @@ const SignupForm = () => {
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
     password: Yup.string().min(6).max(16).label(t("Password")).required(),
     confirmpassword: Yup.string()
+      .min(6)
+      .max(16)
       .oneOf([Yup.ref("password"), null], "Password must match")
       .label(t("Confirm Password"))
       .required(),
@@ -62,12 +70,12 @@ const SignupForm = () => {
   });
   const Step3Schema = Yup.object().shape({
     business_name: Yup.string().trim().max(50).label(t("Business Name")).required(),
-    business_address: Yup.string().trim().max(50).label(t("Business Location")).required(),
+    business_address: Yup.string().trim().label(t("Business Location")).required(),
     salon_type: Yup.string().trim().label(t("Business Type")).required(),
     business_phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Business Phone Number")).required(),
   });
   const Step4Schema = Yup.object().shape({
-    number_of_staff: Yup.string().trim().max(50).label(t("First Name")).required(),
+    number_of_staff: Yup.string().label(t("Staff")).required(),
   });
   const Step5Schema = Yup.object().shape({
     working_hours: Yup.array().of(
@@ -156,32 +164,116 @@ const SignupForm = () => {
 
   const validationSchemaArray = [Step1Schema, Step2Schema, Step3Schema, Step4Schema, Step5Schema];
   yupconfig();
-
-  const handleSignupSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+  const MySwal = withReactContent(Swal);
+  const EmailOtpForm = (otpformprops) => {
+    return (
+      <>
+        <input type="text" id="email_verified" className="swal2-input" placeholder="####" />
+        <a className="cursor-pointer" onClick={() => handleSignupSubmit(otpformprops.values, otpformprops.formik)}>Resend</a>
+      </>
+    );
+  };
+  let pagetype = "";
+  const handleSignupSubmit = (values, formik) => {
+    // { setErrors, setStatus, setSubmitting, resetForm }
     setLoading(true);
-
-    if (isSignupStep > 1 && isSignupStep < 5) {
-      dispatch(PreviewStep(isSignupStep));
-      dispatch(NextStep(isSignupStep));
-      setLoading(false);
+    if (isSignupStep >= 1 && isSignupStep < 5) {
+      if (isSignupStep === 2 || isSignupStep === 3) {
+        if (isSignupStep === 2) {
+          pagetype = "signupstep2";
+        } else if (isSignupStep === 3) {
+          pagetype = "signupstep3";
+        }
+        dispatch(CheckExistApi({ ...values, pagetype: pagetype })).then((action) => {
+          if (action.meta.requestStatus === "fulfilled") {
+            dispatch(NextStep(isSignupStep));
+            setLoading(false);
+          } else if (action.meta.requestStatus === "rejected") {
+            const status = action.payload && action.payload.status;
+            const email_otp = action.payload && action.payload.message && action.payload.message.email_otp;
+            const email_otp_msg = action.payload && action.payload.message && action.payload.message.message;
+            const errors = action.payload && action.payload.message && action.payload.message.errors;
+            if (status === 422) {
+              if (email_otp) {
+                let resend = <a class="cursor-pointer">Resend</a>;
+                console.log(resend);
+                MySwal.fire({
+                  title: "Email Verification",
+                  html: <EmailOtpForm values={values} formik={formik} />,
+                  confirmButtonText: "Verify",
+                  focusConfirm: false,
+                  allowOutsideClick: false,
+                  showCancelButton: true,
+                  preConfirm: () => {
+                    const email_verified = Swal.getPopup().querySelector("#email_verified").value;
+                    console.log(email_otp);
+                    console.log(parseInt(email_verified));
+                    if (!email_verified) {
+                      MySwal.showValidationMessage(`Please enter email verify code`);
+                    } else if (email_otp && email_verified && email_otp === parseInt(email_verified)) {
+                      return { email_verified: email_verified };
+                    } else {
+                      MySwal.showValidationMessage(`Your email verify code did not match`);
+                    }
+                  },
+                }).then((result) => {
+                  if (result.value) {
+                    formik.setFieldValue("email_otp", email_otp);
+                    formik.setFieldValue("email_verified", "1");
+                    MySwal.fire(
+                      `
+                      Email Otp: ${result.value.email_verified}
+                    `.trim(),
+                    );
+                  }
+                });
+                formik.setFieldValue("email_otp", email_otp);
+                formik.setErrors({ email_otp_msg: email_otp_msg });
+                setLoading(false);
+              } else {
+                formik.setErrors(errors);
+                setLoading(false);
+              }
+            }
+          }
+        });
+      } else {
+        dispatch(NextStep(isSignupStep));
+        setLoading(false);
+      }
     }
     if (isSignupStep === 5) {
-          console.log(values);
       setLoading(false);
       try {
         dispatch(SignupStoreApi(values)).then((action) => {
           if (action.meta.requestStatus === "fulfilled") {
-            setStatus({ success: true });
-            resetForm();
-            sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+            formik.setStatus({ success: true });
+            formik.resetForm();
+            sweatalert({ title: t("Your Account Created. Please Login"), text: t("Created Successfully"), icon: "success" });
           } else if (action.meta.requestStatus === "rejected") {
             const status = action.payload && action.payload.status;
             const errors = action.payload && action.payload.message && action.payload.message.errors;
             if (status === 422) {
-              setErrors(errors);
+              // const NotifyContent = () => {
+              //   return (
+              //     <>
+              //       {errors && (
+              //         <ul className="list-unstyled">
+              //           {Object.keys(errors).map((keyName, n) => (
+              //             <li key={n} className="text-light form-text">
+              //               {errors[keyName]}
+              //             </li>
+              //           ))}
+              //         </ul>
+              //       )}
+              //     </>
+              //   );
+              // };
+              // Notify({ text: <NotifyContent />, title: "", type: "error" });
+              formik.setErrors(errors);
             }
-            setStatus({ success: false });
-            setSubmitting(false);
+            formik.setStatus({ success: false });
+            formik.setSubmitting(false);
           }
         });
         if (scriptedRef.current) {
@@ -189,9 +281,9 @@ const SignupForm = () => {
         }
       } catch (err) {
         if (scriptedRef.current) {
-          setErrors(err.message);
+          formik.setErrors(err.message);
         }
-        setStatus({ success: false });
+        formik.setStatus({ success: false });
         setLoading(false);
       }
     }
