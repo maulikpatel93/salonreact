@@ -195,8 +195,6 @@ const SignupForm = () => {
             const errors = action.payload && action.payload.message && action.payload.message.errors;
             if (status === 422) {
               if (email_otp) {
-                let resend = <a class="cursor-pointer">Resend</a>;
-                console.log(resend);
                 MySwal.fire({
                   title: "Email Verification",
                   html: <EmailOtpForm values={values} formik={formik} />,
