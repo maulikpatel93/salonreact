@@ -25,6 +25,7 @@ import busytimeReducer from "../store/slices/busytimeSlice";
 import appointmentReducer from "../store/slices/appointmentSlice";
 import calendarReducer from "../store/slices/calendarSlice";
 import voucherReducer from "../store/slices/voucherSlice";
+import saleReducer from "../store/slices/saleSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -242,6 +243,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     voucherReducer,
+  ),
+  sale: persistReducer(
+    {
+      key: "sale",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    saleReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

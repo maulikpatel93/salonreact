@@ -24,12 +24,13 @@ import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import scrollGridPlugin from "@fullcalendar/scrollgrid";
 // import rrulePlugin from "@fullcalendar/rrule";
 import moment from "moment";
-import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo, calendarStaffList } from "store/slices/calendarSlice";
+import { calendarTabDayView, calendarTabWeekView, calendarRangeInfo, calendarStaffList, calendarResetStaffFilter, calendarStaffFilter } from "store/slices/calendarSlice";
+import { openAddSaleForm } from "store/slices/saleSlice";
 import AppointmentEditForm from "./Form/AppointmentEditForm";
 import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
-import { calendarResetStaffFilter, calendarStaffFilter } from "store/slices/calendarSlice";
 import BusytimeEditForm from "./Form/BusytimeEditForm";
+import SaleDrawer from "pages/sales/SaleDrawer";
 // import InfiniteScroll from "react-infinite-scroll-component";
 // import PaginationLoader from "component/PaginationLoader";
 
@@ -47,6 +48,7 @@ const Calendar = () => {
   const working_hours = currentUser.salon && currentUser.salon.working_hours;
   const role_id = currentUser && currentUser.role_id;
   const access = useSelector((state) => state.salonmodule.isAccess);
+  const saleIsOpenedAddForm = useSelector((state) => state.sale.isOpenedAddForm);
   const clientIsOpenedAddForm = useSelector((state) => state.client.isOpenedAddForm);
   const appointmentIsOpenedAddForm = useSelector((state) => state.appointment.isOpenedAddForm);
   const appointmentIsOpenedEditForm = useSelector((state) => state.appointment.isOpenedEditForm);
@@ -238,6 +240,9 @@ const Calendar = () => {
   };
   const handleClientDrawer = () => {
     dispatch(openAddClientForm());
+  };
+  const handleSaleDrawer = () => {
+    dispatch(openAddSaleForm());
   };
 
   const renderEventContent = (eventInfo) => {
@@ -632,11 +637,13 @@ const Calendar = () => {
                             </a>
                           </li>
                         )}
-                        <li>
-                          <a id="addsale-drawer-link" className="d-flex align-items-center">
-                            {t("Add Sale")}
-                          </a>
-                        </li>
+                        {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && (
+                          <li>
+                            <a id="addsale-drawer-link" className="d-flex align-items-center cursor-pointer" onClick={handleSaleDrawer}>
+                              {t("Add Sale")}
+                            </a>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </div>
@@ -717,6 +724,7 @@ const Calendar = () => {
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm isRangeInfo={isRangeInfo} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedEditForm ? <BusytimeEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer /> : ""}
       </div>
     </>
   );
