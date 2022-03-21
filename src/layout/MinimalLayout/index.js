@@ -43,10 +43,14 @@ const MinimalLayout = () => {
                       </Link>
                     </>
                   )}
+                  {location && location.pathname === "/forgotpassowrd" && (
+                    <>
+                      <Link to="/login" className="cursor-pointer ms-md-5">
+                        {t("Login here")}.
+                      </Link>
+                    </>
+                  )}
                 </p>
-                <a href="#" className="close-btn ms-md-5">
-                  <img src="assets/images/close-icon.svg" alt="" />
-                </a>
               </div>
             </div>
           </div>

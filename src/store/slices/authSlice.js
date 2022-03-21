@@ -43,14 +43,15 @@ export const login = createAsyncThunk("auth/login", async ({ email, password, re
   }
 });
 
-export const logout = createAsyncThunk("auth/logout", async (thunkAPI) => {
+export const Logout = createAsyncThunk("auth/logout", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await AuthService.logout();
+    const resposedata = await AuthService.logout()
+      .then((response) => HandleResponse(thunkAPI, response, "logout"))
+      .catch((error) => HandleError(thunkAPI, error, "logout"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    thunkAPI.dispatch(setMessage(message));
-    return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -60,6 +61,18 @@ export const GetUser = createAsyncThunk("auth/user", async (formValues, thunkAPI
       .getUser(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "user"))
       .catch((error) => HandleError(thunkAPI, error, "user"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const Forgotpassowrdsubmit = createAsyncThunk("auth/forgotpassowrdsubmit", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await AuthService.forgotpassowrdsubmit(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
+      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -78,9 +91,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    authlogout: () => {
-      return logout();
-    },
+    authlogout: () => {},
   },
   extraReducers: {
     [register.fulfilled]: (state) => {
@@ -100,7 +111,12 @@ const authSlice = createSlice({
       state.token = "";
       state.user = null;
     },
-    [logout.fulfilled]: (state) => {
+    [Logout.fulfilled]: (state) => {
+      state.isLoggedIn = false;
+      state.token = "";
+      state.user = null;
+    },
+    [Logout.rejected]: (state) => {
       state.isLoggedIn = false;
       state.token = "";
       state.user = null;
@@ -112,6 +128,9 @@ const authSlice = createSlice({
     [GetUser.rejected]: (state) => {
       state.user = null;
     },
+    [Forgotpassowrdsubmit.pending]: () => {},
+    [Forgotpassowrdsubmit.fulfilled]: () => {},
+    [Forgotpassowrdsubmit.rejected]: () => {},
   },
 });
 

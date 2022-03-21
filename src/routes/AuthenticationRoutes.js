@@ -9,6 +9,7 @@ import config from "./../config";
 const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 const Signup = Loadable(lazy(() => import("../pages/Signup")));
 const NoMatch = Loadable(lazy(() => import("../pages/errors/NoMatch")));
+const ForgotPassword = Loadable(lazy(() => import("../pages/auth/ForgotPassword")));
 
 // import { useSelector } from "react-redux";
 // const { isLoggedIn } = useSelector((state) => state.auth);
@@ -23,6 +24,7 @@ const AuthenticationRoutes = {
   children: [
     { path: config.basePath + "/login", element: <Login /> },
     { path: config.basePath + "/signup", element: <Signup /> },
+    { path: config.basePath + "/forgotpassowrd", element: <ForgotPassword /> },
     { path: "*", element: <NoMatch /> },
   ],
 };

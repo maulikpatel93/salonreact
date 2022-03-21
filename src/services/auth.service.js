@@ -49,10 +49,19 @@ const getUser = (authenticate) => {
   );
 };
 
+const forgotpassowrdsubmit = (values) => {
+  const action = "beforelogin/forgotpassword";
+  return axios.post(API_URL + action, {
+    action: "afterlogin/forgotpassword",
+    email: values.email,
+  });
+};
+
 const authService = {
   register,
   login,
   logout,
   getUser,
+  forgotpassowrdsubmit,
 };
 export default authService;

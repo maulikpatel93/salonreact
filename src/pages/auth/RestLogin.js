@@ -42,7 +42,7 @@ const RestLogin = () => {
     setLoading(true);
     try {
       dispatch(login({ email, password, remember_me })).then((action) => {
-        if (action && action.meta && action.meta.requestStatus == "rejected") {
+        if (action && action.meta && action.meta.requestStatus === "rejected") {
           setLoading(false);
         }
       });
@@ -92,7 +92,7 @@ const RestLogin = () => {
                 {t("Remember me")}
               </label>
             </div> */}
-            <Link to="#!" className="text-body">
+            <Link to="/forgotpassowrd" className="text-body">
               {t("Forgot password?")}
             </Link>
           </div>
