@@ -44,6 +44,8 @@ const Step2 = ({ formik, loading, isSignupStep }) => {
                   <ErrorMessage name="terms" component="div" className="invalid-feedback d-block" />
                 </div>
               </div>
+              <div className="d-none">{formik.values.email_otp && <InputField type="hidden" name="email_otp" value={formik.values.email_otp} label={""} controlId="signupForm-email_otp" />}</div>
+              
               <div className="col-md-6 mb-md-0 mb-2">
                 <button type="button" className="btn w-100 previous" onClick={() => dispatch(PreviewStep(isSignupStep))}>
                   {t("Back")}

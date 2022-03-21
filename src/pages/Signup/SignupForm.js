@@ -20,6 +20,7 @@ import withReactContent from "sweetalert2-react-content";
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
+  const [emailverify, setEmailverify] = useState(false);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -169,7 +170,9 @@ const SignupForm = () => {
     return (
       <>
         <input type="text" id="email_verified" className="swal2-input" placeholder="####" />
-        <a className="cursor-pointer" onClick={() => handleSignupSubmit(otpformprops.values, otpformprops.formik)}>Resend</a>
+        <a className="cursor-pointer" onClick={() => handleSignupSubmit(otpformprops.values, otpformprops.formik)}>
+          Resend
+        </a>
       </>
     );
   };
@@ -177,9 +180,15 @@ const SignupForm = () => {
   const handleSignupSubmit = (values, formik) => {
     // { setErrors, setStatus, setSubmitting, resetForm }
     setLoading(true);
+    console.log(emailverify);
+    console.log(values.email);
     if (isSignupStep >= 1 && isSignupStep < 5) {
       if (isSignupStep === 2 || isSignupStep === 3) {
         if (isSignupStep === 2) {
+          if (emailverify !== values.email) {
+            formik.setFieldValue("email_verified", "");
+            values = { ...values, email_verified: "" };
+          }
           pagetype = "signupstep2";
         } else if (isSignupStep === 3) {
           pagetype = "signupstep3";
@@ -218,11 +227,9 @@ const SignupForm = () => {
                   if (result.value) {
                     formik.setFieldValue("email_otp", email_otp);
                     formik.setFieldValue("email_verified", "1");
-                    MySwal.fire(
-                      `
-                      Email Otp: ${result.value.email_verified}
-                    `.trim(),
-                    );
+                    setEmailverify(values.email);
+                    MySwal.fire(`${t("Email Verified")}`.trim());
+                    dispatch(NextStep(isSignupStep));
                   }
                 });
                 formik.setFieldValue("email_otp", email_otp);
