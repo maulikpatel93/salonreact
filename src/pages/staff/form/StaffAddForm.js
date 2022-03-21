@@ -317,12 +317,12 @@ const StaffAddForm = () => {
                                   <div className="d-none">
                                     <Field type="hidden" name={`working_hours[${i}][days]`} value={days} className="form-control input" id={`staffForm-days-${i}`} />
                                   </div>
-                                  <div className="me-3">
+                                  <div className="me-3 form-check form-switch">
                                     <input
                                       type="checkbox"
                                       name={`working_hours[${i}][dayoff]`}
                                       value="1"
-                                      className=""
+                                      className="form-check-input"
                                       id={`staffForm-dayoff-${i}`}
                                       onChange={(e) => {
                                         if (e.currentTarget.checked) {
