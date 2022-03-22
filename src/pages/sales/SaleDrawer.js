@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
-import { closeAddSaleForm } from "store/slices/saleSlice";
+import { closeAddSaleForm, SaleServices, SaleTabView } from "store/slices/saleSlice";
 
 const SaleDrawer = () => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const tabview = useSelector((state) => state.sale.isSaleTabView);
+  const isServices = useSelector((state) => state.sale.isServices);
+
+  useEffect(() => {
+    if (tabview === "services") {
+      dispatch(SaleServices());
+    }
+  }, [tabview]);
+
   const handleCloseAddsaleForm = () => {
     dispatch(closeAddSaleForm());
   };
@@ -25,30 +35,30 @@ const SaleDrawer = () => {
             <div className="row mx-0">
               <div className="col-md-6 p-0 left-col mb-md-0 mb-3">
                 <div className="common-tab salevoucher-tab border-top-0">
-                  <ul className="nav nav-tabs bg-white" role="tablist">
+                  <ul className="nav nav-tabs bg-white sticky-top" role="tablist">
                     <li className="nav-item">
-                      <a href="#" className="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="true">
-                        Services
+                      <a className={"nav-link " + (tabview && tabview === "services" ? " active" : "")} id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="true" onClick={() => dispatch(SaleTabView("services"))}>
+                        {t("Services")}
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a href="#" className="nav-link" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true">
-                        Products
+                      <a className={"nav-link " + (tabview && tabview === "products" ? " active" : "")} id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onClick={() => dispatch(SaleTabView("products"))}>
+                        {t("Products")}
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a href="#" className="nav-link active" id="vouchers-tab" data-bs-toggle="tab" data-bs-target="#vouchers" type="button" role="tab" aria-controls="vouchers" aria-selected="true">
-                        Vouchers
+                      <a className={"nav-link " + (tabview && tabview === "vouchers" ? " active" : "")} id="vouchers-tab" data-bs-toggle="tab" data-bs-target="#vouchers" type="button" role="tab" aria-controls="vouchers" aria-selected="true" onClick={() => dispatch(SaleTabView("vouchers"))}>
+                        {t("Vouchers")}
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a href="#" className="nav-link" id="subscriptions-tab" data-bs-toggle="tab" data-bs-target="#subscriptions" type="button" role="tab" aria-controls="subscriptions" aria-selected="true">
-                        Subscriptions
+                      <a className={"nav-link " + (tabview && tabview === "subscriptions" ? " active" : "")} id="subscriptions-tab" data-bs-toggle="tab" data-bs-target="#subscriptions" type="button" role="tab" aria-controls="subscriptions" aria-selected="true" onClick={() => dispatch(SaleTabView("subscriptions"))}>
+                        {t("Subscriptions")}
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a href="#" className="nav-link" id="memberships-tab" data-bs-toggle="tab" data-bs-target="#memberships" type="button" role="tab" aria-controls="memberships" aria-selected="true">
-                        Memberships
+                      <a className={"nav-link " + (tabview && tabview === "memberships" ? " active" : "")} id="memberships-tab" data-bs-toggle="tab" data-bs-target="#memberships" type="button" role="tab" aria-controls="memberships" aria-selected="true" onClick={() => dispatch(SaleTabView("memberships"))}>
+                        {t("Memberships")}
                       </a>
                     </li>
                   </ul>
@@ -59,7 +69,7 @@ const SaleDrawer = () => {
                           <i className="far fa-search"></i>
                         </span>
                         <input type="text" className="form-control search-input" placeholder="Search services" />
-                        <a href="#" className="close" style={{ display:"none" }}>
+                        <a className="close" style={{ display: "none" }}>
                           <i className="fal fa-times"></i>
                         </a>
                       </div>
@@ -92,125 +102,53 @@ const SaleDrawer = () => {
                   </div>
                   <div className="container">
                     <div className="tab-content px-md-2 py-md-4 py-3">
-                      <div className="tab-pane" id="services">
+                      <div className={"tab-pane" + (tabview && tabview === "services" ? " show active" : "")} id="services">
                         <div className="accordion" id="accordionExample">
-                          <div className="accordion-item mb-md-4 mb-3">
-                            <h2 className="accordion-header" id="headingOne">
-                              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Hair
-                              </button>
-                            </h2>
-                            <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                              <div className="accordion-body p-0">
-                                <ul className="list-unstyled mb-0">
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Women’s Haircut
-                                        </label>
+                          {isServices &&
+                            Object.keys(isServices).map((item) => {
+                              let category_name = isServices[item].name;
+                              let servicesData = isServices[item].services;
+                              if (servicesData) {
+                                return (
+                                  <div className="accordion-item mb-md-4 mb-3" key={item}>
+                                    <h2 className="accordion-header" id={`heading${item}`}>
+                                      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${item}`} aria-expanded="false" aria-controls={`collapse${item}`}>
+                                        {category_name}
+                                      </button>
+                                    </h2>
+                                    <div id={`collapse${item}`} className="accordion-collapse collapse" aria-labelledby={`heading${item}`} data-bs-parent="#accordionExample">
+                                      <div className="accordion-body p-0">
+                                        <ul className="list-unstyled mb-0">
+                                          {Object.keys(servicesData).map((itemservice) => {
+                                            let service_name = servicesData[itemservice].name;
+                                            let service_duration = servicesData[itemservice].duration;
+                                            let service_price = servicesData[itemservice].serviceprice;
+                                            let generalPrice = service_price.filter((x) => x.name == "General");
+                                            let gprice = generalPrice.length === 1 && generalPrice[0].price;
+                                            return (
+                                              <li key={item + itemservice}>
+                                                <div className="row">
+                                                  <div className="col-md-6">
+                                                    <label htmlFor="" className="mb-0 fw-semibold">
+                                                      {service_name}
+                                                    </label>
+                                                  </div>
+                                                  <div className="col-md-3 col-6 time">{`${service_duration} ${t("Mins")}`}</div>
+                                                  <div className="col-md-3 col-6 price text-end">${gprice}</div>
+                                                </div>
+                                              </li>
+                                            );
+                                          })}
+                                        </ul>
                                       </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
                                     </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Men’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Kid’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Blow Dry
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="accordion-item">
-                            <h2 className="accordion-header" id="headingTwo">
-                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Beauty
-                              </button>
-                            </h2>
-                            <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                              <div className="accordion-body p-0">
-                                <ul className="list-unstyled mb-0">
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Women’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Men’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Kid’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Blow Dry
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
+                                  </div>
+                                );
+                              }
+                            })}
                         </div>
                       </div>
-                      <div className="tab-pane" id="product">
+                      <div className={"tab-pane" + (tabview && tabview === "products" ? " show active" : "")} id="product">
                         <div className="table-responsive bg-white">
                           <table className="table mb-0">
                             <tbody>
@@ -225,7 +163,7 @@ const SaleDrawer = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td >$100.00</td>
+                                <td>$100.00</td>
                               </tr>
                               <tr>
                                 <td>
@@ -238,13 +176,13 @@ const SaleDrawer = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td >$100.00</td>
+                                <td>$100.00</td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
-                      <div className="tab-pane show active" id="vouchers">
+                      <div className={"tab-pane" + (tabview && tabview === "vouchers" ? " show active" : "")} id="vouchers">
                         <div className="row gx-3">
                           <div className="col-md-6 text-center mb-3">
                             <a href="#" id="invoice-link" className="d-block voucher-box">
@@ -260,8 +198,8 @@ const SaleDrawer = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="tab-pane" id="subscriptions"></div>
-                      <div className="tab-pane" id="memberships"></div>
+                      <div className={"tab-pane" + (tabview && tabview === "subscriptions" ? " show active" : "")} id="subscriptions"></div>
+                      <div className={"tab-pane" + (tabview && tabview === "memberships" ? " show active" : "")} id="memberships"></div>
                     </div>
                   </div>
                 </div>
@@ -313,7 +251,7 @@ const SaleDrawer = () => {
                     </div>
                   </div>
                 </div>
-                <div className="add-item-panel p-4" style={{ display:"none" }}>
+                <div className="add-item-panel p-4" style={{ display: "none" }}>
                   <div className="flex-column justify-content-between d-flex flex-wrap">
                     <div className="user-box">
                       <div className="d-flex align-items-center">
@@ -431,7 +369,7 @@ const SaleDrawer = () => {
                     </div>
                   </div>
                 </div>
-                <div className="full-screen-drawer-footer" style={{ display:"none" }} id="paybycreditcard">
+                <div className="full-screen-drawer-footer" style={{ display: "none" }} id="paybycreditcard">
                   <ul className="list-unstyled mb-0">
                     <li className="px-4 d-flex py-3 border-bottom">
                       <span className="h3 pe-2 mb-0">Total</span>

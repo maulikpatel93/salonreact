@@ -157,7 +157,7 @@ const addonservices = (values) => {
     action: action,
     salon_id: auth.user.salon_id,
   };
-  return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
 
 const staffApiController = {

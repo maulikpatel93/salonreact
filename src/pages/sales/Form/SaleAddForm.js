@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { closeAddSaleForm, saleStoreApi } from "../../../store/slices/saleSlice";
+import { saleStoreApi } from "../../../store/slices/saleSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
 const SaleAddForm = () => {
@@ -17,9 +17,7 @@ const SaleAddForm = () => {
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
-  const handleCloseAddsaleForm = () => {
-    dispatch(closeAddSaleForm());
-  };
+  
   const initialValues = {
     first_name: "",
   };

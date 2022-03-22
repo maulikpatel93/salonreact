@@ -69,12 +69,26 @@ export const saleDeleteApi = createAsyncThunk("sale/delete", async (formValues, 
   }
 });
 
+export const SaleServices = createAsyncThunk("sale/services", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .services(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "services"))
+      .catch((error) => HandleError(thunkAPI, error, "services"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedDetailModal: "",
-  isDrawerTabView: "service",
+  isSaleTabView: "services",
   isListView: [],
   isDetailData: "",
+  isServices: [],
 };
 
 const saleSlice = createSlice({
@@ -82,6 +96,9 @@ const saleSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    SaleTabView: (state, action) => {
+      state.isSaleTabView = action.payload;
+    },
     openAddSaleForm: (state = initialState) => {
       // state.isOpenedEditForm = "";
       state.isOpenedAddForm = "open";
@@ -148,8 +165,15 @@ const saleSlice = createSlice({
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
     [saleDeleteApi.rejected]: () => {},
+    [SaleServices.pending]: () => {},
+    [SaleServices.fulfilled]: (state, action) => {
+      state.isServices = action.payload;
+    },
+    [SaleServices.rejected]: (state) => {
+      state.isServices = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal } = saleSlice.actions;
+export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView } = saleSlice.actions;
 export default saleSlice.reducer;

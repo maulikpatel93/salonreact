@@ -44,12 +44,12 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
     let sortArray = [];
     Object.keys(sort).map(function (key, index) {
-      return sortArray[index] = `sort[${key}]=${sort[key]}`;
+      return (sortArray[index] = `sort[${key}]=${sort[key]}`);
     });
     if (sortArray.length > 0) {
       let jsort = sortArray.join("&");
@@ -67,7 +67,7 @@ const view = (values) => {
     field: values && values.id ? "" : "name", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
-    option: values && values.option ? values.option : ''
+    option: values && values.option ? values.option : "",
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
@@ -102,11 +102,27 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const services = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let service_id = values && values.service_id ? values.service_id : "";
+  const action = page ? `afterlogin/sale/services?page=${page}&service_id=${service_id}` : `afterlogin/sale/services?service_id=${service_id}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+  };
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
+};
+
 const saleApiController = {
   create,
   update,
   view,
   deleted,
   suggetionlist,
+  services,
 };
 export default saleApiController;
