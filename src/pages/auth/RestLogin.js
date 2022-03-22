@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import yupconfig from "../../yupconfig";
 import { CheckboxField, FloatLabelInputField } from "../../component/form/Field";
-
+import config from "../../config";
 //============================|| API JWT - LOGIN ||============================//
 import { login } from "../../store/slices/authSlice";
 import { clearMessage } from "../../store/slices/message";
@@ -92,7 +92,7 @@ const RestLogin = () => {
                 {t("Remember me")}
               </label>
             </div> */}
-            <Link to="/forgotpassowrd" className="text-body">
+            <Link to={config.basePath + "/forgotpassowrd"} className="text-body">
               {t("Forgot password?")}
             </Link>
           </div>

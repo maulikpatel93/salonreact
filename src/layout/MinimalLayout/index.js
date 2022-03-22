@@ -30,22 +30,22 @@ const MinimalLayout = () => {
               </div>
               <div className="signup-header-right col-auto ms-auto">
                 <p className="already-login">
-                  {location && location.pathname === "/login" && (
-                    <Link to="/signup" className="cursor-pointer" onClick={() => dispatch({ type: "signup/reset" })}>
+                  {location && location.pathname === config.basePath+"/login" && (
+                    <Link to={config.basePath + "/signup"} className="cursor-pointer" onClick={() => dispatch({ type: "signup/reset" })}>
                       {t("Create Account")}
                     </Link>
                   )}
-                  {location && location.pathname === "/signup" && (
+                  {location && location.pathname === config.basePath+"/signup" && (
                     <>
                       {t("Already have an account?")}
-                      <Link to="/login" className="cursor-pointer">
+                      <Link to={config.basePath + "/login"} className="cursor-pointer">
                         {t("Login here")}.
                       </Link>
                     </>
                   )}
-                  {location && location.pathname === "/forgotpassowrd" && (
+                  {location && location.pathname === config.basePath+"/forgotpassowrd" && (
                     <>
-                      <Link to="/login" className="cursor-pointer ms-md-5">
+                      <Link to={config.basePath + "/login"} className="cursor-pointer ms-md-5">
                         {t("Login here")}.
                       </Link>
                     </>

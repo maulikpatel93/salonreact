@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 // import config from "../../config";
-import Language from "../../component/Language";
+// import Language from "../../component/Language";
 import RestLogin from "./RestLogin";
 
 const Login = () => {
@@ -37,11 +37,11 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="row d-flex justify-content-center align-items-center">
+        {/* <div className="row d-flex justify-content-center align-items-center">
           <div className="col-md-12 text-center mt-5">
             <Language />
           </div>
-        </div>
+        </div> */}
       </div>
     </React.Fragment>
   );
