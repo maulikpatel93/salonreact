@@ -211,7 +211,7 @@ const Products = () => {
               </div>
               {tabview && tabview == "product" ? (
                 <div className={"search-result dropdown-box " + isSearchListProduct} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewProduct.data && isSuggetionViewProduct.data.length ? isSuggetionViewProduct.data.length : "0"} next={fetchDataSuggetionListProduct} scrollableTarget="search-content" hasMore={isSuggetionViewProduct.next_page_url ? true : false} loader={<PaginationLoader />}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewProduct && isSuggetionViewProduct.data && isSuggetionViewProduct.data.length ? isSuggetionViewProduct.data.length : "0"} next={fetchDataSuggetionListProduct} scrollableTarget="search-content" hasMore={isSuggetionViewProduct.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <ProductSuggetionListView view={isSuggetionViewProduct} />
                     </ul>
@@ -219,7 +219,7 @@ const Products = () => {
                 </div>
               ) : (
                 <div className={"search-result dropdown-box " + isSearchListSupplier} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewSupplier.data && isSuggetionViewSupplier.data.length ? isSuggetionViewSupplier.data.length : "0"} next={fetchDataSuggetionListSupplier} scrollableTarget="search-content" hasMore={isSuggetionViewSupplier.next_page_url ? true : false} loader={<PaginationLoader />}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewSupplier && isSuggetionViewSupplier.data && isSuggetionViewSupplier.data.length ? isSuggetionViewSupplier.data.length : "0"} next={fetchDataSuggetionListSupplier} scrollableTarget="search-content" hasMore={isSuggetionViewSupplier.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <SupplierSuggetionListView view={isSuggetionViewSupplier} />
                     </ul>
@@ -257,7 +257,7 @@ const Products = () => {
                     {ListView.length > 0 || ListView.data ? (
                       <section>
                         <div className="" id="scrollableListView">
-                          <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
+                          <InfiniteScroll dataLength={ListView && ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
                             <div className="table-responsive bg-white table-shadow">
                               <table className="table mb-0">
                                 <thead>

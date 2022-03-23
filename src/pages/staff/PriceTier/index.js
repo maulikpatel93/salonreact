@@ -41,7 +41,7 @@ const PriceTier = () => {
   return (
     <>
       <div className="" id="scrollableGridView">
-        <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-price_tier" hasMore={tabview && tabview == "price_tier" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
+        <InfiniteScroll className="row" dataLength={GridView && GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-price_tier" hasMore={tabview && tabview == "price_tier" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
           {checkaccess({ name: "create", role_id: role_id, controller: "pricetiers", access }) && (
             <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={() => dispatch(openAddPriceTierForm())}>
               <div className="tabs-image">

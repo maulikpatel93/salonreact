@@ -1,8 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
-import { closeAddSaleForm, SaleServices, SaleTabView } from "store/slices/saleSlice";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName } from "store/slices/saleSlice";
+import PaginationLoader from "component/PaginationLoader";
+import SaleAddForm from "./Form/SaleAddForm";
+import ClientAddForm from "pages/clients/Form/ClientAddForm";
+import SaleProductListView from "./List/SaleProductListView";
+import SaleServiceListView from "./List/SaleServiceListView";
 
 const SaleDrawer = () => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
@@ -11,15 +18,109 @@ const SaleDrawer = () => {
 
   const tabview = useSelector((state) => state.sale.isSaleTabView);
   const isServices = useSelector((state) => state.sale.isServices);
+  const isServiceSearchName = useSelector((state) => state.sale.isServiceSearchName);
+  const isProducts = useSelector((state) => state.sale.isProducts);
+  const isProductSearchName = useSelector((state) => state.sale.isProductSearchName);
 
   useEffect(() => {
     if (tabview === "services") {
-      dispatch(SaleServices());
+      if (isServiceSearchName) {
+        dispatch(SaleServiceApi({ q: isServiceSearchName }));
+      } else {
+        dispatch(SaleServiceApi());
+      }
+    }
+    if (tabview === "products") {
+      if (isProductSearchName) {
+        dispatch(SaleProductApi({ q: isProductSearchName }));
+      } else {
+        dispatch(SaleProductApi());
+      }
     }
   }, [tabview]);
 
   const handleCloseAddsaleForm = () => {
     dispatch(closeAddSaleForm());
+  };
+
+  //Service search
+  const handleClickSearchService = (e) => {
+    let q = e.currentTarget.value;
+    if (q && q.length > 0) {
+      dispatch(SaleServiceApi({ q: q }));
+    }
+  };
+  const handleKeyUpSearchService = (e) => {
+    let q = e.currentTarget.value;
+    dispatch(SaleServiceSearchName(q));
+    if (q && q.length > 0) {
+      dispatch(SaleServiceApi({ q: q })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          // dispatch(closeCategorysearchList());
+        }
+      });
+    } else {
+      dispatch(SaleServiceApi());
+    }
+  };
+  const handleCloseSearchService = () => {
+    dispatch(SaleServiceSearchName(""));
+    dispatch(SaleServiceApi());
+  };
+  const handleOnBlurService = () => {};
+
+  //Product search
+  const handleClickSearchProduct = (e) => {
+    let q = e.currentTarget.value;
+    if (q && q.length > 0) {
+      dispatch(SaleProductApi({ q: q }));
+    }
+  };
+  const handleKeyUpSearchProduct = (e) => {
+    let q = e.currentTarget.value;
+    dispatch(SaleProductSearchName(q));
+    if (q && q.length > 0) {
+      dispatch(SaleProductApi({ q: q })).then((action) => {
+        if (action.meta.requestStatus === "rejected") {
+          // dispatch(closeSupplierSearchList());
+        }
+      });
+    } else {
+      dispatch(SaleProductApi());
+    }
+  };
+  const handleCloseSearchProduct = () => {
+    dispatch(SaleProductSearchName(""));
+    dispatch(SaleProductApi());
+  };
+  const handleOnBlurProduct = () => {};
+
+  //Pagination Product
+  const fetchDataSaleProduct = () => {
+    dispatch(SaleProductApi({ next_page_url: isProducts.next_page_url }));
+  };
+  const [isFetchingProducts, setIsFetchingProducts] = useState(false);
+  const loadMoreProducts = () => {
+    setIsFetchingProducts(true);
+    dispatch(SaleProductApi({ next_page_url: isProducts.next_page_url }));
+    //mocking an API call
+    setTimeout(() => {
+      setIsFetchingProducts(false);
+    }, 2000);
+  };
+
+  //Pagination Service
+  const fetchDataSaleService = () => {
+    dispatch(SaleServiceApi({ next_page_url: isProducts.next_page_url }));
+  };
+  const [isFetchingServices, setIsFetchingServices] = useState(false);
+  const loadMoreServices = () => {
+    setIsFetchingServices(true);
+    dispatch(SaleServiceApi({ next_page_url: isServices.next_page_url }));
+    //mocking an API call
+    setTimeout(() => {
+      setIsFetchingServices(false);
+    }, 2000);
   };
   return (
     <>
@@ -68,119 +169,69 @@ const SaleDrawer = () => {
                         <span className="input-group-text">
                           <i className="far fa-search"></i>
                         </span>
-                        <input type="text" className="form-control search-input" placeholder="Search services" />
-                        <a className="close" style={{ display: "none" }}>
-                          <i className="fal fa-times"></i>
-                        </a>
-                      </div>
-                      <div className="search-result dropdown-box">
-                        <ul className="p-0 m-0 list-unstyled">
-                          <li>
-                            <a href="#" className="d-flex">
-                              <div className="user-id">
-                                <span className="user-name">Jo Smith</span>
-                              </div>
+                        {tabview && tabview === "services" && (
+                          <>
+                            <input type="text" className="form-control search-input" placeholder={t("Search Service")} value={isServiceSearchName} onInput={(e) => dispatch(SaleServiceSearchName(e.target.value))} onClick={handleClickSearchService} onKeyUp={handleKeyUpSearchService} onBlur={handleOnBlurService} />
+                            <a className="close cursor-pointer" style={{ display: isServiceSearchName ? "block" : "none" }} onClick={handleCloseSearchService}>
+                              <i className="fal fa-times"></i>
                             </a>
-                          </li>
-                          <li>
-                            <a href="#" className="d-flex">
-                              <div className="user-id">
-                                <span className="user-name">Jo Smith</span>
-                              </div>
+                          </>
+                        )}
+                        {tabview && tabview === "products" && (
+                          <>
+                            <input type="text" className="form-control search-input" placeholder={t("Search Product")} value={isProductSearchName} onInput={(e) => dispatch(SaleProductSearchName(e.target.value))} onClick={handleClickSearchProduct} onKeyUp={handleKeyUpSearchProduct} onBlur={handleOnBlurProduct} />
+                            <a className="close" style={{ display: isProductSearchName ? "block" : "none" }} onClick={handleCloseSearchProduct}>
+                              <i className="fal fa-times"></i>
                             </a>
-                          </li>
-                          <li>
-                            <a href="#" className="d-flex">
-                              <div className="user-id">
-                                <span className="user-name">Jo Smith</span>
-                              </div>
+                          </>
+                        )}
+                        {tabview && tabview === "vouchers" && (
+                          <>
+                            <input type="text" className="form-control search-input" placeholder={t("Search Voucher")} value={isProductSearchName} onInput={(e) => dispatch(SaleProductSearchName(e.target.value))} onClick={handleClickSearchProduct} onKeyUp={handleKeyUpSearchProduct} onBlur={handleOnBlurProduct} />
+                            <a className="close" style={{ display: isProductSearchName ? "block" : "none" }} onClick={handleCloseSearchProduct}>
+                              <i className="fal fa-times"></i>
                             </a>
-                          </li>
-                        </ul>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="container">
                     <div className="tab-content px-md-2 py-md-4 py-3">
                       <div className={"tab-pane" + (tabview && tabview === "services" ? " show active" : "")} id="services">
-                        <div className="accordion" id="accordionExample">
-                          {isServices &&
-                            Object.keys(isServices).map((item) => {
-                              let category_name = isServices[item].name;
-                              let servicesData = isServices[item].services;
-                              if (servicesData) {
-                                return (
-                                  <div className="accordion-item mb-md-4 mb-3" key={item}>
-                                    <h2 className="accordion-header" id={`heading${item}`}>
-                                      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${item}`} aria-expanded="false" aria-controls={`collapse${item}`}>
-                                        {category_name}
-                                      </button>
-                                    </h2>
-                                    <div id={`collapse${item}`} className="accordion-collapse collapse" aria-labelledby={`heading${item}`} data-bs-parent="#accordionExample">
-                                      <div className="accordion-body p-0">
-                                        <ul className="list-unstyled mb-0">
-                                          {Object.keys(servicesData).map((itemservice) => {
-                                            let service_name = servicesData[itemservice].name;
-                                            let service_duration = servicesData[itemservice].duration;
-                                            let service_price = servicesData[itemservice].serviceprice;
-                                            let generalPrice = service_price.filter((x) => x.name == "General");
-                                            let gprice = generalPrice.length === 1 && generalPrice[0].price;
-                                            return (
-                                              <li key={item + itemservice}>
-                                                <div className="row">
-                                                  <div className="col-md-6">
-                                                    <label htmlFor="" className="mb-0 fw-semibold">
-                                                      {service_name}
-                                                    </label>
-                                                  </div>
-                                                  <div className="col-md-3 col-6 time">{`${service_duration} ${t("Mins")}`}</div>
-                                                  <div className="col-md-3 col-6 price text-end">${gprice}</div>
-                                                </div>
-                                              </li>
-                                            );
-                                          })}
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              }
-                            })}
-                        </div>
+                        <InfiniteScroll className="" dataLength={isServices && isServices.data && isServices.data.length ? isServices.data.length : "0"} next={fetchDataSaleService} scrollableTarget="services" hasMore={isServices.next_page_url ? true : false} loader={<PaginationLoader />}>
+                          <SaleServiceListView view={isServices} searchname={isServiceSearchName} />
+                          {!isFetchingServices && isServices.next_page_url && (
+                            <div className="col-2 m-auto p-3 text-center">
+                              <button onClick={loadMoreServices} className="btn btn-primary">
+                                {t("More")}
+                              </button>
+                            </div>
+                          )}
+                        </InfiniteScroll>
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "products" ? " show active" : "")} id="product">
-                        <div className="table-responsive bg-white">
-                          <table className="table mb-0">
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <div className="row align-items-center flex-nowrap">
-                                    <div className="pro-img">
-                                      <img src="assets/images/product-img.png" alt="" />
-                                    </div>
-                                    <div className="pro-title">
-                                      <h6 className="mb-1">Wella Fushion Intense Repair Shampoo</h6>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>$100.00</td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <div className="row align-items-center flex-nowrap">
-                                    <div className="pro-img">
-                                      <img src="assets/images/product-img.png" alt="" />
-                                    </div>
-                                    <div className="pro-title">
-                                      <h6 className="mb-1">Wella Fushion Intense Repair Shampoo</h6>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>$100.00</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        <InfiniteScroll className="" dataLength={isProducts && isProducts.data && isProducts.data.length ? isProducts.data.length : "0"} next={fetchDataSaleProduct} scrollableTarget="product" hasMore={isProducts.next_page_url ? true : false} loader={<PaginationLoader />}>
+                          <div className="table-responsive bg-white">
+                            <table className="table mb-0">
+                              <tbody>
+                                <SaleProductListView view={isProducts} />
+                                {isProducts.length <= 0 && (
+                                  <tr className="">
+                                    <td colSpan={2}>{t("No data found")}</td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                          {!isFetchingProducts && isProducts.next_page_url && (
+                            <div className="col-2 m-auto p-3 text-center">
+                              <button onClick={loadMoreProducts} className="btn btn-primary">
+                                {t("More")}
+                              </button>
+                            </div>
+                          )}
+                        </InfiniteScroll>
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "vouchers" ? " show active" : "")} id="vouchers">
                         <div className="row gx-3">
@@ -205,196 +256,13 @@ const SaleDrawer = () => {
                 </div>
               </div>
               <div className="col-md-6 px-0 right-col flex-column justify-content-between d-flex flex-wrap">
-                <div className="p-4 search-panel">
-                  <div className="search large-input">
-                    <div className="text-end">
-                      <a href="#" id="addclient-link" className="h6 color-wine text-decoration-none mb-3">
-                        <i className="fal fa-plus pe-1 small"></i>New Client
-                      </a>
-                    </div>
-                    <div className="input-group mb-md-3 mb-1">
-                      <span className="input-group-text">
-                        <i className="far fa-search"></i>
-                      </span>
-                      <input type="text" className="form-control search-input" placeholder="Start typing client’s name" />
-                      <a href="#" className="close">
-                        <i className="fal fa-times"></i>
-                      </a>
-                    </div>
-                    <div className="search-result dropdown-box">
-                      <ul className="p-0 m-0 list-unstyled">
-                        <li>
-                          <a href="#" className="d-flex">
-                            <div className="user-id">
-                              <h3 className="mb-0">Jo Smith</h3>
-                              <span className="mb-0">Jo Smith</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="d-flex">
-                            <div className="user-id">
-                              <h3 className="mb-0">Jo Smith</h3>
-                              <span className="mb-0">Jo Smith</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="d-flex">
-                            <div className="user-id">
-                              <h3 className="mb-0">Jo Smith</h3>
-                              <span className="mb-0">Jo Smith</span>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="add-item-panel p-4" style={{ display: "none" }}>
-                  <div className="flex-column justify-content-between d-flex flex-wrap">
-                    <div className="user-box">
-                      <div className="d-flex align-items-center">
-                        <div className="user-initial me-3">js</div>
-                        <div className="user-id">
-                          <h3 className="mb-0">
-                            Jo Smith{" "}
-                            <a href="#" className="close ms-2">
-                              <i className="fal fa-times"></i>
-                            </a>
-                          </h3>
-                          <span>jo.smith@hotmail.com</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="complete-box text-center flex-column justify-content-center mt-md-5 mt-4">
-                  <div className="complete-box-wrp text-center">
-                    <img src="assets/images/voucher.png" alt="" className="mb-md-4 mb-3" />
-                    <h4 className="mb-2 fw-semibold">There are no items added to the sale yet. Please choose one.</h4>
-                  </div>
-                </div>
-                <div className="p-4 newsale-probox">
-                  <div className="product-box mt-0 mb-3">
-                    <div className="product-header" id="#checkout-probox">
-                      <a href="#" className="close close d-block">
-                        <i className="fal fa-times"></i>
-                      </a>
-                      <div className="row">
-                        <div className="col-9">
-                          <h4 className="mb-0 fw-semibold">Women’s Haircut</h4>
-                        </div>
-                        <h4 className="col-3 mb-0 text-end">$120</h4>
-                      </div>
-                    </div>
-                    <div className=" d-block" id="checkout-probox">
-                      <div className="card card-body">
-                        <form action="">
-                          <div className="row  align-items-center">
-                            <div className="col-auto d-flex align-items-center mt-1">
-                              <label htmlFor="" className="mb-0 me-3">
-                                Staff
-                              </label>
-                              <select name="" id="" className="form-control">
-                                <option>Amanda Jones</option>
-                                <option>Amanda Jones demo</option>
-                              </select>
-                            </div>
-                            <div className="col-auto price-input d-flex align-items-center mt-1">
-                              <label htmlFor="" className="mb-0 me-3">
-                                Cost
-                              </label>
-                              <input type="text" defaultValue="$120" className="form-control" />
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="product-box mt-0 mb-3 ps-2">
-                    <div className="product-header" id="#checkout-probox">
-                      <a href="#" className="close d-block">
-                        <i className="fal fa-times"></i>
-                      </a>
-                      <div className="d-flex">
-                        <div className="pro-img">
-                          <img src="assets/images/product-img.png" alt="" />
-                        </div>
-                        <div className="pro-content">
-                          <div className="row">
-                            <div className="col-9">
-                              <h4 className="mb-2 fw-semibold">Women’s Haircut</h4>
-                              <div className="qty d-flex align-items-center">
-                                <label htmlFor="" className="mb-0 me-3">
-                                  Qty
-                                </label>
-                                <input type="text" defaultValue="1" className="form-control" />
-                              </div>
-                            </div>
-                            <h4 className="col-3 mb-0 text-end">$120</h4>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-auto p-4">
-                  <form action="">
-                    <input type="text" placeholder="Add a note..." className="form-control lg" />
-                  </form>
-                </div>
-                <div className="full-screen-drawer-footer payment-option">
-                  <div className="px-4 d-flex py-3 total">
-                    <span className="h2 pe-2 mb-0">Total</span>
-                    <span className="h2 text-end ms-auto mb-0">$120</span>
-                  </div>
-                  <div className="p-4">
-                    <div className="row">
-                      <div className="col">
-                        <a href="#" id="payment-link" className="btn-dark btn-lg w-100">
-                          Paid by Credit Card
-                        </a>
-                      </div>
-                      <div className="col">
-                        <a href="#" className="btn-dark btn-lg w-100">
-                          Paid by Cash
-                        </a>
-                      </div>
-                      <div className="col-lg mt-lg-0 mt-2">
-                        <a href="#" className="btn-dark btn-lg w-100 pay-voucher">
-                          Pay by Voucher
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="full-screen-drawer-footer" style={{ display: "none" }} id="paybycreditcard">
-                  <ul className="list-unstyled mb-0">
-                    <li className="px-4 d-flex py-3 border-bottom">
-                      <span className="h3 pe-2 mb-0">Total</span>
-                      <span className="h3 text-end ms-auto mb-0">$120</span>
-                    </li>
-                    <li className="px-4 d-flex py-3 border-bottom">
-                      <span className="h3 pe-2 mb-0">Payment by Credit Card</span>
-                      <span className="h3 text-end ms-auto mb-0">$120</span>
-                    </li>
-                    <li className="px-4 d-flex py-3 border-bottom">
-                      <span className="h3 pe-2 mb-0 fw-semibold">Balance</span>
-                      <span className="h3 text-end ms-auto mb-0 fw-semibold">$0</span>
-                    </li>
-                  </ul>
-                  <div className="p-4">
-                    <a href="#" id="salecomplete-invoice-link" className="w-100 btn btn-lg">
-                      Click To Complete Sale
-                    </a>
-                  </div>
-                </div>
+                <SaleAddForm />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ClientAddForm />
     </>
   );
 };

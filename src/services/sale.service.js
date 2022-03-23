@@ -108,7 +108,24 @@ const services = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   let service_id = values && values.service_id ? values.service_id : "";
-  const action = page ? `afterlogin/sale/services?page=${page}&service_id=${service_id}` : `afterlogin/sale/services?service_id=${service_id}`;
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/sale/services?page=${page}&service_id=${service_id}&q=${q}` : `afterlogin/sale/services?service_id=${service_id}&q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+  };
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
+};
+
+const products = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let product_id = values && values.product_id ? values.product_id : "";
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/sale/products?page=${page}&product_id=${product_id}&q=${q}` : `afterlogin/sale/products?product_id=${product_id}&q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -124,5 +141,6 @@ const saleApiController = {
   deleted,
   suggetionlist,
   services,
+  products,
 };
 export default saleApiController;

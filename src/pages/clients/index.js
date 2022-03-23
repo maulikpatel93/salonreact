@@ -9,7 +9,7 @@ import ClientAddForm from "./Form/ClientAddForm";
 import ClientDetailModal from "./Detail";
 import ClientGridView from "./List/gridview";
 import ClientListView from "./List/listview";
-import SuggetionListView from "./List/SuggetionListView";
+import ClientSuggetionListView from "./List/ClientSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
 import { checkaccess } from "helpers/functions";
@@ -136,9 +136,9 @@ const Clients = () => {
                 </a>
               </div>
               <div className={"search-result dropdown-box " + isSearchList} id="search-content">
-                <InfiniteScroll className="" dataLength={SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
+                <InfiniteScroll className="" dataLength={SuggetionView && SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
                   <ul className="p-0 m-0 list-unstyled">
-                    <SuggetionListView view={SuggetionView} />
+                    <ClientSuggetionListView view={SuggetionView} />
                   </ul>
                 </InfiniteScroll>
               </div>

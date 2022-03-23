@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { serviceListViewApi, closeServiceSearchList, serviceSearchName } from "../../../store/slices/serviceSlice";
@@ -12,13 +12,17 @@ const ServiceSuggetionListView = (props) => {
 
   const view = props.view;
   const objectData = view && view.data ? view.data : view;
+  const page = props && props.page;
 
   const handleSuggestedId = (e) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
     dispatch(serviceSearchName(suggetionname));
     dispatch(closeServiceSearchList());
-    dispatch(serviceListViewApi({ id: suggetionid, result:"result_array" }));
+    if (page === "saledrawer") {
+    } else {
+      dispatch(serviceListViewApi({ id: suggetionid, result: "result_array" }));
+    }
   };
 
   return (
@@ -46,6 +50,7 @@ const ServiceSuggetionListView = (props) => {
   );
 };
 ServiceSuggetionListView.propTypes = {
-  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
+  view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  page: PropTypes.string,
 };
 export default ServiceSuggetionListView;

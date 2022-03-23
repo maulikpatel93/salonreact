@@ -106,6 +106,7 @@ const initialState = {
   isSort: "",
   isSearchList: "",
   isSearchName: "",
+  isSearchObj: "",
 };
 
 const clientSlice = createSlice({
@@ -157,6 +158,9 @@ const clientSlice = createSlice({
     },
     clientSearchName: (state, action) => {
       state.isSearchName = action.payload;
+    },
+    clientSearchObj: (state, action) => {
+      state.isSearchObj = action.payload;
     },
   },
   extraReducers: {
@@ -254,5 +258,5 @@ const clientSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, clientTabListView, clientTabGridView, openAddClientForm, closeAddClientForm, openClientDetailModal, closeClientDetailModal, clientDetailTab, clientSort, clientSortRemove, openClientSearchList, closeClientSearchList, clientSearchName } = clientSlice.actions;
+export const { reset, clientTabListView, clientTabGridView, openAddClientForm, closeAddClientForm, openClientDetailModal, closeClientDetailModal, clientDetailTab, clientSort, clientSortRemove, openClientSearchList, closeClientSearchList, clientSearchName, clientSearchObj } = clientSlice.actions;
 export default clientSlice.reducer;

@@ -423,5 +423,13 @@
     "Log Out": "Log Out",
     "New Sale": "New Sale",
     "sales": "sales",
-    "Mins": "Mins"
+    "Mins": "Mins",
+    "Start typing client's name": "Start typing client's name",
+    "There are no items added to the sale yet. Please choose one.": "There are no items added to the sale yet. Please choose one.",
+    "Add a note...": "Add a note...",
+    "Search Service": "Search Service",
+    "Search Product": "Search Product",
+    "Search Voucher": "Search Voucher",
+    "Retail price cannot be greater than the cost price": "Retail price cannot be greater than the cost price",
+    "Stock quantity": "Stock quantity"
 }

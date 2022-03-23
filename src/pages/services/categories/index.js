@@ -37,7 +37,7 @@ const Categories = () => {
       {ListView.length > 0 || ListView.data ? (
         <section className="services-table">
           <div className="" id="scrollableGridView">
-            <InfiniteScroll className="" dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-category" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />}>
+            <InfiniteScroll className="" dataLength={ListView && ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-category" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />}>
               <div className="table-responsive bg-white table-shadow">
                 <table className="table categorie-table mb-0">
                   <thead>

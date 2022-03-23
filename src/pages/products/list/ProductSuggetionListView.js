@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { productListViewApi, closeProductSearchList, productSearchName } from "../../../store/slices/productSlice";
@@ -12,13 +12,17 @@ const ProductSuggetionListView = (props) => {
 
   const view = props.view;
   const objectData = view && view.data ? view.data : view;
+  const page = props && props.page;
 
   const handleSuggestedId = (e) => {
     let suggetionid = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.id;
     let suggetionname = e.currentTarget.parentElement && e.currentTarget.parentElement.dataset && e.currentTarget.parentElement.dataset.name;
     dispatch(productSearchName(suggetionname));
     dispatch(closeProductSearchList());
-    dispatch(productListViewApi({ id: suggetionid, result:"result_array" }));
+    if (page === "saledrawer") {
+    } else {
+      dispatch(productListViewApi({ id: suggetionid, result: "result_array" }));
+    }
   };
 
   return (
@@ -35,7 +39,7 @@ const ProductSuggetionListView = (props) => {
               <a className="d-flex cursor-pointer" onClick={handleSuggestedId}>
                 <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{name.charAt(0)}</div>}</div>
                 <div className="user-id">
-                  <span className="user-name">{ucfirst(name) +' - '+sku}</span>
+                  <span className="user-name">{ucfirst(name) + " - " + sku}</span>
                   <span className="user-id">{ucfirst(supplier_name)}</span>
                 </div>
               </a>
@@ -49,9 +53,9 @@ const ProductSuggetionListView = (props) => {
 };
 
 ProductSuggetionListView.propTypes = {
-  view: PropTypes.oneOfType([PropTypes.node,PropTypes.array, PropTypes.object]),
-  name: PropTypes.string
+  view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  name: PropTypes.string,
+  page: PropTypes.string,
 };
-
 
 export default ProductSuggetionListView;

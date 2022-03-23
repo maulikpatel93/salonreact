@@ -100,7 +100,7 @@ const Staff = () => {
                 <div className="" id="scrollableGridView">
                   {tabview && tabview == "staff" && (
                     <>
-                      <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
+                      <InfiniteScroll className="row" dataLength={GridView && GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-staff" hasMore={tabview && tabview == "staff" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
                         {checkaccess({ name: "create", role_id: role_id, controller: "staff", access }) && (
                           <a className="box-image-cover cursor-pointer" id="addstaff-member-link" onClick={handleopenAddStaffForm}>
                             <div className="tabs-image">

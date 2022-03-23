@@ -1,0 +1,67 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
+import { ucfirst } from "../../../helpers/functions";
+
+const SaleServiceListView = (props) => {
+  const { t } = useTranslation();
+  const view = props.view;
+  const searchname = props.searchname;
+  const objectData = view && view.data ? view.data : view;
+  return (
+    <>
+      <div className="accordion" id="accordionExample">
+        {objectData &&
+          Object.keys(objectData).map((item) => {
+            let category_name = objectData[item].name;
+            let servicesData = objectData[item].services;
+            if (servicesData) {
+              return (
+                <div className="accordion-item mb-md-4 mb-3" key={item}>
+                  <h2 className="accordion-header" id={`heading${item}`}>
+                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${item}`} aria-expanded="false" aria-controls={`collapse${item}`}>
+                      {ucfirst(category_name)}
+                    </button>
+                  </h2>
+                  <div id={`collapse${item}`} className={"accordion-collapse collapse " + (searchname ? "show" : "")} aria-labelledby={`heading${item}`} data-bs-parent="#accordionExample">
+                    <div className="accordion-body p-0">
+                      <ul className="list-unstyled mb-0">
+                        {Object.keys(servicesData).map((itemservice) => {
+                          let service_name = servicesData[itemservice].name;
+                          let service_duration = servicesData[itemservice].duration;
+                          let service_price = servicesData[itemservice].serviceprice;
+                          let generalPrice = service_price.filter((x) => x.name == "General");
+                          let gprice = generalPrice.length === 1 && generalPrice[0].price;
+                          return (
+                            <li key={item + itemservice}>
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <label htmlFor="" className="mb-0 fw-semibold">
+                                    {ucfirst(service_name)}
+                                  </label>
+                                </div>
+                                <div className="col-md-3 col-6 time">{`${service_duration} ${t("Mins")}`}</div>
+                                <div className="col-md-3 col-6 price text-end">${gprice}</div>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })}
+      </div>
+    </>
+  );
+};
+
+SaleServiceListView.propTypes = {
+  view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  searchname: PropTypes.string,
+  id: PropTypes.string,
+};
+
+export default SaleServiceListView;

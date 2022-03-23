@@ -14,7 +14,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
-import SuggetionListView from "pages/clients/List/SuggetionListView";
+import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import DatePicker from "react-multi-date-picker";
@@ -284,7 +284,7 @@ const AppointmentAddForm = (props) => {
                       <div className={"search-result dropdown-box " + isSearchList} id="search-content">
                         <InfiniteScroll className="" dataLength={SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
                           <ul className="p-0 m-0 list-unstyled">
-                            <SuggetionListView view={SuggetionView} page={"appointmentAddForm"} formik={formik} />
+                            <ClientSuggetionListView view={SuggetionView} page={"appointmentAddForm"} formik={formik} />
                           </ul>
                         </InfiniteScroll>
                       </div>

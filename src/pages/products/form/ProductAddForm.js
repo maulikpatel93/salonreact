@@ -52,11 +52,26 @@ const ProductAddForm = () => {
     sku: Yup.string().trim().label(t("SKU")).required(),
     description: Yup.string().trim().label(t("Description")).required(),
     cost_price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
-    retail_price: Yup.string().trim().label(t("Retail Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+    retail_price: Yup.string()
+      .trim()
+      .label(t("Retail Price"))
+      .required()
+      .test("Decimal only", t("The field should have decimal only"), decimalOnly)
+      .test("End Time_test", t("Retail price cannot be greater than the cost price"), (value, field) => {
+        const { cost_price } = field.parent;
+        if (cost_price !== undefined && value !== undefined) {
+          if (cost_price >= value) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return false;
+      }),
     manage_stock: Yup.mixed().nullable(),
     stock_quantity: Yup.string().when("manage_stock", {
       is: 1,
-      then: Yup.string().trim().label(t("Stock_quantity")).required().test("Digits only", t("The field should have digits only"), digitOnly).nullable(),
+      then: Yup.string().trim().label(t("Stock quantity")).required().test("Digits only", t("The field should have digits only"), digitOnly).nullable(),
     }),
     low_stock_threshold: Yup.string().when("manage_stock", {
       is: 1,
@@ -160,7 +175,7 @@ const ProductAddForm = () => {
                               <InputField type="text" name="retail_price" placeholder="$" value={formik.values.retail_price} label={t("Retail Price")} controlId="productForm-retail_price" />
                             </div>
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+'('+t("Included in price")+')'} controlId="productForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax") + "(" + t("Included in price") + ")"} controlId="productForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -192,7 +207,7 @@ const ProductAddForm = () => {
                           />
                           <div className="row" style={{ display: formik.values.manage_stock == "" || formik.values.manage_stock == 0 ? "none" : "" }}>
                             <div className="mb-3 col-md-6">
-                              <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity} label={t("Stock_quantity")} controlId="productForm-stock_quantity" />
+                              <InputField type="text" name="stock_quantity" value={formik.values.stock_quantity} label={t("Stock quantity")} controlId="productForm-stock_quantity" />
                             </div>
                             <div className="mb-3 col-md-6">
                               <InputField type="text" name="low_stock_threshold" value={formik.values.low_stock_threshold} label={t("Low Stock Threshold")} controlId="productForm-low_stock_threshold" />

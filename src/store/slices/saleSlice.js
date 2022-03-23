@@ -69,12 +69,24 @@ export const saleDeleteApi = createAsyncThunk("sale/delete", async (formValues, 
   }
 });
 
-export const SaleServices = createAsyncThunk("sale/services", async (formValues, thunkAPI) => {
+export const SaleServiceApi = createAsyncThunk("sale/services", async (formValues, thunkAPI) => {
   try {
     const resposedata = await saleApiController
       .services(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "services"))
       .catch((error) => HandleError(thunkAPI, error, "services"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+export const SaleProductApi = createAsyncThunk("sale/products", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .products(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "products"))
+      .catch((error) => HandleError(thunkAPI, error, "products"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -89,6 +101,12 @@ const initialState = {
   isListView: [],
   isDetailData: "",
   isServices: [],
+  isServiceSearch: "",
+  isServiceSearchName: "",
+  isProducts: [],
+  isProductSearch: "",
+  isProductSearchName: "",
+  isCart: "",
 };
 
 const saleSlice = createSlice({
@@ -114,6 +132,12 @@ const saleSlice = createSlice({
     closeSaleDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
+    },
+    SaleProductSearchName: (state, action) => {
+      state.isProductSearchName = action.payload;
+    },
+    SaleServiceSearchName: (state, action) => {
+      state.isServiceSearchName = action.payload;
     },
   },
   extraReducers: {
@@ -165,15 +189,38 @@ const saleSlice = createSlice({
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
     [saleDeleteApi.rejected]: () => {},
-    [SaleServices.pending]: () => {},
-    [SaleServices.fulfilled]: (state, action) => {
+    [SaleServiceApi.pending]: () => {},
+    [SaleServiceApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isServices.current_page ? state.isServices.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isServices && state.isServices.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isServices = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isServices.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
       state.isServices = action.payload;
     },
-    [SaleServices.rejected]: (state) => {
+    [SaleServiceApi.rejected]: (state) => {
       state.isServices = [];
+    },
+    [SaleProductApi.pending]: () => {},
+    [SaleProductApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isProducts.current_page ? state.isProducts.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isProducts && state.isProducts.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isProducts = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isProducts.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isProducts = action.payload;
+    },
+    [SaleProductApi.rejected]: (state) => {
+      state.isProducts = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView } = saleSlice.actions;
+export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName } = saleSlice.actions;
 export default saleSlice.reducer;

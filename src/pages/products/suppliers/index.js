@@ -33,7 +33,7 @@ const Suppliers = () => {
     <>
       {GridView.length > 0 || GridView.data ? (
         <div className="" id="scrollableGridView">
-          <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-supplier" hasMore={GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
+          <InfiniteScroll className="row" dataLength={GridView && GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-supplier" hasMore={GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
             <a className="box-image-cover cursor-pointer" onClick={() => dispatch(openAddSupplierForm())}>
               <div className="tabs-image">
                 <img src={config.imagepath + "suppliers.png"} alt="" />

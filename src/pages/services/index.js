@@ -213,7 +213,7 @@ const Services = () => {
               </div>
               {tabview && tabview == "service" ? (
                 <div className={"search-result dropdown-box " + isSearchListService} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewService.data && isSuggetionViewService.data.length ? isSuggetionViewService.data.length : "0"} next={fetchDataSuggetionListService} scrollableTarget="search-content" hasMore={isSuggetionViewService.next_page_url ? true : false} loader={<PaginationLoader />}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewService && isSuggetionViewService.data && isSuggetionViewService.data.length ? isSuggetionViewService.data.length : "0"} next={fetchDataSuggetionListService} scrollableTarget="search-content" hasMore={isSuggetionViewService.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <ServiceSuggetionListView view={isSuggetionViewService} />
                     </ul>
@@ -221,7 +221,7 @@ const Services = () => {
                 </div>
               ) : (
                 <div className={"search-result dropdown-box " + isSearchListCategory} id="search-content">
-                  <InfiniteScroll className="" dataLength={isSuggetionViewCategory.data && isSuggetionViewCategory.data.length ? isSuggetionViewCategory.data.length : "0"} next={fetchDataSuggetionListCategory} scrollableTarget="search-content" hasMore={isSuggetionViewCategory.next_page_url ? true : false} loader={<PaginationLoader />}>
+                  <InfiniteScroll className="" dataLength={isSuggetionViewCategory && isSuggetionViewCategory.data && isSuggetionViewCategory.data.length ? isSuggetionViewCategory.data.length : "0"} next={fetchDataSuggetionListCategory} scrollableTarget="search-content" hasMore={isSuggetionViewCategory.next_page_url ? true : false} loader={<PaginationLoader />}>
                     <ul className="p-0 m-0 list-unstyled">
                       <CategorySuggetionListView view={isSuggetionViewCategory} />
                     </ul>
