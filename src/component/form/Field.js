@@ -40,6 +40,17 @@ const InputField = ({ label, controlId, ...props }) => {
   );
 };
 
+const InlineInputField = ({ label, controlId, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <Form.Label className="mb-0 me-3">{label}</Form.Label>
+      {field.name === "phone_number" || field.name === "business_phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} />}
+      {meta.touched && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
+    </>
+  );
+};
+
 const TextareaField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -311,6 +322,11 @@ InputField.propTypes = {
   controlId: PropTypes.string,
 };
 
+InlineInputField.propTypes = {
+  label: PropTypes.string,
+  controlId: PropTypes.string,
+};
+
 SelectField.propTypes = {
   label: PropTypes.string,
   controlId: PropTypes.string,
@@ -367,4 +383,4 @@ DatePickerField.propTypes = {
   classname: PropTypes.string,
 };
 
-export { FloatLabelInputField, InputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, InputCheckbox, SwitchField, InputFieldImage, DatePickerField };
+export { FloatLabelInputField, InputField, InlineInputField, SelectField, ReactSelectField, MapAddressField, TextareaField, CheckboxField, InputCheckbox, SwitchField, InputFieldImage, DatePickerField };

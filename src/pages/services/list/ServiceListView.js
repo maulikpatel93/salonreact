@@ -32,7 +32,7 @@ const ServiceListView = (props) => {
           const status = action.payload && action.payload.status;
           const appointment = action.payload && action.payload.message && action.payload.message.appointment;
           if (status === 410) {
-            sweatalert({ title: `<h4 class="text-danger">${t("This service has not been deleted as {{ appointmenttotal }} appointments have already been booked for this service.", {appointmenttotal:appointment})}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
+            sweatalert({ title: `<h4 class="text-danger">${t("This service has not been deleted as {{ appointmenttotal }} appointments have already been booked for this service.", { appointmenttotal: appointment })}</h4>`, text: t("Uploaded successfully"), icon: "warning" });
           }
         }
       });
@@ -76,7 +76,8 @@ const ServiceListView = (props) => {
               {serviceprice &&
                 Object.keys(serviceprice).map((sp) => {
                   let price = serviceprice[sp].price;
-                  return <td key={sp}>{"$ " + price}</td>;
+                  let add_on_price = serviceprice[sp].add_on_price;
+                  return <td key={sp}>{"$ " + (parseFloat(price) + parseFloat(add_on_price))}</td>;
                 })}
               <td>{category_name}</td>
               <td>

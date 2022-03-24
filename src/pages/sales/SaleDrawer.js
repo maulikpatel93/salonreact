@@ -5,6 +5,7 @@ import config from "../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName } from "store/slices/saleSlice";
+import { clientSearchName, clientSearchObj } from "store/slices/clientSlice";
 import PaginationLoader from "component/PaginationLoader";
 import SaleAddForm from "./Form/SaleAddForm";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
@@ -40,6 +41,9 @@ const SaleDrawer = () => {
   }, [tabview]);
 
   const handleCloseAddsaleForm = () => {
+    dispatch({ type: "sale/reset" });
+    dispatch(clientSearchName(""));
+    dispatch(clientSearchObj(""));
     dispatch(closeAddSaleForm());
   };
 
@@ -213,7 +217,7 @@ const SaleDrawer = () => {
                       <div className={"tab-pane" + (tabview && tabview === "products" ? " show active" : "")} id="product">
                         <InfiniteScroll className="" dataLength={isProducts && isProducts.data && isProducts.data.length ? isProducts.data.length : "0"} next={fetchDataSaleProduct} scrollableTarget="product" hasMore={isProducts.next_page_url ? true : false} loader={<PaginationLoader />}>
                           <div className="table-responsive bg-white">
-                            <table className="table mb-0">
+                            <table className="table table-hover mb-0">
                               <tbody>
                                 <SaleProductListView view={isProducts} />
                                 {isProducts.length <= 0 && (

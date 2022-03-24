@@ -1,13 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "../../../helpers/functions";
+import { SaleServiceToCartApi } from "store/slices/saleSlice";
 
 const SaleServiceListView = (props) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const view = props.view;
   const searchname = props.searchname;
   const objectData = view && view.data ? view.data : view;
+
+  const handleServiceClick = (e) => {
+    const servicedata = JSON.parse(e.currentTarget.dataset.obj);
+    const service_id = servicedata.id;
+    dispatch(SaleServiceToCartApi({ service_id: service_id }));
+  };
   return (
     <>
       <div className="accordion" id="accordionExample">
@@ -33,7 +42,7 @@ const SaleServiceListView = (props) => {
                           let generalPrice = service_price.filter((x) => x.name == "General");
                           let gprice = generalPrice.length === 1 && generalPrice[0].price;
                           return (
-                            <li key={item + itemservice}>
+                            <li key={item + itemservice} className="cursor-pointer" data-obj={JSON.stringify(servicesData[itemservice])} onClick={handleServiceClick}>
                               <div className="row">
                                 <div className="col-md-6">
                                   <label htmlFor="" className="mb-0 fw-semibold">

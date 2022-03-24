@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
 import { checkaccess, ucfirst } from "helpers/functions";
-import { clientSearchName, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
+import { clientSearchName, clientSearchObj, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
 import { busytimeDetailApi, busytimeListViewApi, closeAddBusytimeForm, closeEditBusytimeForm, openAddBusytimeForm, openEditBusytimeForm } from "store/slices/busytimeSlice";
 import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, closeAppointmentDetailModal, closeEditAppointmentForm, closeRescheduleAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
@@ -242,6 +242,9 @@ const Calendar = () => {
     dispatch(openAddClientForm());
   };
   const handleSaleDrawer = () => {
+    dispatch({ type: "sale/reset" });
+    dispatch(clientSearchName(""));
+    dispatch(clientSearchObj(""));
     dispatch(openAddSaleForm());
   };
 

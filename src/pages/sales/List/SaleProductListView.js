@@ -1,12 +1,20 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 
 import { ucfirst } from "../../../helpers/functions";
+import { SaleProductToCartApi } from "store/slices/saleSlice";
 
 const SaleServiceListView = (props) => {
+  const dispatch = useDispatch();
   const view = props.view;
   const objectData = view && view.data ? view.data : view;
 
+  const handleProductClick = (e) => {
+    const productdata = JSON.parse(e.currentTarget.dataset.obj);
+    const product_id = productdata.id;
+    dispatch(SaleProductToCartApi({ product_id: product_id }));
+  };
   return (
     <>
       {objectData &&
@@ -18,7 +26,7 @@ const SaleServiceListView = (props) => {
           // let stock_quantity = objectData[item].stock_quantity;
           let image_url = objectData[item].image_url;
           return (
-            <tr className="product-view-tr" key={i} data-id={id}>
+            <tr className="product-view-tr cursor-pointer" key={i} data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleProductClick}>
               <td>
                 <div className="row align-items-center flex-nowrap">
                   <div className="pro-img">
@@ -37,7 +45,7 @@ const SaleServiceListView = (props) => {
                   </div>
                 </div>
               </td>
-              <td>{retail_price}</td>
+              <td>${retail_price}</td>
             </tr>
           );
         })}

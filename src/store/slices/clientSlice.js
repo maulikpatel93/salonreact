@@ -161,7 +161,7 @@ const clientSlice = createSlice({
     },
     clientSearchObj: (state, action) => {
       state.isSearchObj = action.payload;
-    },
+    }
   },
   extraReducers: {
     [clientStoreApi.pending]: () => {},

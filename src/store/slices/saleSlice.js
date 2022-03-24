@@ -94,6 +94,32 @@ export const SaleProductApi = createAsyncThunk("sale/products", async (formValue
   }
 });
 
+export const SaleServiceToCartApi = createAsyncThunk("sale/servicetocart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .services(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "servicetocart"))
+      .catch((error) => HandleError(thunkAPI, error, "servicetocart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const SaleProductToCartApi = createAsyncThunk("sale/producttocart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .products(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "producttocart"))
+      .catch((error) => HandleError(thunkAPI, error, "producttocart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedDetailModal: "",
@@ -106,7 +132,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: "",
+  isCart: { services: [], products: [] },
 };
 
 const saleSlice = createSlice({
@@ -138,6 +164,14 @@ const saleSlice = createSlice({
     },
     SaleServiceSearchName: (state, action) => {
       state.isServiceSearchName = action.payload;
+    },
+    SaleServiceRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isCart.services = state.isCart.services ? state.isCart.services.filter((item) => item.id != id) : [];
+    },
+    SaleProductRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isCart.products = state.isCart.products ? state.isCart.products.filter((item) => item.id != id) : [];
     },
   },
   extraReducers: {
@@ -219,8 +253,40 @@ const saleSlice = createSlice({
     [SaleProductApi.rejected]: (state) => {
       state.isProducts = [];
     },
+    [SaleServiceToCartApi.pending]: () => {},
+    [SaleServiceToCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.services.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const services = [...state.isCart.services, action.payload];
+        state.isCart.services = services;
+      }
+    },
+    [SaleServiceToCartApi.rejected]: (state) => {
+      state.isCart.services = "";
+    },
+    [SaleProductToCartApi.pending]: () => {},
+    [SaleProductToCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.products.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const products = [...state.isCart.products, action.payload];
+        state.isCart.products = products;
+      }
+    },
+    [SaleProductToCartApi.rejected]: (state) => {
+      state.isCart.products = "";
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName } = saleSlice.actions;
+export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart } = saleSlice.actions;
 export default saleSlice.reducer;
