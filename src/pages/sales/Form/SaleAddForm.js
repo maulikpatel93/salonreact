@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import { ucfirst } from "helpers/functions";
+import PropTypes from "prop-types";
 // validation Formik
 import * as Yup from "yup";
-import { Formik, FieldArray, Field } from "formik";
+import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { decimalOnly, digitOnly } from "../../../component/form/Validation";
@@ -16,8 +17,9 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName, clientSearchObj } from "store/slices/clientSlice";
 import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
 import { InputField, InlineInputField, TextareaField, ReactSelectField } from "component/form/Field";
+import moment from "moment";
 
-const SaleAddForm = () => {
+const SaleAddForm = (props) => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -28,6 +30,7 @@ const SaleAddForm = () => {
   const isSearchNameClient = useSelector((state) => state.client.isSearchName);
   const isSearchObjClient = useSelector((state) => state.client.isSearchObj);
   const SuggetionViewClient = useSelector((state) => state.client.isSuggetionListView);
+  const appointmentDetail = props.appointmentDetail;
 
   const isCart = useSelector((state) => state.sale.isCart);
 
@@ -35,7 +38,7 @@ const SaleAddForm = () => {
     client_id: "",
     client_name: "",
     notes: "",
-    cart: { services: [{ id: "", staff_id: "", gprice: "" }], products: [{ id: "", qty: "", cost_price: "" }] },
+    cart: { services: [{ id: "", staff_id: "", gprice: "" }], products: [{ id: "", qty: "", cost_price: "" }], appointment: [{ id: "" }] },
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
@@ -52,8 +55,13 @@ const SaleAddForm = () => {
       products: Yup.array().of(
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
-          qty: Yup.string().trim().label(t("Quantity")).required().test("Digits only", t("The field should have digits only"), digitOnly).nullable(),
+          qty: Yup.string().trim().label(t("Quantity")).min(1).required().test("Digits only", t("The field should have digits only"), digitOnly),
           cost_price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+        }),
+      ),
+      appointment: Yup.array().of(
+        Yup.object().shape({
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
         }),
       ),
     }),
@@ -132,22 +140,47 @@ const SaleAddForm = () => {
   const handleClientAddForm = () => {
     dispatch(openAddClientForm());
   };
+
+  console.log(appointmentDetail);
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlesaleSubmit}>
         {(formik) => {
           useEffect(() => {
+            console.log(isCart);
+            console.log(appointmentDetail);
             if (isCart && isCart.services.length > 0) {
               Object.keys(isCart.services).map((item) => {
+                let service_id = isCart.services[item].id;
                 let service_price = isCart.services[item].serviceprice;
                 let generalPrice = service_price.filter((x) => x.name == "General");
                 let gprice = generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+                let add_on_price = generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+                let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
                 // let staffservices = isCart.services[item].staffservices;
-                formik.setFieldValue("cart[services[" + item + "][gprice]]", gprice);
-                formik.setFieldValue("cart[products[" + item + "][retail]]", gprice);
+                formik.setFieldValue("cart[services[" + item + "][id]]", service_id);
+                formik.setFieldValue("cart[services[" + item + "][staff_id]]", "");
+                formik.setFieldValue("cart[services[" + item + "][gprice]]", totalprice);
               });
             }
-          }, [isCart]);
+            if (isCart && isCart.products.length > 0) {
+              Object.keys(isCart.products).map((item) => {
+                let product_id = isCart.products[item].id;
+                let product_retail_price = isCart.products[item].retail_price;
+                formik.setFieldValue("cart[products[" + item + "][id]]", product_id);
+                formik.setFieldValue("cart[products[" + item + "][qty]]", "1");
+                formik.setFieldValue("cart[products[" + item + "][retail]]", product_retail_price);
+              });
+            }
+            if (appointmentDetail) {
+              formik.setFieldValue("client_id", appointmentDetail.client_id);
+              formik.setFieldValue("cart[appointment[0][id]]", appointmentDetail.id);
+              // dispatch(clientSearchName(appointmentDetail.client && ));
+              dispatch(clientSearchObj(appointmentDetail.client));
+              dispatch(clientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
+            }
+          }, [isCart, appointmentDetail]);
+          let totalprice = 0;
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className={isSearchObjClient ? "add-item-panel p-4" : "search-panel p-4"}>
@@ -173,7 +206,7 @@ const SaleAddForm = () => {
                                 handleCloseSearchClient();
                               }}
                             >
-                              <i className="fal fa-times"></i>
+                              {appointmentDetail ? "" : <i className="fal fa-times"></i>}
                             </a>
                           </h3>
                           <span>{isSearchObjClient && isSearchObjClient.email}</span>
@@ -229,19 +262,36 @@ const SaleAddForm = () => {
                 )}
                 <InputField type="hidden" name="client_id" id="saleForm-client_id" />
               </div>
-              {isCart && (isCart.services.length > 0 || isCart.products.length > 0) ? (
+              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0)) ? (
                 <div className="p-4 newsale-probox">
-                  {isCart.services.length > 0 &&
+                  {appointmentDetail && (
+                    <div className="product-box mt-0 mb-3">
+                      <div className="product-header" id="#checkout-probox">
+                        <div className="row">
+                          <div className="col-9">
+                            <h4 className="mb-0 fw-semibold">{appointmentDetail.service.name}</h4>
+                            <p className="mb-0">{t("With {{ staff_name }} from {{ start_time }} - {{ end_time }}", { staff_name: ucfirst(appointmentDetail.staff.first_name + " " + appointmentDetail.staff.last_name), start_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.start_time).format("hh:mm A"), end_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.end_time).format("hh:mm A") })} </p>
+                            <div className="d-none">
+                              <InputField type="hidden" name="cart[appointment[0][id]]" id={`"salonform-cart-appointment-0-id"`} />
+                            </div>
+                          </div>
+                          <h4 className="col-3 mb-0 text-end">${appointmentDetail.cost}</h4>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {isCart &&
+                    isCart.services.length > 0 &&
                     Object.keys(isCart.services).map((item) => {
                       let service_id = isCart.services[item].id;
                       let service_name = isCart.services[item].name;
-                      let service_price = isCart.services[item].serviceprice;
-                      let generalPrice = service_price.filter((x) => x.name == "General");
-                      let gprice = generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+                      // let service_price = isCart.services[item].serviceprice;
+                      // let generalPrice = service_price.filter((x) => x.name == "General");
+                      // let gprice = generalPrice.length === 1 ? generalPrice[0].price : "0.00";
                       let staffservices = isCart.services[item].staffservices;
-                      let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice;
-                      let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id;
-                     
+                      let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice ? formik.values.cart.services[item].gprice : "0.00";
+                      let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
+                      totalprice += isNaN(parseFloat(formik_cart_service_gprice)) === false && parseFloat(formik_cart_service_gprice);
                       let staffOptionsData = [];
                       if (staffservices.length > 0) {
                         Object.keys(staffservices).map((staffindex) => {
@@ -263,7 +313,7 @@ const SaleAddForm = () => {
                               <div className="col-9">
                                 <h4 className="mb-0 fw-semibold">{service_name}</h4>
                               </div>
-                              <h4 className="col-3 mb-0 text-end">${gprice}</h4>
+                              <h4 className="col-3 mb-0 text-end">${formik_cart_service_gprice}</h4>
                             </div>
                           </div>
                           <div className=" d-block" id="checkout-probox">
@@ -273,7 +323,7 @@ const SaleAddForm = () => {
                                   <ReactSelectField name={`cart[services[${item}][staff_id]]`} placeholder={t("Choose Staff")} value={formik_cart_service_staff_id} options={staffOptionsData} label={t("Staff")} controlId={`"salonform-cart-services-${item}-staff_id"`} isMulti={false} />
                                 </div>
                                 <div className="col-md-4 price-input align-items-center mt-1">
-                                  <InputField type="text" name={`cart[services[${item}][gprice]]`} value={formik_cart_service_gprice} label={t("Cost")} controlId="saleForm-name" page={"saleform"} />
+                                  <InputField type="text" name={`cart[services[${item}][gprice]]`} value={formik_cart_service_gprice} label={t("Cost")} controlId={`"salonform-cart-services-${item}-cost"`} page={"saleform"} />
                                 </div>
                               </div>
                             </div>
@@ -281,13 +331,18 @@ const SaleAddForm = () => {
                         </div>
                       );
                     })}
-                  {isCart.products.length > 0 &&
+                  {isCart &&
+                    isCart.products.length > 0 &&
                     Object.keys(isCart.products).map((item) => {
                       let product_id = isCart.products[item].id;
                       let product_name = isCart.products[item].name;
                       // let cost_price = isCart.products[item].cost_price;
                       let retail_price = isCart.products[item].retail_price;
                       let image_url = isCart.products[item].image_url;
+
+                      let formik_cart_products_qty = formik.values.cart && formik.values.cart.products.length > 0 && formik.values.cart.products[item] && formik.values.cart.products[item].qty ? formik.values.cart.products[item].qty : "1";
+                      let product_price = formik_cart_products_qty > 0 ? parseInt(formik_cart_products_qty) * parseFloat(retail_price) : retail_price;
+                      totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
                       return (
                         <div className="product-box mt-0 mb-3 ps-2" key={item}>
                           <div className="product-header" id="#checkout-probox">
@@ -311,13 +366,10 @@ const SaleAddForm = () => {
                                   <div className="col-9">
                                     <h4 className="mb-2 fw-semibold">{ucfirst(product_name)}</h4>
                                     <div className="qty d-flex align-items-center">
-                                      <label htmlFor="" className="mb-0 me-3">
-                                        Qty
-                                      </label>
-                                      <input type="text" defaultValue="1" className="form-control" />
+                                      <InlineInputField type="text" name={`cart[products[${item}][qty]]`} value={formik_cart_products_qty} label={t("Qty")} controlId={`"salonform-cart-products-${item}-qty"`} page={"saleform"} />
                                     </div>
                                   </div>
-                                  <h4 className="col-3 mb-0 text-end">${retail_price}</h4>
+                                  <h4 className="col-3 mb-0 text-end">${product_price}</h4>
                                 </div>
                               </div>
                             </div>
@@ -339,54 +391,54 @@ const SaleAddForm = () => {
               </div>
               <div className="full-screen-drawer-footer payment-option">
                 <div className="px-4 d-flex py-3 total">
-                  <span className="h2 pe-2 mb-0">Total</span>
-                  <span className="h2 text-end ms-auto mb-0">$120</span>
+                  <span className="h2 pe-2 mb-0">{t("Total")}</span>
+                  <span className="h2 text-end ms-auto mb-0">${totalprice}</span>
                 </div>
                 <div className="p-4">
                   <div className="row">
                     <div className="col">
-                      <a href="#" id="payment-link" className="btn-dark btn-lg w-100">
-                        Paid by Credit Card
-                      </a>
+                      <button type="submit" id="payment-link" className="btn btn-dark btn-lg w-100" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
+                        {t("Paid by Credit Card")}
+                      </button>
                     </div>
                     <div className="col">
-                      <a href="#" className="btn-dark btn-lg w-100">
-                        Paid by Cash
-                      </a>
+                      <button type="submit" className="btn btn-dark btn-lg w-100" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
+                        {t("Paid by Cash")}
+                      </button>
                     </div>
                     <div className="col-lg mt-lg-0 mt-2">
-                      <a href="#" className="btn-dark btn-lg w-100 pay-voucher">
-                        Pay by Voucher
-                      </a>
+                      <button type="submit" className="btn btn-dark btn-lg w-100 pay-voucher" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
+                        {t("Pay by Voucher")}
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="full-screen-drawer-footer" style={{ display: "none" }} id="paybycreditcard">
+              <div className="full-screen-drawer-footer" id="paybycreditcard">
                 <ul className="list-unstyled mb-0">
                   <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0">Total</span>
+                    <span className="h3 pe-2 mb-0">{t("Total")}</span>
+                    <span className="h3 text-end ms-auto mb-0">${totalprice}</span>
+                  </li>
+                  <li className="px-4 d-flex py-3 border-bottom">
+                    <span className="h3 pe-2 mb-0">{t("Paid by Credit Card")}</span>
                     <span className="h3 text-end ms-auto mb-0">$120</span>
                   </li>
                   <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0">Payment by Credit Card</span>
-                    <span className="h3 text-end ms-auto mb-0">$120</span>
-                  </li>
-                  <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0 fw-semibold">Balance</span>
+                    <span className="h3 pe-2 mb-0 fw-semibold">{t("Balance")}</span>
                     <span className="h3 text-end ms-auto mb-0 fw-semibold">$0</span>
                   </li>
                 </ul>
                 <div className="p-4">
-                  <a href="#" id="salecomplete-invoice-link" className="w-100 btn btn-lg">
-                    Click To Complete Sale
-                  </a>
+                  <button type="submit" id="salecomplete-invoice-link" className="w-100 btn btn-primary btn-lg" disabled={loading}>
+                    {loading && <span className="spinner-border spinner-border-sm"></span>}
+                    {t("Click To Complete Sale")}
+                  </button>
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading && <span className="spinner-border spinner-border-sm"></span>}
-                {t("Save")}
-              </button>
             </form>
           );
         }}
@@ -394,5 +446,7 @@ const SaleAddForm = () => {
     </React.Fragment>
   );
 };
-
+SaleAddForm.propTypes = {
+  appointmentDetail: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+};
 export default SaleAddForm;

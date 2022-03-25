@@ -213,9 +213,12 @@ const AppointmentAddForm = (props) => {
           useEffect(() => {
             if (isServicePrice) {
               let duration = isServicePrice.duration ? MinutesToHours(isServicePrice.duration) : "";
-              let cost = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              let generalPrice = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+              let add_on_price = generalPrice && generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+              let cost = parseFloat(gprice) + parseFloat(add_on_price);
               formik.setFieldValue("duration", duration);
-              formik.setFieldValue("cost", cost ? cost[0].price : "");
+              formik.setFieldValue("cost", cost);
               formik.setFieldValue("staff_id", "");
             }
             if (client) {

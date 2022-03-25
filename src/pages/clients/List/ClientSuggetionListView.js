@@ -54,7 +54,7 @@ const ClientSuggetionListView = (props) => {
           );
         })}
 
-      {objectData.length <= 0 ? <li>{t("No data found")}</li> : ""}
+      {objectData.length <= 0 ? <li className="fw-bold ps-3">{t("No data found")}</li> : ""}
     </>
   );
 };

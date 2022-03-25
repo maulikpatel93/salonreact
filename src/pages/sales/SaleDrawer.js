@@ -22,6 +22,7 @@ const SaleDrawer = () => {
   const isServiceSearchName = useSelector((state) => state.sale.isServiceSearchName);
   const isProducts = useSelector((state) => state.sale.isProducts);
   const isProductSearchName = useSelector((state) => state.sale.isProductSearchName);
+  const isAppointmentDetail = useSelector((state) => state.sale.isAppointmentDetail);
 
   useEffect(() => {
     if (tabview === "services") {
@@ -260,7 +261,7 @@ const SaleDrawer = () => {
                 </div>
               </div>
               <div className="col-md-6 px-0 right-col flex-column justify-content-between d-flex flex-wrap">
-                <SaleAddForm />
+                <SaleAddForm appointmentDetail={isAppointmentDetail} />
               </div>
             </div>
           </div>

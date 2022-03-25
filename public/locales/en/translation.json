@@ -431,5 +431,14 @@
     "Search Product": "Search Product",
     "Search Voucher": "Search Voucher",
     "Retail price cannot be greater than the cost price": "Retail price cannot be greater than the cost price",
-    "Stock quantity": "Stock quantity"
+    "Stock quantity": "Stock quantity",
+    "Quantity": "Quantity",
+    "ID": "ID",
+    "Qty": "Qty",
+    "Total": "Total",
+    "Paid by Credit Card": "Paid by Credit Card",
+    "Paid by Cash": "Paid by Cash",
+    "Pay by Voucher": "Pay by Voucher",
+    "Balance": "Balance",
+    "With {{ staff_name }} from {{ start_time }} - {{ end_time }}": "With {{ staff_name }} from {{ start_time }} - {{ end_time }}"
 }

@@ -132,7 +132,9 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [] },
+  isCart: { appointment: [], services: [], products: [] },
+  isCartTotalPrice: [],
+  isAppointmentDetail: "",
 };
 
 const saleSlice = createSlice({
@@ -172,6 +174,9 @@ const saleSlice = createSlice({
     SaleProductRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.products = state.isCart.products ? state.isCart.products.filter((item) => item.id != id) : [];
+    },
+    AppointmentDetail: (state, action) => {
+      state.isAppointmentDetail = action.payload;
     },
   },
   extraReducers: {
@@ -288,5 +293,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart } = saleSlice.actions;
+export const { reset, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail } = saleSlice.actions;
 export default saleSlice.reducer;

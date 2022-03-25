@@ -7,6 +7,7 @@ import { ucfirst } from "helpers/functions";
 import { appointmentDetailApi, openEditAppointmentForm } from "store/slices/appointmentSlice";
 import { serviceOptions, servicePriceApi } from "store/slices/serviceSlice";
 import { staffOptions } from "store/slices/staffSlice";
+import { AppointmentDetail, openAddSaleForm } from "store/slices/saleSlice";
 import Moment from "react-moment";
 import { swalConfirm, sweatalert } from "component/Sweatalert2";
 import PropTypes from "prop-types";
@@ -26,7 +27,7 @@ const AppointmentDetailDrawer = (props) => {
   const appointmentDetail = useSelector((state) => state.appointment.isDetailData);
 
   const id = appointmentDetail.id;
-  const date = appointmentDetail.date;
+  const dateof = appointmentDetail.dateof;
   const start_time = appointmentDetail.start_time;
   const end_time = appointmentDetail.end_time;
   const cost = appointmentDetail.cost;
@@ -86,6 +87,14 @@ const AppointmentDetailDrawer = (props) => {
     // dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
 
+  const handleCheckout = () => {
+    dispatch({ type: "sale/reset" });
+    // dispatch(clientSearchName(""));
+    // dispatch(clientSearchObj(""));
+    dispatch(AppointmentDetail(appointmentDetail));
+    dispatch(openAddSaleForm());
+  };
+
   const handleStatusUpdate = (e) => {
     let statusmsg = "schedule";
     if (e.currentTarget.value === "Scheduled") {
@@ -112,6 +121,7 @@ const AppointmentDetailDrawer = (props) => {
       });
     }
   };
+
   return (
     <>
       <div className={"drawer appointment-detail " + rightDrawerOpened} id="addclient-drawer">
@@ -205,15 +215,15 @@ const AppointmentDetailDrawer = (props) => {
           </div>
           <div className="drawer-body pb-md-5 pb-3">
             <h3 className="mb-2">
-              <Moment format="dddd, MMMM Do YYYY">{date}</Moment>
+              <Moment format="dddd, MMMM Do YYYY">{dateof}</Moment>
             </h3>
             <h5 className="mb-1 fw-normal">
               {service.name} - {"$" + cost}
             </h5>
             <h6 className="mb-1">{ucfirst(staff.first_name + " " + staff.last_name)}</h6>
             <h6 className="mb-1">
-              <Moment format="hh:mm A">{date + "T" + start_time}</Moment> <span className="ms-1 me-1">-</span>
-              <Moment format="hh:mm A">{date + "T" + end_time}</Moment>
+              <Moment format="hh:mm A">{dateof + "T" + start_time}</Moment> <span className="ms-1 me-1">-</span>
+              <Moment format="hh:mm A">{dateof + "T" + end_time}</Moment>
             </h6>
             <div className="mt-3 mb-3">
               <label>{t("Status")}</label>
@@ -240,7 +250,9 @@ const AppointmentDetailDrawer = (props) => {
                 <a className="btn btn-secondary btn-lg text-dark cursor-pointer me-3" onClick={handleDeleteAppointment}>
                   <i className="fas fa-trash-alt p-0"></i>
                 </a>
-                <a className="btn btn-primary btn-lg cursor-pointer w-75">{t("Checkout")}</a>
+                <a className="btn btn-primary btn-lg cursor-pointer w-75" onClick={handleCheckout}>
+                  {t("Checkout")}
+                </a>
               </div>
             </div>
           </div>
