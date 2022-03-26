@@ -440,5 +440,9 @@
     "Paid by Cash": "Paid by Cash",
     "Pay by Voucher": "Pay by Voucher",
     "Balance": "Balance",
-    "With {{ staff_name }} from {{ start_time }} - {{ end_time }}": "With {{ staff_name }} from {{ start_time }} - {{ end_time }}"
+    "With {{ staff_name }} from {{ start_time }} - {{ end_time }}": "With {{ staff_name }} from {{ start_time }} - {{ end_time }}",
+    "subscriptions": "subscriptions",
+    "reports": "reports",
+    "products": "products",
+    "marketing": "marketing"
 }

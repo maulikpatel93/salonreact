@@ -10,7 +10,11 @@ const create = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    formData.append(value, values[value]);
+    if (["cart"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
+    } else {
+      formData.append(value, values[value]);
+    }
   }
   const action = "afterlogin/sale/store";
   formData.append("auth_key", auth_key);

@@ -44,9 +44,11 @@ const InlineInputField = ({ label, controlId, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Label className="mb-0 me-3">{label}</Form.Label>
-      {field.name === "phone_number" || field.name === "business_phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} />}
-      {meta.touched && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
+      <div className="d-flex">
+        <Form.Label className="mb-0 me-3">{label}</Form.Label>
+        {field.name === "phone_number" || field.name === "business_phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} id={controlId} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} id={controlId} />}
+      </div>
+      {meta.touched && <Form.Control.Feedback type="invalid" className="d-block">{meta.error}</Form.Control.Feedback>}
     </>
   );
 };
