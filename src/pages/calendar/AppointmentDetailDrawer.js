@@ -35,6 +35,9 @@ const AppointmentDetailDrawer = (props) => {
   const client = appointmentDetail.client;
   const service = appointmentDetail.service;
   const staff = appointmentDetail.staff;
+  const showdate = appointmentDetail.showdate;
+  const repeats = appointmentDetail.repeats;
+  const sale = appointmentDetail.sale;
 
   const client_id = client.id;
   const profile_photo_url = client.profile_photo_url;
@@ -52,10 +55,11 @@ const AppointmentDetailDrawer = (props) => {
     textColor = "";
   } else if (status === "Confirmed") {
     textColor = "text-warning";
-  } else if (status === "Completed") {
-    textColor = "text-success";
   } else if (status === "Cancelled") {
     textColor = "text-danger";
+  }
+  if (sale && sale.status === "Paid") {
+    textColor = "text-success";
   }
 
   const handleDeleteAppointment = (e) => {
@@ -178,11 +182,11 @@ const AppointmentDetailDrawer = (props) => {
                   <span className="d-block">{t("Edit")}</span>
                 </a>
               )}
-              {status && status === "Confirmed" && (
+              {status && status === "Confirmed" && sale && sale.status !== "Paid" && (repeats === "No" || (repeats === "Yes" && dateof === showdate)) && (
                 <a
                   className="col text-center text-decoration-none cursor-pointer"
                   onClick={() => {
-                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                    dispatch(appointmentDetailApi({ id, client_id, showdate: showdate })).then((action) => {
                       if (action.meta.requestStatus === "fulfilled") {
                         dispatch(openRescheduleAppointmentForm());
                       } else if (action.meta.requestStatus === "rejected") {
@@ -215,7 +219,7 @@ const AppointmentDetailDrawer = (props) => {
           </div>
           <div className="drawer-body pb-md-5 pb-3">
             <h3 className="mb-2">
-              <Moment format="dddd, MMMM Do YYYY">{dateof}</Moment>
+              <Moment format="dddd, MMMM Do YYYY">{showdate}</Moment>
             </h3>
             <h5 className="mb-1 fw-normal">
               {service.name} - {"$" + cost}
@@ -239,23 +243,25 @@ const AppointmentDetailDrawer = (props) => {
                     })}
                 </select>
               ) : (
-                <h5 className={textColor + " fw-bold"}>{status}</h5>
+                <h5 className={textColor + " fw-bold"}>{sale && sale.status === "Paid" ? t("Completed") : status}</h5>
               )}
             </div>
             <p className="mb-2 text-jusitfy">{t("Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.", { start_time: "09:15Am", end_time: "10::00Pm", staff_name: "Amanda" })}</p>
           </div>
-          <div className="drawer-footer text-center pt-3">
-            <div className="row">
-              <div className="col-12">
-                <a className="btn btn-secondary btn-lg text-dark cursor-pointer me-3" onClick={handleDeleteAppointment}>
-                  <i className="fas fa-trash-alt p-0"></i>
-                </a>
-                <a className="btn btn-primary btn-lg cursor-pointer w-75" onClick={handleCheckout}>
-                  {t("Checkout")}
-                </a>
+          {sale && sale.status !== "Paid" && (
+            <div className="drawer-footer text-center pt-3">
+              <div className="row">
+                <div className="col-12">
+                  <a className="btn btn-secondary btn-lg text-dark cursor-pointer me-3" onClick={handleDeleteAppointment}>
+                    <i className="fas fa-trash-alt p-0"></i>
+                  </a>
+                  <a className="btn btn-primary btn-lg cursor-pointer w-75" onClick={handleCheckout}>
+                    {t("Checkout")}
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

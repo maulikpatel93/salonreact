@@ -16,6 +16,8 @@ import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { Notify } from "component/Toastr";
+import Moment from "react-moment";
 
 const AppointmentRescheduleForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -74,8 +76,29 @@ const AppointmentRescheduleForm = (props) => {
             } else if (action.meta.requestStatus === "rejected") {
               const status = action.payload && action.payload.status;
               const errors = action.payload && action.payload.message && action.payload.message.errors;
+              const response = action.payload && action.payload.message && action.payload.message;
               if (status === 422) {
                 setErrors(errors);
+              } else if (status === 410) {
+                const NotifyContent = () => {
+                  return (
+                    <>
+                      <p className="mb-2 text-white text-justify">{response && response.message}</p>
+                      {response && response.booked && (
+                        <ul className="list-unstyled">
+                          {response.booked.map((a, n) => (
+                            <li key={n} className="text-light form-text">
+                              <Moment format="MMMM DD YYYY">{a.showdate}</Moment>, <Moment format="hh:mm A">{a.showdate + "T" + a.start_time}</Moment> - <Moment format="hh:mm A">{a.showdate + "T" + a.end_time}</Moment>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </>
+                  );
+                };
+                Notify({ text: <NotifyContent />, title: response && response.message, type: "error" });
+                setStatus({ warning: response && response.message, booked: response && response.booked });
+                setLoading(false);
               }
               setStatus({ success: false });
               setSubmitting(false);

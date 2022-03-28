@@ -132,7 +132,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { appointment: [], services: [], products: [] },
+  isCart: { services: [], products: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
 };

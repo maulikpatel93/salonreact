@@ -12,12 +12,15 @@ import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { decimalOnly, digitOnly } from "../../../component/form/Validation";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi } from "../../../store/slices/saleSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName, clientSearchObj } from "store/slices/clientSlice";
-import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
 import { InputField, InlineInputField, TextareaField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
+
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm } from "../../../store/slices/saleSlice";
+import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName, clientSearchObj } from "store/slices/clientSlice";
+import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
+import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
+import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
 
 const SaleAddForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -26,6 +29,7 @@ const SaleAddForm = (props) => {
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
+  const isRangeInfo = props.isRangeInfo;
   const isSearchListClient = useSelector((state) => state.client.isSearchList);
   const isSearchNameClient = useSelector((state) => state.client.isSearchName);
   const isSearchObjClient = useSelector((state) => state.client.isSearchObj);
@@ -38,7 +42,9 @@ const SaleAddForm = (props) => {
     client_id: "",
     client_name: "",
     notes: "",
-    cart: { services: [], products: [], appointment: [] },
+    cart: { services: [], products: [] },
+    appointment_id: "",
+    invoicedate: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
@@ -69,15 +75,19 @@ const SaleAddForm = (props) => {
   yupconfig();
 
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    console.log(handlesaleSubmit);
     setLoading(true);
     try {
       dispatch(saleStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
-          dispatch(closeAddsaleForm());
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          dispatch(closeAddSaleForm());
+          dispatch(closeAppointmentDetailModal());
+          sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
+          if (isRangeInfo) {
+            dispatch(appointmentListViewApi(isRangeInfo));
+            dispatch(busytimeListViewApi(isRangeInfo));
+          }
           if (scriptedRef.current) {
             setLoading(false);
           }
@@ -156,9 +166,10 @@ const SaleAddForm = (props) => {
                 let add_on_price = generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
                 let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
                 let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice ? formik.values.cart.services[item].gprice : totalprice;
+                let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
                 // let staffservices = isCart.services[item].staffservices;
                 formik.setFieldValue("cart[services][" + item + "][id]", service_id);
-                formik.setFieldValue("cart[services][" + item + "][staff_id]", "");
+                formik.setFieldValue("cart[services][" + item + "][staff_id]", formik_cart_service_staff_id);
                 formik.setFieldValue("cart[services][" + item + "][gprice]", String(formik_cart_service_gprice));
               });
             }
@@ -177,7 +188,8 @@ const SaleAddForm = (props) => {
             }
             if (appointmentDetail) {
               formik.setFieldValue("client_id", appointmentDetail.client_id);
-              formik.setFieldValue("cart[appointment][0][id]", appointmentDetail.id);
+              formik.setFieldValue("appointment_id", appointmentDetail.id);
+              formik.setFieldValue("invoicedate", appointmentDetail.showdate);
               // dispatch(clientSearchName(appointmentDetail.client && ));
               dispatch(clientSearchObj(appointmentDetail.client));
               dispatch(clientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
@@ -274,9 +286,9 @@ const SaleAddForm = (props) => {
                         <div className="row">
                           <div className="col-9">
                             <h4 className="mb-0 fw-semibold">{appointmentDetail.service.name}</h4>
-                            <p className="mb-0">{t("With {{ staff_name }} from {{ start_time }} - {{ end_time }}", { staff_name: ucfirst(appointmentDetail.staff.first_name + " " + appointmentDetail.staff.last_name), start_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.start_time).format("hh:mm A"), end_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.end_time).format("hh:mm A") })} </p>
+                            <p className="mb-0">{t("With {{ staff_name }} from {{ invoicedate }} at {{ start_time }} - {{ end_time }}", { staff_name: ucfirst(appointmentDetail.staff.first_name + " " + appointmentDetail.staff.last_name), invoicedate: appointmentDetail.showdate, start_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.start_time).format("hh:mm A"), end_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.end_time).format("hh:mm A") })} </p>
                             <div className="d-none">
-                              <InputField type="hidden" name="cart[appointment][0][id]" value={formik.values.cart && formik.values.cart.appointment.length > 0 && formik.values.cart.appointment[0] && formik.values.cart.appointment[0].id} id={`"salonform-cart-appointment-0-id"`} />
+                              <InputField type="hidden" name="appointment_id" value={formik.values.appointment_id} id={`"salonform-cart-appointment-0-id"`} />
                             </div>
                           </div>
                           <h4 className="col-3 mb-0 text-end">${appointmentDetail.cost}</h4>
@@ -464,5 +476,6 @@ const SaleAddForm = (props) => {
 };
 SaleAddForm.propTypes = {
   appointmentDetail: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
 export default SaleAddForm;

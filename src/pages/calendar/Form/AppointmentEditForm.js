@@ -116,7 +116,7 @@ const AppointmentEditForm = (props) => {
             const NotifyContent = () => {
               return (
                 <>
-                  <p className="mb-2 text-danger text-justify">{response && response.message}</p>
+                  <p className="mb-2 text-white text-justify">{response && response.message}</p>
                   {response && response.booked && (
                     <ul className="list-unstyled">
                       {response.booked.map((a, n) => (

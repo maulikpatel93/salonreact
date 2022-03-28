@@ -51,6 +51,7 @@ const view = (values) => {
   const timezone = values && values.timezone ? values.timezone : "";
   const type = values && values.type ? values.type : "";
   const staff_id = values && values.staff_id ? values.staff_id : "";
+  const showdate = values && values.showdate ? values.showdate : "";
   //Busy time Calender view parameter close
   let sortstring = "";
   if (sort) {
@@ -81,6 +82,7 @@ const view = (values) => {
     timezone: timezone,
     type: type,
     staff_id: staff_id,
+    showdate: showdate,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };

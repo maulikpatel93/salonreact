@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PropTypes from "prop-types";
 
 import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName } from "store/slices/saleSlice";
 import { clientSearchName, clientSearchObj } from "store/slices/clientSlice";
@@ -12,11 +13,12 @@ import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import SaleProductListView from "./List/SaleProductListView";
 import SaleServiceListView from "./List/SaleServiceListView";
 
-const SaleDrawer = () => {
+const SaleDrawer = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const isRangeInfo = props.isRangeInfo;
   const tabview = useSelector((state) => state.sale.isSaleTabView);
   const isServices = useSelector((state) => state.sale.isServices);
   const isServiceSearchName = useSelector((state) => state.sale.isServiceSearchName);
@@ -132,7 +134,7 @@ const SaleDrawer = () => {
       <div className={(rightDrawerOpened ? "full-screen-drawer p-0 salevoucher-drawer " : "") + rightDrawerOpened} id="salevoucher-drawer">
         <div className="drawer-wrp position-relative">
           <div className="drawer-header px-4 py-3">
-            <h1 className="pe-md-5 pe-3 mb-0">{t("New Sale")}</h1>
+            <h1 className="pe-md-5 pe-3 mb-0">{isAppointmentDetail ? t("Checkout") : t("New Sale")}</h1>
             <a className="close-drawer cursor-pointer" onClick={handleCloseAddsaleForm}>
               <img src={config.imagepath + "close-icon.svg"} alt="" />
             </a>
@@ -261,7 +263,7 @@ const SaleDrawer = () => {
                 </div>
               </div>
               <div className="col-md-6 px-0 right-col flex-column justify-content-between d-flex flex-wrap">
-                <SaleAddForm appointmentDetail={isAppointmentDetail} />
+                <SaleAddForm appointmentDetail={isAppointmentDetail} isRangeInfo={isRangeInfo} />
               </div>
             </div>
           </div>
@@ -271,5 +273,7 @@ const SaleDrawer = () => {
     </>
   );
 };
-
+SaleDrawer.propTypes = {
+  isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+};
 export default SaleDrawer;

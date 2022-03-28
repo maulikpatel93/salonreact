@@ -83,12 +83,13 @@ const Calendar = () => {
     Object.keys(MergeListview).map((item) => {
       let listview = MergeListview[item].listview;
       let id = MergeListview[item].id;
-      // let dateof = MergeListview[item].dateof;
+      let dateof = MergeListview[item].dateof;
       let showdate = MergeListview[item].showdate;
       let start_time = MergeListview[item].start_time && MergeListview[item].start_time;
       let end_time = MergeListview[item].end_time && MergeListview[item].end_time;
       let status = MergeListview[item].status;
       let staff = MergeListview[item].staff;
+      let sale = MergeListview[item].sale;
       staffs.push(staff);
       if (listview === "Appointment") {
         let service = MergeListview[item].service && MergeListview[item].service;
@@ -102,12 +103,13 @@ const Calendar = () => {
         } else if (status === "Confirmed") {
           backgroundColor = "#ecd078";
           borderColor = "#ecd078";
-        } else if (status === "Completed") {
-          backgroundColor = "#59ba41";
-          borderColor = "#59ba41";
         } else if (status === "Cancelled") {
           backgroundColor = "#c02942";
           borderColor = "#c02942";
+        }
+        if (sale && sale.status === "Paid") {
+          backgroundColor = "#59ba41";
+          borderColor = "#59ba41";
         }
         events.push({
           resourceId: staff.id,
@@ -129,6 +131,7 @@ const Calendar = () => {
         // let repeat_time = MergeListview[item].repeat_time;
         // let repeat_time_option = MergeListview[item].repeat_time_option;
         // let ending = MergeListview[item].ending;
+        // let dateof = MergeListview[item].dateof;
         let showdate = MergeListview[item].showdate;
         events.push({
           resourceId: staff.id,
@@ -369,14 +372,14 @@ const Calendar = () => {
   function handleEventClick(clickInfo) {
     if (clickInfo.event && clickInfo.event.extendedProps) {
       let listview = clickInfo.event.extendedProps.listview && clickInfo.event.extendedProps.listview;
-
+      let showdate = moment(clickInfo.event.start).format("YYYY-MM-DD");
       if (listview === "Appointment") {
         let id = clickInfo.event.extendedProps.appointment && clickInfo.event.extendedProps.appointment.id;
         let client_id = clickInfo.event.extendedProps.client && clickInfo.event.extendedProps.client.id;
         dispatch(closeAddAppointmentForm());
         dispatch(closeAddBusytimeForm());
         dispatch(closeEditBusytimeForm());
-        dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+        dispatch(appointmentDetailApi({ id, client_id, showdate: showdate })).then((action) => {
           if (action.meta.requestStatus === "fulfilled") {
             dispatch(openAppointmentDetailModal());
           } else if (action.meta.requestStatus === "rejected") {
@@ -394,7 +397,7 @@ const Calendar = () => {
         dispatch(closeRescheduleAppointmentForm());
         dispatch(closeAppointmentDetailModal());
         dispatch(closeAddBusytimeForm());
-        dispatch(busytimeDetailApi({ id })).then((action) => {
+        dispatch(busytimeDetailApi({ id, showdate: showdate })).then((action) => {
           if (action.meta.requestStatus === "fulfilled") {
             dispatch(openEditBusytimeForm());
             dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
@@ -727,7 +730,7 @@ const Calendar = () => {
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedAddForm ? <BusytimeAddForm isRangeInfo={isRangeInfo} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedEditForm ? <BusytimeEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
-        {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer /> : ""}
+        {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
       </div>
     </>
   );
