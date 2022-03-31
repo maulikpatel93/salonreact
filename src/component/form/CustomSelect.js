@@ -16,15 +16,26 @@ import { staffOptions } from "store/slices/staffSlice";
 //   placeholder?: string;
 // }
 
-export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId }) => {
+export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId, service_id = "" }) => {
   const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {
     if (field.name === "service_id" && controlId === "appointmentForm-service_id") {
       dispatch(servicePriceApi({ service_id: option && option.value })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
+          // form.setFieldValue("staff_id", "");
           let service = action.payload;
           dispatch(staffOptions({ option: { valueField: "users.id", labelField: "CONCAT(users.last_name,' ',users.first_name)" }, service_id: service.id }));
+        }
+      });
+    }
+    if (field.name === "staff_id" && controlId === "appointmentForm-staff_id") {
+      dispatch(servicePriceApi({ staff_id: option && option.value, service_id: service_id && service_id })).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          // let service = action.payload;
+          // let serviceprice = service && service.serviceprice && service.serviceprice[0] && service.serviceprice[0].price ? service.serviceprice[0].price : "";
+          // console.log(service.serviceprice && service.serviceprice[0].price);
+          // form.setFieldValue("cost", serviceprice);
         }
       });
     }
@@ -92,6 +103,7 @@ CustomSelect.propTypes = {
   options: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   isMulti: PropTypes.bool,
   controlId: PropTypes.string,
+  service_id: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
 
 export default CustomSelect;

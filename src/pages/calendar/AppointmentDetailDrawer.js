@@ -11,7 +11,7 @@ import { AppointmentDetail, openAddSaleForm } from "store/slices/saleSlice";
 import Moment from "react-moment";
 import { swalConfirm, sweatalert } from "component/Sweatalert2";
 import PropTypes from "prop-types";
-import { clientSearchName, closeClientSearchList } from "store/slices/clientSlice";
+import { ClientSearchName, CloseClientSearchList } from "store/slices/clientSlice";
 
 const AppointmentDetailDrawer = (props) => {
   const { t } = useTranslation();
@@ -38,7 +38,6 @@ const AppointmentDetailDrawer = (props) => {
   const showdate = appointmentDetail.showdate;
   const repeats = appointmentDetail.repeats;
   const sale = appointmentDetail.sale;
-
   const client_id = client.id;
   const profile_photo_url = client.profile_photo_url;
   const first_name = client.first_name;
@@ -85,16 +84,16 @@ const AppointmentDetailDrawer = (props) => {
 
   const handleAppointmentDrawer = () => {
     dispatch(openAddAppointmentForm());
-    dispatch(clientSearchName(""));
-    dispatch(closeClientSearchList());
+    dispatch(ClientSearchName(""));
+    dispatch(CloseClientSearchList());
     dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
     // dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
 
   const handleCheckout = () => {
     dispatch({ type: "sale/reset" });
-    // dispatch(clientSearchName(""));
-    // dispatch(clientSearchObj(""));
+    // dispatch(ClientSearchName(""));
+    // dispatch(ClientSearchObj(""));
     dispatch(AppointmentDetail(appointmentDetail));
     dispatch(openAddSaleForm());
   };
@@ -112,13 +111,13 @@ const AppointmentDetailDrawer = (props) => {
     }
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to {{ status }} the appointment?", { status: statusmsg }), message: "statusupdate", confirmButtonText: t("Yes, {{ status }} it!", { status: statusmsg }) });
     if (confirmbtn === true) {
-      dispatch(appointmentUpdateApi({ id: id, client_id: client_id, status: "Confirmed", clickEvent: "statusupdate" })).then((action) => {
+      dispatch(appointmentUpdateApi({ id: id, client_id: client_id, status: "Confirmed", clickEvent: "statusupdate", showdate: showdate })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(clientAppointmentListViewApi({ client: client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
-            dispatch(appointmentDetailApi({ id, client_id }));
+            dispatch(appointmentDetailApi({ id, client_id, showdate: showdate }));
           }
           sweatalert({ title: t("Appointment status updated"), text: t("Appointment status updated"), icon: "success" });
         }
@@ -161,7 +160,7 @@ const AppointmentDetailDrawer = (props) => {
                 <a
                   className="col text-center text-decoration-none cursor-pointer"
                   onClick={() => {
-                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                    dispatch(appointmentDetailApi({ id, client_id, showdate: showdate })).then((action) => {
                       if (action.meta.requestStatus === "fulfilled") {
                         dispatch(openEditAppointmentForm());
                         dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
@@ -248,7 +247,7 @@ const AppointmentDetailDrawer = (props) => {
             </div>
             <p className="mb-2 text-jusitfy">{t("Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.", { start_time: "09:15Am", end_time: "10::00Pm", staff_name: "Amanda" })}</p>
           </div>
-          {sale && sale.status !== "Paid" && (
+          {sale && sale.status !== "Paid" && status === "Confirmed" && (
             <div className="drawer-footer text-center pt-3">
               <div className="row">
                 <div className="col-12">

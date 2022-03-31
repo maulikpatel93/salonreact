@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import useScriptRef from "../../../hooks/useScriptRef";
 import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
-import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "store/slices/clientSlice";
+import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName } from "store/slices/clientSlice";
 import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
@@ -48,33 +48,33 @@ const AppointmentAddForm = (props) => {
   };
 
   const fetchDataSuggetionList = () => {
-    dispatch(clientSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
+    dispatch(ClientSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
   };
 
   const handleClickSearch = (e) => {
     let q = e.currentTarget.value;
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     }
   };
   const handleKeyUpSearch = (e) => {
     let q = e.currentTarget.value;
-    dispatch(clientSearchName(q));
+    dispatch(ClientSearchName(q));
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     } else {
-      dispatch(closeClientSearchList());
+      dispatch(CloseClientSearchList());
     }
   };
   const handleCloseSearch = () => {
-    dispatch(clientSearchName(""));
-    dispatch(closeClientSearchList());
+    dispatch(ClientSearchName(""));
+    dispatch(CloseClientSearchList());
   };
   const handleOnBlur = () => {
     // setTimeout(() => {
-    //   dispatch(closeClientSearchList());
+    //   dispatch(CloseClientSearchList());
     // }, 200);
   };
   const initialValues = {
@@ -187,7 +187,7 @@ const AppointmentAddForm = (props) => {
   };
 
   const handleClientAddForm = () => {
-    dispatch(openAddClientForm());
+    dispatch(OpenAddClientForm());
   };
 
   const serviceOptionsData = isServiceOption;
@@ -213,17 +213,17 @@ const AppointmentAddForm = (props) => {
           useEffect(() => {
             if (isServicePrice) {
               let duration = isServicePrice.duration ? MinutesToHours(isServicePrice.duration) : "";
-              let generalPrice = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              let generalPrice = isServicePrice.serviceprice;
               let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
               let add_on_price = generalPrice && generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
               let cost = parseFloat(gprice) + parseFloat(add_on_price);
               formik.setFieldValue("duration", duration);
               formik.setFieldValue("cost", cost);
-              formik.setFieldValue("staff_id", "");
+              formik.setFieldValue("staff_id", formik.values.staff_id ? formik.values.staff_id : "");
             }
             if (client) {
               formik.setFieldValue("client_id", client.id ? client.id : "");
-              dispatch(clientSearchName(ucfirst(client.first_name + " " + client.last_name)));
+              dispatch(ClientSearchName(ucfirst(client.first_name + " " + client.last_name)));
             }
             formik.setFieldValue("repeats", "No");
           }, [isServicePrice, client]);
@@ -266,7 +266,7 @@ const AppointmentAddForm = (props) => {
                           value={isSearchName}
                           onInput={(e) => {
                             formik.setFieldValue("client_id", "");
-                            dispatch(clientSearchName(e.target.value));
+                            dispatch(ClientSearchName(e.target.value));
                           }}
                           onClick={handleClickSearch}
                           onKeyUp={handleKeyUpSearch}
@@ -321,7 +321,7 @@ const AppointmentAddForm = (props) => {
                     </div>
                     <div className="row gx-2">
                       <div className="col-sm-6 mb-3">
-                        <ReactSelectField name="staff_id" placeholder={t("Choose Staff")} value={formik.values.staff_id} options={staffOptionsData} label={t("Staff")} controlId="appointmentForm-staff_id" isMulti={false} />
+                        <ReactSelectField name="staff_id" placeholder={t("Choose Staff")} value={formik.values.staff_id} options={staffOptionsData} label={t("Staff")} controlId="appointmentForm-staff_id" isMulti={false} service_id={formik.values.service_id} />
                       </div>
                       <div className="col-sm-3 col-6 mb-3">
                         <InputField name="duration" value={formik.values.duration} label={t("Duration")} mask="99:99" controlId="appointmentForm-duration" placeholder="--:--" />

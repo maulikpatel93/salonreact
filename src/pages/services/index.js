@@ -8,6 +8,7 @@ import Categories from "./categories";
 
 import { openAddServiceForm, serviceTabView, serviceListViewApi, serviceSort, serviceSortRemove, openServiceSearchList, closeServiceSearchList, serviceSuggetionListApi, serviceSearchName, addonservices, addonstaff } from "../../store/slices/serviceSlice";
 import { openAddCategoryForm, categoryListViewApi, openCategorySearchList, closeCategorysearchList, categorySuggetionListApi, categorySearchName, categoryOptions } from "../../store/slices/categorySlice";
+import { pricetierOptions } from "../../store/slices/pricetierSlice";
 import { taxOptions } from "../../store/slices/taxSlice";
 import { removeImage } from "../../store/slices/imageSlice";
 import CategoryAddForm from "./categories/CategoryAddForm";
@@ -50,6 +51,7 @@ const Services = () => {
     dispatch(serviceSortRemove());
     dispatch(serviceListViewApi());
     dispatch(categoryListViewApi());
+    dispatch(pricetierOptions({ option: { valueField: "id", labelField: "name" } }));
   }, [dispatch]);
 
   const handleServiceTab = () => {
@@ -259,7 +261,7 @@ const Services = () => {
                     <div className="" id="scrollableServiceListView">
                       <InfiniteScroll dataLength={ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-service" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
                         <div className="table-responsive bg-white table-shadow">
-                          <table className="table mb-0">
+                          <table className="table mb-0 table-hover">
                             <thead>
                               <tr>
                                 <th rowSpan="2" className="service_table_header"></th>
@@ -281,9 +283,6 @@ const Services = () => {
                                     </span>
                                   </a>
                                 </th>
-                                <th colSpan="3" className="p-2 text-center">
-                                  {t("Price")}
-                                </th>
                                 <th rowSpan="2" className="service_table_header">
                                   {t("Category")}
                                   {/* <a className="service-header cursor-pointer" onClick={() => sorting({ category: { name: sort && sort.category && sort.category.name == "asc" ? "desc" : "asc" } })}>
@@ -298,17 +297,6 @@ const Services = () => {
                                   {t("Add on Services")}
                                 </th>
                                 {(checkaccess({ name: "update", role_id: role_id, controller: "services", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "services", access })) && <th rowSpan="2" className="service_table_header"></th>}
-                              </tr>
-                              <tr>
-                                <th scope="col" className="p-2">
-                                  {t("General")}
-                                </th>
-                                <th scope="col" className="p-2">
-                                  {t("Junior")}
-                                </th>
-                                <th scope="col" className="p-2">
-                                  {t("Senior")}
-                                </th>
                               </tr>
                             </thead>
                             <tbody className="services-table-data">
@@ -333,7 +321,7 @@ const Services = () => {
                             <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                             <h4 className="mb-2 fw-semibold">
                               {t("No services have been created yet.")}
-                              <a className="add-service ms-1 cursor-pointer" onClick={() => dispatch(openAddServiceForm())}>
+                              <a className="add-service ms-1 cursor-pointer" onClick={handleopenAddServiceForm}>
                                 {t("Please create one")}
                               </a>
                               .

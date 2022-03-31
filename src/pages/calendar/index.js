@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
 import { checkaccess, ucfirst } from "helpers/functions";
-import { clientSearchName, clientSearchObj, closeClientSearchList, openAddClientForm } from "../../store/slices/clientSlice";
+import { ClientSearchName, ClientSearchObj, CloseClientSearchList, OpenAddClientForm } from "../../store/slices/clientSlice";
 import { busytimeDetailApi, busytimeListViewApi, closeAddBusytimeForm, closeEditBusytimeForm, openAddBusytimeForm, openEditBusytimeForm } from "store/slices/busytimeSlice";
 import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, closeAppointmentDetailModal, closeEditAppointmentForm, closeRescheduleAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
@@ -236,18 +236,18 @@ const Calendar = () => {
   };
   const handleAppointmentDrawer = () => {
     dispatch(openAddAppointmentForm());
-    dispatch(clientSearchName(""));
-    dispatch(closeClientSearchList());
+    dispatch(ClientSearchName(""));
+    dispatch(CloseClientSearchList());
     dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));
     // dispatch(staffOptions({ option: { valueField: "id", labelField: "CONCAT(last_name,' ',first_name)" } }));
   };
   const handleClientDrawer = () => {
-    dispatch(openAddClientForm());
+    dispatch(OpenAddClientForm());
   };
   const handleSaleDrawer = () => {
     dispatch({ type: "sale/reset" });
-    dispatch(clientSearchName(""));
-    dispatch(clientSearchObj(""));
+    dispatch(ClientSearchName(""));
+    dispatch(ClientSearchObj(""));
     dispatch(openAddSaleForm());
   };
 
@@ -673,6 +673,9 @@ const Calendar = () => {
                 },
               }}
               formatRange={false}
+              slotLabelInterval="60"
+              slotMinutes="60"
+              snapDuration="01:00:00"
               slotDuration={"00:15:00"}
               slotLabelFormat={{
                 hour: "numeric",

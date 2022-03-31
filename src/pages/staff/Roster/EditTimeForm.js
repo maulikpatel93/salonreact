@@ -20,14 +20,14 @@ const EditTimeForm = (props) => {
   const scriptedRef = useScriptRef();
 
   const staff_id = props.staff_id;
-  const date = props.date;
+  const dateof = props.dateof;
   const roster = props.roster;
   const role_id = props.role_id;
   const access = props.access;
 
   const initialValues = {
     staff_id: "",
-    date: "",
+    dateof: "",
     start_time: "",
     end_time: "",
     away: "",
@@ -35,7 +35,7 @@ const EditTimeForm = (props) => {
 
   const validationSchema = Yup.object().shape({
     staff_id: Yup.string().trim().required(),
-    date: Yup.string().trim().required(),
+    dateof: Yup.string().trim().required(),
     start_time: Yup.string()
       .trim()
       .label(t("Start Time"))
@@ -107,14 +107,14 @@ const EditTimeForm = (props) => {
         {(formik) => {
           useEffect(() => {
             formik.setFieldValue("staff_id", staff_id);
-            formik.setFieldValue("date", date);
+            formik.setFieldValue("date", dateof);
             if (roster) {
               const fields = ["id", "start_time", "end_time", "away"];
               fields.forEach((field) => {
                 formik.setFieldValue(field, roster[field] ? roster[field] : "", false);
               });
             }
-          }, [staff_id, date, roster]);
+          }, [staff_id, dateof, roster]);
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className="p-md-4 p-3">
@@ -160,7 +160,7 @@ EditTimeForm.propTypes = {
   access: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   staff_id: PropTypes.number,
   role_id: PropTypes.number,
-  date: PropTypes.string,
+  dateof: PropTypes.string,
 };
 
 export default EditTimeForm;

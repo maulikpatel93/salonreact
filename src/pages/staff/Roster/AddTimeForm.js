@@ -18,11 +18,11 @@ const AddTimeForm = (props) => {
   const scriptedRef = useScriptRef();
 
   const staff_id = props.staff_id;
-  const date = props.date;
+  const dateof = props.dateof;
 
   const initialValues = {
     staff_id: "",
-    date: "",
+    dateof: "",
     start_time: "",
     end_time: "",
     away: "",
@@ -30,7 +30,7 @@ const AddTimeForm = (props) => {
 
   const validationSchema = Yup.object().shape({
     staff_id: Yup.string().trim().required(),
-    date: Yup.string().trim().required(),
+    dateof: Yup.string().trim().required(),
     start_time: Yup.string()
       .trim()
       .label(t("Start Time"))
@@ -104,8 +104,8 @@ const AddTimeForm = (props) => {
         {(formik) => {
           useEffect(() => {
             formik.setFieldValue("staff_id", staff_id);
-            formik.setFieldValue("date", date);
-          }, [staff_id, date]);
+            formik.setFieldValue("dateof", dateof);
+          }, [staff_id, dateof]);
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className="p-md-4 p-3">
@@ -133,7 +133,7 @@ const AddTimeForm = (props) => {
 AddTimeForm.propTypes = {
   // roster: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   staff_id: PropTypes.number,
-  date: PropTypes.string,
+  dateof: PropTypes.string,
 };
 
 export default AddTimeForm;

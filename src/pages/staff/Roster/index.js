@@ -48,12 +48,12 @@ const Roster = () => {
   let week = [];
   for (let i = 0; i <= 6; i++) {
     let first = curr.getDate() - curr.getDay() + i;
-    let date = new Date(curr.setDate(first)).toISOString().slice(0, 10); //2022-11-01 format
+    let dateof = new Date(curr.setDate(first)).toISOString().slice(0, 10); //2022-11-01 format
     // let date = moment(curr.setDate(first)).format("YYYY-MM-DD"); //2022-11-01 format
 
     // let day = new Date(curr.setDate(first));
     //     let day = date.toLocaleString("en-Us", { weekday: "short", day: "numeric", year: "numeric", month: "short" });
-    week.push(date);
+    week.push(dateof);
   }
   const handleRosterDelete = (e) => {
     const obj = JSON.parse(e.currentTarget.dataset.obj);
@@ -147,11 +147,11 @@ const Roster = () => {
             <tr>
               <th>{t("Staff Member")}</th>
               {week &&
-                week.map((date, i) => {
-                  let classname = getselectedDate && date && getselectedDate === date ? "active text-center" : "text-center";
+                week.map((dateof, i) => {
+                  let classname = getselectedDate && dateof && getselectedDate === dateof ? "active text-center" : "text-center";
                   return (
-                    <th key={i} date={date} className={classname}>
-                      <Moment format="ddd DD MMM YYYY">{date}</Moment>
+                    <th key={i} dateof={dateof} className={classname}>
+                      <Moment format="ddd DD MMM YYYY">{dateof}</Moment>
                     </th>
                   );
                 })}
@@ -169,9 +169,9 @@ const Roster = () => {
                   <tr key={i} data-id={id}>
                     <td>{ucfirst(first_name) + " " + ucfirst(last_name)}</td>
                     {week &&
-                      week.map((date, j) => {
-                        let rosterdata = rosterfield && rosterfield.filter((item) => item.date === date);
-                        let classname = getselectedDate && item && getselectedDate === date ? "active text-center" : "text-center";
+                      week.map((dateof, j) => {
+                        let rosterdata = rosterfield && rosterfield.filter((item) => item.dateof === dateof);
+                        let classname = getselectedDate && item && getselectedDate === dateof ? "active text-center" : "text-center";
 
                         var backgroundColor = "transparent";
                         if (rosterdata.length > 0 && rosterdata[0].away === "1") {
@@ -180,7 +180,7 @@ const Roster = () => {
                           backgroundColor = "rgb(249, 246, 244)";
                         }
                         return (
-                          <td date={item} className={classname} align="center" key={id + j} style={{ backgroundColor: backgroundColor }}>
+                          <td dateof={item} className={classname} align="center" key={id + j} style={{ backgroundColor: backgroundColor }}>
                             {rosterdata.length > 0 ? (
                               <>
                                 {rosterdata[0].away === "1" ? (
@@ -207,7 +207,7 @@ const Roster = () => {
                                       }
                                     }}
                                   >
-                                    <Moment format="hh:mm A">{date + "T" + rosterdata[0].start_time}</Moment>-<Moment format="hh:mm A">{date + "T" + rosterdata[0].end_time}</Moment>
+                                    <Moment format="hh:mm A">{dateof + "T" + rosterdata[0].start_time}</Moment>-<Moment format="hh:mm A">{dateof + "T" + rosterdata[0].end_time}</Moment>
                                   </a>
                                 )}
                               </>
@@ -231,7 +231,7 @@ const Roster = () => {
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeAddRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
                                 </a>
-                                <AddTimeForm staff_id={id} date={date} />
+                                <AddTimeForm staff_id={id} dateof={dateof} />
                               </div>
                             ) : (
                               ""

@@ -10,7 +10,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, MapAddressField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
-import { clientUpdateApi, clientDetailApi } from "../../../store/slices/clientSlice";
+import { ClientUpdateApi, ClientDetailApi } from "../../../store/slices/clientSlice";
 // import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -24,7 +24,7 @@ const ClientEditForm = () => {
   const scriptedRef = useScriptRef();
 
   // const handleCloseClientDetailModal = () => {
-  //   dispatch(closeClientDetailModal());
+  //   dispatch(CloseClientDetailModal());
   // };
 
   const initialValues = {
@@ -41,9 +41,9 @@ const ClientEditForm = () => {
     state: "",
     postcode: "",
     description: "",
-    send_sms_notification: "",
-    send_email_notification: "",
-    recieve_marketing_email: "",
+    send_sms_notification: 0,
+    send_email_notification: 0,
+    recieve_marketing_email: 0,
   };
 
   const validationSchema = Yup.object().shape({
@@ -59,19 +59,19 @@ const ClientEditForm = () => {
     state: Yup.string().trim().label(t("State")),
     postcode: Yup.string().trim().max(12).label(t("Postcode")),
     description: Yup.string().trim().label(t("Description")),
-    send_sms_notification: Yup.mixed().nullable(),
-    send_email_notification: Yup.mixed().nullable(),
-    recieve_marketing_email: Yup.mixed().nullable(),
+    send_sms_notification: Yup.bool().nullable(),
+    send_email_notification: Yup.bool().nullable(),
+    recieve_marketing_email: Yup.bool().nullable(),
   });
   yupconfig();
 
   const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting }) => {
     setLoading(true);
     try {
-      dispatch(clientUpdateApi(values)).then((action) => {
+      dispatch(ClientUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
-          dispatch(clientDetailApi({ id: action.payload.id }));
+          dispatch(ClientDetailApi({ id: action.payload.id }));
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
@@ -181,7 +181,7 @@ const ClientEditForm = () => {
                       }, 100);
                     } else {
                       setTimeout(() => {
-                        formik.setFieldValue("send_sms_notification", "", false);
+                        formik.setFieldValue("send_sms_notification", 0, false);
                       }, 100);
                     }
                     formik.handleChange(e);
@@ -199,7 +199,7 @@ const ClientEditForm = () => {
                       }, 100);
                     } else {
                       setTimeout(() => {
-                        formik.setFieldValue("send_email_notification", "", false);
+                        formik.setFieldValue("send_email_notification", 0, false);
                       }, 100);
                     }
                     formik.handleChange(e);
@@ -217,7 +217,7 @@ const ClientEditForm = () => {
                       }, 100);
                     } else {
                       setTimeout(() => {
-                        formik.setFieldValue("recieve_marketing_email", "", false);
+                        formik.setFieldValue("recieve_marketing_email", 0, false);
                       }, 100);
                     }
                     formik.handleChange(e);

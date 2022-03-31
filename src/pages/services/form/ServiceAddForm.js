@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // validation Formik
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField, ReactSelectField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
@@ -21,6 +21,7 @@ const ServiceAddForm = () => {
   const isTaxOption = useSelector((state) => state.tax.isTaxOption);
   const isAddonServices = useSelector((state) => state.service.isAddonServices);
   const isAddonStaff = useSelector((state) => state.service.isAddonStaff);
+  const isPriceTierOption = useSelector((state) => state.pricetier.isPriceTierOption);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -36,20 +37,7 @@ const ServiceAddForm = () => {
     name: "",
     category_id: "",
     description: "",
-    service_price: {
-      general: {
-        price: "",
-        add_on_price: "",
-      },
-      junior: {
-        price: "",
-        add_on_price: "",
-      },
-      senior: {
-        price: "",
-        add_on_price: "",
-      },
-    },
+    service_price: [],
     duration: "",
     padding_time: "",
     tax_id: "",
@@ -69,20 +57,13 @@ const ServiceAddForm = () => {
     duration: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Duration")).required())),
     padding_time: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Padding Time")).required())),
     tax_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Tax")).required())),
-    service_price: Yup.object().shape({
-      general: Yup.object().shape({
-        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
+    service_price: Yup.array().of(
+      Yup.object().shape({
+        price_tier_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required(t("Required")) : Yup.string().nullable().label(t("Price Tier")).required())),
+        price: Yup.string().trim().label(t("Price")).required(t("Required")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
+        add_on_price: Yup.string().trim(t("Required")).label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
       }),
-      junior: Yup.object().shape({
-        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
-      }),
-      senior: Yup.object().shape({
-        price: Yup.string().trim().label(t("Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
-        add_on_price: Yup.string().trim().label(t("Add-on Price")).test("Decimal only", t("The field should have decimal only"), decimalOnly),
-      }),
-    }),
+    ),
     service_booked_online: Yup.mixed().nullable(),
     deposit_booked_online: Yup.mixed().nullable(),
     deposit_booked_price: Yup.string()
@@ -97,6 +78,7 @@ const ServiceAddForm = () => {
   yupconfig();
 
   const handlecategoriesubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+    console.log(values);
     setLoading(true);
     try {
       dispatch(serviceStoreApi(values)).then((action) => {
@@ -120,7 +102,6 @@ const ServiceAddForm = () => {
           setLoading(false);
         }
       });
-      
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);
@@ -142,17 +123,13 @@ const ServiceAddForm = () => {
     { value: "50", label: "50 " + t("Minute") },
     { value: "60", label: "60 " + t("Minute") },
   ];
-  const service_price = [
-    { name: "General", price: "", add_on_price: "" },
-    { name: "Junior", price: "", add_on_price: "" },
-    { name: "Senior", price: "", add_on_price: "" },
-  ];
+
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlecategoriesubmit}>
         {(formik) => {
           useEffect(() => {
-            if (isAddonStaff) {
+            if (isAddonStaff.length > 0) {
               Object.keys(isAddonStaff).map((item) => {
                 let addonstaffData = isAddonStaff[item].staff;
                 if (addonstaffData) {
@@ -164,7 +141,7 @@ const ServiceAddForm = () => {
                 }
               });
             }
-            if (isAddonServices) {
+            if (isAddonServices.length > 0) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
                 if (addonservicesData) {
@@ -177,7 +154,19 @@ const ServiceAddForm = () => {
                 }
               });
             }
-          }, [isAddonStaff, isAddonServices]);
+            if (isPriceTierOption.length > 0) {
+              Object.keys(isPriceTierOption).map((item) => {
+                let price_tier_id = isPriceTierOption[item].value;
+                let price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].price !== undefined ? formik.values.service_price[item].price : "";
+                let add_on_price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].add_on_price !== undefined ? formik.values.service_price[item].add_on_price : "";
+
+                formik.setFieldValue("service_price[" + item + "][price_tier_id]", price_tier_id);
+                formik.setFieldValue("service_price[" + item + "][price]", price);
+                formik.setFieldValue("service_price[" + item + "][add_on_price]", add_on_price, false);
+              });
+            }
+          }, [isAddonStaff, isAddonServices, isPriceTierOption]);
+          
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addservice-drawer">
               <div className="drawer-wrp position-relative">
@@ -225,19 +214,28 @@ const ServiceAddForm = () => {
                             <div className="col-lg-3 col-md-4 col-4 mb-2">{t("Price")}</div>
                             <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">{t("Add-on Price")}</div>
                           </div>
-                          {service_price &&
-                            Object.keys(service_price).map((item, i) => {
-                              let service_price_name = service_price[item].name.toLowerCase();
+                          {isPriceTierOption.length > 0 &&
+                            Object.keys(isPriceTierOption).map((item, i) => {
+                              // let price_tier_id = isPriceTierOption[item].value;
+                              let price_tier_name = isPriceTierOption[item].label;
+                              let price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].price !== undefined ? formik.values.service_price[item].price : "";
+                              let add_on_price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].add_on_price !== undefined ? formik.values.service_price[item].add_on_price : "";
+
+                              // let errors_price = formik.errors && formik.errors.service_price && formik.errors.service_price[item];
                               return (
                                 <div className="row" key={i}>
                                   <div className="col-md-3 mb-2 col-4">
-                                    <label htmlFor="">{ucfirst(service_price_name)}</label>
+                                    <label htmlFor="">{ucfirst(price_tier_name)}</label>
                                   </div>
                                   <div className="col-lg-3 col-md-4 col-4 mb-2">
-                                    <InputField type="text" name={"service_price[" + service_price_name + "][price]"} value={formik.values.service_price[service_price_name].price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-price"} />
+                                    {/* <InputField value={price} placeholder={"$"} className={(errors_price && errors_price.price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][price]`} id={"serviceForm-" + item + "-price"} /> */}
+                                    {/* {errors_price && errors_price.price && <ErrorMessage name={`service_price[${item}][price]`} component="div" className="invalid-feedback d-block" />} */}
+                                    <InputField type="text" name={"service_price[" + item + "][price]"} value={price} placeholder="$" label={""} controlId={"serviceForm-" + item + "-price"} />
                                   </div>
                                   <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                                    <InputField type="text" name={"service_price[" + service_price_name + "][add_on_price]"} value={formik.values.service_price[service_price_name].add_on_price} placeholder="$" label={""} controlId={"serviceForm-" + service_price_name + "-add_on_price"} />
+                                    {/* <InputField value={add_on_price} placeholder={"$"} className={(errors_price && errors_price.add_on_price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][add_on_price]`} id={"serviceForm-" + item + "-add_on_price"} /> */}
+                                    {/* {errors_price && errors_price.price && <ErrorMessage name={`service_price[${item}][add_on_price]`} component="div" className="invalid-feedback d-block" />} */}
+                                    <InputField type="text" name={"service_price[" + item + "][add_on_price]"} value={add_on_price} placeholder="$" label={""} controlId={"serviceForm-" + item + "-add_on_price"} />
                                   </div>
                                 </div>
                               );
@@ -271,7 +269,7 @@ const ServiceAddForm = () => {
                         <div className="col-md-6 pe-md-0">
                           <div className="row">
                             <div className="col-md-8 mb-3">
-                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax")+' ('+t("Included in price")+')'} controlId="serviceForm-tax_id" isMulti={false} />
+                              <ReactSelectField name="tax_id" placeholder={t("Search...")} value={formik.values.tax_id} options={taxOptionsData} label={t("Tax") + " (" + t("Included in price") + ")"} controlId="serviceForm-tax_id" isMulti={false} />
                             </div>
                           </div>
                         </div>
@@ -370,7 +368,7 @@ const ServiceAddForm = () => {
                                     <label>{t("All Staff")}</label>
                                   </div>
                                   <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
-                                    {isAddonStaff &&
+                                    {isAddonStaff.length > 0 &&
                                       Object.keys(isAddonStaff).map((item) => {
                                         let price_tier_id = isAddonStaff[item].id;
                                         let price_tier_name = isAddonStaff[item].name;

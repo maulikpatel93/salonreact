@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
 import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName } from "store/slices/saleSlice";
-import { clientSearchName, clientSearchObj } from "store/slices/clientSlice";
+import { ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import PaginationLoader from "component/PaginationLoader";
 import SaleAddForm from "./Form/SaleAddForm";
 import ClientAddForm from "pages/clients/Form/ClientAddForm";
@@ -45,8 +45,8 @@ const SaleDrawer = (props) => {
 
   const handleCloseAddsaleForm = () => {
     dispatch({ type: "sale/reset" });
-    dispatch(clientSearchName(""));
-    dispatch(clientSearchObj(""));
+    dispatch(ClientSearchName(""));
+    dispatch(ClientSearchObj(""));
     dispatch(closeAddSaleForm());
   };
 

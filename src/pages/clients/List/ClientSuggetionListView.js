@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
-import { clientGridViewApi, clientListViewApi, closeClientSearchList, clientSearchName, clientSearchObj } from "../../../store/slices/clientSlice";
+import { ClientGridViewApi, ClientListViewApi, CloseClientSearchList, ClientSearchName, ClientSearchObj } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
@@ -25,11 +25,11 @@ const ClientSuggetionListView = (props) => {
     if (page && (page === "appointmentAddForm" || page === "saleaddForm")) {
       formik.setFieldValue("client_id", suggetionid); 
     }
-    dispatch(clientSearchObj(suggetionobj));
-    dispatch(clientSearchName(suggetionname));
-    dispatch(closeClientSearchList());
-    dispatch(clientGridViewApi({ id: suggetionid, result: "result_array" }));
-    dispatch(clientListViewApi({ id: suggetionid, result: "result_array" }));
+    dispatch(ClientSearchObj(suggetionobj));
+    dispatch(ClientSearchName(suggetionname));
+    dispatch(CloseClientSearchList());
+    dispatch(ClientGridViewApi({ id: suggetionid, result: "result_array" }));
+    dispatch(ClientListViewApi({ id: suggetionid, result: "result_array" }));
   };
 
   return (

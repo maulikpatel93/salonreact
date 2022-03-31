@@ -3,7 +3,7 @@ import clientApiController from "../../services/client.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 
-export const clientStoreApi = createAsyncThunk("client/create", async (formvalues, thunkAPI) => {
+export const ClientStoreApi = createAsyncThunk("client/create", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .create(formvalues, thunkAPI)
@@ -16,7 +16,7 @@ export const clientStoreApi = createAsyncThunk("client/create", async (formvalue
   }
 });
 
-export const clientUpdateApi = createAsyncThunk("client/update", async (formvalues, thunkAPI) => {
+export const ClientUpdateApi = createAsyncThunk("client/update", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .update(formvalues, thunkAPI)
@@ -29,7 +29,7 @@ export const clientUpdateApi = createAsyncThunk("client/update", async (formvalu
   }
 });
 
-export const clientListViewApi = createAsyncThunk("client/listview", async (formValues, thunkAPI) => {
+export const ClientListViewApi = createAsyncThunk("client/listview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
@@ -42,7 +42,7 @@ export const clientListViewApi = createAsyncThunk("client/listview", async (form
   }
 });
 
-export const clientGridViewApi = createAsyncThunk("client/gridview", async (formValues, thunkAPI) => {
+export const ClientGridViewApi = createAsyncThunk("client/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
@@ -55,7 +55,7 @@ export const clientGridViewApi = createAsyncThunk("client/gridview", async (form
   }
 });
 
-export const clientDetailApi = createAsyncThunk("client/detail", async (formValues, thunkAPI) => {
+export const ClientDetailApi = createAsyncThunk("client/detail", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .view(formValues, thunkAPI)
@@ -68,7 +68,7 @@ export const clientDetailApi = createAsyncThunk("client/detail", async (formValu
   }
 });
 
-export const clientDeleteApi = createAsyncThunk("client/delete", async (formValues, thunkAPI) => {
+export const ClientDeleteApi = createAsyncThunk("client/delete", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .deleted(formValues, thunkAPI)
@@ -81,7 +81,7 @@ export const clientDeleteApi = createAsyncThunk("client/delete", async (formValu
   }
 });
 
-export const clientSuggetionListApi = createAsyncThunk("client/suggetionlist", async (formValues, thunkAPI) => {
+export const ClientSuggetionListApi = createAsyncThunk("client/suggetionlist", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientApiController
       .suggetionlist(formValues, thunkAPI)
@@ -114,58 +114,58 @@ const clientSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    clientTabListView: (state) => {
+    ClientTabListView: (state) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
       state.isTabView = "list";
     },
-    clientTabGridView: (state) => {
+    ClientTabGridView: (state) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
       state.isTabView = "grid";
     },
-    openAddClientForm: (state = initialState) => {
+    OpenAddClientForm: (state = initialState) => {
       state.isOpenedDetailModal = "";
       state.isOpenedAddForm = "open";
     },
-    closeAddClientForm: (state = initialState) => {
+    CloseAddClientForm: (state = initialState) => {
       state.isOpenedDetailModal = "";
       state.isOpenedAddForm = "";
     },
-    openClientDetailModal: (state = initialState) => {
+    OpenClientDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "open";
     },
-    closeClientDetailModal: (state = initialState) => {
+    CloseClientDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
     },
-    clientDetailTab: (state, action) => {
+    ClientDetailTab: (state, action) => {
       state.isClientDetailTab = action.payload;
     },
-    clientSort: (state, action) => {
+    ClientSort: (state, action) => {
       let sort = state.isSort ? state.isSort : {};
       state.isSort = Object.assign(sort, action.payload);
     },
-    clientSortRemove: (state) => {
+    ClientSortRemove: (state) => {
       state.isSort = "";
     },
-    openClientSearchList: (state) => {
+    OpenClientSearchList: (state) => {
       state.isSearchList = "open";
     },
-    closeClientSearchList: (state) => {
+    CloseClientSearchList: (state) => {
       state.isSearchList = "";
     },
-    clientSearchName: (state, action) => {
+    ClientSearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
-    clientSearchObj: (state, action) => {
+    ClientSearchObj: (state, action) => {
       state.isSearchObj = action.payload;
     }
   },
   extraReducers: {
-    [clientStoreApi.pending]: () => {},
-    [clientStoreApi.fulfilled]: (state, action) => {
+    [ClientStoreApi.pending]: () => {},
+    [ClientStoreApi.fulfilled]: (state, action) => {
       if (state.isGridView && state.isGridView.data) {
         state.isGridView.data = [action.payload, ...state.isGridView.data];
       } else {
@@ -177,9 +177,9 @@ const clientSlice = createSlice({
         state.isListView = { data: [action.payload] };
       }
     },
-    [clientStoreApi.rejected]: () => {},
-    [clientUpdateApi.pending]: () => {},
-    [clientUpdateApi.fulfilled]: (state, action) => {
+    [ClientStoreApi.rejected]: () => {},
+    [ClientUpdateApi.pending]: () => {},
+    [ClientUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       let isGridView = state.isGridView && state.isGridView.data ? state.isGridView.data : state.isGridView;
       let isListView = state.isListView && state.isListView.data ? state.isListView.data : state.isListView;
@@ -196,9 +196,9 @@ const clientSlice = createSlice({
         });
       }
     },
-    [clientUpdateApi.rejected]: () => {},
-    [clientGridViewApi.pending]: () => {},
-    [clientGridViewApi.fulfilled]: (state, action) => {
+    [ClientUpdateApi.rejected]: () => {},
+    [ClientGridViewApi.pending]: () => {},
+    [ClientGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isGridView && state.isGridView.data;
@@ -209,11 +209,11 @@ const clientSlice = createSlice({
       }
       state.isGridView = action.payload;
     },
-    [clientGridViewApi.rejected]: (state) => {
+    [ClientGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
-    [clientListViewApi.pending]: () => {},
-    [clientListViewApi.fulfilled]: (state, action) => {
+    [ClientListViewApi.pending]: () => {},
+    [ClientListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isListView && state.isListView.data;
@@ -224,11 +224,11 @@ const clientSlice = createSlice({
       }
       state.isListView = action.payload;
     },
-    [clientListViewApi.rejected]: (state) => {
+    [ClientListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [clientSuggetionListApi.pending]: () => {},
-    [clientSuggetionListApi.fulfilled]: (state, action) => {
+    [ClientSuggetionListApi.pending]: () => {},
+    [ClientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
@@ -239,18 +239,18 @@ const clientSlice = createSlice({
       }
       state.isSuggetionListView = action.payload;
     },
-    [clientSuggetionListApi.rejected]: (state) => {
+    [ClientSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [clientDetailApi.pending]: () => {},
-    [clientDetailApi.fulfilled]: (state, action) => {
+    [ClientDetailApi.pending]: () => {},
+    [ClientDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [clientDetailApi.rejected]: (state) => {
+    [ClientDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [clientDeleteApi.pending]: () => {},
-    [clientDeleteApi.fulfilled]: (state, action) => {
+    [ClientDeleteApi.pending]: () => {},
+    [ClientDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
@@ -258,5 +258,5 @@ const clientSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, clientTabListView, clientTabGridView, openAddClientForm, closeAddClientForm, openClientDetailModal, closeClientDetailModal, clientDetailTab, clientSort, clientSortRemove, openClientSearchList, closeClientSearchList, clientSearchName, clientSearchObj } = clientSlice.actions;
+export const { reset, ClientTabListView, ClientTabGridView, OpenAddClientForm, CloseAddClientForm, OpenClientDetailModal, CloseClientDetailModal, ClientDetailTab, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj } = clientSlice.actions;
 export default clientSlice.reducer;

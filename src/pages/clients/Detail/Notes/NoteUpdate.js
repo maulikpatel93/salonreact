@@ -24,7 +24,7 @@ const NoteUpdate = (props) => {
   };
 
   const validationSchema = Yup.object().shape({
-    note: Yup.string().trim().max(50).label(t("Note")).required(),
+    note: Yup.string().trim().label(t("Note")).required(),
   });
   yupconfig();
   

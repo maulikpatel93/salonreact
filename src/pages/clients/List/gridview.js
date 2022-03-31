@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { clientDeleteApi, openClientDetailModal, clientDetailApi, clientDetailTab } from "../../../store/slices/clientSlice";
+import { ClientDeleteApi, OpenClientDetailModal, ClientDetailApi, ClientDetailTab } from "../../../store/slices/clientSlice";
 import PropTypes from "prop-types";
 import { checkaccess } from "helpers/functions";
 import { clientAppointmentListViewApi } from "store/slices/appointmentSlice";
@@ -25,16 +25,16 @@ const ClientGridView = (props) => {
     const name = ucfirst(props.first_name + " " + props.last_name);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete this client?"), message: name, confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(clientDeleteApi({ id: props.id }));
+      dispatch(ClientDeleteApi({ id: props.id }));
     }
   };
   const handleClientDetailModal = (e, props) => {
     const id = e.currentTarget.closest(".box-image-cover").dataset.id;
-    dispatch(clientDetailApi({ id })).then((action) => {
+    dispatch(ClientDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        dispatch(openClientDetailModal());
+        dispatch(OpenClientDetailModal());
         if (props && props.tab === "clientdetail") {
-          dispatch(clientDetailTab("clientdetail"));
+          dispatch(ClientDetailTab("clientdetail"));
         }
         if (props && props.tab === "appointment") {
           dispatch(clientAppointmentListViewApi({ client_id: id }));

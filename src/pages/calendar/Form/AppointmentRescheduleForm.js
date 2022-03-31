@@ -70,7 +70,7 @@ const AppointmentRescheduleForm = (props) => {
               dispatch(clientAppointmentListViewApi({ client: detail.client_id }));
               if (isRangeInfo) {
                 dispatch(appointmentListViewApi(isRangeInfo));
-                dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+                dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));
               }
               sweatalert({ title: t("Appointment reschedule successfully"), text: t("Appointment reschedule successfully"), icon: "success" });
             } else if (action.meta.requestStatus === "rejected") {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { openAddClientForm, clientTabListView, clientTabGridView, clientGridViewApi, clientListViewApi, clientSort, clientSortRemove, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName } from "../../store/slices/clientSlice";
+import { OpenAddClientForm, ClientTabListView, ClientTabGridView, ClientGridViewApi, ClientListViewApi, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName } from "../../store/slices/clientSlice";
 
 import config from "../../config";
 import ClientAddForm from "./Form/ClientAddForm";
@@ -36,31 +36,31 @@ const Clients = () => {
   const clientIsOpenedDetailModal = useSelector((state) => state.client.isOpenedDetailModal);
 
   useEffect(() => {
-    dispatch(clientSortRemove());
-    dispatch(clientGridViewApi());
-    dispatch(clientListViewApi());
+    dispatch(ClientSortRemove());
+    dispatch(ClientGridViewApi());
+    dispatch(ClientListViewApi());
   }, [dispatch]);
 
-  const handleopenAddClientForm = () => {
-    dispatch(openAddClientForm());
+  const handleOpenAddClientForm = () => {
+    dispatch(OpenAddClientForm());
   };
 
   const sorting = (props) => {
-    dispatch(clientSort(props));
-    dispatch(clientListViewApi({ sort: props }));
+    dispatch(ClientSort(props));
+    dispatch(ClientListViewApi({ sort: props }));
   };
 
   const fetchDataGrid = () => {
-    dispatch(clientGridViewApi({ next_page_url: GridView.next_page_url }));
+    dispatch(ClientGridViewApi({ next_page_url: GridView.next_page_url }));
   };
   const fetchDataList = () => {
-    dispatch(clientListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(ClientListViewApi({ next_page_url: ListView.next_page_url }));
   };
 
   const [isFetching, setIsFetching] = useState(false);
   const loadMoreItemsGrid = () => {
     setIsFetching(true);
-    dispatch(clientGridViewApi({ next_page_url: GridView.next_page_url }));
+    dispatch(ClientGridViewApi({ next_page_url: GridView.next_page_url }));
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);
@@ -69,7 +69,7 @@ const Clients = () => {
 
   const loadMoreItemsList = () => {
     setIsFetching(true);
-    dispatch(clientListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(ClientListViewApi({ next_page_url: ListView.next_page_url }));
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);
@@ -77,37 +77,37 @@ const Clients = () => {
   };
 
   const fetchDataSuggetionList = () => {
-    dispatch(clientSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
+    dispatch(ClientSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
   };
 
   const handleClickSearch = (e) => {
     let q = e.currentTarget.value;
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     }
   };
   const handleKeyUpSearch = (e) => {
     let q = e.currentTarget.value;
-    dispatch(clientSearchName(q));
+    dispatch(ClientSearchName(q));
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     } else {
-      dispatch(clientGridViewApi());
-      dispatch(clientListViewApi());
-      dispatch(closeClientSearchList());
+      dispatch(ClientGridViewApi());
+      dispatch(ClientListViewApi());
+      dispatch(CloseClientSearchList());
     }
   };
   const handleCloseSearch = () => {
-    dispatch(clientSearchName(""));
-    dispatch(closeClientSearchList());
-    dispatch(clientGridViewApi());
-    dispatch(clientListViewApi());
+    dispatch(ClientSearchName(""));
+    dispatch(CloseClientSearchList());
+    dispatch(ClientGridViewApi());
+    dispatch(ClientListViewApi());
   };
   const handleOnBlur = () => {
     // setTimeout(() => {
-    //   dispatch(closeClientSearchList());
+    //   dispatch(CloseClientSearchList());
     // }, 200);
   };
 
@@ -130,7 +130,7 @@ const Clients = () => {
                 <span className="input-group-text">
                   <i className="far fa-search"></i>
                 </span>
-                <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchName} onInput={(e) => dispatch(clientSearchName(e.target.value))} onClick={handleClickSearch} onKeyUp={handleKeyUpSearch} onBlur={handleOnBlur} />
+                <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchName} onInput={(e) => dispatch(ClientSearchName(e.target.value))} onClick={handleClickSearch} onKeyUp={handleKeyUpSearch} onBlur={handleOnBlur} />
                 <a className="close cursor-pointer" style={{ display: isSearchName ? "block" : "none" }} onClick={handleCloseSearch}>
                   <i className="fal fa-times"></i>
                 </a>
@@ -148,18 +148,18 @@ const Clients = () => {
             <span className="list-view-lable me-1">{t("Display as")}:</span>
             <ul className="nav nav-tabs mb-0 d-inline-block list-view-tab border-0 me-xl-3" role="tablist">
               <li className="nav-item d-inline-block">
-                <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "grid" ? " active" : "")} id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" onClick={() => dispatch(clientTabGridView())}>
+                <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "grid" ? " active" : "")} id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" onClick={() => dispatch(ClientTabGridView())}>
                   <img src={config.imagepath + "block-view.png"} alt="" />
                 </a>
               </li>
               <li className="nav-item d-inline-block">
-                <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "list" ? " active" : "")} id="listview-tab" data-bs-toggle="tab" data-bs-target="#listview" type="button" role="tab" aria-controls="listview" aria-selected="true" onClick={() => dispatch(clientTabListView())}>
+                <a className={"nav-link border-0 cursor-pointer" + (tabview && tabview == "list" ? " active" : "")} id="listview-tab" data-bs-toggle="tab" data-bs-target="#listview" type="button" role="tab" aria-controls="listview" aria-selected="true" onClick={() => dispatch(ClientTabListView())}>
                   <img src={config.imagepath + "list-view.png"} alt="" />
                 </a>
               </li>
             </ul>
             {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && (
-              <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleopenAddClientForm}>
+              <a id="addclient-drawer-link" className="btn btn-primary add-new-btn me-1 px-lg-4  cursor-pointer" onClick={handleOpenAddClientForm}>
                 {t("New Client")}
               </a>
             )}
@@ -194,7 +194,7 @@ const Clients = () => {
                 <>
                   <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={tabview && tabview == "grid" && GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
                     {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && (
-                      <a className="box-image-cover cursor-pointer" onClick={handleopenAddClientForm}>
+                      <a className="box-image-cover cursor-pointer" onClick={handleOpenAddClientForm}>
                         <div className="tabs-image">
                           <img src={config.imagepath + "tabs-image.png"} alt="" />
                         </div>

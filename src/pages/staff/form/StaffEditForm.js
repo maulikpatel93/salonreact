@@ -15,6 +15,7 @@ import { closeEditStaffForm, staffUpdateApi, addonserviceAction } from "../../..
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 const StaffEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -52,17 +53,18 @@ const StaffEditForm = () => {
     suburb: "",
     state: "",
     postcode: "",
+    calendar_booking: 0,
     price_tier_id: "",
     add_on_services: [],
     add_on_category: [],
     working_hours: [
-      { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "", days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 0, days: "Sunday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 0, days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -87,7 +89,7 @@ const StaffEditForm = () => {
           .trim()
           .nullable()
           .when("dayoff", {
-            is: "1",
+            is: 1,
             then: Yup.string()
               .trim()
               .label(t("Start Time"))
@@ -108,7 +110,7 @@ const StaffEditForm = () => {
           .trim()
           .nullable()
           .when("dayoff", {
-            is: "1",
+            is: 1,
             then: Yup.string()
               .trim()
               .label(t("End Time"))
@@ -174,7 +176,7 @@ const StaffEditForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditStaffForm());
-          sweatalert({ title: t("Updated"), text: t("Created Successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -185,7 +187,7 @@ const StaffEditForm = () => {
             setLoading(false);
             let htmlAppointmentMatchAll = "";
             if (data) {
-              htmlAppointmentMatchAll += `<p class="text-danger text-justify">${t("You cannot remove / update this service because these staff services have already booked an appointment.")}</p><div class="table-respoinsive"><table class="table appointmentStaffList"><thead><tr><th class="text-start">${t('Service')}</th><th>${t('Total Appointment')}</th></tr></thead><tbody>`;
+              htmlAppointmentMatchAll += `<p class="text-danger text-justify">${t("You cannot remove / update this service because these staff services have already booked an appointment.")}</p><div class="table-respoinsive"><table class="table appointmentStaffList"><thead><tr><th class="text-start">${t("Service")}</th><th>${t("Total Appointment")}</th></tr></thead><tbody>`;
               Object.keys(data).map((item) => {
                 let service_name = data[item].service.name;
                 let appointmentcount = data[item].appointmentcount;
@@ -235,9 +237,10 @@ const StaffEditForm = () => {
               const fields = ["id", "price_tier_id", "first_name", "last_name", "email", "phone_number", "address", "street", "suburb", "state", "postcode", "calendar_booking"];
               fields.forEach((field) => {
                 if (["calendar_booking"].includes(field)) {
-                  formik.setFieldValue(field, parseInt(detail[field]), false);
+                  formik.setFieldValue(field, parseInt(formik.values[field]) ? parseInt(formik.values[field]) : parseInt(detail[field]), false);
                 } else {
-                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                  let detail_field = detail[field] ? detail[field] : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 }
               });
               const staffworkinghours = detail.staffworkinghours;
@@ -249,8 +252,8 @@ const StaffEditForm = () => {
                   let break_time = item.break_time;
                   let dayoff = item.dayoff;
                   formik.setFieldValue(`working_hours[${i}][days]`, days ? days : "");
-                  formik.setFieldValue(`working_hours[${i}][start_time]`, start_time ? start_time : "");
-                  formik.setFieldValue(`working_hours[${i}][end_time]`, end_time ? end_time : "", false);
+                  formik.setFieldValue(`working_hours[${i}][start_time]`, start_time ? moment("2022-01-01T" + start_time).format("HH:mm") : "");
+                  formik.setFieldValue(`working_hours[${i}][end_time]`, end_time ? moment("2022-01-01T" + end_time).format("HH:mm") : "", false);
                   formik.setFieldValue(`working_hours[${i}][dayoff]`, dayoff ? dayoff : "", false);
                   if (break_time) {
                     break_time.map((breakitem, j) => {
@@ -258,14 +261,14 @@ const StaffEditForm = () => {
                       let break_start_time = breakitem.break_start_time;
                       let break_end_time = breakitem.break_end_time;
                       formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_title]`, break_title ? break_title : "", false);
-                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_start_time]`, break_start_time ? break_start_time : "", false);
-                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_end_time]`, break_start_time ? break_end_time : "", false);
+                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_start_time]`, break_start_time ? moment("2022-01-01T" + break_start_time).format("HH:mm") : "", false);
+                      formik.setFieldValue(`working_hours[${i}][break_time][${j}][break_end_time]`, break_start_time ? moment("2022-01-01T" + break_end_time).format("HH:mm") : "", false);
                     });
                   }
                 });
               }
             }
-            if (isAddonServices) {
+            if (isAddonServices.length > 0) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
                 // console.log(!addonservicesData.some((itemservice) => itemservice?.isServiceChecked !== true));
@@ -347,7 +350,7 @@ const StaffEditForm = () => {
                                 }, 100);
                               } else {
                                 setTimeout(() => {
-                                  formik.setFieldValue("calendar_booking", "", false);
+                                  formik.setFieldValue("calendar_booking", 0, false);
                                 }, 100);
                               }
                               formik.handleChange(e);
@@ -370,7 +373,7 @@ const StaffEditForm = () => {
                             HourList.map((item, i) => {
                               let days = item.days;
                               let errors_hour = formik.errors && formik.errors.working_hours && formik.errors.working_hours[i];
-                              let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff === "1" ? "1" : "";
+                              let dayoff = formik.values.working_hours && formik.values.working_hours[i] && formik.values.working_hours[i].dayoff === 1 ? 1 : 0;
                               return (
                                 <li className="li" key={i}>
                                   <label htmlFor="">{days}</label>
@@ -387,11 +390,11 @@ const StaffEditForm = () => {
                                       onChange={(e) => {
                                         if (e.currentTarget.checked) {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "1", false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, 1, false);
                                           }, 100);
                                         } else {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, 0, false);
                                             formik.setFieldValue(`working_hours[${i}][start_time]`, "", false);
                                             formik.setFieldValue(`working_hours[${i}][end_time]`, "", false);
                                             formik.setFieldValue(`working_hours[${i}][break_time]`, [], false);
@@ -479,7 +482,7 @@ const StaffEditForm = () => {
                             })}
                         </ul>
                       </div>
-                      <div className="col-xl-4 col-md-12 service">
+                      <div className="col-xl-4 col-md-12 service" style={{ display: isAddonServices.length > 0 ? "block" : "none" }}>
                         <h3 className="mb-2">{t("Services")}</h3>
                         <h6 className="subtitle">{t("Select which services this staff member is able to perform.")}</h6>
                         <ul className="list-unstyled mb-0 p-0 m-0">
@@ -497,7 +500,7 @@ const StaffEditForm = () => {
                                   } else {
                                     formik.setFieldValue("add_on_all", 0);
                                   }
-                                  if (isAddonServices) {
+                                  if (isAddonServices.length > 0) {
                                     Object.keys(isAddonServices).map((item) => {
                                       let addonservicesData = isAddonServices[item].services;
                                       let tempUser = addonservicesData.map((itemservice) => {
@@ -511,7 +514,7 @@ const StaffEditForm = () => {
                               <label>{t("All Services")}</label>
                             </div>
                             <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
-                              {isAddonServices &&
+                              {isAddonServices.length > 0 &&
                                 Object.keys(isAddonServices).map((item) => {
                                   let category_id = isAddonServices[item].id;
                                   let category_name = isAddonServices[item].name;

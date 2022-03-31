@@ -11,7 +11,7 @@ import Photos from "./Photos";
 import Invoices from "./Invoices";
 import Documents from "./Documents";
 import Notes from "./Notes";
-import { closeClientDetailModal, clientDetailTab } from "../../../store/slices/clientSlice";
+import { CloseClientDetailModal, ClientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
 import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
@@ -35,7 +35,7 @@ const ClientDetailModal = () => {
   const { t } = useTranslation();
 
   const handleCloseClientDetailModal = () => {
-    dispatch(closeClientDetailModal());
+    dispatch(CloseClientDetailModal());
     dispatch({ type: "client/detail/rejected" });
   };
   const first_name = detail.first_name;
@@ -103,7 +103,7 @@ const ClientDetailModal = () => {
                       type="button"
                       role="tab"
                       onClick={() => {
-                        dispatch(clientDetailTab("appointment"));
+                        dispatch(ClientDetailTab("appointment"));
                         dispatch(clientAppointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
                       }}
                     >
@@ -113,23 +113,23 @@ const ClientDetailModal = () => {
                 )}
                 {checkaccess({ name: "update", role_id: role_id, controller: "clients", access }) && (
                   <li className="nav-item" role="presentation">
-                    <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("clientdetail"))}>
+                    <button className={"nav-link" + (detailTab && detailTab == "clientdetail" ? " active" : "")} id="client-detail" data-bs-toggle="tab" data-bs-target="#client-detail-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("clientdetail"))}>
                       {t("Client Details")}
                     </button>
                   </li>
                 )}
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")} id="vouchers" data-bs-toggle="tab" data-bs-target="#vouchers-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("vouchers"))}>
+                  <button className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")} id="vouchers" data-bs-toggle="tab" data-bs-target="#vouchers-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("vouchers"))}>
                     {t("Vouchers")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "subscriptions" ? " active" : "")} id="subscriptions" data-bs-toggle="tab" data-bs-target="#subscriptions-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("subscriptions"))}>
+                  <button className={"nav-link" + (detailTab && detailTab == "subscriptions" ? " active" : "")} id="subscriptions" data-bs-toggle="tab" data-bs-target="#subscriptions-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("subscriptions"))}>
                     {t("Subscriptions")}
                   </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "memberships" ? " active" : "")} id="memberships" data-bs-toggle="tab" data-bs-target="#memberships-tab" type="button" role="tab" onClick={() => dispatch(clientDetailTab("memberships"))}>
+                  <button className={"nav-link" + (detailTab && detailTab == "memberships" ? " active" : "")} id="memberships" data-bs-toggle="tab" data-bs-target="#memberships-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("memberships"))}>
                     {t("Memberships")}
                   </button>
                 </li>
@@ -143,7 +143,7 @@ const ClientDetailModal = () => {
                       type="button"
                       role="tab"
                       onClick={() => {
-                        dispatch(clientDetailTab("photos"));
+                        dispatch(ClientDetailTab("photos"));
                         dispatch(clientphotoGridViewApi({ client_id: detail.id }));
                       }}
                     >
@@ -160,7 +160,7 @@ const ClientDetailModal = () => {
                     type="button"
                     role="tab"
                     onClick={() => {
-                      dispatch(clientDetailTab("invoices"));
+                      dispatch(ClientDetailTab("invoices"));
                     }}
                   >
                     {t("Invoices")}
@@ -176,7 +176,7 @@ const ClientDetailModal = () => {
                       type="button"
                       role="tab"
                       onClick={() => {
-                        dispatch(clientDetailTab("documents"));
+                        dispatch(ClientDetailTab("documents"));
                         dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
                       }}
                     >
@@ -194,7 +194,7 @@ const ClientDetailModal = () => {
                       type="button"
                       role="tab"
                       onClick={() => {
-                        dispatch(clientDetailTab("notes"));
+                        dispatch(ClientDetailTab("notes"));
                         dispatch(clientnoteGridViewApi({ client_id: detail.id }));
                       }}
                     >

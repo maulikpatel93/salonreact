@@ -9,7 +9,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, MapAddressField, ReactSelectField, TextareaField, SwitchField, InputFieldImage } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 
-import { closeAddClientForm, clientStoreApi } from "../../../store/slices/clientSlice";
+import { CloseAddClientForm, ClientStoreApi } from "../../../store/slices/clientSlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 
@@ -21,8 +21,8 @@ const ClientAddForm = () => {
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
-  const handlecloseAddClientForm = () => {
-    dispatch(closeAddClientForm());
+  const handleCloseAddClientForm = () => {
+    dispatch(CloseAddClientForm());
   };
   const initialValues = {
     first_name: "",
@@ -38,9 +38,9 @@ const ClientAddForm = () => {
     state: "",
     postcode: "",
     description: "",
-    send_sms_notification: "",
-    send_email_notification: "",
-    recieve_marketing_email: "",
+    send_sms_notification: 0,
+    send_email_notification: 0,
+    recieve_marketing_email: 0,
   };
 
   const validationSchema = Yup.object().shape({
@@ -66,12 +66,12 @@ const ClientAddForm = () => {
   const handleClientSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(clientStoreApi(values)).then((action) => {
+      dispatch(ClientStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           dispatch(removeImage());
-          dispatch(closeAddClientForm());
+          dispatch(CloseAddClientForm());
           sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
@@ -111,7 +111,7 @@ const ClientAddForm = () => {
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header">
                     <h2 className="mb-4 pe-md-5 pe-3">New Client</h2>
-                    <a className="close-drawer cursor-pointer" onClick={handlecloseAddClientForm}>
+                    <a className="close-drawer cursor-pointer" onClick={handleCloseAddClientForm}>
                       <img src={config.imagepath + "close-icon.svg"} alt="" />
                     </a>
                   </div>
@@ -179,7 +179,7 @@ const ClientAddForm = () => {
                                 }, 100);
                               } else {
                                 setTimeout(() => {
-                                  formik.setFieldValue("send_sms_notification", "", false);
+                                  formik.setFieldValue("send_sms_notification", 0, false);
                                 }, 100);
                               }
                               formik.handleChange(e);
@@ -192,7 +192,7 @@ const ClientAddForm = () => {
                               }, 100);
                             } else {
                               setTimeout(() => {
-                                formik.setFieldValue("send_email_notification", "", false);
+                                formik.setFieldValue("send_email_notification", 0, false);
                               }, 100);
                             }
                             formik.handleChange(e);
@@ -205,7 +205,7 @@ const ClientAddForm = () => {
                               }, 100);
                             } else {
                               setTimeout(() => {
-                                formik.setFieldValue("recieve_marketing_email", "", false);
+                                formik.setFieldValue("recieve_marketing_email", 0, false);
                               }, 100);
                             }
                             formik.handleChange(e);

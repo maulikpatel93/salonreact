@@ -65,7 +65,7 @@ const ServiceListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let duration = objectData[item].duration;
-          let serviceprice = objectData[item].serviceprice;
+          // let serviceprice = objectData[item].serviceprice;
           let category_name = objectData[item].category && objectData[item].category.name;
           let add_on_service = objectData[item].addonservices;
           return (
@@ -73,12 +73,6 @@ const ServiceListView = (props) => {
               <td>{i + 1}</td>
               <td>{ucfirst(name)}</td>
               <td>{duration}</td>
-              {serviceprice &&
-                Object.keys(serviceprice).map((sp) => {
-                  let price = serviceprice[sp].price;
-                  let add_on_price = serviceprice[sp].add_on_price;
-                  return <td key={sp}>{"$ " + (parseFloat(price) + parseFloat(add_on_price))}</td>;
-                })}
               <td>{category_name}</td>
               <td>
                 {add_on_service &&

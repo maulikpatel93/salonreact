@@ -101,7 +101,7 @@ const AppointmentEditForm = (props) => {
           dispatch(clientAppointmentListViewApi({ client: detail.client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
-            dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+            dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
@@ -172,15 +172,20 @@ const AppointmentEditForm = (props) => {
               const fields = ["id", "client_id", "service_id", "staff_id", "dateof", "start_time", "duration", "cost", "repeats", "repeat_time", "repeat_time_option", "ending", "booking_notes", "status", "status_manage"];
               fields.forEach((field) => {
                 if (["dateof"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "", false);
+                  let detail_field = detail[field] ? moment(detail[field]).format("dddd, DD MMMM YYYY") : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 } else if (["start_time"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? moment(detail["dateof"] + "T" + detail[field]).format("HH:mm") : "", false);
+                  let detail_field = detail[field] ? moment(detail["dateof"] + "T" + detail[field]).format("HH:mm") : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 } else if (["ending"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "", false);
+                  let detail_field = detail[field] ? moment(detail[field]).format("DD MMMM YYYY") : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 } else if (["duration"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? MinutesToHours(detail[field]) : "", false);
+                  let detail_field = detail[field] ? MinutesToHours(detail[field]) : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 } else if (["status_manage"].includes(field)) {
-                  formik.setFieldValue(field, detail[field] ? detail[field] : "Not Started", false);
+                  let detail_field = detail[field] ? detail[field] : "Not Started";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 } else if (["status"].includes(field)) {
                   if (detail[field] === "Confirmed") {
                     formik.setFieldValue(field, 1, false);
@@ -188,16 +193,19 @@ const AppointmentEditForm = (props) => {
                     formik.setFieldValue(field, "", false);
                   }
                 } else {
-                  formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
+                  let detail_field = detail[field] ? detail[field] : "";
+                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
                 }
               });
             } else if (isServicePrice) {
               let duration = isServicePrice.duration ? MinutesToHours(isServicePrice.duration) : "";
-              let cost = isServicePrice.serviceprice && isServicePrice.serviceprice.filter((item) => item.name == "General");
+              let generalPrice = isServicePrice.serviceprice;
+              let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+              let add_on_price = generalPrice && generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+              let cost = parseFloat(gprice) + parseFloat(add_on_price);
               formik.setFieldValue("service_id", isServicePrice.id);
               formik.setFieldValue("duration", duration);
-              formik.setFieldValue("cost", cost ? cost[0].price : "");
-              formik.setFieldValue("staff_id", "", false);
+              formik.setFieldValue("cost", cost ? cost : "");
             }
           }, [detail, isServicePrice]);
           return (
@@ -346,7 +354,7 @@ const AppointmentEditForm = (props) => {
                                   dispatch(clientAppointmentListViewApi({ client: detail.id }));
                                   if (isRangeInfo) {
                                     dispatch(appointmentListViewApi(isRangeInfo));
-                                    dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id }));
+                                    dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));
                                   }
                                   sweatalert({ title: t("Appointment booking Cancelled"), text: t("Appointment booking Cancelled"), icon: "success" });
                                 }

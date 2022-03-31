@@ -17,7 +17,7 @@ import { InputField, InlineInputField, TextareaField, ReactSelectField } from "c
 import moment from "moment";
 
 import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm } from "../../../store/slices/saleSlice";
-import { openAddClientForm, openClientSearchList, closeClientSearchList, clientSuggetionListApi, clientSearchName, clientSearchObj } from "store/slices/clientSlice";
+import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
@@ -115,41 +115,41 @@ const SaleAddForm = (props) => {
 
   //Client search
   const fetchDataSuggetionListClient = () => {
-    dispatch(clientSuggetionListApi({ next_page_url: SuggetionViewClient.next_page_url, q: isSearchNameClient }));
+    dispatch(ClientSuggetionListApi({ next_page_url: SuggetionViewClient.next_page_url, q: isSearchNameClient }));
   };
 
   const handleClickSearchClient = (e) => {
     let q = e.currentTarget.value;
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     }
   };
   const handleKeyUpSearchClient = (e) => {
     let q = e.currentTarget.value;
-    dispatch(clientSearchName(q));
+    dispatch(ClientSearchName(q));
     if (q && q.length > 0) {
-      dispatch(openClientSearchList());
-      dispatch(clientSuggetionListApi({ q: q }));
+      dispatch(OpenClientSearchList());
+      dispatch(ClientSuggetionListApi({ q: q }));
     } else {
-      dispatch(closeClientSearchList());
-      dispatch(clientSearchName(""));
-      dispatch(clientSearchObj(""));
+      dispatch(CloseClientSearchList());
+      dispatch(ClientSearchName(""));
+      dispatch(ClientSearchObj(""));
     }
   };
   const handleCloseSearchClient = () => {
-    dispatch(clientSearchName(""));
-    dispatch(clientSearchObj(""));
-    dispatch(closeClientSearchList());
+    dispatch(ClientSearchName(""));
+    dispatch(ClientSearchObj(""));
+    dispatch(CloseClientSearchList());
   };
   const handleOnBlurClient = () => {
     // setTimeout(() => {
-    //   dispatch(closeClientSearchList());
+    //   dispatch(CloseClientSearchList());
     // }, 200);
   };
 
   const handleClientAddForm = () => {
-    dispatch(openAddClientForm());
+    dispatch(OpenAddClientForm());
   };
 
   return (
@@ -190,12 +190,11 @@ const SaleAddForm = (props) => {
               formik.setFieldValue("client_id", appointmentDetail.client_id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
               formik.setFieldValue("invoicedate", appointmentDetail.showdate);
-              // dispatch(clientSearchName(appointmentDetail.client && ));
-              dispatch(clientSearchObj(appointmentDetail.client));
-              dispatch(clientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
+              // dispatch(ClientSearchName(appointmentDetail.client && ));
+              dispatch(ClientSearchObj(appointmentDetail.client));
+              dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
             }
           }, [isCart, appointmentDetail]);
-          console.log(formik.values);
           let totalprice = 0;
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
@@ -250,7 +249,7 @@ const SaleAddForm = (props) => {
                         value={isSearchNameClient}
                         onInput={(e) => {
                           formik.setFieldValue("client_id", "");
-                          dispatch(clientSearchName(e.target.value));
+                          dispatch(ClientSearchName(e.target.value));
                         }}
                         onClick={handleClickSearchClient}
                         onKeyUp={handleKeyUpSearchClient}

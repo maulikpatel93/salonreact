@@ -52,18 +52,19 @@ const StaffAddForm = () => {
     suburb: "",
     state: "",
     postcode: "",
+    calendar_booking: 0,
     price_tier_id: "",
     add_on_services: [],
     add_on_category: [],
     time: new Date(),
     working_hours: [
-      { dayoff: "", days: "Sunday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Monday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Tuesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Wednesday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Thursday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "1", days: "Friday", start_time: "", end_time: "", break_time: [] },
-      { dayoff: "", days: "Saturday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 0, days: "Sunday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 0, days: "Monday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Tuesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Wednesday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Thursday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Friday", start_time: "", end_time: "", break_time: [] },
+      { dayoff: 1, days: "Saturday", start_time: "", end_time: "", break_time: [] },
     ],
   };
 
@@ -88,7 +89,7 @@ const StaffAddForm = () => {
           .trim()
           .nullable()
           .when("dayoff", {
-            is: "1",
+            is: 1,
             then: Yup.string()
               .trim()
               .label(t("Start Time"))
@@ -109,7 +110,7 @@ const StaffAddForm = () => {
           .trim()
           .nullable()
           .when("dayoff", {
-            is: "1",
+            is: 1,
             then: Yup.string()
               .trim()
               .label(t("End Time"))
@@ -208,7 +209,7 @@ const StaffAddForm = () => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleStaffSubmit}>
         {(formik) => {
           useEffect(() => {
-            if (isAddonServices) {
+            if (isAddonServices.length > 0) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
                 if (addonservicesData) {
@@ -278,7 +279,7 @@ const StaffAddForm = () => {
                           <SwitchField
                             name="calendar_booking"
                             label={t("Allow calendar bookings")}
-                            controlId="clientForm-calendar_booking"
+                            controlId="staffForm-calendar_booking"
                             value="1"
                             onChange={(e) => {
                               if (e.currentTarget.checked) {
@@ -327,11 +328,11 @@ const StaffAddForm = () => {
                                       onChange={(e) => {
                                         if (e.currentTarget.checked) {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "1", false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, 1, false);
                                           }, 100);
                                         } else {
                                           setTimeout(() => {
-                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, "", false);
+                                            formik.setFieldValue(`working_hours[${i}][dayoff]`, 0, false);
                                             formik.setFieldValue(`working_hours[${i}][start_time]`, "", false);
                                             formik.setFieldValue(`working_hours[${i}][end_time]`, "", false);
                                             formik.setFieldValue(`working_hours[${i}][break_time]`, [], false);
@@ -442,7 +443,7 @@ const StaffAddForm = () => {
                             })}
                         </ul>
                       </div>
-                      <div className="col-xl-4 col-md-12 service">
+                      <div className="col-xl-4 col-md-12 service" style={{ display: isAddonServices.length > 0 ? "block" : "none" }}>
                         <h3 className="mb-2">{t("Services")}</h3>
                         <h6 className="subtitle">{t("Select which services this staff member is able to perform.")}</h6>
                         <ul className="list-unstyled mb-0 p-0 m-0">
@@ -460,7 +461,7 @@ const StaffAddForm = () => {
                                   } else {
                                     formik.setFieldValue("add_on_all", 0);
                                   }
-                                  if (isAddonServices) {
+                                  if (isAddonServices.length > 0) {
                                     Object.keys(isAddonServices).map((item) => {
                                       let addonservicesData = isAddonServices[item].services;
                                       let tempUser = addonservicesData.map((itemservice) => {
@@ -474,7 +475,7 @@ const StaffAddForm = () => {
                               <label>{t("All Services")}</label>
                             </div>
                             <ul className="list-unstyled mb-0 ps-lg-4 ps-3">
-                              {isAddonServices &&
+                              {isAddonServices.length > 0 &&
                                 Object.keys(isAddonServices).map((item) => {
                                   let category_id = isAddonServices[item].id;
                                   let category_name = isAddonServices[item].name;

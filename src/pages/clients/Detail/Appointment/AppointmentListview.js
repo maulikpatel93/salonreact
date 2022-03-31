@@ -23,12 +23,13 @@ const AppointmentListview = (props) => {
     <>
       {objectData &&
         Object.keys(objectData).map((item) => {
+          console.log(objectData[item]);
           let id = objectData[item].id;
           let client_id = objectData[item].client_id;
           let service_id = objectData[item].service_id;
-          let date = objectData[item].date;
+          let dateof = objectData[item].dateof;
           let start_time = objectData[item].start_time;
-          let datetime = date + " " + start_time;
+          let datetime = dateof + " " + start_time;
           let status = objectData[item].status;
           // let duration = objectData[item].duration;
           // let repeats = objectData[item].repeats;
@@ -53,7 +54,7 @@ const AppointmentListview = (props) => {
                 className={(status === "Scheduled" && "cursor-pointer") + " text-decoration-none event-box"}
                 onClick={() => {
                   if (status === "Scheduled") {
-                    dispatch(appointmentDetailApi({ id, client_id })).then((action) => {
+                    dispatch(appointmentDetailApi({ id, client_id, showdate: dateof })).then((action) => {
                       if (action.meta.requestStatus === "fulfilled") {
                         dispatch(openEditAppointmentForm());
                         dispatch(serviceOptions({ option: { valueField: "id", labelField: "name" } }));

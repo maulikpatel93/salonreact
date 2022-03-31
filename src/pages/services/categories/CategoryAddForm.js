@@ -7,12 +7,13 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField } from "../../../component/form/Field";
-import { sweatalert } from "../../../component/Sweatalert2";
+// import { sweatalert } from "../../../component/Sweatalert2";
 
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeAddCategoryForm, categoryStoreApi } from "../../../store/slices/categorySlice";
 import { removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
+import { Notify } from "component/Toastr";
 
 const CategoryAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const CategoryAddForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(100).label(t("Category_name")).required(),
+    name: Yup.string().trim().max(100).label(t("Name")).required(),
   });
   yupconfig();
 
@@ -45,7 +46,9 @@ const CategoryAddForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeAddCategoryForm());
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          const response = action.payload && action.payload.message && action.payload.message;
+          Notify({ text:t('Success'), title: response && response.message, type: "success" });
+          // sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -82,7 +85,7 @@ const CategoryAddForm = () => {
                   <div className="modal-body p-md-4 p-3">
                     <h4 className="mb-2">{t("Add Category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
-                      <InputField type="text" name="name" value={formik.values.name} label={t("Category_name")} controlId="categoryForm-name" />
+                      <InputField type="text" name="name" value={formik.values.name} label={t("Name")} controlId="categoryForm-name" />
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}

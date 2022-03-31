@@ -7,12 +7,13 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField } from "../../../component/form/Field";
-import { sweatalert } from "../../../component/Sweatalert2";
+// import { sweatalert } from "../../../component/Sweatalert2";
 
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeEditCategoryForm, categoryUpdateApi } from "../../../store/slices/categorySlice";
 import { selectImage, removeImage } from "../../../store/slices/imageSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
+import { Notify } from "component/Toastr";
 
 const CategoryEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const CategoryEditForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(100).label(t("Category_name")).required(),
+    name: Yup.string().trim().max(100).label(t("Name")).required(),
   });
   yupconfig();
 
@@ -44,7 +45,9 @@ const CategoryEditForm = () => {
           resetForm();
           dispatch(removeImage());
           dispatch(closeEditCategoryForm());
-          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
+          const response = action.payload && action.payload.message && action.payload.message;
+          Notify({ text:t('Updated'), title: response && response.message, type: "success" });
+          // sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;
           const errors = action.payload && action.payload.message && action.payload.message.errors;
@@ -92,7 +95,7 @@ const CategoryEditForm = () => {
                   <div className="modal-body p-md-4 p-3">
                     <h4 className="mb-2">{t("Edit Category")}</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
-                      <InputField type="text" name="name" value={formik.values.name} label={t("Category_name")} controlId="categoryForm-name" />
+                      <InputField type="text" name="name" value={formik.values.name} label={t("Name")} controlId="categoryForm-name" />
                       <div className="text-center mt-3">
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                           {loading && <span className="spinner-border spinner-border-sm"></span>}

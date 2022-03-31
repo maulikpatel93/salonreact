@@ -82,7 +82,7 @@ const view = (values) => {
     id: values && values.id ? values.id : "",
     field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
-    serviceprice_field: values && values.option ? "0" : "name,price,add_on_price", //business_name,owner_name
+    serviceprice_field: values && values.option ? "0" : "price_tier_id,price,add_on_price", //business_name,owner_name
     supplier_field: values && values.option ? "0" : "name", //business_name,owner_name
     tax_field: values && values.option ? "0" : "name", //business_name,owner_name
     addOnService_field: values && values.option ? "0" : "name", //business_name,owner_name
@@ -158,12 +158,14 @@ const serviceprice = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
   let service_id = values && values.service_id ? values.service_id : "";
+  let staff_id = values && values.service_id ? values.staff_id : "";
   const action = `afterlogin/services/serviceprice`;
   const data = {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
     service_id: service_id,
+    staff_id: staff_id,
   };
   return axios.post(API_URL + action, data, { headers: authHeader() });
 };
