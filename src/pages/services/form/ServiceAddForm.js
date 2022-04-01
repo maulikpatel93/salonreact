@@ -78,7 +78,6 @@ const ServiceAddForm = () => {
   yupconfig();
 
   const handlecategoriesubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    console.log(values);
     setLoading(true);
     try {
       dispatch(serviceStoreApi(values)).then((action) => {

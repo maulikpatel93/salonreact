@@ -76,6 +76,78 @@ const view = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const invoiceview = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const sort = values && values.sort;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  const result = values && values.result ? values.result : "";
+  let sortstring = "";
+  if (sort) {
+    let sortArray = [];
+    Object.keys(sort).map(function (key, index) {
+      return (sortArray[index] = `sort[${key}]=${sort[key]}`);
+    });
+    if (sortArray.length > 0) {
+      let jsort = sortArray.join("&");
+      sortstring = jsort;
+    }
+  }
+  const pagination = values && values.option ? false : true;
+  const action = page ? `afterlogin/sale/invoice?page=${page}&${sortstring}` : `afterlogin/sale/invoice?${sortstring}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    pagination: values && values.id ? false : pagination, //true or false
+    id: values && values.id ? values.id : "",
+    client_id: values && values.client_id ? values.client_id : "",
+    daterange: values && values.daterange ? values.daterange : "",
+    field: values && values.id ? "" : "", // first_name,last_name,email
+    salon_field: false, //business_name,owner_name
+    result: result, //business_name,owner_name
+    option: values && values.option ? values.option : "",
+  };
+  return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
+};
+
+const createinvoiceview = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const sort = values && values.sort;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  const result = values && values.result ? values.result : "";
+  let sortstring = "";
+  if (sort) {
+    let sortArray = [];
+    Object.keys(sort).map(function (key, index) {
+      return (sortArray[index] = `sort[${key}]=${sort[key]}`);
+    });
+    if (sortArray.length > 0) {
+      let jsort = sortArray.join("&");
+      sortstring = jsort;
+    }
+  }
+  const pagination = values && values.option ? false : true;
+  const action = page ? `afterlogin/sale/createinvoice?page=${page}&${sortstring}` : `afterlogin/sale/createinvoice?${sortstring}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    pagination: values && values.id ? false : pagination, //true or false
+    id: values && values.id ? values.id : "",
+    client_id: values && values.client_id ? values.client_id : "",
+    daterange: values && values.daterange ? values.daterange : "",
+    field: values && values.id ? "" : "id,salon_id,client_id,appointment_id,voucher_id,invoicedate,totalprice,paidby,status", // first_name,last_name,email
+    salon_field: false, //business_name,owner_name
+    result: result, //business_name,owner_name
+    option: values && values.option ? values.option : "",
+  };
+  return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
+};
+
 const deleted = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
@@ -138,6 +210,26 @@ const products = (values) => {
   return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const clientsuggetionlist = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/client/view?page=${page}&q=${q}` : `afterlogin/client/view?q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    role_id: 6,
+    salon_id: auth.user.salon_id,
+    pagination: true, //true or false
+    id: values && values.id ? values.id : "",
+    field: values && values.id ? "" : "first_name,last_name,email,profile_photo,phone_number", // first_name,last_name,email
+    salon_field: false, //business_name,owner_name
+  };
+  return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
+};
+
 const saleApiController = {
   create,
   update,
@@ -146,5 +238,8 @@ const saleApiController = {
   suggetionlist,
   services,
   products,
+  invoiceview,
+  createinvoiceview,
+  clientsuggetionlist
 };
 export default saleApiController;

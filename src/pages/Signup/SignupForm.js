@@ -180,8 +180,6 @@ const SignupForm = () => {
   const handleSignupSubmit = (values, formik) => {
     // { setErrors, setStatus, setSubmitting, resetForm }
     setLoading(true);
-    console.log(emailverify);
-    console.log(values.email);
     if (isSignupStep >= 1 && isSignupStep < 5) {
       if (isSignupStep === 2 || isSignupStep === 3) {
         if (isSignupStep === 2) {
@@ -213,8 +211,6 @@ const SignupForm = () => {
                   showCancelButton: true,
                   preConfirm: () => {
                     const email_verified = Swal.getPopup().querySelector("#email_verified").value;
-                    console.log(email_otp);
-                    console.log(parseInt(email_verified));
                     if (!email_verified) {
                       MySwal.showValidationMessage(`Please enter email verify code`);
                     } else if (email_otp && email_verified && email_otp === parseInt(email_verified)) {

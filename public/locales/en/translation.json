@@ -447,5 +447,11 @@
     "marketing": "marketing",
     "Sale Completed": "Sale Completed",
     "Sale Completed Successfully": "Sale Completed Successfully",
-    "Repeated": "Repeated"
+    "Repeated": "Repeated",
+    "Create Invoice": "Create Invoice",
+    "View Invoices": "View Invoices",
+    "Invoice": "Invoice",
+    "Paid": "Paid",
+    "Pending": "Pending",
+    "Failed": "Failed"
 }

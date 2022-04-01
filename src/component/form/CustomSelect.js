@@ -4,6 +4,7 @@ import Select from "react-select";
 import { servicePriceApi } from "store/slices/serviceSlice";
 import { useDispatch } from "react-redux";
 import { staffOptions } from "store/slices/staffSlice";
+import { SaleServiceToCartApi } from "store/slices/saleSlice";
 // interface Option {
 //   label: string;
 //   value: string;
@@ -16,7 +17,7 @@ import { staffOptions } from "store/slices/staffSlice";
 //   placeholder?: string;
 // }
 
-export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId, service_id = "" }) => {
+export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false, controlId, service_id = "", page = "" }) => {
   const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {
@@ -29,9 +30,13 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
         }
       });
     }
-    if (field.name === "staff_id" && controlId === "appointmentForm-staff_id") {
+    if ((field.name === "staff_id" && controlId === "appointmentForm-staff_id") || page === "newsale") {
       dispatch(servicePriceApi({ staff_id: option && option.value, service_id: service_id && service_id })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
+          let service = action.payload;
+          if (service && service.serviceprice && page === "newsale") {
+            dispatch(SaleServiceToCartApi({ service_id: service_id, serviceprice: service.serviceprice }));
+          }
           // let service = action.payload;
           // let serviceprice = service && service.serviceprice && service.serviceprice[0] && service.serviceprice[0].price ? service.serviceprice[0].price : "";
           // console.log(service.serviceprice && service.serviceprice[0].price);
@@ -104,6 +109,7 @@ CustomSelect.propTypes = {
   isMulti: PropTypes.bool,
   controlId: PropTypes.string,
   service_id: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  page: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
 
 export default CustomSelect;

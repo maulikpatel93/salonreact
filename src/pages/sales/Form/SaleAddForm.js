@@ -298,6 +298,7 @@ const SaleAddForm = (props) => {
                   {isCart &&
                     isCart.services.length > 0 &&
                     Object.keys(isCart.services).map((item) => {
+                      console.log(isCart.services[item]);
                       let service_id = isCart.services[item].id;
                       let service_name = isCart.services[item].name;
                       // let service_price = isCart.services[item].serviceprice;
@@ -341,7 +342,7 @@ const SaleAddForm = (props) => {
                             <div className="card card-body">
                               <div className="row ">
                                 <div className="col-md-4 align-items-center mt-1">
-                                  <ReactSelectField name={`cart[services][${item}][staff_id]`} placeholder={t("Choose Staff")} value={formik_cart_service_staff_id} options={staffOptionsData} label={t("Staff")} controlId={`"salonform-cart-services-${item}-staff_id"`} isMulti={false} />
+                                  <ReactSelectField name={`cart[services][${item}][staff_id]`} placeholder={t("Choose Staff")} value={formik_cart_service_staff_id} options={staffOptionsData} label={t("Staff")} controlId={`"salonform-cart-services-${item}-staff_id"`} isMulti={false} page={"newsale"} service_id={service_id} />
                                 </div>
                                 <div className="col-md-4 price-input align-items-center mt-1">
                                   <InputField type="text" name={`cart[services][${item}][gprice]`} value={formik_cart_service_gprice} label={t("Cost")} controlId={`"salonform-cart-services-${item}-cost"`} page={"saleform"} />

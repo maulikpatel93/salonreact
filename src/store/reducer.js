@@ -251,7 +251,7 @@ const reducer = combineReducers({
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
-      whitelist: [],
+      whitelist: ["isTabView"],
     },
     saleReducer,
   ),

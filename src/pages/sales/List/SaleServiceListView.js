@@ -38,11 +38,11 @@ const SaleServiceListView = (props) => {
                         {Object.keys(servicesData).map((itemservice) => {
                           let service_name = servicesData[itemservice].name;
                           let service_duration = servicesData[itemservice].duration;
-                          let service_price = servicesData[itemservice].serviceprice;
-                          let generalPrice = service_price.filter((x) => x.name == "General");
-                          let gprice = generalPrice.length === 1 && generalPrice[0].price;
-                          let add_on_price = generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
-                          let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
+                          // let service_price = servicesData[itemservice].serviceprice;
+                          // let generalPrice = service_price;
+                          // let gprice = generalPrice.length === 1 && generalPrice[0].price;
+                          // let add_on_price = generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+                          // let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
                           return (
                             <li key={item + itemservice} className="cursor-pointer" data-obj={JSON.stringify(servicesData[itemservice])} onClick={handleServiceClick}>
                               <div className="row">
@@ -52,7 +52,7 @@ const SaleServiceListView = (props) => {
                                   </label>
                                 </div>
                                 <div className="col-md-3 col-6 time">{`${service_duration} ${t("Mins")}`}</div>
-                                <div className="col-md-3 col-6 price text-end">${totalprice}</div>
+                                {/* <div className="col-md-3 col-6 price text-end">${totalprice}</div> */}
                               </div>
                             </li>
                           );
