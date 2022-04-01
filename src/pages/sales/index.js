@@ -167,7 +167,7 @@ const Sales = () => {
                     // onEvent={handleEvent}
                     onCancel={handleCancel}
                   >
-                    <div className="input-group mb-3" id="reportrange">
+                    <div className="input-group" id="reportrange">
                       <input type="text" className="form-control date" defaultValue={labeldaterange} />
                       <span className="input-group-text cursor-pointer" id="basic-addon1" onClick={handleCancel}>
                         <i className="fas fa-times"></i>

@@ -12,7 +12,7 @@ import { decimalOnly } from "../../../component/form/Validation";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { openAddVoucherForm, setVoucherPreview, voucherListViewApi, voucherUpdateApi } from "store/slices/voucherSlice";
+import { OpenAddVoucherForm, setVoucherPreview, VoucherGridViewApi, VoucherUpdateApi } from "store/slices/voucherSlice";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
@@ -63,13 +63,13 @@ const VoucherEditForm = (props) => {
   const handlevoucherSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(voucherUpdateApi(values)).then((action) => {
+      dispatch(VoucherUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-          dispatch(openAddVoucherForm());
-          dispatch(voucherListViewApi());
+          dispatch(OpenAddVoucherForm());
+          dispatch(VoucherGridViewApi());
           if (scriptedRef.current) {
             setLoading(false);
           }
@@ -146,7 +146,7 @@ const VoucherEditForm = (props) => {
             <div className="voucher-form d-flex flex-column">
               <div className="">
                 <h3 className="float-start">{t("Edit Voucher")}</h3>
-                <a className="float-end h5 cursor-pointer btn btn-outline-primary btn-md mb-0 p-2" onClick={() => dispatch(openAddVoucherForm())}>
+                <a className="float-end h5 cursor-pointer btn btn-outline-primary btn-md mb-0 p-2" onClick={() => dispatch(OpenAddVoucherForm())}>
                   {t("Create Voucher")}
                 </a>
               </div>

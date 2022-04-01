@@ -5,7 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import config from "../../../config";
 import VoucherListView from "./VoucherListView";
-import { voucherListViewApi } from "../../../store/slices/voucherSlice";
+import { VoucherGridViewApi } from "../../../store/slices/voucherSlice";
 import PaginationLoader from "component/PaginationLoader";
 import { checkaccess } from "helpers/functions";
 
@@ -20,12 +20,12 @@ const VoucherList = () => {
   const access = useSelector((state) => state.salonmodule.isAccess);
   const ListView = useSelector((state) => state.voucher.isListView);
   const fetchDataGrid = () => {
-    dispatch(voucherListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(VoucherGridViewApi({ next_page_url: ListView.next_page_url }));
   };
   const [isFetching, setIsFetching] = useState(false);
   const loadMoreItems = () => {
     setIsFetching(true);
-    dispatch(voucherListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(VoucherGridViewApi({ next_page_url: ListView.next_page_url }));
     //mocking an API call
     setTimeout(() => {
       setIsFetching(false);

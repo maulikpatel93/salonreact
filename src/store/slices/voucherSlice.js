@@ -4,7 +4,7 @@ import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 export const usersAdapter = createEntityAdapter();
 
-export const voucherStoreApi = createAsyncThunk("voucher/create", async (formvalues, thunkAPI) => {
+export const VoucherStoreApi = createAsyncThunk("voucher/create", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .create(formvalues, thunkAPI)
@@ -17,7 +17,7 @@ export const voucherStoreApi = createAsyncThunk("voucher/create", async (formval
   }
 });
 
-export const voucherUpdateApi = createAsyncThunk("voucher/update", async (formvalues, thunkAPI) => {
+export const VoucherUpdateApi = createAsyncThunk("voucher/update", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .update(formvalues, thunkAPI)
@@ -30,7 +30,7 @@ export const voucherUpdateApi = createAsyncThunk("voucher/update", async (formva
   }
 });
 
-export const voucherListViewApi = createAsyncThunk("voucher/gridview", async (formValues, thunkAPI) => {
+export const VoucherGridViewApi = createAsyncThunk("voucher/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .view(formValues, thunkAPI)
@@ -43,12 +43,12 @@ export const voucherListViewApi = createAsyncThunk("voucher/gridview", async (fo
   }
 });
 
-export const voucherOptions = createAsyncThunk("voucher/voucherOptions", async (formValues, thunkAPI) => {
+export const VoucherOptions = createAsyncThunk("voucher/VoucherOptions", async (formValues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "voucherOptions"))
-      .catch((error) => HandleError(thunkAPI, error, "voucherOptions"));
+      .then((response) => HandleResponse(thunkAPI, response, "VoucherOptions"))
+      .catch((error) => HandleError(thunkAPI, error, "VoucherOptions"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -56,7 +56,7 @@ export const voucherOptions = createAsyncThunk("voucher/voucherOptions", async (
   }
 });
 
-export const voucherDetailApi = createAsyncThunk("voucher/detail", async (formValues, thunkAPI) => {
+export const VoucherDetailApi = createAsyncThunk("voucher/detail", async (formValues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .view(formValues, thunkAPI)
@@ -69,7 +69,7 @@ export const voucherDetailApi = createAsyncThunk("voucher/detail", async (formVa
   }
 });
 
-export const voucherDeleteApi = createAsyncThunk("voucher/delete", async (formValues, thunkAPI) => {
+export const VoucherDeleteApi = createAsyncThunk("voucher/delete", async (formValues, thunkAPI) => {
   try {
     const resposedata = await voucherApiController
       .deleted(formValues, thunkAPI)
@@ -86,7 +86,7 @@ const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
   isOpenedDetailModal: "",
-  isListView: [],
+  isGridView: [],
   isSuggetionListView: [],
   isDetailData: "",
   isSearchList: "",
@@ -100,27 +100,27 @@ const voucherSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    openAddVoucherForm: (state = initialState) => {
+    OpenAddVoucherForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "open";
     },
-    closeAddVoucherForm: (state = initialState) => {
+    CloseAddVoucherForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
     },
-    openEditVoucherForm: (state = initialState) => {
+    OpenEditVoucherForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "open";
     },
-    closeEditVoucherForm: (state = initialState) => {
+    CloseEditVoucherForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
     },
-    openVoucherDetailModal: (state = initialState) => {
+    OpenVoucherDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "open";
     },
-    closeVoucherDetailModal: (state = initialState) => {
+    CloseVoucherDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
     },
@@ -129,63 +129,63 @@ const voucherSlice = createSlice({
     },
   },
   extraReducers: {
-    [voucherStoreApi.pending]: () => {},
-    [voucherStoreApi.fulfilled]: () => {
-      // if (state.isListView && state.isListView.data) {
-      //   state.isListView.data = [action.payload, ...state.isListView.data];
+    [VoucherStoreApi.pending]: () => {},
+    [VoucherStoreApi.fulfilled]: () => {
+      // if (state.isGridView && state.isGridView.data) {
+      //   state.isGridView.data = [action.payload, ...state.isGridView.data];
       // } else {
-      //   state.isListView = { data: [action.payload] };
+      //   state.isGridView = { data: [action.payload] };
       // }
     },
-    [voucherStoreApi.rejected]: () => {},
-    [voucherUpdateApi.pending]: () => {},
-    [voucherUpdateApi.fulfilled]: () => {
+    [VoucherStoreApi.rejected]: () => {},
+    [VoucherUpdateApi.pending]: () => {},
+    [VoucherUpdateApi.fulfilled]: () => {
       // const { id, ...changes } = action.payload;
-      // const existingData = state.isListView.data.find((event) => event.id === id);
+      // const existingData = state.isGridView.data.find((event) => event.id === id);
       // if (existingData) {
       //   Object.keys(changes).map((keyName) => {
       //     existingData[keyName] = changes[keyName];
       //   });
       // }
     },
-    [voucherUpdateApi.rejected]: () => {},
-    [voucherListViewApi.pending]: () => {},
-    [voucherListViewApi.fulfilled]: (state, action) => {
-      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+    [VoucherUpdateApi.rejected]: () => {},
+    [VoucherGridViewApi.pending]: () => {},
+    [VoucherGridViewApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-      let viewdata = state.isListView && state.isListView.data;
+      let viewdata = state.isGridView && state.isGridView.data;
       let newviewdata = action.payload && action.payload.data;
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
       if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
+        viewdata && newviewdata ? (state.isGridView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
-      state.isListView = action.payload;
+      state.isGridView = action.payload;
     },
-    [voucherListViewApi.rejected]: (state) => {
-      state.isListView = [];
+    [VoucherGridViewApi.rejected]: (state) => {
+      state.isGridView = [];
     },
-    [voucherDetailApi.pending]: () => {},
-    [voucherDetailApi.fulfilled]: (state, action) => {
+    [VoucherDetailApi.pending]: () => {},
+    [VoucherDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [voucherDetailApi.rejected]: (state) => {
+    [VoucherDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [voucherDeleteApi.pending]: () => {},
-    [voucherDeleteApi.fulfilled]: (state, action) => {
+    [VoucherDeleteApi.pending]: () => {},
+    [VoucherDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
+      state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
     },
-    [voucherDeleteApi.rejected]: () => {},
-    [voucherOptions.pending]: () => {},
-    [voucherOptions.fulfilled]: (state, action) => {
+    [VoucherDeleteApi.rejected]: () => {},
+    [VoucherOptions.pending]: () => {},
+    [VoucherOptions.fulfilled]: (state, action) => {
       state.isvoucherOption = action.payload;
     },
-    [voucherOptions.rejected]: (state) => {
+    [VoucherOptions.rejected]: (state) => {
       state.isvoucherOption = [];
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, openAddVoucherForm, closeAddVoucherForm, openEditVoucherForm, closeEditVoucherForm, openVoucherDetailModal, closeVoucherDetailModal, openVoucherSearchList, closevouchersearchList, voucherSearchName, setVoucherPreview } = voucherSlice.actions;
+export const { reset, OpenAddVoucherForm, CloseAddVoucherForm, OpenEditVoucherForm, CloseEditVoucherForm, OpenVoucherDetailModal, CloseVoucherDetailModal, openVoucherSearchList, closevouchersearchList, voucherSearchName, setVoucherPreview } = voucherSlice.actions;
 export default voucherSlice.reducer;
