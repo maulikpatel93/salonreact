@@ -17,10 +17,11 @@ const Sales = () => {
   SalonModule();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [state, setState] = useState({
-    start: moment().subtract(29, "days"),
-    end: moment(),
-  });
+  // const [state, setState] = useState({
+  //   start: moment().subtract(29, "days"),
+  //   end: moment(),
+  // });
+  const [state, setState] = useState({ start: "", end: "" });
   const { start, end } = state;
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
@@ -126,9 +127,10 @@ const Sales = () => {
     setState({ start, end });
   };
 
-  // const handleCancel = (event, picker) => {
-  //   picker.element.val("");
-  // };
+  const handleCancel = () => {
+    //picker.element.val("");
+    setState({ start: "", end: "" });
+  };
   return (
     <>
       <div className="page-content">
@@ -147,10 +149,9 @@ const Sales = () => {
                 <form action="#" className="d-inline-block">
                   <DateRangePicker
                     initialSettings={{
-                      startDate: start.toDate(),
-                      endDate: end.toDate(),
+                      startDate: start ? start.toDate() : moment().subtract(29, "days"),
+                      endDate: end ? end.toDate() : moment(),
                       locale: {
-                        cancelLabel: "Clear",
                         format: "Do MMMM YYYY",
                       },
                       ranges: {
@@ -164,8 +165,14 @@ const Sales = () => {
                     }}
                     onCallback={handleCallback}
                     // onEvent={handleEvent}
+                    onCancel={handleCancel}
                   >
-                    <input type="text" className="form-control date" />
+                    <div className="input-group mb-3" id="reportrange">
+                      <input type="text" className="form-control date" defaultValue={labeldaterange} />
+                      <span className="input-group-text cursor-pointer" id="basic-addon1" onClick={handleCancel}>
+                        <i className="fas fa-times"></i>
+                      </span>
+                    </div>
                   </DateRangePicker>
                 </form>
               </div>
