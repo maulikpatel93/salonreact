@@ -20,9 +20,9 @@ const VoucherPreview = (props) => {
   return (
     <>
       <div className="voucher-preview">
-        <h3>{t("Voucher Preview")}</h3>
         <div className="bg-white voucher-preview-inner">
           <div className="row mb-md-4 mb-3 gx-1">
+            <p>{t("Preview")}</p>
             <div className="col-9">
               <h2 className="mb-0">{preview.name ? preview.name : t("Voucher Name")}</h2>
               <h3 className="mb-1">${preview.amount ? preview.amount : "00.00"}</h3>

@@ -109,7 +109,7 @@ const Vouchers = () => {
                   )}
                   <VoucherGridView currentUser={currentUser} view={GridView} role_id={role_id} access={access} />
                   {!isFetching && GridView.next_page_url && (
-                    <div className="box-image-cover">
+                    <div className="box-image-cover voucher-grid">
                       <div className="tabs-image">
                         <img src={config.imagepath + "tabs-image.png"} alt="" />
                       </div>

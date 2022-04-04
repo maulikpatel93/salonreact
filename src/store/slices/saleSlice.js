@@ -107,6 +107,19 @@ export const SaleProductApi = createAsyncThunk("sale/products", async (formValue
   }
 });
 
+export const SaleVoucherApi = createAsyncThunk("sale/vouchers", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .vouchers(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "vouchers"))
+      .catch((error) => HandleError(thunkAPI, error, "vouchers"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const SaleServiceToCartApi = createAsyncThunk("sale/servicetocart", async (formValues, thunkAPI) => {
   try {
     const resposedata = await saleApiController
@@ -126,6 +139,19 @@ export const SaleProductToCartApi = createAsyncThunk("sale/producttocart", async
       .products(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "producttocart"))
       .catch((error) => HandleError(thunkAPI, error, "producttocart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const SaleVoucherToCartApi = createAsyncThunk("sale/vouchertocart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .vouchers(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "vouchertocart"))
+      .catch((error) => HandleError(thunkAPI, error, "vouchertocart"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -160,13 +186,14 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [] },
+  isCart: { services: [], products: [], vouchers: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
   isSuggetionListView: [],
   isSearchList: "",
   isSearchName: "",
   isSearchObj: "",
+  isVouchers: [],
 };
 
 const saleSlice = createSlice({
@@ -199,6 +226,9 @@ const saleSlice = createSlice({
     SaleProductSearchName: (state, action) => {
       state.isProductSearchName = action.payload;
     },
+    SaleServiceSearchName: (state, action) => {
+      state.isServiceSearchName = action.payload;
+    },
     SaleServiceRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.services = state.isCart.services ? state.isCart.services.filter((item) => item.id != id) : [];
@@ -206,6 +236,10 @@ const saleSlice = createSlice({
     SaleProductRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.products = state.isCart.products ? state.isCart.products.filter((item) => item.id != id) : [];
+    },
+    SaleVoucherRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isCart.vouchers = state.isCart.vouchers ? state.isCart.vouchers.filter((item) => item.id != id) : [];
     },
     AppointmentDetail: (state, action) => {
       state.isAppointmentDetail = action.payload;
@@ -317,6 +351,21 @@ const saleSlice = createSlice({
     [SaleProductApi.rejected]: (state) => {
       state.isProducts = [];
     },
+    [SaleVoucherApi.pending]: () => {},
+    [SaleVoucherApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isVouchers.current_page ? state.isVouchers.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isVouchers && state.isVouchers.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isVouchers = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isVouchers.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isVouchers = action.payload;
+    },
+    [SaleVoucherApi.rejected]: (state) => {
+      state.isVouchers = [];
+    },
     [SaleServiceToCartApi.pending]: () => {},
     [SaleServiceToCartApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
@@ -349,6 +398,22 @@ const saleSlice = createSlice({
     [SaleProductToCartApi.rejected]: (state) => {
       state.isCart.products = "";
     },
+    [SaleVoucherToCartApi.pending]: () => {},
+    [SaleVoucherToCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.vouchers.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const vouchers = [...state.isCart.vouchers, action.payload];
+        state.isCart.vouchers = vouchers;
+      }
+    },
+    [SaleVoucherToCartApi.rejected]: (state) => {
+      state.isCart.vouchers = "";
+    },
     [ClientSuggetionListApi.pending]: () => {},
     [ClientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
@@ -367,5 +432,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart } = saleSlice.actions;
 export default saleSlice.reducer;

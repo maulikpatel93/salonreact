@@ -42,9 +42,9 @@ const SaleAddForm = (props) => {
     client_id: "",
     client_name: "",
     notes: "",
-    cart: { services: [], products: [] },
+    cart: { services: [], products: [], vouchers: [] },
     appointment_id: "",
-    invoicedate: "",
+    eventdate: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
@@ -65,9 +65,11 @@ const SaleAddForm = (props) => {
           price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
         }),
       ),
-      appointment: Yup.array().of(
+      vouchers: Yup.array().of(
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
+          qty: Yup.string().trim().label(t("Quantity")).min(1).required().test("Digits only", t("The field should have digits only"), digitOnly),
+          price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
         }),
       ),
     }),
@@ -186,10 +188,24 @@ const SaleAddForm = (props) => {
                 formik.setFieldValue("cart[products][" + item + "][price]", product_retail_price);
               });
             }
+            if (isCart && isCart.vouchers.length > 0) {
+              Object.keys(isCart.vouchers).map((item) => {
+                let product_id = isCart.vouchers[item].id;
+                let name = isCart.vouchers[item].name;
+                let amount = isCart.vouchers[item].amount;
+                // let product_cost_price = isCart.products[item].cost_price;
+                let formik_cart_products_qty = formik.values.cart && formik.values.cart.products.length > 0 && formik.values.cart.products[item] && formik.values.cart.products[item].qty ? formik.values.cart.products[item].qty : "1";
+                let product_price = formik_cart_products_qty > 0 ? parseInt(formik_cart_products_qty) * parseFloat(product_retail_price) : product_retail_price;
+                totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
+                formik.setFieldValue("cart[products][" + item + "][id]", product_id);
+                formik.setFieldValue("cart[products][" + item + "][qty]", String(formik_cart_products_qty));
+                formik.setFieldValue("cart[products][" + item + "][price]", product_retail_price);
+              });
+            }
             if (appointmentDetail) {
               formik.setFieldValue("client_id", appointmentDetail.client_id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
-              formik.setFieldValue("invoicedate", appointmentDetail.showdate);
+              formik.setFieldValue("eventdate", appointmentDetail.showdate);
               // dispatch(ClientSearchName(appointmentDetail.client && ));
               dispatch(ClientSearchObj(appointmentDetail.client));
               dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
@@ -285,7 +301,7 @@ const SaleAddForm = (props) => {
                         <div className="row">
                           <div className="col-9">
                             <h4 className="mb-0 fw-semibold">{appointmentDetail.service.name}</h4>
-                            <p className="mb-0">{t("With {{ staff_name }} from {{ invoicedate }} at {{ start_time }} - {{ end_time }}", { staff_name: ucfirst(appointmentDetail.staff.first_name + " " + appointmentDetail.staff.last_name), invoicedate: appointmentDetail.showdate, start_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.start_time).format("hh:mm A"), end_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.end_time).format("hh:mm A") })} </p>
+                            <p className="mb-0">{t("With {{ staff_name }} from {{ eventdate }} at {{ start_time }} - {{ end_time }}", { staff_name: ucfirst(appointmentDetail.staff.first_name + " " + appointmentDetail.staff.last_name), eventdate: appointmentDetail.showdate, start_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.start_time).format("hh:mm A"), end_time: moment(appointmentDetail.dateof + "T" + appointmentDetail.end_time).format("hh:mm A") })} </p>
                             <div className="d-none">
                               <InputField type="hidden" name="appointment_id" value={formik.values.appointment_id} id={`"salonform-cart-appointment-0-id"`} />
                             </div>

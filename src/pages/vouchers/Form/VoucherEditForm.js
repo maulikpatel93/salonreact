@@ -9,10 +9,11 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField, SelectField, ReactSelectField, SwitchField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { OpenAddVoucherForm, setVoucherPreview, VoucherGridViewApi, VoucherUpdateApi } from "store/slices/voucherSlice";
+import { CloseEditVoucherForm, OpenAddVoucherForm, setVoucherPreview, VoucherGridViewApi, VoucherUpdateApi } from "store/slices/voucherSlice";
+import VoucherPreview from "../List/VoucherPreview";
 // import DatePicker from "react-multi-date-picker";
 // import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
@@ -22,9 +23,13 @@ const VoucherEditForm = (props) => {
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  const rightDrawerOpened = useSelector((state) => state.voucher.isOpenedEditForm);
+  const isVoucherPreview = useSelector((state) => state.voucher.isVoucherPreview);
+  const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const detail = useSelector((state) => state.voucher.isDetailData);
-
-  const service = props.service;
+  // const service = props.service;
   const getformValues = (values) => {
     useEffect(() => {
       dispatch(setVoucherPreview(values));
@@ -37,10 +42,10 @@ const VoucherEditForm = (props) => {
     amount: "",
     valid: "",
     used_online: "",
-    limit_uses: "",
-    limit_uses_value: "",
+    // limit_uses: "",
+    // limit_uses_value: "",
     terms_and_conditions: "",
-    service_id: [],
+    // service_id: [],
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().max(50).label(t("Voucher Name")).required(),
@@ -48,15 +53,15 @@ const VoucherEditForm = (props) => {
     amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     valid: Yup.string().trim().label(t("Valid For")).required(),
     used_online: Yup.mixed().nullable(),
-    limit_uses: Yup.mixed().nullable(),
     terms_and_conditions: Yup.string().trim().label(t("Terms and Conditions")).required(),
-    limit_uses_value: Yup.string()
-      .nullable()
-      .when("limit_uses", {
-        is: 1,
-        then: Yup.string().trim().label(t("Limit")).required().test("Digits only", t("The field should have digits only"), decimalOnly),
-      }),
-    service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().label(t("Service")).min(1).required() : Yup.string().nullable().label(t("Service")).required())),
+    // limit_uses: Yup.mixed().nullable(),
+    // limit_uses_value: Yup.string()
+    //   .nullable()
+    //   .when("limit_uses", {
+    //     is: 1,
+    //     then: Yup.string().trim().label(t("Limit")).required().test("Digits only", t("The field should have digits only"), decimalOnly),
+    //   }),
+    // service_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().label(t("Service")).min(1).required() : Yup.string().nullable().label(t("Service")).required())),
   });
   yupconfig();
 
@@ -68,8 +73,8 @@ const VoucherEditForm = (props) => {
           setStatus({ success: true });
           resetForm();
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
-          dispatch(OpenAddVoucherForm());
-          dispatch(VoucherGridViewApi());
+          dispatch(CloseEditVoucherForm());
+          // dispatch(VoucherGridViewApi());
           if (scriptedRef.current) {
             setLoading(false);
           }
@@ -94,6 +99,10 @@ const VoucherEditForm = (props) => {
       setLoading(false);
     }
   };
+
+  const handleCloseEditVoucherForm = () => {
+    dispatch(CloseEditVoucherForm());
+  };
   const validforOptionsData = [
     { value: "1", label: "1 " + t("Month") },
     { value: "2", label: "2 " + t("Months") },
@@ -108,18 +117,18 @@ const VoucherEditForm = (props) => {
     { value: "11", label: "11 " + t("Months") },
     { value: "12", label: "12 " + t("Months") },
   ];
-  const limitOptionsData = [
-    { value: "10", label: "10" },
-    { value: "25", label: "25" },
-    { value: "50", label: "50" },
-    { value: "75", label: "75" },
-    { value: "100", label: "100" },
-    { value: "125", label: "125" },
-    { value: "150", label: "150" },
-    { value: "175", label: "175" },
-    { value: "200", label: "200" },
-  ];
-  const serviceOptionsData = service;
+  // const limitOptionsData = [
+  //   { value: "10", label: "10" },
+  //   { value: "25", label: "25" },
+  //   { value: "50", label: "50" },
+  //   { value: "75", label: "75" },
+  //   { value: "100", label: "100" },
+  //   { value: "125", label: "125" },
+  //   { value: "150", label: "150" },
+  //   { value: "175", label: "175" },
+  //   { value: "200", label: "200" },
+  // ];
+  // const serviceOptionsData = service;
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlevoucherSubmit}>
@@ -127,106 +136,138 @@ const VoucherEditForm = (props) => {
           useEffect(() => {
             // formik.setFieldValue("service_id", [6, 13]);
             if (detail) {
-              const fields = ["id", "name", "description", "amount", "valid", "used_online", "limit_uses", "limit_uses_value", "terms_and_conditions"];
+              const fields = ["id", "name", "description", "amount", "valid", "used_online", "terms_and_conditions"];
               fields.forEach((field) => {
-                if (["used_online", "limit_uses"].includes(field)) {
+                if (["used_online"].includes(field)) {
                   formik.setFieldValue(field, parseInt(detail[field]), false);
                 } else {
                   formik.setFieldValue(field, detail[field] ? detail[field] : "", false);
                 }
               });
-              let services = detail.voucherservices && detail.voucherservices.map((obj) => obj.id);
-              if (services.length > 0) {
-                formik.setFieldValue("service_id", services);
-              }
+              // let services = detail.voucherservices && detail.voucherservices.map((obj) => obj.id);
+              // if (services.length > 0) {
+              //   formik.setFieldValue("service_id", services);
+              // }
             }
           }, [detail]);
           getformValues(formik.values);
           return (
-            <div className="voucher-form d-flex flex-column">
-              <div className="">
-                <h3 className="float-start">{t("Edit Voucher")}</h3>
-                <a className="float-end h5 cursor-pointer btn btn-outline-primary btn-md mb-0 p-2" onClick={() => dispatch(OpenAddVoucherForm())}>
-                  {t("Create Voucher")}
-                </a>
+            <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addproduct-drawer">
+              <div className="drawer-wrp position-relative">
+                <form noValidate onSubmit={formik.handleSubmit}>
+                  <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
+                    <h3 className="mb-0 fw-semibold">{t("Edit Voucher")}</h3>
+                    <div className="ms-auto">
+                      <a className="close btn me-1 cursor-pointer" onClick={handleCloseEditVoucherForm}>
+                        {t("Cancel")}
+                      </a>
+                      <button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading && <span className="spinner-border spinner-border-sm"></span>}
+                        {t("Save")}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="drawer-body">
+                    <div className="row">
+                      <div className="col-xxl-6 col-xl-8 col-md-8 add-form px-md-4 px-1 py-lg-5 py-3">
+                        <div className="row mx-0">
+                          <div className="col-md-6 mb-md-0 mb-3 ps-4 pe-4">
+                            <h4 className="fw-semibold mb-2">{t("Description")}</h4>
+                            <p>{t("Add the name and general details of this voucher.")}</p>
+                          </div>
+                          <div className="col-md-6 ps-4 pe-4">
+                            <div className="mb-3">
+                              <InputField type="text" name="name" value={formik.values.name} label={t("Voucher Name")} controlId="voucherForm-name" />
+                            </div>
+                            <div className="mb-3">
+                              <TextareaField name="description" placeholder={t("Add a short description")} value={formik.values.description} label={t("Description")} controlId="voucherForm-description" />
+                            </div>
+                            <div className="row gx-2">
+                              <div className="mb-md-4 mb-3 col-md-6">
+                                <InputField type="text" name={"amount"} value={formik.values.amount} placeholder="$" label={"Amount"} controlId={"voucherForm-amount"} />
+                              </div>
+                              <div className="mb-md-4 mb-3 col-md-6">
+                                <SelectField name="valid" placeholder={t("--Select--")} value={formik.values.valid} options={validforOptionsData} label={t("Valid For")} controlId="voucherForm-valid" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr className="drawer-supplier-hr"></hr>
+                        <div className="row mx-0">
+                          <div className="col-md-6 mb-md-0 mb-3 ps-4 pe-4">
+                            <h4 className="fw-semibold mb-2">{t("Online use")}</h4>
+                            <p>{t("Set voucher to be redeemable online.")}</p>
+                          </div>
+                          <div className="col-md-6 ps-4 pe-4">
+                            <SwitchField
+                              name="used_online"
+                              label={t("Allow voucher to be used online")}
+                              controlId="voucherForm-used_online"
+                              value={"1"}
+                              onChange={(e) => {
+                                if (e.currentTarget.checked) {
+                                  setTimeout(() => {
+                                    formik.setFieldValue("used_online", 1, false);
+                                  }, 100);
+                                } else {
+                                  setTimeout(() => {
+                                    formik.setFieldValue("used_online", "", false);
+                                  }, 100);
+                                }
+                                formik.handleChange(e);
+                              }}
+                            />
+                            <div className="alert mb-md-4 mb-3 d-flex align-items-xl-center align-items-start">
+                              <img src="assets/images/alert.png" className="me-2" alt="" />
+                              <span>
+                                You must <a href="#">set up online payments</a> to be able to use your vouchers online.
+                              </span>
+                            </div>
+                            {/* <div className="row gx-2 align-items-center">
+                              <div className="col-xl-6 mb-3">
+                                <SwitchField
+                                  name="limit_uses"
+                                  label={t("Limit Uses to:")}
+                                  controlId="voucherForm-limit_uses"
+                                  value={"1"}
+                                  onChange={(e) => {
+                                    if (e.currentTarget.checked) {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("limit_uses", 1, false);
+                                      }, 100);
+                                    } else {
+                                      setTimeout(() => {
+                                        formik.setFieldValue("limit_uses", "", false);
+                                      }, 100);
+                                    }
+                                    formik.handleChange(e);
+                                  }}
+                                />
+                              </div>
+                              <div className="mb-3 col-xl-6" style={{ display: formik.values.limit_uses ? "block" : "none" }}>
+                                <SelectField name="limit_uses_value" placeholder={t("--Select--")} value={formik.values.limit_uses_value} options={limitOptionsData} label={""} controlId="voucherForm-limit_uses_value" />
+                              </div>
+                            </div> */}
+                          </div>
+                        </div>
+                        <hr className="drawer-supplier-hr"></hr>
+                        <div className="row mx-0">
+                          <div className="col-md-6 mb-md-0 mb-3 ps-4 pe-4">
+                            <h4 className="fw-semibold mb-2">{t("Terms and conditions")}</h4>
+                            <p>{t("The terms and conditions that will be appear on the voucher.")}</p>
+                          </div>
+                          <div className="col-md-6 ps-4 pe-4">
+                            <TextareaField name="terms_and_conditions" placeholder={t("Terms and Conditions")} value={formik.values.terms_and_conditions} label={t("Terms and Conditions")} controlId="voucherForm-terms_and_conditions" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-xxl-6 col-xl-4 col-md-4">
+                        <VoucherPreview preview={isVoucherPreview} service={isServiceOption} currentUser={currentUser} />
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
-              <form noValidate onSubmit={formik.handleSubmit}>
-                <div className="mb-3">
-                  <InputField type="text" name="name" value={formik.values.name} label={t("Voucher Name")} controlId="voucherForm-name" />
-                </div>
-                <div className="mb-3">
-                  <TextareaField name="description" placeholder={t("Add a short description")} value={formik.values.description} label={t("Description")} controlId="voucherForm-description" />
-                </div>
-                <div className="row gx-2">
-                  <div className="mb-md-4 mb-3 col-md-6">
-                    <InputField type="text" name={"amount"} value={formik.values.amount} placeholder="$" label={"Amount"} controlId={"voucherForm-amount"} />
-                  </div>
-                  <div className="mb-md-4 mb-3 col-md-6">
-                    <SelectField name="valid" placeholder={t("--Select--")} value={formik.values.valid} options={validforOptionsData} label={t("Valid For")} controlId="voucherForm-valid" />
-                  </div>
-                </div>
-                <SwitchField
-                  name="used_online"
-                  label={t("Allow voucher to be used online")}
-                  controlId="voucherForm-used_online"
-                  value={"1"}
-                  onChange={(e) => {
-                    if (e.currentTarget.checked) {
-                      setTimeout(() => {
-                        formik.setFieldValue("used_online", 1, false);
-                      }, 100);
-                    } else {
-                      setTimeout(() => {
-                        formik.setFieldValue("used_online", "", false);
-                      }, 100);
-                    }
-                    formik.handleChange(e);
-                  }}
-                />
-                <div className="alert mb-md-4 mb-3 d-flex align-items-xl-center align-items-start">
-                  <img src="assets/images/alert.png" className="me-2" alt="" />
-                  <span>
-                    You must <a href="#">set up online payments</a> to be able to use your vouchers online.
-                  </span>
-                </div>
-                <div className="row gx-2 align-items-center">
-                  <div className="col-xl-6 mb-3">
-                    <SwitchField
-                      name="limit_uses"
-                      label={t("Limit Uses to:")}
-                      controlId="voucherForm-limit_uses"
-                      value={"1"}
-                      onChange={(e) => {
-                        if (e.currentTarget.checked) {
-                          setTimeout(() => {
-                            formik.setFieldValue("limit_uses", 1, false);
-                          }, 100);
-                        } else {
-                          setTimeout(() => {
-                            formik.setFieldValue("limit_uses", "", false);
-                          }, 100);
-                        }
-                        formik.handleChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="mb-3 col-xl-6" style={{ display: formik.values.limit_uses ? "block" : "none" }}>
-                    <SelectField name="limit_uses_value" placeholder={t("--Select--")} value={formik.values.limit_uses_value} options={limitOptionsData} label={""} controlId="voucherForm-limit_uses_value" />
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <ReactSelectField name="service_id" placeholder={t("Search...")} value={formik.values.service_id} options={serviceOptionsData} label={t("Services Included")} controlId="voucherForm-service_id" isMulti={true} />
-                </div>
-                <div className="mb-3">
-                  <TextareaField name="terms_and_conditions" placeholder={t("Terms and Conditions")} value={formik.values.terms_and_conditions} label={t("Terms and Conditions")} controlId="voucherForm-terms_and_conditions" />
-                </div>
-                <div className="drawer-footer mt-auto">
-                  <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
-                    {loading && <span className="spinner-border spinner-border-sm"></span>}
-                    {t("Save voucher")}
-                  </button>
-                </div>
-              </form>
             </div>
           );
         }}
@@ -235,8 +276,8 @@ const VoucherEditForm = (props) => {
   );
 };
 
-VoucherEditForm.propTypes = {
-  service: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
-};
+// VoucherEditForm.propTypes = {
+//   service: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+// };
 
 export default VoucherEditForm;

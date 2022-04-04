@@ -28,7 +28,7 @@ const VoucherGridView = (props) => {
   };
 
   const handleEditForm = (e) => {
-    const id = e.currentTarget.closest(".voucher-action").dataset.id;
+    const id = e.currentTarget.closest(".vouchre-grid").dataset.id;
     dispatch(VoucherDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(OpenEditVoucherForm());
@@ -43,24 +43,22 @@ const VoucherGridView = (props) => {
           let name = objectData[item].name;
           let amount = objectData[item].amount;
           return (
-            <div className="voucher-action p-3 mb-3" key={item} data-id={id}>
-              <div className="row gx-2">
-                <div className="col-9">
-                  <h5 className="fw-semibold mb-md-3 mb-2">{t("{{amount}} off {{name}}", { amount: "$" + amount, name: name })}</h5>
-                </div>
-                <div className="col-3">
-                  <h5 className="fw-semibold text-end mb-md-3 mb-2">${amount}</h5>
+            <div className="vouchre-grid box-image-cover" key={item} data-id={id}>
+              <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
+              <div className="image-content">
+                <h5 className="fw-semibold mb-3">{name}</h5>
+                <div className="voucher-action">
+                  <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
+                    {t("Edit")}
+                  </a>
+                  <a id="salevoucher-link" className="sell me-1 cursor-pointer">
+                    {t("Sell")}
+                  </a>
+                  <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherDelete}>
+                    <i className="fas fa-trash text-sm"></i>
+                  </a>
                 </div>
               </div>
-              <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
-                {t("Edit")}
-              </a>
-              <a id="salevoucher-link" className="sell me-1 cursor-pointer">
-                {t("Sell")}
-              </a>
-              <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherDelete}>
-                {t("Delete")}
-              </a>
             </div>
           );
         })}

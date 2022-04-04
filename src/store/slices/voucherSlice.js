@@ -130,23 +130,23 @@ const voucherSlice = createSlice({
   },
   extraReducers: {
     [VoucherStoreApi.pending]: () => {},
-    [VoucherStoreApi.fulfilled]: () => {
-      // if (state.isGridView && state.isGridView.data) {
-      //   state.isGridView.data = [action.payload, ...state.isGridView.data];
-      // } else {
-      //   state.isGridView = { data: [action.payload] };
-      // }
+    [VoucherStoreApi.fulfilled]: (state, action) => {
+      if (state.isGridView && state.isGridView.data) {
+        state.isGridView.data = [action.payload, ...state.isGridView.data];
+      } else {
+        state.isGridView = { data: [action.payload] };
+      }
     },
     [VoucherStoreApi.rejected]: () => {},
     [VoucherUpdateApi.pending]: () => {},
-    [VoucherUpdateApi.fulfilled]: () => {
-      // const { id, ...changes } = action.payload;
-      // const existingData = state.isGridView.data.find((event) => event.id === id);
-      // if (existingData) {
-      //   Object.keys(changes).map((keyName) => {
-      //     existingData[keyName] = changes[keyName];
-      //   });
-      // }
+    [VoucherUpdateApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isGridView.data.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      }
     },
     [VoucherUpdateApi.rejected]: () => {},
     [VoucherGridViewApi.pending]: () => {},

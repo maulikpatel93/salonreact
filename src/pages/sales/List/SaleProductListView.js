@@ -1,12 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-
+import { useTranslation } from "react-i18next";
 import { ucfirst } from "../../../helpers/functions";
 import { SaleProductToCartApi } from "store/slices/saleSlice";
 
 const SaleServiceListView = (props) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const view = props.view;
   const objectData = view && view.data ? view.data : view;
 
@@ -49,6 +50,7 @@ const SaleServiceListView = (props) => {
             </tr>
           );
         })}
+        {objectData.length <= 0 ? <tr className="fw-bold p-3"><td colSpan={2}>{t("No data found")}</td></tr> : ""}
     </>
   );
 };

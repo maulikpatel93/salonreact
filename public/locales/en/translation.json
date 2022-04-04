@@ -453,5 +453,14 @@
     "Invoice": "Invoice",
     "Paid": "Paid",
     "Pending": "Pending",
-    "Failed": "Failed"
+    "Failed": "Failed",
+    "New Voucher": "New Voucher",
+    "No vouchers have been added yet.": "No vouchers have been added yet.",
+    "Add the name and general details of this voucher.": "Add the name and general details of this voucher.",
+    "Online use": "Online use",
+    "Set voucher to be redeemable online.": "Set voucher to be redeemable online.",
+    "Terms and conditions": "Terms and conditions",
+    "The terms and conditions that will be appear on the voucher.": "The terms and conditions that will be appear on the voucher.",
+    "Preview": "Preview",
+    "Click To Complete Sale": "Click To Complete Sale"
 }

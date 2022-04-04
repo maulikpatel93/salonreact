@@ -64,6 +64,7 @@ const SaleServiceListView = (props) => {
               );
             }
           })}
+          {objectData.length <= 0 ? <div className="fw-bold p-3">{t("No data found")}</div> : ""}
       </div>
     </>
   );
