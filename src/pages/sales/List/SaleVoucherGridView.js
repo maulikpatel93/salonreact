@@ -18,7 +18,7 @@ const SaleVoucherGridView = (props) => {
   return (
     <>
       <div className="col-lg-4 col-md-6 col-sm-6 mb-3">
-        <div className="vouchre-grid box-image-cover text-center m-0 w-100">
+        <div className="voucher-grid box-image-cover text-center m-0 w-100">
           <div className="tabs-image user-initial mx-auto">
             <i className="fas fa-gift fa-2x"></i>
           </div>
@@ -40,7 +40,7 @@ const SaleVoucherGridView = (props) => {
             //   </div>
             // </div>
             <div className="col-lg-4 col-md-6 col-sm-6 mb-3" key={i}>
-              <div className="vouchre-grid box-image-cover text-center m-0 w-100 cursor-pointer" data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherClick}>
+              <div className="voucher-grid box-image-cover text-center m-0 w-100 cursor-pointer" data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherClick}>
                 <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
                 <div className="image-content">
                   <h5 className="fw-semibold mb-3">{name}</h5>

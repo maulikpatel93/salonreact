@@ -279,6 +279,18 @@ textarea.form-control::placeholder {
     border-color: #8c1c4d;
 }
 
+.btn-checkout {
+    color: #fff !important;
+    background-color: #374151 !important;
+    border-color: #374151 !important;
+}
+
+.btn-checkout:hover {
+    color: #374151 !important;
+    background-color: #fff !important;
+    border-color: #374151 !important;
+}
+
 a {
     color: #0b0b0b;
     line-height: normal;
@@ -1262,7 +1274,8 @@ header .search .search-wrapper.open {
     background-color: #fafafa;
 }
 
-.product-box {
+.product-box,
+.newsale-probox .membership-box {
     padding: 25px 50px 25px 25px;
     border-radius: 6px;
     border: 1px solid #e5e5e5;
@@ -1271,7 +1284,8 @@ header .search .search-wrapper.open {
     cursor: pointer;
 }
 
-.product-box .close {
+.product-box .close,
+.newsale-probox .membership-box .close {
     position: absolute;
     color: #ef0000;
     right: 15px;
@@ -1281,15 +1295,18 @@ header .search .search-wrapper.open {
     visibility: hidden;
 }
 
-.product-box.open .close {
+.product-box.open .close,
+.newsale-probox .membership-box.open .close {
     visibility: visible;
 }
 
-.product-box .product-header p {
+.product-box .product-header p,
+.newsale-probox .membership-box .product-header p {
     font-size: 18px;
 }
 
-.product-box .card {
+.product-box .card,
+.newsale-probox .membership-box .card {
     border: 0;
     padding: 10px 0 0;
 }
@@ -1633,7 +1650,7 @@ header .search .search-wrapper.open {
 .voucher-action .sell,
 .voucher-action .edit,
 .voucher-action .delete {
-    background-color: #8F807D;
+    background-color: #8f807d;
     box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
     border-radius: 4px;
     font-size: 12px;
@@ -1646,7 +1663,7 @@ header .search .search-wrapper.open {
     font-size: 12px !important;
 }
 
-.vouchre-grid.box-image-cover .user-initial {
+.voucher-grid.box-image-cover .user-initial {
     font-size: 22px;
     font-weight: bold;
 }
@@ -1654,6 +1671,40 @@ header .search .search-wrapper.open {
 .voucher-action .edit:hover,
 .voucher-action .sell:hover,
 .voucher-action .delete:hover {
+    background-color: #828df8;
+}
+
+
+/* Membership  css */
+
+.membership-action .edit,
+.membership-action .sell,
+.membership-action .edit,
+.membership-action .delete {
+    background-color: #8f807d;
+    box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 6px 10px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.membership-action .delete i {
+    font-size: 12px !important;
+}
+
+.membership-grid.box-image-cover .user-initial {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: normal;
+    text-transform: capitalize !important;
+    padding: 16px;
+}
+
+.membership-action .edit:hover,
+.membership-action .sell:hover,
+.membership-action .delete:hover {
     background-color: #828df8;
 }
 
@@ -1676,9 +1727,9 @@ header .search .search-wrapper.open {
 }
 
 .common-tab .nav-tabs li a.active {
-    border-bottom: 3px solid #BB5876;
+    border-bottom: 3px solid #bb5876;
     font-weight: 600;
-    color: #8C1C4D;
+    color: #8c1c4d;
 }
 
 .box-image-cover {
@@ -1993,7 +2044,8 @@ header .search .search-wrapper.open {
     font-size: 18px;
 }
 
-.salevoucher-tab .voucher-box {
+.salevoucher-tab .voucher-box,
+.salevoucher-tab .membership-box {
     border: 1px solid #d4d4d4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
@@ -2004,7 +2056,8 @@ header .search .search-wrapper.open {
     background-color: #fff;
 }
 
-.salevoucher-tab .voucher-box h5 {
+.salevoucher-tab .voucher-box h5,
+.salevoucher-tab .membership-box h5 {
     font-size: 18px;
 }
 
@@ -3147,7 +3200,8 @@ table .pro-title {
     padding-left: 10px;
 }
 
-.newsale-probox .product-box .close {
+.newsale-probox .product-box .close,
+.newsale-probox .membership-box .close {
     opacity: 1;
     visibility: visible;
 }
@@ -3339,7 +3393,8 @@ table .pro-title {
         font-size: 16px;
         padding: 10px 13px;
     }
-    .salevoucher-tab .voucher-box {
+    .salevoucher-tab .voucher-box,
+    .salevoucher-tab .membership-box {
         padding: 25px 15px;
     }
     .addstaff-member .detail,
@@ -3527,7 +3582,8 @@ table .pro-title {
     .full-screen-drawer .drawer-body {
         height: calc(100vh - 68px);
     }
-    .product-box .product-header p {
+    .product-box .product-header p,
+    .newsale-probox .membership-box .product-header p {
         font-size: 16px;
     }
     .mega-menu ul li a,
@@ -3812,7 +3868,8 @@ table .pro-title {
         padding: 12px 15px;
         font-size: 18px;
     }
-    .product-box {
+    .product-box,
+    .newsale-probox .membership-box {
         padding: 15px 40px 15px 15px;
     }
     .product-box form .price {
@@ -3872,6 +3929,18 @@ table .pro-title {
         width: 50px;
         line-height: 50px;
     }
+    .membership-grid.box-image-cover {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 0 15px 0;
+        padding: 30px 10px 10px;
+    }
+    .membership-grid.box-image-cover .user-initial {
+        font-size: 20px;
+        height: 124px;
+        width: 124px;
+        padding: 20px;
+    }
     .box-image-cover .image-content {
         padding-top: 10px;
     }
@@ -3889,7 +3958,8 @@ table .pro-title {
     #roster table {
         margin-bottom: 70px;
     }
-    .salevoucher-tab .voucher-box {
+    .salevoucher-tab .voucher-box,
+    .salevoucher-tab .membership-box {
         padding: 15px;
     }
     .full-screen-drawer .drawer-body>.row {

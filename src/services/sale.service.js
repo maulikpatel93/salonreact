@@ -226,6 +226,22 @@ const vouchers = (values) => {
   return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const membership = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let membership_id = values && values.membership_id ? values.membership_id : "";
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/sale/membership?page=${page}&product_id=${product_id}&q=${q}` : `afterlogin/sale/membership?membership_id=${membership_id}&q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+  };
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
+};
+
 const clientsuggetionlist = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
@@ -255,6 +271,7 @@ const saleApiController = {
   services,
   products,
   vouchers,
+  membership,
   invoiceview,
   createinvoiceview,
   clientsuggetionlist

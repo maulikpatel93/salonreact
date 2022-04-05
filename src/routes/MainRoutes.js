@@ -13,6 +13,7 @@ const Calendar = Loadable(lazy(() => import("../pages/calendar")));
 const Sales = Loadable(lazy(() => import("../pages/sales")));
 const Vouchers = Loadable(lazy(() => import("../pages/vouchers")));
 const Subscriptions = Loadable(lazy(() => import("../pages/subscriptions")));
+const Membership = Loadable(lazy(() => import("../pages/membership")));
 const Clients = Loadable(lazy(() => import("../pages/clients")));
 const Staff = Loadable(lazy(() => import("../pages/staff")));
 const Services = Loadable(lazy(() => import("../pages/services")));
@@ -49,6 +50,10 @@ const MainRoutes = {
     {
       path: config.basePath + "/subscriptions",
       element: <Subscriptions />,
+    },
+    {
+      path: config.basePath + "/membership",
+      element: <Membership />,
     },
     {
       path: config.basePath + "/clients",

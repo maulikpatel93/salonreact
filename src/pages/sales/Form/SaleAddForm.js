@@ -16,7 +16,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, InlineInputField, TextareaField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
 
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm } from "../../../store/slices/saleSlice";
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart } from "../../../store/slices/saleSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -212,6 +212,9 @@ const SaleAddForm = (props) => {
             }
           }, [isCart, appointmentDetail]);
           let totalprice = 0;
+          if (appointmentDetail.cost) {
+            totalprice += isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost);
+          }
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className={isSearchObjClient ? "add-item-panel p-4" : "search-panel p-4"}>
@@ -293,7 +296,7 @@ const SaleAddForm = (props) => {
                 )}
                 <InputField type="hidden" name="client_id" id="saleForm-client_id" value={formik.values.client_id} />
               </div>
-              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0)) ? (
+              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.membership.length > 0)) ? (
                 <div className="p-4 newsale-probox">
                   {appointmentDetail && (
                     <div className="product-box mt-0 mb-3">
@@ -314,7 +317,6 @@ const SaleAddForm = (props) => {
                   {isCart &&
                     isCart.services.length > 0 &&
                     Object.keys(isCart.services).map((item) => {
-                      console.log(isCart.services[item]);
                       let service_id = isCart.services[item].id;
                       let service_name = isCart.services[item].name;
                       // let service_price = isCart.services[item].serviceprice;
@@ -342,7 +344,7 @@ const SaleAddForm = (props) => {
                               className="close close d-block cursor-pointer"
                               onClick={() => {
                                 dispatch(SaleServiceRemoveToCart({ id: service_id }));
-                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, services: formik.values.cart.services.length > 0 ? formik.values.cart.services.filter((item) => item.id != service_id) : [] } });
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, services: formik.values.cart.services && formik.values.cart.services.length > 0 ? formik.values.cart.services.filter((item) => item.id != service_id) : [] } });
                               }}
                             >
                               <i className="fal fa-times"></i>
@@ -388,7 +390,7 @@ const SaleAddForm = (props) => {
                               className="close d-block cursor-pointer"
                               onClick={() => {
                                 dispatch(SaleProductRemoveToCart({ id: product_id }));
-                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, products: formik.values.cart.products.length > 0 ? formik.values.cart.products.filter((item) => item.id != product_id) : [] } });
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, products: formik.values.cart.products && formik.values.cart.products.length > 0 ? formik.values.cart.products.filter((item) => item.id != product_id) : [] } });
                               }}
                             >
                               <i className="fal fa-times"></i>
@@ -421,6 +423,92 @@ const SaleAddForm = (props) => {
                         </div>
                       );
                     })}
+
+                  {isCart &&
+                    isCart.vouchers.length > 0 &&
+                    Object.keys(isCart.vouchers).map((item) => {
+                      let voucher_id = isCart.vouchers[item].id;
+                      let voucher_name = isCart.vouchers[item].name;
+                      let voucher_price = isCart.vouchers[item].cost;
+
+                      totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
+                      let image_url = config.imagepath + "voucher.png";
+                      return (
+                        <div className="product-box mt-0 mb-3 ps-2" key={item}>
+                          <div className="product-header" id="#checkout-probox">
+                            <a
+                              className="close d-block cursor-pointer"
+                              onClick={() => {
+                                dispatch(SaleVoucherRemoveToCart({ id: voucher_id }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, vouchers: formik.values.cart.vouchers && formik.values.cart.vouchers.length > 0 ? formik.values.cart.vouchers.filter((item) => item.id != voucher_id) : [] } });
+                              }}
+                            >
+                              <i className="fal fa-times"></i>
+                            </a>
+                            <div className="d-flex">
+                              <div className="pro-img">
+                                <div className="user">
+                                  <a data-fancybox="" data-src={image_url}>
+                                    <img src={image_url} alt="" className="rounded-circle wh-40" />
+                                  </a>
+                                </div>
+                              </div>
+                              <div className="pro-content">
+                                <div className="row">
+                                  <div className="col-9">
+                                    <h4 className="mb-2 fw-semibold">{ucfirst(voucher_name)}</h4>
+                                  </div>
+                                  <h4 className="col-3 mb-0 text-end">${voucher_price}</h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {isCart &&
+                    isCart.membership.length > 0 &&
+                    Object.keys(isCart.membership).map((item) => {
+                      let membership_id = isCart.membership[item].id;
+                      let membership_name = isCart.membership[item].name;
+                      let membership_price = isCart.membership[item].cost;
+
+                      totalprice += isNaN(parseFloat(membership_price)) === false && parseFloat(membership_price);
+                      let image_url = config.imagepath + "membership-lg.png";
+                      return (
+                        <div className="membership-box mt-0 mb-3 ps-2" key={item}>
+                          <div className="membership-header" id="#checkout-probox">
+                            <a
+                              className="close d-block cursor-pointer"
+                              onClick={() => {
+                                dispatch(SaleMembershipRemoveToCart({ id: membership_id }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, membership: formik.values.cart.membership && formik.values.cart.membership.length > 0 ? formik.values.cart.membership.filter((item) => item.id != membership_id) : [] } });
+                              }}
+                            >
+                              <i className="fal fa-times"></i>
+                            </a>
+                            <div className="d-flex">
+                              <div className="pro-img align-self-center">
+                                <div className="user">
+                                  <a data-fancybox="" data-src={image_url}>
+                                    <img src={image_url} alt="" className="object-fit-none h-20 w-auto px-2" />
+                                  </a>
+                                </div>
+                              </div>
+                              <div className="pro-content align-self-center">
+                                <div className="row">
+                                  <div className="col-9">
+                                    <h4 className="mb-0 fw-semibold">{ucfirst(membership_name)}</h4>
+                                  </div>
+                                  <h4 className="col-3 mb-0 text-end">${membership_price}</h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
               ) : (
                 <div className="complete-box text-center flex-column justify-content-center mt-md-5 mt-4">
@@ -438,7 +526,7 @@ const SaleAddForm = (props) => {
                   <span className="h2 pe-2 mb-0">{t("Total")}</span>
                   <span className="h2 text-end ms-auto mb-0">${totalprice}</span>
                 </div>
-                <div className="p-4">
+                {/* <div className="p-4">
                   <div className="row">
                     <div className="col">
                       <button type="submit" id="payment-link" className="btn btn-dark btn-lg w-100" disabled={loading}>
@@ -459,27 +547,13 @@ const SaleAddForm = (props) => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
-              <div className="full-screen-drawer-footer" id="paybycreditcard">
-                <ul className="list-unstyled mb-0">
-                  <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0">{t("Total")}</span>
-                    <span className="h3 text-end ms-auto mb-0">${totalprice}</span>
-                  </li>
-                  <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0">{t("Paid by Credit Card")}</span>
-                    <span className="h3 text-end ms-auto mb-0">$120</span>
-                  </li>
-                  <li className="px-4 d-flex py-3 border-bottom">
-                    <span className="h3 pe-2 mb-0 fw-semibold">{t("Balance")}</span>
-                    <span className="h3 text-end ms-auto mb-0 fw-semibold">$0</span>
-                  </li>
-                </ul>
+              <div className="full-screen-drawer-footer" id="checkout">
                 <div className="p-4">
-                  <button type="submit" id="salecomplete-invoice-link" className="w-100 btn btn-primary btn-lg" disabled={loading}>
+                  <button type="submit" id="salecomplete-invoice-link" className="w-100 btn btn-checkout btn-lg" disabled={loading}>
                     {loading && <span className="spinner-border spinner-border-sm"></span>}
-                    {t("Click To Complete Sale")}
+                    {t("Checkout")}
                   </button>
                 </div>
               </div>

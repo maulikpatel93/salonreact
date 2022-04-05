@@ -74,6 +74,10 @@
     }
 }
 
+.h-20 {
+    height: 20px !important;
+}
+
 .wh-118 {
     width: 118px !important;
     height: 118px !important;
@@ -274,4 +278,8 @@ header {
 
 .spinner-border {
     margin-right: 1px;
+}
+
+.object-fit-none {
+    object-fit: unset !important;
 }

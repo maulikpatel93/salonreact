@@ -120,6 +120,19 @@ export const SaleVoucherApi = createAsyncThunk("sale/vouchers", async (formValue
   }
 });
 
+export const SaleMembershipApi = createAsyncThunk("sale/membership", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .membership(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "membership"))
+      .catch((error) => HandleError(thunkAPI, error, "membership"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const SaleServiceToCartApi = createAsyncThunk("sale/servicetocart", async (formValues, thunkAPI) => {
   try {
     const resposedata = await saleApiController
@@ -159,6 +172,19 @@ export const SaleVoucherToCartApi = createAsyncThunk("sale/vouchertocart", async
   }
 });
 
+export const SaleMembershipToCartApi = createAsyncThunk("sale/membershiptocart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .membership(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "membershiptocart"))
+      .catch((error) => HandleError(thunkAPI, error, "membershiptocart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const ClientSuggetionListApi = createAsyncThunk("sale/clientsuggetionlist", async (formValues, thunkAPI) => {
   try {
     const resposedata = await saleApiController
@@ -174,6 +200,7 @@ export const ClientSuggetionListApi = createAsyncThunk("sale/clientsuggetionlist
 
 const initialState = {
   isOpenedAddForm: "",
+  isOpenedVoucherToForm: "",
   isOpenedDetailModal: "",
   isTabView: "viewinvoice",
   isSaleTabView: "services",
@@ -186,7 +213,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [], vouchers: [] },
+  isCart: { services: [], products: [], vouchers: [], membership: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
   isSuggetionListView: [],
@@ -194,6 +221,7 @@ const initialState = {
   isSearchName: "",
   isSearchObj: "",
   isVouchers: [],
+  isMembership: [],
 };
 
 const saleSlice = createSlice({
@@ -214,6 +242,14 @@ const saleSlice = createSlice({
     closeAddSaleForm: (state = initialState) => {
       // state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
+    },
+    OpenVoucherToForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedVoucherToForm = "open";
+    },
+    CloseVoucherToForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedVoucherToForm = "";
     },
     openSaleDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
@@ -240,6 +276,10 @@ const saleSlice = createSlice({
     SaleVoucherRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.vouchers = state.isCart.vouchers ? state.isCart.vouchers.filter((item) => item.id != id) : [];
+    },
+    SaleMembershipRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isCart.membership = state.isCart.membership ? state.isCart.membership.filter((item) => item.id != id) : [];
     },
     AppointmentDetail: (state, action) => {
       state.isAppointmentDetail = action.payload;
@@ -366,6 +406,21 @@ const saleSlice = createSlice({
     [SaleVoucherApi.rejected]: (state) => {
       state.isVouchers = [];
     },
+    [SaleMembershipApi.pending]: () => {},
+    [SaleMembershipApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isMembership.current_page ? state.isMembership.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isMembership && state.isMembership.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isMembership = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isMembership.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isMembership = action.payload;
+    },
+    [SaleMembershipApi.rejected]: (state) => {
+      state.isMembership = [];
+    },
     [SaleServiceToCartApi.pending]: () => {},
     [SaleServiceToCartApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
@@ -414,6 +469,22 @@ const saleSlice = createSlice({
     [SaleVoucherToCartApi.rejected]: (state) => {
       state.isCart.vouchers = "";
     },
+    [SaleMembershipToCartApi.pending]: () => {},
+    [SaleMembershipToCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.membership.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const membership = [...state.isCart.membership, action.payload];
+        state.isCart.membership = membership;
+      }
+    },
+    [SaleMembershipToCartApi.rejected]: (state) => {
+      state.isCart.membership = "";
+    },
     [ClientSuggetionListApi.pending]: () => {},
     [ClientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
@@ -432,5 +503,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart,OpenVoucherToForm, CloseVoucherToForm } = saleSlice.actions;
 export default saleSlice.reducer;

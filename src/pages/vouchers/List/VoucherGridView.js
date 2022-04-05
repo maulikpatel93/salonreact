@@ -28,7 +28,7 @@ const VoucherGridView = (props) => {
   };
 
   const handleEditForm = (e) => {
-    const id = e.currentTarget.closest(".vouchre-grid").dataset.id;
+    const id = e.currentTarget.closest(".voucher-grid").dataset.id;
     dispatch(VoucherDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(OpenEditVoucherForm());
@@ -43,7 +43,7 @@ const VoucherGridView = (props) => {
           let name = objectData[item].name;
           let amount = objectData[item].amount;
           return (
-            <div className="vouchre-grid box-image-cover" key={item} data-id={id}>
+            <div className="voucher-grid box-image-cover" key={item} data-id={id}>
               <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
               <div className="image-content">
                 <h5 className="fw-semibold mb-3">{name}</h5>

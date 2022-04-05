@@ -5,7 +5,7 @@ import config from "../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
-import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName, SaleVoucherApi } from "store/slices/saleSlice";
+import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName, SaleVoucherApi, SaleMembershipApi } from "store/slices/saleSlice";
 import { ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import PaginationLoader from "component/PaginationLoader";
 import SaleAddForm from "./Form/SaleAddForm";
@@ -13,6 +13,7 @@ import ClientAddForm from "pages/clients/Form/ClientAddForm";
 import SaleProductListView from "./List/SaleProductListView";
 import SaleServiceListView from "./List/SaleServiceListView";
 import SaleVoucherGridView from "./List/SaleVoucherGridView";
+import SaleMembershipGridView from "./List/SaleMembershipGridView";
 
 const SaleDrawer = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
@@ -27,6 +28,7 @@ const SaleDrawer = (props) => {
   const isProductSearchName = useSelector((state) => state.sale.isProductSearchName);
   const isAppointmentDetail = useSelector((state) => state.sale.isAppointmentDetail);
   const isVouchers = useSelector((state) => state.sale.isVouchers);
+  const isMembership = useSelector((state) => state.sale.isMembership);
 
   useEffect(() => {
     if (tabview === "services") {
@@ -46,6 +48,10 @@ const SaleDrawer = (props) => {
 
     if (tabview === "vouchers") {
       dispatch(SaleVoucherApi());
+    }
+
+    if (tabview === "memberships") {
+      dispatch(SaleMembershipApi());
     }
   }, [tabview]);
 
@@ -149,6 +155,21 @@ const SaleDrawer = (props) => {
       setIsFetchingVouchers(false);
     }, 2000);
   };
+
+  //Pagination Membership
+  const fetchDataSaleMembership = () => {
+    dispatch(SaleMembershipApi({ next_page_url: isVouchers.next_page_url }));
+  };
+  const [isFetchingMembership, setIsFetchingMembership] = useState(false);
+  const loadMoreMembership = () => {
+    setIsFetchingMembership(true);
+    dispatch(SaleMembershipApi({ next_page_url: isMembership.next_page_url }));
+    //mocking an API call
+    setTimeout(() => {
+      setIsFetchingMembership(false);
+    }, 2000);
+  };
+
   return (
     <>
       <div className={(rightDrawerOpened ? "full-screen-drawer p-0 salevoucher-drawer " : "") + rightDrawerOpened} id="salevoucher-drawer">
@@ -284,7 +305,26 @@ const SaleDrawer = (props) => {
                         </InfiniteScroll>
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "subscriptions" ? " show active" : "")} id="subscriptions"></div>
-                      <div className={"tab-pane" + (tabview && tabview === "memberships" ? " show active" : "")} id="memberships"></div>
+                      <div className={"tab-pane" + (tabview && tabview === "memberships" ? " show active" : "")} id="memberships">
+                        <InfiniteScroll className="row" dataLength={isMembership && isMembership.data && isMembership.data.length ? isMembership.data.length : "0"} next={fetchDataSaleMembership} scrollableTarget="product" hasMore={isMembership.next_page_url ? true : false} loader={<PaginationLoader />}>
+                          <SaleMembershipGridView view={isMembership} />
+                          {isMembership.length <= 0 && (
+                            <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                              <div className="complete-box-wrp text-center ">
+                                <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                                <h4 className="mb-2 fw-semibold">{t("No membership have been added yet.")}</h4>
+                              </div>
+                            </div>
+                          )}
+                          {!isFetchingMembership && isMembership.next_page_url && (
+                            <div className="col-2 m-auto p-3 text-center">
+                              <button onClick={loadMoreMembership} className="btn btn-primary">
+                                {t("More")}
+                              </button>
+                            </div>
+                          )}
+                        </InfiniteScroll>
+                      </div>
                     </div>
                   </div>
                 </div>
