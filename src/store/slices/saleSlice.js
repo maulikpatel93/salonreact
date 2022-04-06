@@ -213,7 +213,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [], vouchers: [], membership: [] },
+  isCart: { services: [], products: [], vouchers: [], membership: [], onoffvouchers: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
   isSuggetionListView: [],
@@ -222,6 +222,8 @@ const initialState = {
   isSearchObj: "",
   isVouchers: [],
   isMembership: [],
+  isVoucherToFormData: [],
+  isCartVoucherCount: [],
 };
 
 const saleSlice = createSlice({
@@ -251,6 +253,9 @@ const saleSlice = createSlice({
       // state.isOpenedEditForm = "";
       state.isOpenedVoucherToForm = "";
     },
+    VoucherToFormData: (state, action) => {
+      state.isVoucherToFormData = action.payload;
+    },
     openSaleDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "open";
@@ -277,6 +282,10 @@ const saleSlice = createSlice({
       const { id } = action.payload;
       state.isCart.vouchers = state.isCart.vouchers ? state.isCart.vouchers.filter((item) => item.id != id) : [];
     },
+    SaleOnOffVoucherRemoveToCart: (state, action) => {
+      const { i } = action.payload;
+      state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.slice(0, i).concat(state.isCart.onoffvouchers.slice(i + 1, state.isCart.onoffvouchers.length)) : [];
+    },
     SaleMembershipRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.membership = state.isCart.membership ? state.isCart.membership.filter((item) => item.id != id) : [];
@@ -295,6 +304,10 @@ const saleSlice = createSlice({
     },
     ClientSearchObj: (state, action) => {
       state.isSearchObj = action.payload;
+    },
+    SaleOnOffVoucherToCartApi: (state, action) => {
+      const onoffvouchers = [...state.isCart.onoffvouchers, action.payload];
+      state.isCart.onoffvouchers = onoffvouchers;
     },
   },
   extraReducers: {
@@ -503,5 +516,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart,OpenVoucherToForm, CloseVoucherToForm } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart } = saleSlice.actions;
 export default saleSlice.reducer;

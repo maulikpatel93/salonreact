@@ -4277,3 +4277,103 @@ table .pro-title {
 .white-space-pre-line {
     white-space: pre-line !important;
 }
+
+
+/* 04/04/2022 New Sale page vouchers box start*/
+
+.voucher-center-box {
+    background-color: #F4EEEB;
+    max-width: 118px;
+    height: 118px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    border-radius: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voucher-center-box img {
+    max-width: 51px;
+}
+
+.voucher-center-box span {
+    font-size: 28px;
+    line-height: 31px;
+    font-weight: 600;
+    color: #8C1C4D;
+}
+
+
+/* one-off Voucher page start  */
+
+.one-off-voucher {
+    border-bottom: 1px solid #eee;
+}
+
+.one-off-voucher .cancel_btn {
+    text-decoration: none;
+    text-transform: capitalize;
+    background-color: #F4EEEB;
+    padding: 12px 36px;
+    font-size: 18px;
+    line-height: 25px;
+    color: #333;
+    font-weight: 600;
+}
+
+
+/* from start  */
+
+.gift-vocher-page-form {
+    padding-top: 80px;
+}
+
+.gift_form_cover {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.gift_form_cover h3 {
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.gift_form_cover form input[type="submit"] {
+    padding: 16px 0;
+}
+
+.gift_form_cover form label {
+    color: #333;
+}
+
+.gift_form_cover form input[type="submit"]:hover {
+    color: #000 !important;
+}
+
+.form-control:focus,
+.dropdown-toggle:focus {
+    border-color: unset;
+}
+
+.birthday_vocher {
+    position: relative;
+}
+
+.birdthday_addtop {
+    background-color: #8C1C4D;
+    width: 54px;
+    height: 54px;
+    border-radius: 100%;
+    position: absolute;
+    color: #fff;
+    padding-top: 5px;
+    top: -14px;
+    right: -12px;
+}
+
+.birdthday_addtop p {
+    color: #fff;
+}

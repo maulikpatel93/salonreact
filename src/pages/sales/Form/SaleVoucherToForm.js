@@ -12,9 +12,8 @@ import { decimalOnly } from "../../../component/form/Validation";
 // import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddMembershipForm, MembershipStoreApi } from "store/slices/membershipSlice";
 import config from "config";
-import { CloseVoucherToForm } from "store/slices/saleSlice";
+import { CloseVoucherToForm, SaleVoucherToCartApi, SaleOnOffVoucherToCartApi } from "store/slices/saleSlice";
 
 const SaleVoucherToForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -24,9 +23,12 @@ const SaleVoucherToForm = (props) => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
-  const rightDrawerOpened = useSelector((state) => state.membership.isOpenedAddForm);
-
+  const rightDrawerOpened = useSelector((state) => state.sale.isOpenedVoucherToForm);
+  const isVoucherToFormData = useSelector((state) => state.sale.isVoucherToFormData);
+  const voucher = isVoucherToFormData.type === "Voucher" ? isVoucherToFormData.voucher : "";
   const initialValues = {
+    voucher_id: "",
+    amount: "",
     first_name: "",
     last_name: "",
     is_send: "",
@@ -34,37 +36,58 @@ const SaleVoucherToForm = (props) => {
     message: "",
   };
   const validationSchema = Yup.object().shape({
+    amount: Yup.string()
+      .nullable()
+      .when("voucher_id", {
+        is: (v) => v === "" || v === null || v === undefined,
+        then: Yup.string().trim(t("Required")).label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+      }),
     first_name: Yup.string().trim().max(50).label(t("Membership Name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("Membership Name")).required()
+    last_name: Yup.string().trim().max(50).label(t("Membership Name")).required(),
+    is_send: Yup.mixed().nullable(),
+    email: Yup.string()
+      .nullable()
+      .when("is_send", {
+        is: 1,
+        then: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+      }),
   });
   yupconfig();
 
   const handlemembershipSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    console.log(values);
     setLoading(true);
     try {
-      dispatch(MembershipStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus === "fulfilled") {
-          setStatus({ success: true });
-          resetForm();
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
-          dispatch(CloseAddMembershipForm());
-          if (scriptedRef.current) {
-            setLoading(false);
+      if (values.type === "Voucher") {
+        dispatch(SaleVoucherToCartApi(values)).then((action) => {
+          if (action.meta.requestStatus === "fulfilled") {
+            setStatus({ success: true });
+            resetForm();
+            dispatch(CloseVoucherToForm());
+            if (scriptedRef.current) {
+              setLoading(false);
+            }
+          } else if (action.meta.requestStatus === "rejected") {
+            const status = action.payload && action.payload.status;
+            const errors = action.payload && action.payload.message && action.payload.message.errors;
+            if (status === 422) {
+              setErrors(errors);
+            }
+            setStatus({ success: false });
+            setSubmitting(false);
+            if (scriptedRef.current) {
+              setLoading(false);
+            }
           }
-        } else if (action.meta.requestStatus === "rejected") {
-          const status = action.payload && action.payload.status;
-          const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status === 422) {
-            setErrors(errors);
-          }
-          setStatus({ success: false });
-          setSubmitting(false);
-          if (scriptedRef.current) {
-            setLoading(false);
-          }
+        });
+      } else {
+        dispatch(SaleOnOffVoucherToCartApi(values));
+        setStatus({ success: true });
+        resetForm();
+        dispatch(CloseVoucherToForm());
+        if (scriptedRef.current) {
+          setLoading(false);
         }
-      });
+      }
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);
@@ -80,12 +103,24 @@ const SaleVoucherToForm = (props) => {
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlemembershipSubmit}>
         {(formik) => {
+          useEffect(() => {
+            if (voucher) {
+              let voucher_to = voucher.voucher_to ? voucher.voucher_to : "";
+              formik.setFieldValue("voucher_id", voucher.id ? voucher.id : "");
+              formik.setFieldValue("amount", voucher.amount ? voucher.amount : "");
+              const fields = ["first_name", "last_name", "is_send", "email", "message"];
+              fields.forEach((field) => {
+                formik.setFieldValue(field, voucher_to[field] ? voucher_to[field] : "", false);
+              });
+            }
+            formik.setFieldValue("type", voucher ? "Voucher" : "OnOffVoucher");
+          }, [voucher]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addproduct-drawer">
               <div className="drawer-wrp position-relative">
                 <form noValidate onSubmit={formik.handleSubmit}>
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
-                    <h3 className="mb-0 fw-semibold">{t("New Membership")}</h3>
+                    <h3 className="mb-0 fw-semibold">{voucher ? voucher.name : t("One-Off Voucher")}</h3>
                     <div className="ms-auto">
                       <a className="close btn me-1 cursor-pointer" onClick={handleCloseVoucherToForm}>
                         {t("Cancel")}
@@ -95,6 +130,13 @@ const SaleVoucherToForm = (props) => {
                   <div className="drawer-body px-4 pt-2">
                     <div className="row">
                       <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 m-auto">
+                        {!voucher && (
+                          <div className="mb-3">
+                            <h4 className="mb-1 fw-semibold">{t("Gift Voucher Amount")}</h4>
+                            <p className="mb-2">{t("Add the amount for voucher is for.")}</p>
+                            <InputField type="text" name="amount" value={formik.values.amount} placeholder="$" label={t("Amount")} controlId="SaleVoucherToForm-amount" />
+                          </div>
+                        )}
                         <div className="mb-3">
                           <h4 className="mb-1 fw-semibold">{t("To (Recipient)")}</h4>
                           <p className="mb-2">{t("Add the details of who will be receiving voucher.")}</p>
@@ -103,10 +145,7 @@ const SaleVoucherToForm = (props) => {
                           <InputField type="text" name="first_name" value={formik.values.first_name} label={t("First Name")} controlId="SaleVoucherToForm-first_name" />
                         </div>
                         <div className="mb-3">
-                          <InputField type="text" name="last_name" value={formik.values.last_name} label={t("First Name")} controlId="SaleVoucherToForm-last_name" />
-                        </div>
-                        <div className="mb-3">
-                          <InputField type="text" name={"email"} value={formik.values.email} placeholder="" label={"Email"} controlId={"SaleVoucherToForm-email"} />
+                          <InputField type="text" name="last_name" value={formik.values.last_name} label={t("Last Name")} controlId="SaleVoucherToForm-last_name" />
                         </div>
                         <div className="mb-3">
                           <SwitchField
@@ -128,13 +167,18 @@ const SaleVoucherToForm = (props) => {
                             }}
                           />
                         </div>
+                        {formik.values.is_send && (
+                          <div className="mb-3">
+                            <InputField type="text" name={"email"} value={formik.values.email} placeholder="" label={"Email"} controlId={"SaleVoucherToForm-email"} />
+                          </div>
+                        )}
                         <div className="mb-3">
-                          <TextareaField type="text" name={"message"} value={formik.values.message} placeholder="$" label={"Message"} controlId={"SaleVoucherToForm-message"} />
+                          <TextareaField type="text" name={"message"} value={formik.values.message} placeholder="" label={"Message"} controlId={"SaleVoucherToForm-message"} />
                         </div>
                         <div className="mt-5">
                           <button type="submit" className="btn btn-primary w-100" disabled={loading}>
                             {loading && <span className="spinner-border spinner-border-sm"></span>}
-                            {t("Save Membership")}
+                            {voucher && voucher.voucher_to ? t("Update") : t("Add to Sale")}
                           </button>
                         </div>
                       </div>

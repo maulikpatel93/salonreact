@@ -475,5 +475,12 @@
     "Add the amount the customer will pay for the membership.": "Add the amount the customer will pay for the membership.",
     "Credit": "Credit",
     "Save Membership": "Save Membership",
-    "Update Membership": "Update Membership"
+    "Update Membership": "Update Membership",
+    "Add to Sale": "Add to Sale",
+    "To (Recipient)": "To (Recipient)",
+    "Add the details of who will be receiving voucher.": "Add the details of who will be receiving voucher.",
+    "Send voucher to recipient": "Send voucher to recipient",
+    "One-Off Voucher": "One-Off Voucher",
+    "Gift Voucher Amount": "Gift Voucher Amount",
+    "Add the amount for voucher is for.": "Add the amount for voucher is for."
 }

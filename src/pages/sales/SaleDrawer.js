@@ -14,6 +14,7 @@ import SaleProductListView from "./List/SaleProductListView";
 import SaleServiceListView from "./List/SaleServiceListView";
 import SaleVoucherGridView from "./List/SaleVoucherGridView";
 import SaleMembershipGridView from "./List/SaleMembershipGridView";
+import SaleVoucherToForm from "./Form/SaleVoucherToForm";
 
 const SaleDrawer = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
@@ -29,6 +30,7 @@ const SaleDrawer = (props) => {
   const isAppointmentDetail = useSelector((state) => state.sale.isAppointmentDetail);
   const isVouchers = useSelector((state) => state.sale.isVouchers);
   const isMembership = useSelector((state) => state.sale.isMembership);
+  const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
 
   useEffect(() => {
     if (tabview === "services") {
@@ -285,7 +287,7 @@ const SaleDrawer = (props) => {
                         </InfiniteScroll>
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "vouchers" ? " show active" : "")} id="vouchers">
-                        <InfiniteScroll className="row" dataLength={isVouchers && isVouchers.data && isVouchers.data.length ? isVouchers.data.length : "0"} next={fetchDataSaleVoucher} scrollableTarget="product" hasMore={isVouchers.next_page_url ? true : false} loader={<PaginationLoader />}>
+                        <InfiniteScroll className="row pt-3" dataLength={isVouchers && isVouchers.data && isVouchers.data.length ? isVouchers.data.length : "0"} next={fetchDataSaleVoucher} scrollableTarget="product" hasMore={isVouchers.next_page_url ? true : false} loader={<PaginationLoader />}>
                           <SaleVoucherGridView view={isVouchers} />
                           {isVouchers.length <= 0 && (
                             <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
@@ -337,6 +339,7 @@ const SaleDrawer = (props) => {
         </div>
       </div>
       <ClientAddForm />
+      {isOpenedVoucherToForm && <SaleVoucherToForm />}
     </>
   );
 };

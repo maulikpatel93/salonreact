@@ -1,53 +1,86 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-
+import config from "../../../config";
 import { ucfirst } from "../../../helpers/functions";
-import { SaleVoucherToCartApi } from "store/slices/saleSlice";
+import { OpenVoucherToForm, VoucherToFormData } from "store/slices/saleSlice";
 
 const SaleVoucherGridView = (props) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const view = props.view;
   const objectData = view && view.data ? view.data : view;
-
+  const isCartVoucher = useSelector((state) => state.sale.isCart.vouchers);
   const handleVoucherClick = (e) => {
     const voucherdata = JSON.parse(e.currentTarget.dataset.obj);
-    const voucher_id = voucherdata.id;
-    dispatch(SaleVoucherToCartApi({ voucher_id: voucher_id }));
+    dispatch(OpenVoucherToForm());
+    dispatch(VoucherToFormData({ type: "Voucher", voucher: voucherdata }));
   };
+  const handleOnOffVoucherClick = () => {
+    dispatch(OpenVoucherToForm());
+    dispatch(VoucherToFormData({ type: "OnOffVoucher" }));
+  };
+
   return (
     <>
-      <div className="col-lg-4 col-md-6 col-sm-6 mb-3">
-        <div className="voucher-grid box-image-cover text-center m-0 w-100">
-          <div className="tabs-image user-initial mx-auto">
-            <i className="fas fa-gift fa-2x"></i>
+      <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3">
+        <a id="invoice-link" className="d-block voucher-box" onClick={handleOnOffVoucherClick}>
+          <div className="voucher-center-box">
+            <img src={config.imagepath + "Frame.png"} alt="icon" />
           </div>
-          <div className="image-content">
-            <h5 className="fw-semibold mb-3">{"One-Off Voucher"}</h5>
-          </div>
-        </div>
+          <h5 className="mb-1 fw-semibold">{"One-Off Voucher"}</h5>
+        </a>
       </div>
       {objectData &&
         Object.keys(objectData).map((item, i) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let amount = objectData[item].amount;
-          return (
-            // <div className="col-md-4 text-center mb-3" key={i} data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherClick}>
-            //   <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
-            //   <div className="image-content">
-            //     <h5 className="fw-semibold mb-3">{name}</h5>
-            //   </div>
-            // </div>
-            <div className="col-lg-4 col-md-6 col-sm-6 mb-3" key={i}>
-              <div className="voucher-grid box-image-cover text-center m-0 w-100 cursor-pointer" data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherClick}>
-                <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
-                <div className="image-content">
-                  <h5 className="fw-semibold mb-3">{name}</h5>
-                </div>
+
+          let cartvoucher = isCartVoucher.filter((item) => item.id === id);
+          let dataObj = objectData[item];
+          if (cartvoucher.length === 1) {
+            dataObj = { ...objectData[item], voucher_to: cartvoucher[0] && cartvoucher[0].voucher_to ? cartvoucher[0].voucher_to : "" };
+          }
+          if (isCartVoucher.length > 0) {
+            return (
+              <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3" key={i}>
+                {cartvoucher.length === 1 ? (
+                  <a id="invoice-link" className="d-block voucher-box birthday_vocher" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
+                    <div className="voucher-center-box ">
+                      <span>{"$" + amount}</span>
+                    </div>
+                    <h5 className="mb-1 fw-semibold">{name}</h5>
+                    {cartvoucher.length === 1 && (
+                      <div className="birdthday_addtop">
+                        <img src={config.imagepath + "check.png"} alt="chek-icon" />
+                        <p>{t("Added")}</p>
+                      </div>
+                    )}
+                  </a>
+                ) : (
+                  <a id="invoice-link" className="d-block voucher-box birthday_vocher" data-id={id} data-obj={JSON.stringify(dataObj)}>
+                    <div className="voucher-center-box ">
+                      <span>{"$" + amount}</span>
+                    </div>
+                    <h5 className="mb-1 fw-semibold">{name}</h5>
+                  </a>
+                )}
               </div>
-            </div>
-          );
+            );
+          } else {
+            return (
+              <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3" key={i}>
+                <a id="invoice-link" className="d-block voucher-box birthday_vocher" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
+                  <div className="voucher-center-box ">
+                    <span>{"$" + amount}</span>
+                  </div>
+                  <h5 className="mb-1 fw-semibold">{name}</h5>
+                </a>
+              </div>
+            );
+          }
         })}
     </>
   );

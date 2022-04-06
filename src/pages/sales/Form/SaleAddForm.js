@@ -16,7 +16,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, InlineInputField, TextareaField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
 
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart } from "../../../store/slices/saleSlice";
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart } from "../../../store/slices/saleSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -42,7 +42,7 @@ const SaleAddForm = (props) => {
     client_id: "",
     client_name: "",
     notes: "",
-    cart: { services: [], products: [], vouchers: [] },
+    cart: { services: [], products: [], vouchers: [], onoffvoucher: [], membership: [] },
     appointment_id: "",
     eventdate: "",
   };
@@ -68,8 +68,22 @@ const SaleAddForm = (props) => {
       vouchers: Yup.array().of(
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
-          qty: Yup.string().trim().label(t("Quantity")).min(1).required().test("Digits only", t("The field should have digits only"), digitOnly),
-          price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+          amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+        }),
+      ),
+      onoffvouchers: Yup.array().of(
+        Yup.object().shape({
+          first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
+          last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
+          email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+          amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+          message: Yup.string().trim().label(t("Message")),
+        }),
+      ),
+      membership: Yup.array().of(
+        Yup.object().shape({
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
+          cost: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
         }),
       ),
     }),
@@ -78,6 +92,7 @@ const SaleAddForm = (props) => {
 
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
+    console.log(values);
     try {
       dispatch(saleStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
@@ -190,18 +205,43 @@ const SaleAddForm = (props) => {
             }
             if (isCart && isCart.vouchers.length > 0) {
               Object.keys(isCart.vouchers).map((item) => {
-                let product_id = isCart.vouchers[item].id;
-                let name = isCart.vouchers[item].name;
+                let voucher_id = isCart.vouchers[item].id;
                 let amount = isCart.vouchers[item].amount;
-                // let product_cost_price = isCart.products[item].cost_price;
-                let formik_cart_products_qty = formik.values.cart && formik.values.cart.products.length > 0 && formik.values.cart.products[item] && formik.values.cart.products[item].qty ? formik.values.cart.products[item].qty : "1";
-                let product_price = formik_cart_products_qty > 0 ? parseInt(formik_cart_products_qty) * parseFloat(product_retail_price) : product_retail_price;
-                totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
-                formik.setFieldValue("cart[products][" + item + "][id]", product_id);
-                formik.setFieldValue("cart[products][" + item + "][qty]", String(formik_cart_products_qty));
-                formik.setFieldValue("cart[products][" + item + "][price]", product_retail_price);
+                let code = isCart.vouchers[item].code;
+                let voucher_to = isCart.vouchers[item].voucher_to;
+                formik.setFieldValue("cart[vouchers][" + item + "][id]", voucher_id);
+                formik.setFieldValue("cart[vouchers][" + item + "][code]", String(code));
+                formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(amount));
+                formik.setFieldValue("cart[vouchers][" + item + "][voucher_to]", voucher_to);
               });
             }
+
+            if (isCart && isCart.onoffvouchers.length > 0) {
+              Object.keys(isCart.onoffvouchers).map((item) => {
+                let first_name = isCart.onoffvouchers[item].first_name;
+                let last_name = isCart.onoffvouchers[item].last_name;
+                let is_send = isCart.onoffvouchers[item].is_send;
+                let email = isCart.onoffvouchers[item].email;
+                let amount = isCart.onoffvouchers[item].amount;
+                let message = isCart.onoffvouchers[item].message;
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][is_send]", is_send);
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][email]", email);
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][amount]", String(amount));
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][message]", message);
+              });
+            }
+
+            if (isCart && isCart.membership.length > 0) {
+              Object.keys(isCart.membership).map((item) => {
+                let id = isCart.membership[item].id;
+                let cost = isCart.membership[item].cost;
+                formik.setFieldValue("cart[membership][" + item + "][id]", id);
+                formik.setFieldValue("cart[membership][" + item + "][cost]", cost);
+              });
+            }
+
             if (appointmentDetail) {
               formik.setFieldValue("client_id", appointmentDetail.client_id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
@@ -215,6 +255,7 @@ const SaleAddForm = (props) => {
           if (appointmentDetail.cost) {
             totalprice += isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost);
           }
+          console.log(formik.errors);
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className={isSearchObjClient ? "add-item-panel p-4" : "search-panel p-4"}>
@@ -296,7 +337,7 @@ const SaleAddForm = (props) => {
                 )}
                 <InputField type="hidden" name="client_id" id="saleForm-client_id" value={formik.values.client_id} />
               </div>
-              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.membership.length > 0)) ? (
+              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.onoffvouchers.length > 0 || isCart.membership.length > 0)) ? (
                 <div className="p-4 newsale-probox">
                   {appointmentDetail && (
                     <div className="product-box mt-0 mb-3">
@@ -429,7 +470,8 @@ const SaleAddForm = (props) => {
                     Object.keys(isCart.vouchers).map((item) => {
                       let voucher_id = isCart.vouchers[item].id;
                       let voucher_name = isCart.vouchers[item].name;
-                      let voucher_price = isCart.vouchers[item].cost;
+                      let voucher_price = isCart.vouchers[item].amount;
+                      let voucher_to = isCart.vouchers[item].voucher_to;
 
                       totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
                       let image_url = config.imagepath + "voucher.png";
@@ -453,12 +495,70 @@ const SaleAddForm = (props) => {
                                   </a>
                                 </div>
                               </div>
-                              <div className="pro-content">
+                              <div
+                                className="pro-content cursor-pointer"
+                                onClick={() => {
+                                  const voucherdata = isCart.vouchers[item];
+                                  dispatch(OpenVoucherToForm());
+                                  dispatch(VoucherToFormData({ type: "Voucher", voucher: voucherdata }));
+                                }}
+                              >
                                 <div className="row">
                                   <div className="col-9">
                                     <h4 className="mb-2 fw-semibold">{ucfirst(voucher_name)}</h4>
+                                    <p className="mb-0">{`${t("To (Recipient)")} : ${voucher_to.first_name} ${voucher_to.last_name}`}</p>
                                   </div>
                                   <h4 className="col-3 mb-0 text-end">${voucher_price}</h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {isCart &&
+                    isCart.onoffvouchers.length > 0 &&
+                    Object.keys(isCart.onoffvouchers).map((item) => {
+                      let first_name = isCart.onoffvouchers[item].first_name;
+                      let last_name = isCart.onoffvouchers[item].last_name;
+                      let amount = isCart.onoffvouchers[item].amount;
+
+                      totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
+                      let image_url = config.imagepath + "voucher.png";
+                      return (
+                        <div className="product-box mt-0 mb-3 ps-2" key={item}>
+                          <div className="product-header" id="#checkout-probox">
+                            <a
+                              className="close d-block cursor-pointer"
+                              onClick={() => {
+                                dispatch(SaleOnOffVoucherRemoveToCart({ i: item }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.slice(0, item).concat(formik.values.cart.onoffvouchers.slice(item + 1, formik.values.cart.onoffvouchers.length)) : [] } });
+                              }}
+                            >
+                              <i className="fal fa-times"></i>
+                            </a>
+                            <div className="d-flex">
+                              <div className="pro-img">
+                                <div className="user">
+                                  <a data-fancybox="" data-src={image_url}>
+                                    <img src={image_url} alt="" className="rounded-circle wh-40" />
+                                  </a>
+                                </div>
+                              </div>
+                              <div
+                                className="pro-content cursor-pointer"
+                                onClick={() => {
+                                  const onoffvouchersdata = isCart.onoffvouchers[item];
+                                  dispatch(OpenVoucherToForm());
+                                  dispatch(VoucherToFormData({ type: "OnOffVoucher", onoffvoucher: onoffvouchersdata }));
+                                }}
+                              >
+                                <div className="row">
+                                  <div className="col-9">
+                                    <h4 className="mb-2 fw-semibold">{ucfirst(first_name) + " " + ucfirst(last_name)}</h4>
+                                  </div>
+                                  <h4 className="col-3 mb-0 text-end">${amount}</h4>
                                 </div>
                               </div>
                             </div>

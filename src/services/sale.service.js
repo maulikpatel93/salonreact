@@ -217,11 +217,12 @@ const vouchers = (values) => {
   const next_page_url = values && values.next_page_url;
   let voucher_id = values && values.voucher_id ? values.voucher_id : "";
   let q = values && values.q ? values.q : "";
-  const action = page ? `afterlogin/sale/vouchers?page=${page}&product_id=${product_id}&q=${q}` : `afterlogin/sale/vouchers?voucher_id=${voucher_id}&q=${q}`;
+  const action = page ? `afterlogin/sale/vouchers?page=${page}&voucher_id=${voucher_id}&q=${q}` : `afterlogin/sale/vouchers?voucher_id=${voucher_id}&q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
+    voucher_to: values,
   };
   return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
