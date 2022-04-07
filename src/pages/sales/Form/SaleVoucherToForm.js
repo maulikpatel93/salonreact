@@ -26,6 +26,7 @@ const SaleVoucherToForm = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isVoucherToFormData = useSelector((state) => state.sale.isVoucherToFormData);
   const voucher = isVoucherToFormData.type === "Voucher" ? isVoucherToFormData.voucher : "";
+  const onoffvoucher = isVoucherToFormData.type === "OnOffVoucher" ? isVoucherToFormData.onoffvoucher : "";
   const initialValues = {
     voucher_id: "",
     amount: "",
@@ -108,13 +109,19 @@ const SaleVoucherToForm = (props) => {
               let voucher_to = voucher.voucher_to ? voucher.voucher_to : "";
               formik.setFieldValue("voucher_id", voucher.id ? voucher.id : "");
               formik.setFieldValue("amount", voucher.amount ? voucher.amount : "");
-              const fields = ["first_name", "last_name", "is_send", "email", "message"];
+              const fields = ["id", "first_name", "last_name", "is_send", "email", "message"];
               fields.forEach((field) => {
                 formik.setFieldValue(field, voucher_to[field] ? voucher_to[field] : "", false);
               });
             }
+            if (onoffvoucher) {
+              const fields = ["id", "voucher_id", "first_name", "last_name", "is_send", "email", "message", "amount"];
+              fields.forEach((field) => {
+                formik.setFieldValue(field, onoffvoucher[field] ? onoffvoucher[field] : "", false);
+              });
+            }
             formik.setFieldValue("type", voucher ? "Voucher" : "OnOffVoucher");
-          }, [voucher]);
+          }, [voucher, onoffvoucher]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addproduct-drawer">
               <div className="drawer-wrp position-relative">
@@ -178,7 +185,7 @@ const SaleVoucherToForm = (props) => {
                         <div className="mt-5">
                           <button type="submit" className="btn btn-primary w-100" disabled={loading}>
                             {loading && <span className="spinner-border spinner-border-sm"></span>}
-                            {voucher && voucher.voucher_to ? t("Update") : t("Add to Sale")}
+                            {(voucher && voucher.voucher_to) || onoffvoucher ? t("Update") : t("Add to Sale")}
                           </button>
                         </div>
                       </div>

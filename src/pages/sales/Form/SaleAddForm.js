@@ -16,7 +16,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, InlineInputField, TextareaField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
 
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart } from "../../../store/slices/saleSlice";
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm } from "../../../store/slices/saleSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -42,40 +42,43 @@ const SaleAddForm = (props) => {
     client_id: "",
     client_name: "",
     notes: "",
-    cart: { services: [], products: [], vouchers: [], onoffvoucher: [], membership: [] },
+    cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
     appointment_id: "",
     eventdate: "",
+    client: "",
+    appointmentDetail: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     client_name: Yup.string().trim().label(t("Client")),
-    notes: Yup.string().trim().label(t("Notes")).required(),
+    notes: Yup.string().trim().label(t("Notes")),
     cart: Yup.object().shape({
       services: Yup.array().of(
         Yup.object().shape({
-          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly),
           staff_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Staff")).required())),
-          gprice: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+          gprice: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
         }),
       ),
       products: Yup.array().of(
         Yup.object().shape({
-          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly),
           qty: Yup.string().trim().label(t("Quantity")).min(1).required().test("Digits only", t("The field should have digits only"), digitOnly),
-          price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+          price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
         }),
       ),
       vouchers: Yup.array().of(
         Yup.object().shape({
-          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
-          amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly),
+          amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
         }),
       ),
       onoffvouchers: Yup.array().of(
         Yup.object().shape({
+          id: Yup.string().trim().label(t("ID")).test("Digits only", t("The field should have digits only"), digitOnly),
           first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
           last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
-          email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+          email: Yup.string().trim().max(100).email().label(t("Email Address")),
           amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
           message: Yup.string().trim().label(t("Message")),
         }),
@@ -92,35 +95,38 @@ const SaleAddForm = (props) => {
 
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
-    console.log(values);
     try {
-      dispatch(saleStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus === "fulfilled") {
-          setStatus({ success: true });
-          resetForm();
-          dispatch(closeAddSaleForm());
-          dispatch(closeAppointmentDetailModal());
-          sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
-          if (isRangeInfo) {
-            dispatch(appointmentListViewApi(isRangeInfo));
-            dispatch(busytimeListViewApi(isRangeInfo));
-          }
-          if (scriptedRef.current) {
-            setLoading(false);
-          }
-        } else if (action.meta.requestStatus === "rejected") {
-          const status = action.payload && action.payload.status;
-          const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status === 422) {
-            setErrors(errors);
-          }
-          setStatus({ success: false });
-          setSubmitting(false);
-          if (scriptedRef.current) {
-            setLoading(false);
-          }
-        }
-      });
+      dispatch(OpenCheckoutForm());
+      dispatch(SaleCheckoutData(values));
+      setStatus({ success: true });
+      setLoading(false);
+      // dispatch(saleStoreApi(values)).then((action) => {
+      //   if (action.meta.requestStatus === "fulfilled") {
+      //     setStatus({ success: true });
+      //     resetForm();
+      //     dispatch(closeAddSaleForm());
+      //     dispatch(closeAppointmentDetailModal());
+      //     sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
+      //     if (isRangeInfo) {
+      //       dispatch(appointmentListViewApi(isRangeInfo));
+      //       dispatch(busytimeListViewApi(isRangeInfo));
+      //     }
+      //     if (scriptedRef.current) {
+      //       setLoading(false);
+      //     }
+      //   } else if (action.meta.requestStatus === "rejected") {
+      //     const status = action.payload && action.payload.status;
+      //     const errors = action.payload && action.payload.message && action.payload.message.errors;
+      //     if (status === 422) {
+      //       setErrors(errors);
+      //     }
+      //     setStatus({ success: false });
+      //     setSubmitting(false);
+      //     if (scriptedRef.current) {
+      //       setLoading(false);
+      //     }
+      //   }
+      // });
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);
@@ -174,15 +180,19 @@ const SaleAddForm = (props) => {
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlesaleSubmit}>
         {(formik) => {
           useEffect(() => {
+            if (isSearchObjClient) {
+              formik.setFieldValue("client", isSearchObjClient);
+            }
+            formik.setFieldValue("cart", isCart);
             if (isCart && isCart.services.length > 0) {
               Object.keys(isCart.services).map((item) => {
                 let service_id = isCart.services[item].id;
                 let service_price = isCart.services[item].serviceprice;
-                let generalPrice = service_price.filter((x) => x.name == "General");
-                let gprice = generalPrice.length === 1 ? generalPrice[0].price : "0.00";
-                let add_on_price = generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+                let generalPrice = service_price;
+                let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+                let add_on_price = generalPrice && generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
                 let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
-                let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice ? formik.values.cart.services[item].gprice : totalprice;
+                let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice > 0 ? formik.values.cart.services[item].gprice : totalprice;
                 let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
                 // let staffservices = isCart.services[item].staffservices;
                 formik.setFieldValue("cart[services][" + item + "][id]", service_id);
@@ -218,12 +228,14 @@ const SaleAddForm = (props) => {
 
             if (isCart && isCart.onoffvouchers.length > 0) {
               Object.keys(isCart.onoffvouchers).map((item) => {
+                let id = isCart.onoffvouchers[item].id;
                 let first_name = isCart.onoffvouchers[item].first_name;
                 let last_name = isCart.onoffvouchers[item].last_name;
                 let is_send = isCart.onoffvouchers[item].is_send;
                 let email = isCart.onoffvouchers[item].email;
                 let amount = isCart.onoffvouchers[item].amount;
                 let message = isCart.onoffvouchers[item].message;
+                formik.setFieldValue("cart[onoffvouchers][" + item + "][id]", id ? id : "");
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][is_send]", is_send);
@@ -243,6 +255,7 @@ const SaleAddForm = (props) => {
             }
 
             if (appointmentDetail) {
+              formik.setFieldValue("appointmentDetail", appointmentDetail);
               formik.setFieldValue("client_id", appointmentDetail.client_id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
               formik.setFieldValue("eventdate", appointmentDetail.showdate);
@@ -250,12 +263,11 @@ const SaleAddForm = (props) => {
               dispatch(ClientSearchObj(appointmentDetail.client));
               dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
             }
-          }, [isCart, appointmentDetail]);
+          }, [isCart, appointmentDetail, isSearchObjClient]);
           let totalprice = 0;
           if (appointmentDetail.cost) {
             totalprice += isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost);
           }
-          console.log(formik.errors);
           return (
             <form noValidate onSubmit={formik.handleSubmit}>
               <div className={isSearchObjClient ? "add-item-panel p-4" : "search-panel p-4"}>
@@ -520,6 +532,7 @@ const SaleAddForm = (props) => {
                   {isCart &&
                     isCart.onoffvouchers.length > 0 &&
                     Object.keys(isCart.onoffvouchers).map((item) => {
+                      let id = isCart.onoffvouchers[item].id;
                       let first_name = isCart.onoffvouchers[item].first_name;
                       let last_name = isCart.onoffvouchers[item].last_name;
                       let amount = isCart.onoffvouchers[item].amount;
@@ -532,8 +545,9 @@ const SaleAddForm = (props) => {
                             <a
                               className="close d-block cursor-pointer"
                               onClick={() => {
-                                dispatch(SaleOnOffVoucherRemoveToCart({ i: item }));
-                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.slice(0, item).concat(formik.values.cart.onoffvouchers.slice(item + 1, formik.values.cart.onoffvouchers.length)) : [] } });
+                                dispatch(SaleOnOffVoucherRemoveToCart({ id: id }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.filter((ov) => ov.id != id) : [] } });
+                                // formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.slice(0, item).concat(formik.values.cart.onoffvouchers.slice(item + 1, formik.values.cart.onoffvouchers.length)) : [] } });
                               }}
                             >
                               <i className="fal fa-times"></i>

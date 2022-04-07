@@ -35,7 +35,19 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
         if (action.meta.requestStatus === "fulfilled") {
           let service = action.payload;
           if (service && service.serviceprice && page === "newsale") {
-            dispatch(SaleServiceToCartApi({ service_id: service_id, serviceprice: service.serviceprice }));
+            let serviceprice = service.serviceprice;
+            let generalPrice = serviceprice;
+            let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
+            let add_on_price = generalPrice && generalPrice.length === 1 ? generalPrice[0].add_on_price : "0.00";
+            let totalprice = parseFloat(gprice) + parseFloat(add_on_price);
+            let field_gprice = field.name.replace("staff_id", "gprice");
+            form.setFieldValue(String(field_gprice), String(totalprice));
+            dispatch(SaleServiceToCartApi({ service_id: service_id, serviceprice: serviceprice })).then((action1) => {
+              if (action1.meta.requestStatus === "fulfilled") {
+              }
+            });
+            //
+            // console.log(service.serviceprice);
           }
           // let service = action.payload;
           // let serviceprice = service && service.serviceprice && service.serviceprice[0] && service.serviceprice[0].price ? service.serviceprice[0].price : "";

@@ -224,6 +224,8 @@ const initialState = {
   isMembership: [],
   isVoucherToFormData: [],
   isCartVoucherCount: [],
+  isOpenedCheckoutForm: "",
+  isCheckoutData: [],
 };
 
 const saleSlice = createSlice({
@@ -283,8 +285,9 @@ const saleSlice = createSlice({
       state.isCart.vouchers = state.isCart.vouchers ? state.isCart.vouchers.filter((item) => item.id != id) : [];
     },
     SaleOnOffVoucherRemoveToCart: (state, action) => {
-      const { i } = action.payload;
-      state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.slice(0, i).concat(state.isCart.onoffvouchers.slice(i + 1, state.isCart.onoffvouchers.length)) : [];
+      const { id } = action.payload;
+      state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.filter((item) => item.id != id) : [];
+      // state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.slice(0, i).concat(state.isCart.onoffvouchers.slice(i + 1, state.isCart.onoffvouchers.length)) : [];
     },
     SaleMembershipRemoveToCart: (state, action) => {
       const { id } = action.payload;
@@ -306,8 +309,28 @@ const saleSlice = createSlice({
       state.isSearchObj = action.payload;
     },
     SaleOnOffVoucherToCartApi: (state, action) => {
-      const onoffvouchers = [...state.isCart.onoffvouchers, action.payload];
-      state.isCart.onoffvouchers = onoffvouchers;
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.onoffvouchers.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        action.payload = { ...action.payload, id: state.isCart.onoffvouchers.length + 1 };
+        const onoffvouchers = [...state.isCart.onoffvouchers, action.payload];
+        state.isCart.onoffvouchers = onoffvouchers;
+      }
+    },
+    SaleCheckoutData: (state, action) => {
+      state.isCheckoutData = action.payload;
+    },
+    OpenCheckoutForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedCheckoutForm = "open";
+    },
+    CloseCheckoutForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedCheckoutForm = "";
     },
   },
   extraReducers: {
@@ -516,5 +539,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm } = saleSlice.actions;
 export default saleSlice.reducer;

@@ -60,7 +60,7 @@ const ProductAddForm = () => {
       .test("End Time_test", t("Retail price cannot be greater than the cost price"), (value, field) => {
         const { cost_price } = field.parent;
         if (cost_price !== undefined && value !== undefined) {
-          if (cost_price >= value) {
+          if (parseFloat(cost_price) >= parseFloat(value)) {
             return true;
           } else {
             return false;

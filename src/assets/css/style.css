@@ -291,6 +291,32 @@ textarea.form-control::placeholder {
     border-color: #374151 !important;
 }
 
+.btn-pay {
+    color: #fff !important;
+    background-color: #374151 !important;
+    border-color: #374151 !important;
+    font-weight: bold;
+}
+
+.btn-pay:hover {
+    color: #fff !important;
+    background-color: #8c1c4d !important;
+    border-color: #8c1c4d !important;
+}
+
+.btn-pay-voucher {
+    color: #fff !important;
+    background-color: #8F807D !important;
+    border-color: #8F807D !important;
+    font-weight: bold;
+}
+
+.btn-pay-voucher:hover {
+    color: #fff !important;
+    background-color: #8c1c4d !important;
+    border-color: #8c1c4d !important;
+}
+
 a {
     color: #0b0b0b;
     line-height: normal;

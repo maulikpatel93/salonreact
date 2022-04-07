@@ -15,6 +15,7 @@ import SaleServiceListView from "./List/SaleServiceListView";
 import SaleVoucherGridView from "./List/SaleVoucherGridView";
 import SaleMembershipGridView from "./List/SaleMembershipGridView";
 import SaleVoucherToForm from "./Form/SaleVoucherToForm";
+import SaleCheckoutForm from "./Form/SaleCheckoutForm";
 
 const SaleDrawer = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedAddForm);
@@ -31,6 +32,7 @@ const SaleDrawer = (props) => {
   const isVouchers = useSelector((state) => state.sale.isVouchers);
   const isMembership = useSelector((state) => state.sale.isMembership);
   const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
+  const isOpenedCheckoutForm = useSelector((state) => state.sale.isOpenedCheckoutForm);
 
   useEffect(() => {
     if (tabview === "services") {
@@ -340,6 +342,7 @@ const SaleDrawer = (props) => {
       </div>
       <ClientAddForm />
       {isOpenedVoucherToForm && <SaleVoucherToForm />}
+      {isOpenedCheckoutForm && <SaleCheckoutForm />}
     </>
   );
 };

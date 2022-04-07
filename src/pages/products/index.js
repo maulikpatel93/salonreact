@@ -334,7 +334,7 @@ const Products = () => {
                               <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                               <h4 className="mb-2 fw-semibold">
                                 {t("No products have been added yet.")}
-                                <a className="add-product ms-1 cursor-pointer" onClick={() => dispatch(openAddProductForm())}>
+                                <a className="add-product ms-1 cursor-pointer" onClick={handleopenAddProductForm}>
                                   {t("Please add one")}
                                 </a>
                                 .
