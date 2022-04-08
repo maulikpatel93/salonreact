@@ -23,7 +23,7 @@ const SaleServiceListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           // let sku = objectData[item].sku;
-          let retail_price = objectData[item].retail_price;
+          let cost_price = objectData[item].cost_price;
           // let stock_quantity = objectData[item].stock_quantity;
           let image_url = objectData[item].image_url;
           return (
@@ -46,11 +46,15 @@ const SaleServiceListView = (props) => {
                   </div>
                 </div>
               </td>
-              <td>${retail_price}</td>
+              <td>${cost_price}</td>
             </tr>
           );
         })}
-        {objectData.length <= 0 ? <tr className="fw-bold p-3"><td colSpan={2}>{t("No data found")}</td></tr> : ""}
+      {objectData.length <= 0 && (
+        <tr className="fw-bold p-3">
+          <td colSpan={2}>{t("No data found")}</td>
+        </tr>
+      )}
     </>
   );
 };

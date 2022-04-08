@@ -5,7 +5,7 @@ import config from "../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
-import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName, SaleVoucherApi, SaleMembershipApi } from "store/slices/saleSlice";
+import { closeAddSaleForm, SaleTabView, SaleServiceApi, SaleServiceSearchName, SaleProductApi, SaleProductSearchName, SaleVoucherApi, SaleMembershipApi, CloseCheckoutForm } from "store/slices/saleSlice";
 import { ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import PaginationLoader from "component/PaginationLoader";
 import SaleAddForm from "./Form/SaleAddForm";
@@ -33,8 +33,20 @@ const SaleDrawer = (props) => {
   const isMembership = useSelector((state) => state.sale.isMembership);
   const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isOpenedCheckoutForm = useSelector((state) => state.sale.isOpenedCheckoutForm);
+  const isCartCheckout = useSelector((state) => state.sale.isCart);
 
   useEffect(() => {
+    const isCartCount = [];
+    if (isCartCheckout) {
+      Object.keys(isCartCheckout).map((c) => {
+        if (isCartCheckout[c].length > 0) {
+          isCartCount.push(isCartCheckout[c].length);
+        }
+      });
+    }
+    if (isCartCount.length === 0 && isAppointmentDetail === "") {
+      dispatch(CloseCheckoutForm());
+    }
     if (tabview === "services") {
       if (isServiceSearchName) {
         dispatch(SaleServiceApi({ q: isServiceSearchName }));
@@ -57,7 +69,7 @@ const SaleDrawer = (props) => {
     if (tabview === "memberships") {
       dispatch(SaleMembershipApi());
     }
-  }, [tabview]);
+  }, [tabview, isCartCheckout, isAppointmentDetail]);
 
   const handleCloseAddsaleForm = () => {
     dispatch({ type: "sale/reset" });

@@ -1307,7 +1307,7 @@ header .search .search-wrapper.open {
     border: 1px solid #e5e5e5;
     position: relative;
     margin-top: 30px;
-    cursor: pointer;
+    cursor: auto;
 }
 
 .product-box .close,
@@ -1318,7 +1318,6 @@ header .search .search-wrapper.open {
     top: 15px;
     line-height: 1;
     font-size: 16px;
-    visibility: hidden;
 }
 
 .product-box.open .close,

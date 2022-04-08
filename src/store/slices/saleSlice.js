@@ -332,6 +332,24 @@ const saleSlice = createSlice({
       // state.isOpenedEditForm = "";
       state.isOpenedCheckoutForm = "";
     },
+    SaleCartUpdate: (state, action) => {
+      let cartupdate = action.payload;
+      if (cartupdate) {
+        const { id, ...changes } = action.payload;
+        let existingData = "";
+        if (cartupdate.type === "products") {
+          existingData = state.isCart.products.find((event) => event.id === id);
+        }
+        if (cartupdate.type === "services") {
+          existingData = state.isCart.services.find((event) => event.id === id);
+        }
+        if (existingData) {
+          Object.keys(changes).map((keyName) => {
+            existingData[keyName] = changes[keyName];
+          });
+        }
+      }
+    },
   },
   extraReducers: {
     [saleStoreApi.pending]: () => {},
@@ -539,5 +557,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate } = saleSlice.actions;
 export default saleSlice.reducer;

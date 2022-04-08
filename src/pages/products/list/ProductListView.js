@@ -54,7 +54,7 @@ const ProductListView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let sku = objectData[item].sku;
-          let retail_price = objectData[item].retail_price;
+          let cost_price = objectData[item].cost_price;
           let stock_quantity = objectData[item].stock_quantity;
           let image_url = objectData[item].image_url;
           let supplier_name = objectData[item].supplier && objectData[item].supplier.name;
@@ -76,7 +76,7 @@ const ProductListView = (props) => {
               <td>{sku}</td>
               <td>{supplier_name}</td>
               <td>{stock_quantity}</td>
-              <td>{retail_price}</td>
+              <td>{cost_price}</td>
               <td className="ps-0 text-end" width="60px">
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">

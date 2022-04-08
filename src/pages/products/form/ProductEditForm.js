@@ -70,10 +70,10 @@ const ProductEditForm = () => {
       .label(t("Retail Price"))
       .required()
       .test("Decimal only", t("The field should have decimal only"), decimalOnly)
-      .test("End Time_test", t("Retail price cannot be greater than the cost price"), (value, field) => {
+      .test("End Time_test", t("Retail price can be greater than the cost price"), (value, field) => {
         const { cost_price } = field.parent;
         if (cost_price !== undefined && value !== undefined) {
-          if (cost_price >= value) {
+          if (parseFloat(cost_price) <= parseFloat(value)) {
             return true;
           } else {
             return false;

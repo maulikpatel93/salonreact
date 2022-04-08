@@ -300,11 +300,11 @@ const Products = () => {
                                       </a>
                                     </th>
                                     <th>
-                                      <a className="product-header cursor-pointer" onClick={() => sorting({ retail_price: sort.retail_price == "asc" ? "desc" : "asc" })}>
-                                        {t("Retail Price")}
+                                      <a className="product-header cursor-pointer" onClick={() => sorting({ cost_price: sort.cost_price == "asc" ? "desc" : "asc" })}>
+                                        {t("Cost Price")}
                                         <span className="down-up-arrow">
-                                          <i className={"fal fa-angle-up" + (sort.retail_price == "asc" ? " text-dark" : "")}></i>
-                                          <i className={"fal fa-angle-down" + (sort.retail_price == "desc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-up" + (sort.cost_price == "asc" ? " text-dark" : "")}></i>
+                                          <i className={"fal fa-angle-down" + (sort.cost_price == "desc" ? " text-dark" : "")}></i>
                                         </span>
                                       </a>
                                     </th>

@@ -184,14 +184,16 @@ const services = (values) => {
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
   let service_id = values && values.service_id ? values.service_id : "";
-  let serviceprice = values && values.serviceprice ? values.serviceprice : "";
+  let staff = values && values.staff ? values.staff : "";
+  let gprice = values && values.gprice ? values.gprice : "";
   let q = values && values.q ? values.q : "";
   const action = page ? `afterlogin/sale/services?page=${page}&service_id=${service_id}&q=${q}` : `afterlogin/sale/services?service_id=${service_id}&q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
     salon_id: auth.user.salon_id,
-    serviceprice: serviceprice,
+    staff: staff,
+    gprice: gprice,
   };
   return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
