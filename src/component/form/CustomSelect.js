@@ -34,7 +34,7 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
       dispatch(servicePriceApi({ staff_id: option && option.value, service_id: service_id && service_id })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           let service = action.payload;
-          if (service && service.serviceprice && page === "newsale") {
+          if (service && service.serviceprice && page === "newsale" && option) {
             let serviceprice = service.serviceprice;
             let generalPrice = serviceprice;
             let gprice = generalPrice && generalPrice.length === 1 ? generalPrice[0].price : "0.00";
