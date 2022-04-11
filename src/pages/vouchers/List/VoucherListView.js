@@ -7,6 +7,7 @@ import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { openEditVoucherForm, voucherDeleteApi, voucherDetailApi } from "../../../store/slices/voucherSlice";
 import { checkaccess } from "helpers/functions";
+import { openAddSaleForm, SaleTabView } from "store/slices/saleSlice";
 
 const VoucherListView = (props) => {
   const dispatch = useDispatch();
@@ -35,6 +36,14 @@ const VoucherListView = (props) => {
       }
     });
   };
+  const handleVoucherSaleClick = (e) => {
+    const voucher_id = e.currentTarget.closest(".voucher-action").dataset.id;
+    console.log(voucher_id);
+    dispatch({ type: "sale/reset" });
+    dispatch(openAddSaleForm());
+    dispatch(SaleTabView("vouchers"));
+    // dispatch(SaleVoucherToCartApi({ voucher_id: voucher_id }));
+  };
   return (
     <>
       {objectData &&
@@ -55,7 +64,7 @@ const VoucherListView = (props) => {
               <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
                 {t("Edit")}
               </a>
-              <a id="salevoucher-link" className="sell me-1 cursor-pointer">
+              <a id="salevoucher-link" className="sell me-1 cursor-pointer" onClick={handleVoucherSaleClick}>
                 {t("Sell")}
               </a>
               <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherDelete}>

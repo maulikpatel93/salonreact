@@ -47,7 +47,7 @@ const SaleVoucherGridView = (props) => {
             return (
               <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3" key={i}>
                 {cartvoucher.length === 1 ? (
-                  <a id="invoice-link" className="d-block voucher-box birthday_vocher" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
+                  <a id="invoice-link" className="d-block voucher-box birthday_vocher cursor-pointer" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
                     <div className="voucher-center-box ">
                       <span>{"$" + amount}</span>
                     </div>
@@ -72,7 +72,7 @@ const SaleVoucherGridView = (props) => {
           } else {
             return (
               <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3" key={i}>
-                <a id="invoice-link" className="d-block voucher-box birthday_vocher" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
+                <a id="invoice-link" className="d-block voucher-box birthday_vocher cursor-pointer" data-id={id} data-obj={JSON.stringify(dataObj)} onClick={handleVoucherClick}>
                   <div className="voucher-center-box ">
                     <span>{"$" + amount}</span>
                   </div>

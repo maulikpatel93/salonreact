@@ -36,7 +36,7 @@ const MembershipGridView = (props) => {
       }
     });
   };
-  const handleMembershipClick = (e) => {
+  const handleMembershipSaleClick = (e) => {
     const membership_id = e.currentTarget.closest(".membership-grid").dataset.id;
     dispatch({ type: "sale/reset" });
     dispatch(openAddSaleForm());
@@ -62,7 +62,7 @@ const MembershipGridView = (props) => {
                   <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
                     {t("Edit")}
                   </a>
-                  <a id="salemembership-link" className="sell me-1 cursor-pointer" onClick={handleMembershipClick}>
+                  <a id="salemembership-link" className="sell me-1 cursor-pointer" onClick={handleMembershipSaleClick}>
                     {t("Sell")}
                   </a>
                   <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleMembershipDelete}>

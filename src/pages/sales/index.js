@@ -11,6 +11,7 @@ import SaleClientSuggetionListView from "./List/SaleClientSuggetionListView";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import moment from "moment";
+import SaleCompleted from "./Drawer/SaleCompleted";
 // import { checkaccess } from "helpers/functions";
 
 const Sales = () => {
@@ -31,6 +32,7 @@ const Sales = () => {
   const tabview = useSelector((state) => state.sale.isTabView);
   const ViewInvoiceList = useSelector((state) => state.sale.isInvoiceListView);
   const CreateInvoiceList = useSelector((state) => state.sale.isCreateInvoiceListView);
+  const isOpenedSaleCompleted = useSelector((state) => state.sale.isOpenedSaleCompleted);
 
   const isSearchList = useSelector((state) => state.sale.isSearchList);
   const isSearchName = useSelector((state) => state.sale.isSearchName);
@@ -268,6 +270,7 @@ const Sales = () => {
               )}
             </div>
           </div>
+          {isOpenedSaleCompleted && <SaleCompleted />}
         </section>
       </div>
     </>

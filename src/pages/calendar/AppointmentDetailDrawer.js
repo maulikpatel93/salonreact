@@ -12,6 +12,7 @@ import Moment from "react-moment";
 import { swalConfirm, sweatalert } from "component/Sweatalert2";
 import PropTypes from "prop-types";
 import { ClientSearchName, CloseClientSearchList } from "store/slices/clientSlice";
+import moment from "moment";
 
 const AppointmentDetailDrawer = (props) => {
   const { t } = useTranslation();
@@ -245,7 +246,7 @@ const AppointmentDetailDrawer = (props) => {
                 <h5 className={textColor + " fw-bold"}>{sale && sale.status === "Paid" ? t("Completed") : status}</h5>
               )}
             </div>
-            <p className="mb-2 text-jusitfy">{t("Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.", { start_time: "09:15Am", end_time: "10::00Pm", staff_name: "Amanda" })}</p>
+            <p className="mb-2 text-jusitfy">{t("Client will be arriving early to be able to start before {{start_time}} if {{staff_name}} is available and will be needing to leave by {{end_time}} at the latest.", { start_time: moment(dateof + "T" + start_time).format("hh:mm A"), end_time: moment(dateof + "T" + end_time).format("hh:mm A"), staff_name: ucfirst(staff.first_name + " " + staff.last_name) })}</p>
           </div>
           {sale && sale.status !== "Paid" && status === "Confirmed" && (
             <div className="drawer-footer text-center pt-3">

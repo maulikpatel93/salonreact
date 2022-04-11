@@ -5,12 +5,18 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "helpers/functions";
 import Moment from "react-moment";
+import { OpenSaleCompleted, SaleCompletedData } from "store/slices/saleSlice";
 
 const InvoiceListView = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const views = props.view;
   const objectData = views && views.data ? views.data : views;
+  const handleSaleCompleted = (e) => {
+    let saledata = e.currentTarget && e.currentTarget.dataset && JSON.parse(e.currentTarget.dataset.obj);
+    dispatch(SaleCompletedData(saledata));
+    dispatch(OpenSaleCompleted());
+  };
   return (
     <>
       {objectData &&
@@ -20,10 +26,10 @@ const InvoiceListView = (props) => {
           let totalprice = objectData[item].totalprice;
           let status = objectData[item].status;
           let client = objectData[item].client;
-          let client_name = ucfirst(client.first_name) + " " + ucfirst(client.last_name);
+          let client_name = client && ucfirst(client.first_name) + " " + ucfirst(client.last_name);
           let cart = objectData[item].cart;
           return (
-            <tr className="sale-complete-link" key={item}>
+            <tr className="sale-complete-link" key={item} data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleSaleCompleted}>
               <td>{`#${id}`}</td>
               <td>{client_name}</td>
               <td>

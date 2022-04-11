@@ -33,6 +33,7 @@ const SaleDrawer = (props) => {
   const isMembership = useSelector((state) => state.sale.isMembership);
   const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isOpenedCheckoutForm = useSelector((state) => state.sale.isOpenedCheckoutForm);
+  const isOpenedSaleCompleted = useSelector((state) => state.sale.isOpenedSaleCompleted);
   const isCartCheckout = useSelector((state) => state.sale.isCart);
 
   useEffect(() => {
@@ -353,8 +354,9 @@ const SaleDrawer = (props) => {
         </div>
       </div>
       <ClientAddForm />
-      {isOpenedVoucherToForm && <SaleVoucherToForm />}
-      {isOpenedCheckoutForm && <SaleCheckoutForm />}
+      {isOpenedVoucherToForm && <SaleVoucherToForm isRangeInfo={isRangeInfo} />}
+      {isOpenedCheckoutForm && <SaleCheckoutForm isRangeInfo={isRangeInfo} />}
+      {isOpenedSaleCompleted && <SaleCompleted />}
     </>
   );
 };

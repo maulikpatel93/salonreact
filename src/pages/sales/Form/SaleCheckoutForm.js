@@ -12,7 +12,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { TextareaField } from "component/form/Field";
 import moment from "moment";
 
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -52,7 +52,8 @@ const SaleCheckoutForm = (props) => {
           resetForm();
           dispatch(closeAddSaleForm());
           dispatch(closeAppointmentDetailModal());
-          sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
+          dispatch(OpenSaleCompleted());
+          // sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(busytimeListViewApi(isRangeInfo));
@@ -95,13 +96,11 @@ const SaleCheckoutForm = (props) => {
             if (isCart && isCart.services.length > 0) {
               Object.keys(isCart.services).map((item) => {
                 let service_id = isCart.services[item].id;
-                //let staff = isCart.services[item].staff;
+                let staff = isCart.services[item].staff;
                 let gprice = isCart.services[item].gprice ? isCart.services[item].gprice : "";
-                let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice > 0 ? formik.values.cart.services[item].gprice : gprice;
-                let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
                 formik.setFieldValue("cart[services][" + item + "][id]", service_id);
-                formik.setFieldValue("cart[services][" + item + "][staff_id]", formik_cart_service_staff_id);
-                formik.setFieldValue("cart[services][" + item + "][gprice]", String(formik_cart_service_gprice));
+                formik.setFieldValue("cart[services][" + item + "][staff_id]", staff && staff.id);
+                formik.setFieldValue("cart[services][" + item + "][gprice]", String(gprice));
               });
             }
             if (isCart && isCart.products.length > 0) {
@@ -439,13 +438,13 @@ const SaleCheckoutForm = (props) => {
                         </div>
                         <div className="row">
                           <div className="col-4">
-                            <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading}>
+                            <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
                               {t("Paid by Credit Card")}
                             </button>
                           </div>
                           <div className="col-4">
-                            <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading}>
+                            <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
                               {t("Paid by Cash")}
                             </button>

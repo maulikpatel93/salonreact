@@ -7,6 +7,7 @@ import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { OpenEditVoucherForm, VoucherDeleteApi, VoucherDetailApi } from "../../../store/slices/voucherSlice";
 import { checkaccess } from "helpers/functions";
+import { SaleTabView, openAddSaleForm, OpenVoucherToForm, VoucherToFormData } from "store/slices/saleSlice";
 
 const VoucherGridView = (props) => {
   const dispatch = useDispatch();
@@ -35,6 +36,18 @@ const VoucherGridView = (props) => {
       }
     });
   };
+  const handleVoucherSaleClick = (e) => {
+    const voucher_id = e.currentTarget.closest(".voucher-grid").dataset.id;
+    const voucher_obj = e.currentTarget.closest(".voucher-grid").dataset.obj;
+    const voucherdata = JSON.parse(voucher_obj);
+    console.log(voucherdata);
+    dispatch({ type: "sale/reset" });
+    dispatch(openAddSaleForm());
+    dispatch(SaleTabView("vouchers"));
+    dispatch(OpenVoucherToForm());
+    dispatch(VoucherToFormData({ type: "Voucher", voucher: voucherdata }));
+    // dispatch(SaleVoucherToCartApi({ voucher_id: voucher_id }));
+  };
   return (
     <>
       {objectData &&
@@ -43,7 +56,7 @@ const VoucherGridView = (props) => {
           let name = objectData[item].name;
           let amount = objectData[item].amount;
           return (
-            <div className="voucher-grid box-image-cover" key={item} data-id={id}>
+            <div className="voucher-grid box-image-cover" key={item} data-id={id} data-obj={JSON.stringify(objectData[item])}>
               <div className="tabs-image user-initial mx-auto">{"$" + amount}</div>
               <div className="image-content">
                 <h5 className="fw-semibold mb-3">{name}</h5>
@@ -51,7 +64,7 @@ const VoucherGridView = (props) => {
                   <a className="edit me-1 cursor-pointer" onClick={handleEditForm}>
                     {t("Edit")}
                   </a>
-                  <a id="salevoucher-link" className="sell me-1 cursor-pointer">
+                  <a id="salevoucher-link" className="sell me-1 cursor-pointer" onClick={handleVoucherSaleClick}>
                     {t("Sell")}
                   </a>
                   <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleVoucherDelete}>

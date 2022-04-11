@@ -30,6 +30,7 @@ const SaleAddForm = (props) => {
   const scriptedRef = useScriptRef();
 
   const isRangeInfo = props.isRangeInfo;
+  
   const isSearchListClient = useSelector((state) => state.client.isSearchList);
   const isSearchNameClient = useSelector((state) => state.client.isSearchName);
   const isSearchObjClient = useSelector((state) => state.client.isSearchObj);

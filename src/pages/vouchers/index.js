@@ -13,6 +13,7 @@ import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
 import { checkaccess } from "helpers/functions";
 import VoucherGridView from "./List/VoucherGridView";
+import SaleDrawer from "pages/sales/SaleDrawer";
 
 const Vouchers = () => {
   SalonModule();
@@ -28,6 +29,7 @@ const Vouchers = () => {
   const isServiceOption = useSelector((state) => state.service.isServiceOption);
   const isOpenedAddForm = useSelector((state) => state.voucher.isOpenedAddForm);
   const isOpenedEditForm = useSelector((state) => state.voucher.isOpenedEditForm);
+  const saleIsOpenedAddForm = useSelector((state) => state.sale.isOpenedAddForm);
   // const isOpenedDetailModal = useSelector((state) => state.voucher.isOpenedDetailModal);
 
   useEffect(() => {
@@ -144,6 +146,7 @@ const Vouchers = () => {
         </div>
         {isOpenedAddForm && <VoucherAddForm service={isServiceOption} />}
         {isOpenedEditForm && <VoucherEditForm service={isServiceOption} />}
+        {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer page={"voucher"} /> : ""}
       </div>
     </>
   );
