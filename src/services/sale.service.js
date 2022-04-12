@@ -238,7 +238,23 @@ const membership = (values) => {
   const next_page_url = values && values.next_page_url;
   let membership_id = values && values.membership_id ? values.membership_id : "";
   let q = values && values.q ? values.q : "";
-  const action = page ? `afterlogin/sale/membership?page=${page}&product_id=${product_id}&q=${q}` : `afterlogin/sale/membership?membership_id=${membership_id}&q=${q}`;
+  const action = page ? `afterlogin/sale/membership?page=${page}&membership_id=${membership_id}&q=${q}` : `afterlogin/sale/membership?membership_id=${membership_id}&q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+  };
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
+};
+
+const subscription = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let subscription_id = values && values.membership_id ? values.membership_id : "";
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/sale/subscription?page=${page}&subscription_id=${subscription_id}&q=${q}` : `afterlogin/sale/subscription?subscription_id=${subscription_id}&q=${q}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -291,9 +307,10 @@ const saleApiController = {
   products,
   vouchers,
   membership,
+  subscription,
   invoiceview,
   createinvoiceview,
   clientsuggetionlist,
-  sendEmailInvoice,
+  sendEmailInvoice
 };
 export default saleApiController;

@@ -495,5 +495,8 @@
     "Search by invoice # or customer name": "Search by invoice # or customer name",
     "Invoice Sent": "Invoice Sent",
     "Invoice Sent Successfully": "Invoice Sent Successfully",
-    "Email Invoice": "Email Invoice"
+    "Email Invoice": "Email Invoice",
+    "Subscription Name": "Subscription Name",
+    "New Subscription": "New Subscription",
+    "Add a name to easily identify the subscription.": "Add a name to easily identify the subscription."
 }

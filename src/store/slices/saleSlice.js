@@ -133,6 +133,19 @@ export const SaleMembershipApi = createAsyncThunk("sale/membership", async (form
   }
 });
 
+export const SaleSubscriptionApi = createAsyncThunk("sale/subscription", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .subscription(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "subscription"))
+      .catch((error) => HandleError(thunkAPI, error, "subscription"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const SaleServiceToCartApi = createAsyncThunk("sale/servicetocart", async (formValues, thunkAPI) => {
   try {
     const resposedata = await saleApiController
@@ -178,6 +191,19 @@ export const SaleMembershipToCartApi = createAsyncThunk("sale/membershiptocart",
       .membership(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "membershiptocart"))
       .catch((error) => HandleError(thunkAPI, error, "membershiptocart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const SaleSubscriptionToCartApi = createAsyncThunk("sale/subscriptiontocart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .subscription(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "subscriptiontocart"))
+      .catch((error) => HandleError(thunkAPI, error, "subscriptiontocart"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -235,6 +261,7 @@ const initialState = {
   isSearchObj: "",
   isVouchers: [],
   isMembership: [],
+  isSubscription: [],
   isVoucherToFormData: [],
   isCartVoucherCount: [],
   isOpenedCheckoutForm: "",
@@ -499,6 +526,21 @@ const saleSlice = createSlice({
     [SaleMembershipApi.rejected]: (state) => {
       state.isMembership = [];
     },
+    [SaleSubscriptionApi.pending]: () => {},
+    [SaleSubscriptionApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isSubscription.current_page ? state.isSubscription.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isSubscription && state.isSubscription.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isSubscription = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isSubscription.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isSubscription = action.payload;
+    },
+    [SaleSubscriptionApi.rejected]: (state) => {
+      state.isSubscription = [];
+    },
     [SaleServiceToCartApi.pending]: () => {},
     [SaleServiceToCartApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
@@ -563,6 +605,22 @@ const saleSlice = createSlice({
     [SaleMembershipToCartApi.rejected]: (state) => {
       state.isCart.membership = "";
     },
+    [SaleSubscriptionToCartApi.pending]: () => {},
+    [SaleSubscriptionToCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isCart.membership.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const subscription = [...state.isCart.subscription, action.payload];
+        state.isCart.subscription = subscription;
+      }
+    },
+    [SaleSubscriptionToCartApi.rejected]: (state) => {
+      state.isCart.subscription = "";
+    },
     [ClientSuggetionListApi.pending]: () => {},
     [ClientSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
@@ -581,7 +639,6 @@ const saleSlice = createSlice({
     [SaleEmailInvoiceApi.pending]: () => {},
     [SaleEmailInvoiceApi.fulfilled]: () => {},
     [SaleEmailInvoiceApi.rejected]: () => {},
-    
   },
 });
 // Action creators are generated for each case reducer function

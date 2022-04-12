@@ -27,6 +27,7 @@ import calendarReducer from "../store/slices/calendarSlice";
 import voucherReducer from "../store/slices/voucherSlice";
 import saleReducer from "../store/slices/saleSlice";
 import membershipReducer from "../store/slices/membershipSlice";
+import subscriptionReducer from "../store/slices/subscriptionSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -266,6 +267,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     membershipReducer,
+  ),
+  subscription: persistReducer(
+    {
+      key: "subscription",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    subscriptionReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,
