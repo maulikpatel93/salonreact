@@ -31,6 +31,7 @@ import AppointmentRescheduleForm from "./Form/AppointmentRescheduleForm";
 import AppointmentDetailDrawer from "./AppointmentDetailDrawer";
 import BusytimeEditForm from "./Form/BusytimeEditForm";
 import SaleDrawer from "pages/sales/SaleDrawer";
+import SaleCompleted from "pages/sales/Drawer/SaleCompleted";
 // import InfiniteScroll from "react-infinite-scroll-component";
 // import PaginationLoader from "component/PaginationLoader";
 
@@ -63,6 +64,7 @@ const Calendar = () => {
   const isRangeInfo = useSelector((state) => state.calendar.isRangeInfo);
   const calendarTab = useSelector((state) => state.calendar.isTabView);
   const isStaffFilter = useSelector((state) => state.calendar.isStaffFilter);
+  const isOpenedSaleCompleted = useSelector((state) => state.sale.isOpenedSaleCompleted);
 
   useEffect(() => {
     dispatch(staffOptionsDropdown({ dropdown: true }));
@@ -734,6 +736,8 @@ const Calendar = () => {
         {checkaccess({ name: "create", role_id: role_id, controller: "busytime", access }) && busytimeIsOpenedEditForm ? <BusytimeEditForm isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "clients", access }) && clientIsOpenedAddForm ? <ClientAddForm /> : ""}
         {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer isRangeInfo={isRangeInfo} page={"calendar"} /> : ""}
+
+        {isOpenedSaleCompleted && <SaleCompleted />}
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import Moment from "react-moment";
 import { ucfirst } from "helpers/functions";
+import { AppointmentDetail, openAddSaleForm } from "store/slices/saleSlice";
 // import config from "../../../config";
 
 const CreateInvoiceListView = (props) => {
@@ -25,7 +26,15 @@ const CreateInvoiceListView = (props) => {
           let staff_name = ucfirst(staff.first_name) + " " + ucfirst(staff.last_name);
           let service = objectData[item].service;
           return (
-            <tr id="sale-checkout-link" key={item}>
+            <tr
+              id="sale-checkout-link"
+              className="cursor-pointer"
+              key={item}
+              onClick={() => {
+                dispatch(AppointmentDetail(objectData[item]));
+                dispatch(openAddSaleForm());
+              }}
+            >
               <td>
                 <Moment format="Do MMMM YYYY">{dateof}</Moment>
               </td>

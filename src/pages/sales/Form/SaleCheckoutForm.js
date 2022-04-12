@@ -12,7 +12,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { TextareaField } from "component/form/Field";
 import moment from "moment";
 
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -52,6 +52,7 @@ const SaleCheckoutForm = (props) => {
           resetForm();
           dispatch(closeAddSaleForm());
           dispatch(closeAppointmentDetailModal());
+          dispatch(SaleCompletedData(action.payload));
           dispatch(OpenSaleCompleted());
           // sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
           if (isRangeInfo) {

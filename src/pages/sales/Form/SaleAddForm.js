@@ -38,7 +38,7 @@ const SaleAddForm = (props) => {
   const appointmentDetail = props.appointmentDetail;
 
   const isCart = useSelector((state) => state.sale.isCart);
-  console.log(isCart);
+  
   const initialValues = {
     client_id: "",
     client_name: "",
@@ -258,7 +258,7 @@ const SaleAddForm = (props) => {
             }
             if (appointmentDetail) {
               formik.setFieldValue("appointmentDetail", appointmentDetail);
-              formik.setFieldValue("client_id", appointmentDetail.client_id);
+              formik.setFieldValue("client_id", appointmentDetail.client && appointmentDetail.client.id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
               formik.setFieldValue("eventdate", appointmentDetail.showdate);
               // dispatch(ClientSearchName(appointmentDetail.client && ));

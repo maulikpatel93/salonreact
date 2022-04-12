@@ -12,7 +12,8 @@ import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import moment from "moment";
 import SaleCompleted from "./Drawer/SaleCompleted";
-// import { checkaccess } from "helpers/functions";
+import SaleDrawer from "./SaleDrawer";
+import { checkaccess } from "helpers/functions";
 
 const Sales = () => {
   SalonModule();
@@ -33,6 +34,7 @@ const Sales = () => {
   const ViewInvoiceList = useSelector((state) => state.sale.isInvoiceListView);
   const CreateInvoiceList = useSelector((state) => state.sale.isCreateInvoiceListView);
   const isOpenedSaleCompleted = useSelector((state) => state.sale.isOpenedSaleCompleted);
+  const saleIsOpenedAddForm = useSelector((state) => state.sale.isOpenedAddForm);
 
   const isSearchList = useSelector((state) => state.sale.isSearchList);
   const isSearchName = useSelector((state) => state.sale.isSearchName);
@@ -270,6 +272,7 @@ const Sales = () => {
               )}
             </div>
           </div>
+          {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer page={"createinvoice"} /> : ""}
           {isOpenedSaleCompleted && <SaleCompleted />}
         </section>
       </div>

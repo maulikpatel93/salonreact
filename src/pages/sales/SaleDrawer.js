@@ -22,6 +22,7 @@ const SaleDrawer = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const page = props.page;
   const isRangeInfo = props.isRangeInfo;
   const tabview = useSelector((state) => state.sale.isSaleTabView);
   const isServices = useSelector((state) => state.sale.isServices);
@@ -33,7 +34,6 @@ const SaleDrawer = (props) => {
   const isMembership = useSelector((state) => state.sale.isMembership);
   const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isOpenedCheckoutForm = useSelector((state) => state.sale.isOpenedCheckoutForm);
-  const isOpenedSaleCompleted = useSelector((state) => state.sale.isOpenedSaleCompleted);
   const isCartCheckout = useSelector((state) => state.sale.isCart);
 
   useEffect(() => {
@@ -73,7 +73,9 @@ const SaleDrawer = (props) => {
   }, [tabview, isCartCheckout, isAppointmentDetail]);
 
   const handleCloseAddsaleForm = () => {
-    dispatch({ type: "sale/reset" });
+    if (page !== "createinvoice") {
+      dispatch({ type: "sale/reset" });
+    }
     dispatch(ClientSearchName(""));
     dispatch(ClientSearchObj(""));
     dispatch(closeAddSaleForm());
@@ -356,11 +358,11 @@ const SaleDrawer = (props) => {
       <ClientAddForm />
       {isOpenedVoucherToForm && <SaleVoucherToForm isRangeInfo={isRangeInfo} />}
       {isOpenedCheckoutForm && <SaleCheckoutForm isRangeInfo={isRangeInfo} />}
-      {isOpenedSaleCompleted && <SaleCompleted />}
     </>
   );
 };
 SaleDrawer.propTypes = {
   isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  page: PropTypes.string,
 };
 export default SaleDrawer;
