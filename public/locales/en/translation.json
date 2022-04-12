@@ -485,5 +485,15 @@
     "Add the amount for voucher is for.": "Add the amount for voucher is for.",
     "New Sale - Payment": "New Sale - Payment",
     "Message": "Message",
-    "With {{ staff_name }}": "With {{ staff_name }}"
+    "With {{ staff_name }}": "With {{ staff_name }}",
+    "Tax Invoice": "Tax Invoice",
+    "Invoice to": "Invoice to",
+    "Total AUD": "Total AUD",
+    "Congratulations!": "Congratulations!",
+    "Payment by {{ paidby }}": "Payment by {{ paidby }}",
+    "Send": "Send",
+    "Search by invoice # or customer name": "Search by invoice # or customer name",
+    "Invoice Sent": "Invoice Sent",
+    "Invoice Sent Successfully": "Invoice Sent Successfully",
+    "Email Invoice": "Email Invoice"
 }

@@ -198,6 +198,19 @@ export const ClientSuggetionListApi = createAsyncThunk("sale/clientsuggetionlist
   }
 });
 
+export const SaleEmailInvoiceApi = createAsyncThunk("sale/saleemailinvoice", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .sendEmailInvoice(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "saleemailinvoice"))
+      .catch((error) => HandleError(thunkAPI, error, "saleemailinvoice"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedVoucherToForm: "",
@@ -565,6 +578,10 @@ const saleSlice = createSlice({
     [ClientSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
+    [SaleEmailInvoiceApi.pending]: () => {},
+    [SaleEmailInvoiceApi.fulfilled]: () => {},
+    [SaleEmailInvoiceApi.rejected]: () => {},
+    
   },
 });
 // Action creators are generated for each case reducer function
