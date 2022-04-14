@@ -242,7 +242,7 @@ const Roster = () => {
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeEditRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
                                 </a>
-                                <EditTimeForm staff_id={id} date={date} roster={rosterdata.length > 0 && rosterdata[0]} role_id={role_id} access={access}/>
+                                <EditTimeForm staff_id={id} date={dateof} roster={rosterdata.length > 0 && rosterdata[0]} role_id={role_id} access={access}/>
                               </div>
                             ) : (
                               ""
