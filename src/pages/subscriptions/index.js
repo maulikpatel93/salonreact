@@ -14,6 +14,8 @@ import { SalonModule } from "pages";
 import { checkaccess } from "helpers/functions";
 import SubscriptionGridView from "./List/SubscriptionGridView";
 import SaleDrawer from "pages/sales/SaleDrawer";
+import { OpenAddStripeForm, StripeCardPaymentApi } from "store/slices/stripeSlice";
+import StripeSetupForm from "./Form/StripeSetupForm";
 
 const Subscriptions = () => {
   SalonModule();
@@ -29,6 +31,7 @@ const Subscriptions = () => {
   const isOpenedAddForm = useSelector((state) => state.subscription.isOpenedAddForm);
   const isOpenedEditForm = useSelector((state) => state.subscription.isOpenedEditForm);
   const saleIsOpenedAddForm = useSelector((state) => state.sale.isOpenedAddForm);
+  const isOpenedStripeAddForm = useSelector((state) => state.stripe.isOpenedAddForm);
 
   useEffect(() => {
     dispatch(SubscriptionGridViewApi());
@@ -49,6 +52,16 @@ const Subscriptions = () => {
     setTimeout(() => {
       setIsFetching(false);
     }, 2000);
+  };
+  const handleCardPayment = () => {
+    dispatch(StripeCardPaymentApi({
+      card: {
+        number: '4242424242424242',
+        exp_month: 4,
+        exp_year: 2023,
+        cvc: '314',
+      },
+    }));
   };
   return (
     <>
@@ -125,6 +138,7 @@ const Subscriptions = () => {
           <div className="tab-content px-lg-4 py-lg-5">
             <div className="tab-pane show active" id="allsubscription">
               <div className="row">
+                <a onClick={handleCardPayment}>test</a>
                 {GridView.length > 0 || GridView.data ? (
                   <div className="" id="scrollableGridView">
                     <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={GridView.next_page_url ? true : false} loader={<PaginationLoader />}>
@@ -158,35 +172,35 @@ const Subscriptions = () => {
                 ) : (
                   <>
                     {checkaccess({ name: "create", role_id: role_id, controller: "products", access }) && (
-                      //   <div className="tab-pane show active" id="subscription-stripe">
-                      //   <div className="complete-box text-center d-flex flex-column justify-content-center mt-md-5 mt-4 mb-4 substripe-complete">
-                      //     <div className="complete-box-wrp text-center ">
-                      //       <img src={config.imagepath + "subcription-stripe.png"} alt="" className="mb-md-4 mb-3" />
-                      //       <h4 className="mb-2 fw-semibold">
-                      //         You must set up Stripe to be able to create a subscription.
-                      //         <br />
-                      //         <a href="#">Setup Now</a>
-                      //       </h4>
-                      //     </div>
-                      //   </div>
-                      //   <div className="substripe-content text-center pt-xxl-2">
-                      //     <h6>You need to set up a payment gateway (Stripe) so you can take the automatic payments required for subscriptions. Once set up, return here and create your first subscription.</h6>
-                      //   </div>
-                      // </div>
-                      <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                        <div className="complete-box-wrp text-center ">
-                          <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" />
-                          <h4 className="mb-2 fw-semibold">
-                            No subscriptions have been
-                            <br /> created yet.
-                            <br />
-                            <a className="add-subscription" onClick={() => dispatch(OpenAddSubscriptionForm())}>
-                              Please create one
-                            </a>
-                            .
-                          </h4>
+                      <div className="tab-pane show active" id="subscription-stripe">
+                        <div className="complete-box text-center d-flex flex-column justify-content-center mt-md-5 mt-4 mb-4 substripe-complete">
+                          <div className="complete-box-wrp text-center ">
+                            <img src={config.imagepath + "subcription-stripe.png"} alt="" className="mb-md-4 mb-3" />
+                            <h4 className="mb-2 fw-semibold">
+                              {t("You must set up Stripe to be able to create a subscription.")}
+                              <br />
+                              <a onClick={() => dispatch(OpenAddStripeForm())}>{t("Setup Now")}</a>
+                            </h4>
+                          </div>
+                        </div>
+                        <div className="substripe-content text-center pt-xxl-2">
+                          <h6>{t("You need to set up a payment gateway (Stripe) so you can take the automatic payments required for subscriptions. Once set up, return here and create your first subscription.")}</h6>
                         </div>
                       </div>
+                      // <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                      //   <div className="complete-box-wrp text-center ">
+                      //     <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" />
+                      //     <h4 className="mb-2 fw-semibold">
+                      //       No subscriptions have been
+                      //       <br /> created yet.
+                      //       <br />
+                      //       <a className="add-subscription" onClick={() => dispatch(OpenAddSubscriptionForm())}>
+                      //         Please create one
+                      //       </a>
+                      //       .
+                      //     </h4>
+                      //   </div>
+                      // </div>
                     )}
                   </>
                 )}
@@ -195,8 +209,10 @@ const Subscriptions = () => {
           </div>
         </div>
       </div>
+
       {isOpenedAddForm && <SubscriptionAddForm />}
       {isOpenedEditForm && <SubscriptionEditForm />}
+      {isOpenedStripeAddForm && <StripeSetupForm />}
       {checkaccess({ name: "create", role_id: role_id, controller: "sale", access }) && saleIsOpenedAddForm ? <SaleDrawer page={"membership"} /> : ""}
     </>
   );

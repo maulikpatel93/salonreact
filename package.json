@@ -18,6 +18,8 @@
         "@fullcalendar/timegrid": "^5.10.1",
         "@popperjs/core": "^2.11.2",
         "@reduxjs/toolkit": "^1.7.1",
+        "@stripe/react-stripe-js": "^1.7.1",
+        "@stripe/stripe-js": "^1.27.0",
         "@testing-library/jest-dom": "^5.16.1",
         "@testing-library/react": "^12.1.2",
         "@testing-library/user-event": "^13.5.0",

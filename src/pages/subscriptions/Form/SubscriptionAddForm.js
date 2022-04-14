@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import InfiniteScroll from "react-infinite-scroll-component";
+import PaginationLoader from "component/PaginationLoader";
 // validation Formik
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -14,6 +16,8 @@ import { decimalOnly } from "../../../component/form/Validation";
 import useScriptRef from "../../../hooks/useScriptRef";
 import { CloseAddSubscriptionForm, SubscriptionStoreApi } from "store/slices/subscriptionSlice";
 import config from "config";
+import { SaleServiceApi } from "store/slices/saleSlice";
+import SaleServiceListView from "pages/sales/List/SaleServiceListView";
 
 const SubscriptionAddForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +28,11 @@ const SubscriptionAddForm = (props) => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const rightDrawerOpened = useSelector((state) => state.subscription.isOpenedAddForm);
+  const isServices = useSelector((state) => state.sale.isServices);
+
+  useEffect(() => {
+    dispatch(SaleServiceApi());
+  }, []);
 
   const initialValues = {
     name: "",
@@ -97,6 +106,20 @@ const SubscriptionAddForm = (props) => {
     { value: "Monthly", label: t("Month(s)") },
     { value: "Yearly", label: t("Year(s)") },
   ];
+
+  //Pagination Service
+  const fetchDataSaleService = () => {
+    dispatch(SaleServiceApi({ next_page_url: isProducts.next_page_url }));
+  };
+  const [isFetchingServices, setIsFetchingServices] = useState(false);
+  const loadMoreServices = () => {
+    setIsFetchingServices(true);
+    dispatch(SaleServiceApi({ next_page_url: isServices.next_page_url }));
+    //mocking an API call
+    setTimeout(() => {
+      setIsFetchingServices(false);
+    }, 2000);
+  };
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlesubscriptionSubmit}>
@@ -140,8 +163,18 @@ const SubscriptionAddForm = (props) => {
                       <div className="col-md-4 p-xl-5 p-4 subscription-service">
                         <h4 className="fw-semibold mb-2">Add Services</h4>
                         <p>Select the services to include in the subsription.</p>
-                        <div className="accordion" id="accordionExample">
-                          <div className="accordion-item mb-md-4 mb-3">
+                        <InfiniteScroll className="" dataLength={isServices && isServices.data && isServices.data.length ? isServices.data.length : "0"} next={fetchDataSaleService} scrollableTarget="services" hasMore={isServices.next_page_url ? true : false} loader={<PaginationLoader />}>
+                          <SaleServiceListView view={isServices} />
+                          {!isFetchingServices && isServices.next_page_url && (
+                            <div className="col-2 m-auto p-3 text-center">
+                              <button onClick={loadMoreServices} className="btn btn-primary">
+                                {t("More")}
+                              </button>
+                            </div>
+                          )}
+                        </InfiniteScroll>
+                        {/* <div className="accordion" id="accordionExample">
+                           <div className="accordion-item mb-md-4 mb-3">
                             <h2 className="accordion-header" id="headingOne">
                               <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                 Hair
@@ -255,7 +288,7 @@ const SubscriptionAddForm = (props) => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="col-md-4 p-xl-5 p-4">
                         <h4 className="fw-semibold mb-2">Services Included</h4>

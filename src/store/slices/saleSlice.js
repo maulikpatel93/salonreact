@@ -268,6 +268,7 @@ const initialState = {
   isCheckoutData: [],
   isOpenedSaleCompleted: "",
   isSaleCompletedData: "",
+  isOpenCardPaymentForm: "",
 };
 
 const saleSlice = createSlice({
@@ -400,6 +401,14 @@ const saleSlice = createSlice({
     },
     SaleCompletedData: (state, action) => {
       state.isSaleCompletedData = action.payload;
+    },
+    OpenCardPaymentForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenCardPaymentForm = "open";
+    },
+    CloseCardPaymentForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenCardPaymentForm = "";
     },
   },
   extraReducers: {
@@ -642,5 +651,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm } = saleSlice.actions;
 export default saleSlice.reducer;

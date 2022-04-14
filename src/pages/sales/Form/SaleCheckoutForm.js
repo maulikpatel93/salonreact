@@ -12,7 +12,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { TextareaField } from "component/form/Field";
 import moment from "moment";
 
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -25,6 +25,7 @@ const SaleCheckoutForm = (props) => {
   const scriptedRef = useScriptRef();
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedCheckoutForm);
   const isCheckoutData = useSelector((state) => state.sale.isCheckoutData);
+  const isOpenCardPaymentForm = useSelector((state) => state.sale.isOpenCardPaymentForm);
   const clientdata = isCheckoutData.client ? isCheckoutData.client : "";
   const appointmentDetail = isCheckoutData.appointmentDetail ? isCheckoutData.appointmentDetail : "";
   const client = appointmentDetail && appointmentDetail.client ? appointmentDetail.client : clientdata;
@@ -42,7 +43,7 @@ const SaleCheckoutForm = (props) => {
     notes: Yup.string().trim().label(t("Notes")),
   });
   yupconfig();
-
+  console.log(isOpenCardPaymentForm);
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
@@ -439,6 +440,12 @@ const SaleCheckoutForm = (props) => {
                         </div>
                         <div className="row">
                           <div className="col-4">
+                            <button type="button" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => dispatch(OpenCardPaymentForm())}>
+                              {loading && <span className="spinner-border spinner-border-sm"></span>}
+                              {t("Paid by Credit Card form")}
+                            </button>
+                          </div>
+                          <div className="col-4">
                             <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
                               {t("Paid by Credit Card")}
@@ -457,6 +464,11 @@ const SaleCheckoutForm = (props) => {
                             </button>
                           </div>
                         </div>
+                        {isOpenCardPaymentForm && (
+                          <div className="row">
+                            <div className="col-md-12">test</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

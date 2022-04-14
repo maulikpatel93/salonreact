@@ -498,5 +498,15 @@
     "Email Invoice": "Email Invoice",
     "Subscription Name": "Subscription Name",
     "New Subscription": "New Subscription",
-    "Add a name to easily identify the subscription.": "Add a name to easily identify the subscription."
+    "Add a name to easily identify the subscription.": "Add a name to easily identify the subscription.",
+    "You must set up Stripe to be able to create a subscription.": "You must set up Stripe to be able to create a subscription.",
+    "Setup Now": "Setup Now",
+    "You need to set up a payment gateway (Stripe) so you can take the automatic payments required for subscriptions. Once set up, return here and create your first subscription.": "You need to set up a payment gateway (Stripe) so you can take the automatic payments required for subscriptions. Once set up, return here and create your first subscription.",
+    "Stripe Name": "Stripe Name",
+    "If you’re completing this form on behalf of a business, it must be completed by the business owner or someone with signficant management responsibility of that business.": "If you’re completing this form on behalf of a business, it must be completed by the business owner or someone with signficant management responsibility of that business.",
+    "Get started with Stripe": "Get started with Stripe",
+    "Beauti partners with Stripe for secure payments.": "Beauti partners with Stripe for secure payments.",
+    "Continue": "Continue",
+    "Setup": "Setup",
+    "Stripe Setup Successfully": "Stripe Setup Successfully"
 }
