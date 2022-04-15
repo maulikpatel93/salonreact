@@ -508,5 +508,8 @@
     "Beauti partners with Stripe for secure payments.": "Beauti partners with Stripe for secure payments.",
     "Continue": "Continue",
     "Setup": "Setup",
-    "Stripe Setup Successfully": "Stripe Setup Successfully"
+    "Stripe Setup Successfully": "Stripe Setup Successfully",
+    "No subscriptions have been": "No subscriptions have been",
+    "created yet": "created yet",
+    "Return to Beauti": "Return to Beauti"
 }

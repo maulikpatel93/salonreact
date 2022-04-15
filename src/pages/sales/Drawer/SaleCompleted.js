@@ -8,7 +8,7 @@ import { CloseSaleCompleted } from "store/slices/saleSlice";
 import { ucfirst } from "helpers/functions";
 import Moment from "react-moment";
 import moment from "moment";
-import SaleEmailInvoice from "../Form/SaleEmailInvoice";
+import SaleEmailInvoiceForm from "../Form/SaleEmailInvoiceForm";
 
 const SaleCompleted = (props) => {
   const dispatch = useDispatch();
@@ -218,7 +218,7 @@ const SaleCompleted = (props) => {
                   </div>
                 </div>
                 <div className="full-screen-drawer-footer p-5">
-                  <SaleEmailInvoice isSaleCompletedData={isSaleCompletedData} />
+                  <SaleEmailInvoiceForm isSaleCompletedData={isSaleCompletedData} />
                 </div>
               </div>
             </div>

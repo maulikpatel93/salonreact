@@ -21,6 +21,8 @@ const Products = Loadable(lazy(() => import("../pages/products")));
 const Reports = Loadable(lazy(() => import("../pages/reports")));
 const Marketing = Loadable(lazy(() => import("../pages/marketing")));
 const Account = Loadable(lazy(() => import("../pages/account")));
+const StripeAccountReauth = Loadable(lazy(() => import("../pages/account/StripeAccountReauth")));
+const StripeAccountReturn = Loadable(lazy(() => import("../pages/account/StripeAccountReturn")));
 const NoMatch = Loadable(lazy(() => import("../pages/errors/NoMatch")));
 
 const MainRoutes = {
@@ -82,6 +84,14 @@ const MainRoutes = {
     {
       path: config.basePath + "/account",
       element: <Account />,
+    },
+    {
+      path: config.basePath + "/reauth",
+      element: <StripeAccountReauth />,
+    },
+    {
+      path: config.basePath + "/return",
+      element: <StripeAccountReturn />,
     },
     { path: "*", element: <NoMatch /> },
   ],

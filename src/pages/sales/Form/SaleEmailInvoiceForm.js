@@ -10,7 +10,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { SaleEmailInvoiceApi } from "store/slices/saleSlice";
 import { sweatalert } from "../../../component/Sweatalert2";
 
-const SaleEmailInvoice = (props) => {
+const SaleEmailInvoiceForm = (props) => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -87,7 +87,7 @@ const SaleEmailInvoice = (props) => {
     </React.Fragment>
   );
 };
-SaleEmailInvoice.propTypes = {
+SaleEmailInvoiceForm.propTypes = {
   isSaleCompletedData: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
-export default SaleEmailInvoice;
+export default SaleEmailInvoiceForm;

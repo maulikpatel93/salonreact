@@ -9,13 +9,13 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { TextareaField } from "component/form/Field";
+import { InputField, TextareaField } from "component/form/Field";
 import moment from "moment";
-
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
+import { formatCreditCardNumber, formatCVC, formatExpirationDate } from "component/card/CardUtils";
 
 const SaleCheckoutForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,8 @@ const SaleCheckoutForm = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedCheckoutForm);
   const isCheckoutData = useSelector((state) => state.sale.isCheckoutData);
   const isOpenCardPaymentForm = useSelector((state) => state.sale.isOpenCardPaymentForm);
@@ -31,21 +33,50 @@ const SaleCheckoutForm = (props) => {
   const client = appointmentDetail && appointmentDetail.client ? appointmentDetail.client : clientdata;
   const isCart = useSelector((state) => state.sale.isCart);
   const isRangeInfo = props.isRangeInfo;
+
   const initialValues = {
     client_id: "",
     notes: "",
     cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
     appointment_id: "",
     eventdate: "",
+    is_stripe: 0,
+    cardname: "",
+    cardnumber: "",
+    cardexpiry: "",
+    cardcvc: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     notes: Yup.string().trim().label(t("Notes")),
+    is_stripe: Yup.mixed(),
+    cardname: Yup.string().trim().label(t("Card Holder Name")),
+    cardnumber: Yup.string()
+      .trim()
+      .nullable()
+      .when("is_stripe", {
+        is: 1,
+        // then: Yup.string().trim().matches(config.cardNumberPattern, t(config.cardNumberPattern_error)).label(t("Card Number")).required(),
+        then: Yup.string().trim().label(t("Card Number")).required(),
+      }),
+    cardexpiry: Yup.string()
+      .trim()
+      .nullable()
+      .when("is_stripe", {
+        is: 1,
+        then: Yup.string().trim().label(t("Card Expiry")).required(),
+      }),
+    cardcvc: Yup.string()
+      .trim()
+      .nullable()
+      .when("is_stripe", {
+        is: 1,
+        then: Yup.string().trim().label(t("CVC")).required(),
+      }),
   });
   yupconfig();
-  console.log(isOpenCardPaymentForm);
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    setLoading(true);
+    setLoading(false);
     try {
       dispatch(saleStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
@@ -86,6 +117,7 @@ const SaleCheckoutForm = (props) => {
   };
   const handleCloseCheckoutForm = () => {
     dispatch(CloseCheckoutForm());
+    dispatch(CloseCardPaymentForm());
   };
   return (
     <React.Fragment>
@@ -162,6 +194,10 @@ const SaleCheckoutForm = (props) => {
           if (appointmentDetail && appointmentDetail.cost) {
             totalprice += isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost);
           }
+          console.log(formik.values);
+          // console.log(formatCreditCardNumber(formik.values.cardnumber));
+          // formik.setFieldValue("cardnumber", formatCreditCardNumber(formik.values.cardnumber));
+
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 salecheckout-drawer " : "") + rightDrawerOpened} id="salecheckout-drawer">
               <div className="drawer-wrp position-relative">
@@ -432,41 +468,67 @@ const SaleCheckoutForm = (props) => {
                             );
                           })}
                         <div className="">
-                          <TextareaField type="text" name="notes" rows={1} placeholder={t("Add a note...")} value={formik.values.notes} label={""} className="form-control lg" controlId="salonForm-notes" />
+                          <TextareaField type="text" name="notes" rows={1} placeholder={t("Add a note...")} value={formik.values.notes} label={""} className="form-control lg" controlId="checkoutForm-notes" />
                         </div>
                         <div className="px-4 d-flex py-3 total">
                           <span className="h2 pe-2 mb-0">{t("Total")}</span>
                           <span className="h2 text-end ms-auto mb-0">${totalprice}</span>
                         </div>
-                        <div className="row">
-                          <div className="col-4">
-                            <button type="button" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => dispatch(OpenCardPaymentForm())}>
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Paid by Credit Card form")}
-                            </button>
+
+                        {isOpenCardPaymentForm ? (
+                          <div className="row gy-3 mt-4">
+                            <div className="col-md-4">
+                              <InputField type="text" name="cardnumber" value={formatCreditCardNumber(formik.values.cardnumber)} label={t("Card Number")} controlId="checkoutForm-cardnumber" placeholder="**** **** **** ****" />
+                            </div>
+                            <div className="col-md-4">
+                              <InputField type="text" name="cardexpiry" placeholder="MM/YY" value={formatExpirationDate(formik.values.cardexpiry)} label={t("Card Expiry")} controlId="checkoutForm-cardexpiry" />
+                            </div>
+                            <div className="col-md-4">
+                              <InputField type="text" name="cardcvc" placeholder="***" value={formatCVC(formik.values.cardcvc)} label={t("Card Cvc")} controlId="checkoutForm-cardcvc" />
+                            </div>
+                            <div className="col-md-12">
+                              <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
+                                {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                {t("Pay")}
+                              </button>
+                            </div>
                           </div>
-                          <div className="col-4">
-                            <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Paid by Credit Card")}
-                            </button>
-                          </div>
-                          <div className="col-4">
-                            <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Paid by Cash")}
-                            </button>
-                          </div>
-                          <div className="col-4">
-                            <button type="submit" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading}>
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Pay by Voucher")}
-                            </button>
-                          </div>
-                        </div>
-                        {isOpenCardPaymentForm && (
+                        ) : (
                           <div className="row">
-                            <div className="col-md-12">test</div>
+                            <div className="col-4">
+                              {currentUser.stripe_account_id ? (
+                                <button
+                                  type="button"
+                                  id="payment-link"
+                                  className="btn btn-pay btn-lg w-100 p-3"
+                                  disabled={loading}
+                                  onClick={() => {
+                                    formik.setFieldValue("is_stripe", 1);
+                                    dispatch(OpenCardPaymentForm());
+                                  }}
+                                >
+                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                  {t("Paid by Credit Card")}
+                                </button>
+                              ) : (
+                                <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
+                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                  {t("by Credit Card")}
+                                </button>
+                              )}
+                            </div>
+                            <div className="col-4">
+                              <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
+                                {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                {t("Paid by Cash")}
+                              </button>
+                            </div>
+                            <div className="col-4">
+                              <button type="submit" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading}>
+                                {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                {t("Pay by Voucher")}
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

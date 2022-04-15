@@ -31,14 +31,18 @@ const StripeSetupForm = () => {
   yupconfig();
 
   const handlestripeSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    console.log(values);
     setLoading(true);
     try {
       dispatch(StripeSetupApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
-          sweatalert({ title: t("Setup"), text: t("Stripe Setup Successfully"), icon: "success" });
+          const stripedetail = action.payload;
+          const stripeAccountLink = stripedetail.stripeAccountLink;
+          const stripe_account_id = stripedetail.stripe_account_id;
+          console.log(stripeAccountLink.url);
+          window.location.href = stripeAccountLink.url;
+          // sweatalert({ title: t("Setup"), text: t("Stripe Setup Successfully"), icon: "success" });
           dispatch(CloseAddStripeForm());
           if (scriptedRef.current) {
             setLoading(false);
@@ -81,7 +85,8 @@ const StripeSetupForm = () => {
                       <div className="col-lg-4 text-white content-block">
                         <h2 className="mb-4 pb-xxl-2">{t("Beauti partners with Stripe for secure payments.")}</h2>
                         <a className="cursor-pointer" onClick={handleCloseAddStripeForm}>
-                          <i className="fas fa-long-arrow-left me-2"></i>Return to Beauti
+                          <i className="fas fa-long-arrow-left me-2"></i>
+                          {t("Return to Beauti")}
                         </a>
                       </div>
                       <div className="col-lg-8 form-block">
