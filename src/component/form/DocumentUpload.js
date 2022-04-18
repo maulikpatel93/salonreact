@@ -20,6 +20,7 @@ const DocumentUpload = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const page = props.page;
   const initialValues = {
     photo: "",
   };
@@ -61,9 +62,16 @@ const DocumentUpload = (props) => {
           return (
             <>
               <form noValidate onSubmit={formik.handleSubmit} className="photoform">
-                <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={handleClick}>
-                  {props.label}
-                </button>
+                {page === "client-adddocumentform-circle" ? (
+                  <a className="add-document cursor-pointer" onClick={handleClick}>
+                    {props.label}
+                  </a>
+                ) : (
+                  <button type="button" className="btn btn-outline-primary btn-sm ms-2" onClick={handleClick}>
+                    {props.label}
+                  </button>
+                )}
+
                 <input type="file" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf" ref={hiddenFileInput} onChange={handleChange} style={{ display: "none" }} multiple />
                 <button type="submit" className="btn btn-primary w-100 btn-lg d-none" disabled={loading}>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
@@ -81,6 +89,7 @@ const DocumentUpload = (props) => {
 DocumentUpload.propTypes = {
   label: PropTypes.string,
   client_id: PropTypes.number,
+  page: PropTypes.string,
 };
 
 export default DocumentUpload;
