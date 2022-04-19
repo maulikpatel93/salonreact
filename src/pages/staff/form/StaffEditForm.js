@@ -268,6 +268,8 @@ const StaffEditForm = () => {
                 });
               }
             }
+          }, [detail]);
+          useEffect(() => {
             if (isAddonServices.length > 0) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
@@ -283,7 +285,7 @@ const StaffEditForm = () => {
                 }
               });
             }
-          }, [detail, isAddonServices]);
+          }, [isAddonServices]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 addstaff-member " : "") + rightDrawerOpened} id="addstaff-member-drawer">
               <div className="drawer-wrp position-relative">

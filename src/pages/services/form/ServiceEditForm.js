@@ -165,10 +165,10 @@ const ServiceEditForm = () => {
               const fields = ["id", "name", "category_id", "tax_id", "description", "duration", "padding_time", "service_booked_online", "deposit_booked_online", "deposit_booked_price", "tax_id", "category_id"];
               fields.forEach((field) => {
                 if (["service_booked_online", "deposit_booked_online"].includes(field)) {
-                  formik.setFieldValue(field, parseInt(formik.values[field]) ? parseInt(formik.values[field]) : parseInt(detail[field]), false);
+                  formik.setFieldValue(field, detail[field] ? parseInt(detail[field]) : "", false);
                 } else {
                   let detail_field = detail[field] ? detail[field] : "";
-                  formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
+                  formik.setFieldValue(field, detail_field, false);
                 }
               });
               // let service_price = detail.serviceprice;
@@ -179,6 +179,31 @@ const ServiceEditForm = () => {
               //   formik.setFieldValue("service_price[" + item + "][add_on_price]", add_on_price, false);
               // });
             }
+
+            if (isPriceTierOption.length > 0) {
+              Object.keys(isPriceTierOption).map((item) => {
+                let price_tier_id = isPriceTierOption[item].value;
+                formik.setFieldValue("service_price[" + item + "][price_tier_id]", price_tier_id, false);
+                if (detail) {
+                  let obj = detail.serviceprice && detail.serviceprice.filter((item) => item.pricetier.id === price_tier_id);
+                  let objprice = obj.length > 0 ? obj[0].price : "";
+                  let objadd_on_price = obj.length > 0 ? obj[0].add_on_price : "";
+                  let price = objprice;
+                  let add_on_price = objadd_on_price;
+                  if (formik.values.service_price.length > 0) {
+                    if (formik.values.service_price[item]) {
+                      price = formik.values.service_price[item].price !== undefined ? formik.values.service_price[item].price : objprice;
+                      add_on_price = formik.values.service_price[item].add_on_price !== undefined ? formik.values.service_price[item].add_on_price : objadd_on_price;
+                    }
+                  }
+                  formik.setFieldValue("service_price[" + item + "][price]", price, false);
+                  formik.setFieldValue("service_price[" + item + "][add_on_price]", add_on_price, false);
+                }
+              });
+            }
+          }, [detail, isPriceTierOption]);
+          console.log(formik.values);
+          useEffect(() => {
             if (isAddonStaff.length > 0) {
               Object.keys(isAddonStaff).map((item) => {
                 let addonstaffData = isAddonStaff[item].staff;
@@ -191,6 +216,8 @@ const ServiceEditForm = () => {
                 }
               });
             }
+          }, [isAddonStaff]);
+          useEffect(() => {
             if (isAddonServices.length > 0) {
               Object.keys(isAddonServices).map((item) => {
                 let addonservicesData = isAddonServices[item].services;
@@ -206,25 +233,7 @@ const ServiceEditForm = () => {
                 }
               });
             }
-            if (isPriceTierOption.length > 0) {
-              Object.keys(isPriceTierOption).map((item) => {
-                let price_tier_id = isPriceTierOption[item].value;
-
-                formik.setFieldValue("service_price[" + item + "][price_tier_id]", price_tier_id, false);
-                if (detail) {
-                  let obj = detail.serviceprice && detail.serviceprice.filter((item) => item.pricetier.id === price_tier_id);
-                  let objprice = obj.length > 0 ? obj[0].price : "";
-                  let objadd_on_price = obj.length > 0 ? obj[0].add_on_price : "";
-                  let price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].price !== undefined ? formik.values.service_price[item].price : objprice;
-                  let add_on_price = formik.values.service_price && formik.values.service_price[item] && formik.values.service_price[item].add_on_price !== undefined ? formik.values.service_price[item].add_on_price : objadd_on_price;
-
-                  formik.setFieldValue("service_price[" + item + "][price]", price, false);
-                  formik.setFieldValue("service_price[" + item + "][add_on_price]", add_on_price, false);
-                }
-              });
-            }
-          }, [detail, isAddonStaff, isAddonServices, isPriceTierOption]);
-
+          }, [isAddonServices]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="editservice-drawer">
               <div className="drawer-wrp position-relative">
@@ -283,12 +292,12 @@ const ServiceEditForm = () => {
                                     <label htmlFor="">{ucfirst(price_tier_name)}</label>
                                   </div>
                                   <div className="col-lg-3 col-md-4 col-4 mb-2">
-                                    <Field placeholder={"$"} className={(errors_price && errors_price.price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][price]`} id={"serviceForm-" + item + "-price"} onChange={formik.handleChange} />
+                                    <Field placeholder={"$"} value={formik.values.service_price[item] ? formik.values.service_price[item].price : ""} className={(errors_price && errors_price.price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][price]`} id={"serviceForm-" + item + "-price"} onChange={formik.handleChange} />
                                     {errors_price && errors_price.price && <ErrorMessage name={`service_price[${item}][price]`} component="div" className="invalid-feedback d-block" />}
                                     {/* <InputField type="text" name={"service_price[" + item + "][price]"}  placeholder="$" label={""} controlId={"serviceForm-" + item + "-price"} /> */}
                                   </div>
                                   <div className="col-lg-3 col-md-4 col-4 ms-xxl-4 mb-2">
-                                    <Field placeholder={"$"} className={(errors_price && errors_price.add_on_price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][add_on_price]`} id={"serviceForm-" + item + "-add_on_price"} onChange={formik.handleChange} />
+                                    <Field placeholder={"$"} value={formik.values.service_price[item] ? formik.values.service_price[item].add_on_price : ""} className={(errors_price && errors_price.add_on_price ? "is-invalid" : "") + " form-control"} name={`service_price[${item}][add_on_price]`} id={"serviceForm-" + item + "-add_on_price"} onChange={formik.handleChange} />
                                     {errors_price && errors_price.price && <ErrorMessage name={`service_price[${item}][add_on_price]`} component="div" className="invalid-feedback d-block" />}
                                     {/* <InputField type="text" name={"service_price[" + item + "][add_on_price]"} value={service_addonprice} placeholder="$" label={""} controlId={"serviceForm-" + item + "-add_on_price"} /> */}
                                   </div>

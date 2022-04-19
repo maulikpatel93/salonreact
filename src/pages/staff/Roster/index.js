@@ -76,7 +76,7 @@ const Roster = () => {
   return (
     <>
       <div className="row justify-content-between">
-        <div className="col-xl-2 col-md-5">
+        <div className="col-xxl-2 col-xl-4 col-md-5 md-mb-0 mb-3">
           <div className="dropdown staff-dropdown">
             <div className="btn-group w-100">
               <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -122,8 +122,8 @@ const Roster = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-3 col-xl-3">
-          <div className="">
+        <div className="col-xxl-10 col-xl-8 col-md-7 text-end">
+          <div className="d-inline-block">
             <div className="date">
               <div className="input-group">
                 <span className="input-group-text icon bg-white" onClick={() => setSelectedDate(prevday)}>
@@ -226,7 +226,7 @@ const Roster = () => {
                               </a>
                             )}
 
-                            {checkaccess({ name: "create", role_id: role_id, controller: "roster", access }) && (addTime === id + "-" + j) ? (
+                            {checkaccess({ name: "create", role_id: role_id, controller: "roster", access }) && addTime === id + "-" + j ? (
                               <div className="addtime-popup">
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeAddRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
@@ -237,12 +237,12 @@ const Roster = () => {
                               ""
                             )}
 
-                            {checkaccess({ name: "update", role_id: role_id, controller: "roster", access }) && (updateTime === id + "-" + j) ? (
+                            {checkaccess({ name: "update", role_id: role_id, controller: "roster", access }) && updateTime === id + "-" + j ? (
                               <div className="updatetime-popup">
                                 <a className="close cursor-pointer" onClick={() => dispatch(closeEditRosterForm())}>
                                   <img src={config.imagepath + "close-icon.svg"} alt="" />
                                 </a>
-                                <EditTimeForm staff_id={id} date={dateof} roster={rosterdata.length > 0 && rosterdata[0]} role_id={role_id} access={access}/>
+                                <EditTimeForm staff_id={id} date={dateof} roster={rosterdata.length > 0 && rosterdata[0]} role_id={role_id} access={access} />
                               </div>
                             ) : (
                               ""

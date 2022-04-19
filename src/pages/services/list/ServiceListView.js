@@ -41,7 +41,6 @@ const ServiceListView = (props) => {
 
   const handleServiceEditForm = (e) => {
     const id = e.currentTarget.closest(".service-view-tr").dataset.id;
-    dispatch(openEditServiceForm());
     dispatch(serviceDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         const detail = action.payload;
@@ -50,6 +49,7 @@ const ServiceListView = (props) => {
         } else {
           dispatch(removeImage());
         }
+        dispatch(openEditServiceForm());
         dispatch(addonservices({ isNotId: id }));
         dispatch(addonstaff({ service_id: id }));
         dispatch(categoryOptions({ option: { valueField: "id", labelField: "name" } }));

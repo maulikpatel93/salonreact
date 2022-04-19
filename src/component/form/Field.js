@@ -289,7 +289,7 @@ const MapAddressField = ({ label, controlId, ...props }) => {
       <Form.Group className="" controlId={controlId}>
         <Form.Label>{label}</Form.Label>
         <InputGroup hasValidation>
-          <InputGroup.Text id="inputGroupPrepend" className="bg-white text-secondary">
+          <InputGroup.Text id="inputGroupPrepend" className="">
             <i className="far fa-search"></i>
           </InputGroup.Text>
           <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} aria-describedby="inputGroupPrepend" className="search-input" />

@@ -43,7 +43,7 @@ const Documents = () => {
         </h2>
       </div>
       <div className="content-wrp">
-        <InfiniteScroll className="" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="documentlist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
+        <InfiniteScroll className="row gx-0" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="documentlist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
           {documentObjectData.length > 0 ? (
             <>
               {Object.keys(documentObjectData).map((item, i) => {

@@ -201,7 +201,7 @@ const SaleDrawer = (props) => {
           </div>
           <div className="drawer-body">
             <div className="row mx-0">
-              <div className="col-md-6 p-0 left-col mb-md-0 mb-3">
+              <div className="col-md-6 p-0 left-col">
                 <div className="common-tab salevoucher-tab border-top-0">
                   <ul className="nav nav-tabs bg-white sticky-top" role="tablist">
                     <li className="nav-item">

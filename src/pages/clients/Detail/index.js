@@ -285,10 +285,7 @@ const ClientDetailModal = () => {
                 </div>
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
-                    <div className="drawer-header">
-                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Photos")}</h2>
-                    </div>
-                    <div className="content-wrp">{detailTab && detailTab == "photos" && <Photos role_id={role_id} access={access} />}</div>
+                    {detailTab && detailTab == "photos" && <Photos role_id={role_id} access={access} />}
                   </div>
                 )}
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">

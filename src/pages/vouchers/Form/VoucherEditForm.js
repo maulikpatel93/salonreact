@@ -168,7 +168,7 @@ const VoucherEditForm = (props) => {
                     </div>
                   </div>
                   <div className="drawer-body">
-                    <div className="row">
+                    <div className="row mx-0">
                       <div className="col-xxl-6 col-xl-8 col-md-8 add-form px-md-4 px-1 py-lg-5 py-3">
                         <div className="row mx-0">
                           <div className="col-md-6 mb-md-0 mb-3 ps-4 pe-4">

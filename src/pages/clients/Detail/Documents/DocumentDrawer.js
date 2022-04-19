@@ -41,17 +41,6 @@ const DocumentDrawer = () => {
 
   return (
     <>
-      {/* <div className={"drawer adddoc-drawer " + rightDrawerOpened}>
-        <div className="drawer-wrp position-relative">
-          <div className="drawer-header">
-            <h2 className="mb-4 pe-md-5 pe-3">
-              {t("Documents")} {checkaccess({ name: "create", role_id: role_id, controller: "clientdocuments", access }) && <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("Add Document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />}
-            </h2>
-            <a className="close cursor-pointer" onClick={() => dispatch(closeDocumentDrawer())}>
-              <img src={config.imagepath + "close-icon.svg"} alt="" />
-            </a>
-          </div>
-          <div className="drawer-body" id="documentlist"> */}
       <InfiniteScroll className="" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="documentlist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
         {documentObjectData.length > 0 ? (
           <>
@@ -95,9 +84,6 @@ const DocumentDrawer = () => {
           ""
         )}
       </InfiniteScroll>
-      {/* </div>
-        </div>
-      </div> */}
     </>
   );
 };

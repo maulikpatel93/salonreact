@@ -42,7 +42,8 @@ const StaffGridView = (props) => {
   };
   const handleStaffEditForm = (e) => {
     const id = e.currentTarget.closest(".box-image-cover").dataset.id;
-    dispatch(openEditStaffForm());
+    console.log(id);
+
     dispatch(staffDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         const detail = action.payload;
@@ -51,6 +52,7 @@ const StaffGridView = (props) => {
         } else {
           dispatch(removeImage());
         }
+        dispatch(openEditStaffForm());
         dispatch(addonservices({ staff_id: id }));
         dispatch(pricetierOptions({ option: { valueField: "id", labelField: "name" } }));
       }
