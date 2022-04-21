@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -8,7 +8,11 @@ import { swalConfirm } from "../../../component/Sweatalert2";
 import { ClientDeleteApi, OpenClientDetailModal, ClientDetailApi, ClientDetailTab } from "../../../store/slices/clientSlice";
 import PropTypes from "prop-types";
 import { checkaccess } from "helpers/functions";
-import { clientAppointmentListViewApi } from "store/slices/appointmentSlice";
+import { ClientAppointmentListViewApi } from "store/slices/appointmentSlice";
+import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice";
+import { ClientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import { ClientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
+import { ClientnoteGridViewApi } from "store/slices/clientnoteSlice";
 
 const ClientGridView = (props) => {
   const dispatch = useDispatch();
@@ -19,6 +23,7 @@ const ClientGridView = (props) => {
   const access = props.access;
 
   const objectData = views && views.data ? views.data : views;
+  const detailTab = useSelector((state) => state.client.isClientDetailTab);
 
   const handleClientDelete = (e) => {
     const props = JSON.parse(e.currentTarget.dataset.obj);
@@ -37,7 +42,22 @@ const ClientGridView = (props) => {
           dispatch(ClientDetailTab("clientdetail"));
         }
         if (props && props.tab === "appointment") {
-          dispatch(clientAppointmentListViewApi({ client_id: id }));
+          dispatch(ClientAppointmentListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "photos") {
+          dispatch(ClientphotoGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "invoices") {
+          // dispatch(ClientInvoiceListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "documents") {
+          dispatch(ClientdocumentGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "notes") {
+          dispatch(ClientnoteGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "memberships") {
+          dispatch(ClientMembershipListViewApi({ client_id: id }));
         }
       }
     });
@@ -92,7 +112,7 @@ const ClientGridView = (props) => {
                   </div>
                 </div>
               )}
-              <a className="client-detail cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: "appointment" })}>
+              <a className="client-detail cursor-pointer" onClick={(e) => handleClientDetailModal(e, { tab: detailTab ? detailTab : "appointment" })}>
                 {profile_photo_url ? (
                   <div className="tabs-image">
                     <img src={profile_photo_url} alt="" className="rounded-circle wh-118" />

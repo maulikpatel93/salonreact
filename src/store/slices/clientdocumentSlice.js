@@ -29,7 +29,7 @@ export const clientdocumentUpdateApi = createAsyncThunk("clientdocument/update",
   }
 });
 
-export const clientdocumentGridViewApi = createAsyncThunk("clientdocument/gridview", async (formValues, thunkAPI) => {
+export const ClientdocumentGridViewApi = createAsyncThunk("clientdocument/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientdocumentApiController
       .view(formValues, thunkAPI)
@@ -114,8 +114,8 @@ const clientdocumentSlice = createSlice({
       }
     },
     [clientdocumentUpdateApi.rejected]: () => {},
-    [clientdocumentGridViewApi.pending]: () => {},
-    [clientdocumentGridViewApi.fulfilled]: (state, action) => {
+    [ClientdocumentGridViewApi.pending]: () => {},
+    [ClientdocumentGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isGridView && state.isGridView.data;
@@ -126,7 +126,7 @@ const clientdocumentSlice = createSlice({
       }
       state.isGridView = action.payload;
     },
-    [clientdocumentGridViewApi.rejected]: (state) => {
+    [ClientdocumentGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
     [clientdocumentDeleteApi.pending]: () => {},

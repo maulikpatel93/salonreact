@@ -56,7 +56,7 @@ export const appointmentListViewApi = createAsyncThunk("appointment/listview", a
   }
 });
 
-export const clientAppointmentListViewApi = createAsyncThunk("appointment/clientappointmentlistview", async (formValues, thunkAPI) => {
+export const ClientAppointmentListViewApi = createAsyncThunk("appointment/clientappointmentlistview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await appointmentApiController
       .view(formValues, thunkAPI)
@@ -211,8 +211,8 @@ const appointmentSlice = createSlice({
     [appointmentListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [clientAppointmentListViewApi.pending]: () => {},
-    [clientAppointmentListViewApi.fulfilled]: (state, action) => {
+    [ClientAppointmentListViewApi.pending]: () => {},
+    [ClientAppointmentListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isClientAppointmentListView.current_page ? state.isClientAppointmentListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isClientAppointmentListView && state.isClientAppointmentListView.data;
@@ -223,7 +223,7 @@ const appointmentSlice = createSlice({
       }
       state.isClientAppointmentListView = action.payload;
     },
-    [clientAppointmentListViewApi.rejected]: (state) => {
+    [ClientAppointmentListViewApi.rejected]: (state) => {
       state.isClientAppointmentListView = [];
     },
     [appointmentDetailApi.pending]: () => {},

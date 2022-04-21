@@ -82,6 +82,32 @@ export const SubscriptionDeleteApi = createAsyncThunk("subscription/delete", asy
   }
 });
 
+export const SubscriptionServiceApi = createAsyncThunk("subscription/services", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await subscriptionApiController
+      .services(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "services"))
+      .catch((error) => HandleError(thunkAPI, error, "services"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const SubscriptionServiceCartApi = createAsyncThunk("subscription/subscriptionservicecart", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await subscriptionApiController
+      .services(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "subscriptionservicecart"))
+      .catch((error) => HandleError(thunkAPI, error, "subscriptionservicecart"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -92,6 +118,8 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isSubscriptionOption: [],
+  isServices: [],
+  isSubscriptionServices: [],
 };
 
 const subscriptionSlice = createSlice({
@@ -122,6 +150,10 @@ const subscriptionSlice = createSlice({
     CloseSubscriptionDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
+    },
+    SubscriptionServiceRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isSubscriptionServices = state.isSubscriptionServices ? state.isSubscriptionServices.filter((item) => item.id != id) : [];
     },
   },
   extraReducers: {
@@ -180,8 +212,39 @@ const subscriptionSlice = createSlice({
     [SubscriptionOptions.rejected]: (state) => {
       state.isSubscriptionOption = [];
     },
+    [SubscriptionServiceApi.pending]: () => {},
+    [SubscriptionServiceApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isServices.current_page ? state.isServices.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isServices && state.isServices.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isServices = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isServices.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isServices = action.payload;
+    },
+    [SubscriptionServiceApi.rejected]: (state) => {
+      state.isServices = [];
+    },
+    [SubscriptionServiceCartApi.pending]: () => {},
+    [SubscriptionServiceCartApi.fulfilled]: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isSubscriptionServices && state.isSubscriptionServices.find((event) => event.id === id);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        const subscription = [...state.isSubscriptionServices, action.payload];
+        state.isSubscriptionServices = subscription;
+      }
+    },
+    [SubscriptionServiceCartApi.rejected]: (state) => {
+      state.isSubscriptionServices = "";
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName } = subscriptionSlice.actions;
+export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName, SubscriptionServiceRemoveToCart } = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;

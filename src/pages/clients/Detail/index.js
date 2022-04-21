@@ -13,11 +13,12 @@ import Documents from "./Documents";
 import Notes from "./Notes";
 import { CloseClientDetailModal, ClientDetailTab } from "../../../store/slices/clientSlice";
 import { ucfirst } from "../../../helpers/functions";
-import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
-import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
-import { clientnoteGridViewApi } from "store/slices/clientnoteSlice";
+import { ClientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import { ClientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
+import { ClientnoteGridViewApi } from "store/slices/clientnoteSlice";
 import { checkaccess } from "helpers/functions";
-import { clientAppointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
+import { ClientAppointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
+import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -104,7 +105,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(ClientDetailTab("appointment"));
-                        dispatch(clientAppointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
+                        dispatch(ClientAppointmentListViewApi({ client_id: detail.id, isFilter: isFilter }));
                       }}
                     >
                       {t("Appointments")}
@@ -128,11 +129,24 @@ const ClientDetailModal = () => {
                     {t("Subscriptions")}
                   </button>
                 </li>
-                <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "memberships" ? " active" : "")} id="memberships" data-bs-toggle="tab" data-bs-target="#memberships-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("memberships"))}>
-                    {t("Memberships")}
-                  </button>
-                </li>
+                {checkaccess({ name: "list", role_id: role_id, controller: "clientmembership", access }) && (
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={"nav-link" + (detailTab && detailTab == "memberships" ? " active" : "")}
+                      id="memberships"
+                      data-bs-toggle="tab"
+                      data-bs-target="#memberships-tab"
+                      type="button"
+                      role="tab"
+                      onClick={() => {
+                        dispatch(ClientDetailTab("memberships"));
+                        dispatch(ClientMembershipListViewApi({ client_id: detail.id }));
+                      }}
+                    >
+                      {t("Memberships")}
+                    </button>
+                  </li>
+                )}
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
                   <li className="nav-item" role="presentation">
                     <button
@@ -144,7 +158,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(ClientDetailTab("photos"));
-                        dispatch(clientphotoGridViewApi({ client_id: detail.id }));
+                        dispatch(ClientphotoGridViewApi({ client_id: detail.id }));
                       }}
                     >
                       {t("Photos")}
@@ -177,7 +191,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(ClientDetailTab("documents"));
-                        dispatch(clientdocumentGridViewApi({ client_id: detail.id }));
+                        dispatch(ClientdocumentGridViewApi({ client_id: detail.id }));
                       }}
                     >
                       {t("Documents")}
@@ -195,7 +209,7 @@ const ClientDetailModal = () => {
                       role="tab"
                       onClick={() => {
                         dispatch(ClientDetailTab("notes"));
-                        dispatch(clientnoteGridViewApi({ client_id: detail.id }));
+                        dispatch(ClientnoteGridViewApi({ client_id: detail.id }));
                       }}
                     >
                       {t("Notes")}
@@ -219,7 +233,7 @@ const ClientDetailModal = () => {
                             onChange={(e) => {
                               const filter = { status: e.currentTarget.value };
                               dispatch(openAppointmentFilter(filter));
-                              dispatch(clientAppointmentListViewApi({ client_id: detail.id, filter: filter }));
+                              dispatch(ClientAppointmentListViewApi({ client_id: detail.id, filter: filter }));
                             }}
                             value={isFilter && isFilter.status}
                           >
@@ -276,12 +290,7 @@ const ClientDetailModal = () => {
                   </div>
                 </div>
                 <div className={"tab-pane fade" + (detailTab && detailTab == "memberships" ? " show active" : "")} id="memberships-tab" role="tabpanel" aria-labelledby="memberships-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Memberships")}</h2>
-                  </div>
-                  <div className="content-wrp">
-                    <Membership />
-                  </div>
+                  {detailTab && detailTab == "memberships" && <Membership role_id={role_id} access={access} />}
                 </div>
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientphotos", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "photos" ? " show active" : "")} id="photos-tab" role="tabpanel" aria-labelledby="photos-tab">
@@ -308,10 +317,7 @@ const ClientDetailModal = () => {
                 )}
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientnotes", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "notes" ? " show active" : "")} id="notes-tab" role="tabpanel" aria-labelledby="notes-tab">
-                    <div className="drawer-header">
-                      <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Notes")}</h2>
-                    </div>
-                    <div className="content-wrp">{detailTab && detailTab == "notes" && <Notes role_id={role_id} access={access} />}</div>
+                    {detailTab && detailTab == "notes" && <Notes role_id={role_id} access={access} />}
                   </div>
                 )}
               </div>

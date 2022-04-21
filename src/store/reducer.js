@@ -29,6 +29,8 @@ import saleReducer from "../store/slices/saleSlice";
 import membershipReducer from "../store/slices/membershipSlice";
 import subscriptionReducer from "../store/slices/subscriptionSlice";
 import stripeReducer from "../store/slices/stripeSlice";
+import clientmembershipReducer from "../store/slices/clientmembershipSlice";
+import clientsubscriptionReducer from "../store/slices/clientsubscriptionSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -103,6 +105,28 @@ const reducer = combineReducers({
       whitelist: [],
     },
     clientnoteReducer,
+  ),
+  clientmembership: persistReducer(
+    {
+      key: "clientmembership",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    clientmembershipReducer,
+  ),
+  clientsubscription: persistReducer(
+    {
+      key: "clientsubscription",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    clientsubscriptionReducer,
   ),
   product: persistReducer(
     {

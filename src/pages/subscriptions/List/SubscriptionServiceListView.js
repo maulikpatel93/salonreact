@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "../../../helpers/functions";
-import { SaleServiceToCartApi } from "store/slices/saleSlice";
+import { SubscriptionServiceCartApi } from "store/slices/subscriptionSlice";
 
-const SaleServiceListView = (props) => {
+const SubscriptionServiceListView = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const view = props.view;
@@ -15,7 +15,7 @@ const SaleServiceListView = (props) => {
   const handleServiceClick = (e) => {
     const servicedata = JSON.parse(e.currentTarget.dataset.obj);
     const service_id = servicedata.id;
-    dispatch(SaleServiceToCartApi({ service_id: service_id }));
+    dispatch(SubscriptionServiceCartApi({ event: "serviceClick", service_id: service_id }));
   };
   return (
     <>
@@ -38,6 +38,8 @@ const SaleServiceListView = (props) => {
                         {Object.keys(servicesData).map((itemservice) => {
                           let service_name = servicesData[itemservice].name;
                           let service_duration = servicesData[itemservice].duration;
+                          let defaultPrice = servicesData[itemservice].defaultserviceprice;
+                          let service_price = defaultPrice.length === 1 ? parseFloat(defaultPrice[0].price) : "";
                           // let service_price = servicesData[itemservice].serviceprice;
                           // let generalPrice = service_price;
                           // let gprice = generalPrice.length === 1 && generalPrice[0].price;
@@ -52,7 +54,7 @@ const SaleServiceListView = (props) => {
                                   </label>
                                 </div>
                                 <div className="col-md-3 col-6 time">{`${service_duration} ${t("Mins")}`}</div>
-                                {/* <div className="col-md-3 col-6 price text-end">${totalprice}</div> */}
+                                <div className="col-md-3 col-6 price text-end">${service_price}</div>
                               </div>
                             </li>
                           );
@@ -70,10 +72,10 @@ const SaleServiceListView = (props) => {
   );
 };
 
-SaleServiceListView.propTypes = {
+SubscriptionServiceListView.propTypes = {
   view: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   searchname: PropTypes.string,
   id: PropTypes.string,
 };
 
-export default SaleServiceListView;
+export default SubscriptionServiceListView;

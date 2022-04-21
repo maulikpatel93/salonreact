@@ -29,7 +29,7 @@ export const clientphotoUpdateApi = createAsyncThunk("clientphoto/update", async
   }
 });
 
-export const clientphotoGridViewApi = createAsyncThunk("clientphoto/gridview", async (formValues, thunkAPI) => {
+export const ClientphotoGridViewApi = createAsyncThunk("clientphoto/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientphotoApiController
       .view(formValues, thunkAPI)
@@ -101,8 +101,8 @@ const clientphotoSlice = createSlice({
       }
     },
     [clientphotoUpdateApi.rejected]: () => {},
-    [clientphotoGridViewApi.pending]: () => {},
-    [clientphotoGridViewApi.fulfilled]: (state, action) => {
+    [ClientphotoGridViewApi.pending]: () => {},
+    [ClientphotoGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isGridView && state.isGridView.data;
@@ -113,7 +113,7 @@ const clientphotoSlice = createSlice({
       }
       state.isGridView = action.payload;
     },
-    [clientphotoGridViewApi.rejected]: (state) => {
+    [ClientphotoGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
     [clientphotoDeleteApi.pending]: () => {},

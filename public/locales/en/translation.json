@@ -511,5 +511,21 @@
     "Stripe Setup Successfully": "Stripe Setup Successfully",
     "No subscriptions have been": "No subscriptions have been",
     "created yet": "created yet",
-    "Return to Beauti": "Return to Beauti"
+    "Return to Beauti": "Return to Beauti",
+    "There are no memberships available.": "There are no memberships available.",
+    "Please create one first.": "Please create one first.",
+    "Active": "Active",
+    "Issued": "Issued",
+    "Purchase amount": "Purchase amount",
+    "Set the quantity of the services included, or remove them.": "Set the quantity of the services included, or remove them.",
+    "Edit Subscription": "Edit Subscription",
+    "Subscription": "Subscription",
+    "Subscription Credit": "Subscription Credit",
+    "Subscription Cost": "Subscription Cost",
+    "Add the amount the customer will pay for the subscription.": "Add the amount the customer will pay for the subscription.",
+    "Update Subscription": "Update Subscription",
+    "Are you sure want to delete this subscription?": "Are you sure want to delete this subscription?",
+    "Add how much the subscription will cost.": "Add how much the subscription will cost.",
+    "Frequency of Payment and Services": "Frequency of Payment and Services",
+    "Choose how often the subscription repeats. Note, payment will automatically be taken and the services will reset at this interval.": "Choose how often the subscription repeats. Note, payment will automatically be taken and the services will reset at this interval."
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
-import { appointmentDeleteApi, appointmentListViewApi, appointmentUpdateApi, clientAppointmentListViewApi, closeAppointmentDetailModal, closeEditAppointmentForm, openAddAppointmentForm, openRescheduleAppointmentForm } from "store/slices/appointmentSlice";
+import { appointmentDeleteApi, appointmentListViewApi, appointmentUpdateApi, ClientAppointmentListViewApi, closeAppointmentDetailModal, closeEditAppointmentForm, openAddAppointmentForm, openRescheduleAppointmentForm } from "store/slices/appointmentSlice";
 import { ucfirst } from "helpers/functions";
 import { appointmentDetailApi, openEditAppointmentForm } from "store/slices/appointmentSlice";
 import { serviceOptions, servicePriceApi } from "store/slices/serviceSlice";
@@ -115,7 +115,7 @@ const AppointmentDetailDrawer = (props) => {
       dispatch(appointmentUpdateApi({ id: id, client_id: client_id, status: "Confirmed", clickEvent: "statusupdate", showdate: showdate })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           dispatch(servicePriceApi({ service_id: "" }));
-          dispatch(clientAppointmentListViewApi({ client: client_id }));
+          dispatch(ClientAppointmentListViewApi({ client: client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(appointmentDetailApi({ id, client_id, showdate: showdate }));

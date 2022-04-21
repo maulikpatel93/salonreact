@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, clientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
+import { closeAddAppointmentForm, appointmentStoreApi, appointmentListViewApi, ClientAppointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName } from "store/slices/clientSlice";
 import ClientSuggetionListView from "pages/clients/List/ClientSuggetionListView";
@@ -135,7 +135,7 @@ const AppointmentAddForm = (props) => {
           resetForm();
           dispatch(servicePriceApi({ service_id: "" }));
           dispatch(closeAddAppointmentForm());
-          dispatch(clientAppointmentListViewApi({ client: values.client_id }));
+          dispatch(ClientAppointmentListViewApi({ client: values.client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
             dispatch(busytimeListViewApi(isRangeInfo));

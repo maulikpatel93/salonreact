@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import yupconfig from "../../../../yupconfig";
 
 import PropTypes from "prop-types";
-import { clientnoteGridViewApi, clientnoteStoreApi, closeAddNoteForm } from "store/slices/clientnoteSlice";
+import { ClientnoteGridViewApi, clientnoteStoreApi, closeAddNoteForm } from "store/slices/clientnoteSlice";
 import { sweatalert } from "component/Sweatalert2";
 import { TextareaField } from "component/form/Field";
 
@@ -31,7 +31,7 @@ const NoteCreate = (props) => {
     dispatch(clientnoteStoreApi({...values , client_id: props.client_id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         resetForm();
-        dispatch(clientnoteGridViewApi({ client_id: props.client_id }));
+        dispatch(ClientnoteGridViewApi({ client_id: props.client_id }));
         dispatch(closeAddNoteForm());
         sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
       } else if (action.meta.requestStatus === "rejected") {

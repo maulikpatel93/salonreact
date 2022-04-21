@@ -5,19 +5,17 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 // validation Formik
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 // import config from "../../../config";
 import yupconfig from "../../../yupconfig";
-import { InputField, TextareaField, SelectField, SwitchField } from "../../../component/form/Field";
+import { InputField, SelectField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
-import { decimalOnly } from "../../../component/form/Validation";
+import { decimalOnly, digitOnly } from "../../../component/form/Validation";
 // import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddSubscriptionForm, SubscriptionStoreApi } from "store/slices/subscriptionSlice";
-import config from "config";
-import { SaleServiceApi } from "store/slices/saleSlice";
-import SaleServiceListView from "pages/sales/List/SaleServiceListView";
+import { CloseAddSubscriptionForm, SubscriptionStoreApi, SubscriptionServiceApi, SubscriptionServiceRemoveToCart } from "store/slices/subscriptionSlice";
+import SubscriptionServiceListView from "../List/SubscriptionServiceListView";
 
 const SubscriptionAddForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -28,10 +26,12 @@ const SubscriptionAddForm = (props) => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const rightDrawerOpened = useSelector((state) => state.subscription.isOpenedAddForm);
-  const isServices = useSelector((state) => state.sale.isServices);
-
+  const isServices = useSelector((state) => state.subscription.isServices);
+  const isSubscriptionServicesObj = useSelector((state) => state.subscription.isSubscriptionServices);
+  console.log(isSubscriptionServicesObj);
   useEffect(() => {
-    dispatch(SaleServiceApi());
+    dispatch(SubscriptionServiceApi());
+    dispatch({ type: "subscription/subscriptionservicecart/rejected" });
   }, []);
 
   const initialValues = {
@@ -40,6 +40,7 @@ const SubscriptionAddForm = (props) => {
     repeats: "Yes",
     repeat_time: 1,
     repeat_time_option: "",
+    subservice: [],
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().max(50).label(t("Subscription Name")).required(),
@@ -57,6 +58,12 @@ const SubscriptionAddForm = (props) => {
         is: "Yes",
         then: Yup.string().trim().label(t("Repeat time option")).required(t("Required")),
       }),
+    subservice: Yup.array().of(
+      Yup.object().shape({
+        id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("Digits only"), digitOnly),
+        qty: Yup.string().trim().label("").min(1).required("*").test("Digits only", t("Digits only"), digitOnly),
+      }),
+    ),
   });
   yupconfig();
 
@@ -102,7 +109,7 @@ const SubscriptionAddForm = (props) => {
   //   { value: "Yes", label: t("Yes") },
   // ];
   const repeattimeOptionsData = [
-    // { value: "Weekly", label: t("Week(s)") },
+    { value: "Weekly", label: t("Week(s)") },
     { value: "Monthly", label: t("Month(s)") },
     { value: "Yearly", label: t("Year(s)") },
   ];
@@ -124,7 +131,23 @@ const SubscriptionAddForm = (props) => {
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlesubscriptionSubmit}>
         {(formik) => {
-          console.log(formik.errors);
+          useEffect(() => {
+            formik.setFieldValue("repeats", "Yes", false);
+            formik.setFieldValue("repeat_time", 1, false); // count of month
+            if (isSubscriptionServicesObj.length > 0) {
+              Object.keys(isSubscriptionServicesObj).map((item) => {
+                let id = isSubscriptionServicesObj[item].id;
+                let defaultPrice = isSubscriptionServicesObj[item].defaultserviceprice;
+                let service_price = defaultPrice.length === 1 ? parseFloat(defaultPrice[0].price) : "";
+                let service_addonprice = defaultPrice.length === 1 ? parseFloat(defaultPrice[0].add_on_price) : "";
+                let qty = formik.values && formik.values.subservice.length > 0 && formik.values.subservice[item] && formik.values.subservice[item].qty ? formik.values.subservice[item].qty : 1;
+                formik.setFieldValue("subservice[" + item + "][id]", id, false);
+                formik.setFieldValue("subservice[" + item + "][qty]", qty, false);
+                formik.setFieldValue("subservice[" + item + "][service_price]", service_price, false);
+                formik.setFieldValue("subservice[" + item + "][service_addonprice]", service_addonprice, false);
+              });
+            }
+          }, [isSubscriptionServicesObj]);
           return (
             <div className={rightDrawerOpened + " full-screen-drawer p-0 subscription-drawer"} id="addproduct-drawer">
               <div className="drawer-wrp position-relative">
@@ -147,7 +170,7 @@ const SubscriptionAddForm = (props) => {
                         <div className="mb-md-4 mb-3">
                           <h4 className="fw-semibold mb-2">{t("Subscription Name")}</h4>
                           <p className="mb-2">{t("Add a name to easily identify the subscription.")}</p>
-                          <InputField type="text" name="name" value={formik.values.name} label={t("First Name")} controlId="subscriptionForm-name" />
+                          <InputField type="text" name="name" value={formik.values.name} label={t("Subscription Name")} controlId="subscriptionForm-name" />
                         </div>
                         <div className="mb-md-4 mb-3">
                           <h4 className="fw-semibold mb-2">Cost</h4>
@@ -164,7 +187,7 @@ const SubscriptionAddForm = (props) => {
                         <h4 className="fw-semibold mb-2">Add Services</h4>
                         <p>Select the services to include in the subsription.</p>
                         <InfiniteScroll className="" dataLength={isServices && isServices.data && isServices.data.length ? isServices.data.length : "0"} next={fetchDataSaleService} scrollableTarget="services" hasMore={isServices.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <SaleServiceListView view={isServices} />
+                          <SubscriptionServiceListView view={isServices} />
                           {!isFetchingServices && isServices.next_page_url && (
                             <div className="col-2 m-auto p-3 text-center">
                               <button onClick={loadMoreServices} className="btn btn-primary">
@@ -173,140 +196,42 @@ const SubscriptionAddForm = (props) => {
                             </div>
                           )}
                         </InfiniteScroll>
-                        {/* <div className="accordion" id="accordionExample">
-                           <div className="accordion-item mb-md-4 mb-3">
-                            <h2 className="accordion-header" id="headingOne">
-                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Hair
-                              </button>
-                            </h2>
-                            <div id="collapseOne" className="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                              <div className="accordion-body p-0">
-                                <ul className="list-unstyled mb-0">
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Women’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Men’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Kid’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Blow Dry
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="accordion-item">
-                            <h2 className="accordion-header" id="headingTwo">
-                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Beauty
-                              </button>
-                            </h2>
-                            <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                              <div className="accordion-body p-0">
-                                <ul className="list-unstyled mb-0">
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Women’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Men’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Kid’s Haircut
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <label htmlFor="" className="mb-0 fw-semibold">
-                                          Blow Dry
-                                        </label>
-                                      </div>
-                                      <div className="col-md-3 col-6 time">45 mins</div>
-                                      <div className="col-md-3 col-6 price text-end">$100</div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
                       <div className="col-md-4 p-xl-5 p-4">
-                        <h4 className="fw-semibold mb-2">Services Included</h4>
-                        <p>Set the quantity of the services included, or remove them.</p>
-                        <div className="card card-body mb-3">
-                          <div className="d-flex flex-wrap align-items-center">
-                            <div className="col-lg-8 col-12 d-flex align-items-center pe-lg-2 mb-lg-0 mb-2">
-                              <input type="text" defaultValue="3" className="form-control qty text-center me-xxl-4 me-2" />
-                              <h5 className="fw-semibold mb-0">Women’s Haircut</h5>
-                            </div>
-                            <div className="col-lg-4 col-12 d-flex justify-content-between  align-items-center">
-                              <h5 className="fw-semibold mb-0">$100</h5>
-                              <a className="close d-block">
-                                <i className="fal fa-times"></i>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
+                        <h4 className="fw-semibold mb-2">{t("Services Included")}</h4>
+                        <p>{t("Set the quantity of the services included, or remove them.")}</p>
+
+                        {isSubscriptionServicesObj.length > 0 &&
+                          Object.keys(isSubscriptionServicesObj).map((item) => {
+                            let id = isSubscriptionServicesObj[item].id;
+                            let service_name = isSubscriptionServicesObj[item].name;
+                            let defaultPrice = isSubscriptionServicesObj[item].defaultserviceprice;
+                            let service_price = defaultPrice.length === 1 ? defaultPrice[0].price : "";
+                            let qty = formik.values && formik.values.subservice.length > 0 && formik.values.subservice[item] && formik.values.subservice[item].qty ? formik.values.subservice[item].qty : "";
+                            return (
+                              <div className="card card-body mb-3" key={item}>
+                                <div className="d-flex flex-wrap align-items-center">
+                                  <div className="col-lg-8 col-12 d-flex align-items-center pe-lg-2 mb-lg-0 mb-2">
+                                    <InputField type="text" name={`subservice[${item}][qty]`} value={qty} className="form-control qty text-center me-xxl-4 me-2" controlId={"subscriptionForm-subservice" + item} />
+                                    <h5 className="fw-semibold mb-0">{service_name}</h5>
+                                  </div>
+                                  <div className="col-lg-4 col-12 d-flex justify-content-between  align-items-center">
+                                    <h5 className="fw-semibold mb-0">${service_price}</h5>
+                                    <a
+                                      className="close d-block cursor-pointer"
+                                      onClick={() => {
+                                        dispatch(SubscriptionServiceRemoveToCart({ id: id }));
+                                        formik.setValues({ ...formik.values, subservice: formik.values.subservice && formik.values.subservice.length > 0 ? formik.values.subservice.filter((item) => item.id != id) : [] });
+                                      }}
+                                    >
+                                      <i className="fal fa-times"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        {isSubscriptionServicesObj.length <= 0 ? <div className="fw-bold p-3">{t("No data found")}</div> : ""}
                       </div>
                     </div>
                   </div>

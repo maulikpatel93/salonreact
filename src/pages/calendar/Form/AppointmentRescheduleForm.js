@@ -11,7 +11,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
-import { closeRescheduleAppointmentForm, appointmentRescheduleApi, appointmentListViewApi, clientAppointmentListViewApi, appointmentDetailApi } from "../../../store/slices/appointmentSlice";
+import { closeRescheduleAppointmentForm, appointmentRescheduleApi, appointmentListViewApi, ClientAppointmentListViewApi, appointmentDetailApi } from "../../../store/slices/appointmentSlice";
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
@@ -67,7 +67,7 @@ const AppointmentRescheduleForm = (props) => {
               setStatus({ success: true });
               resetForm();
               dispatch(closeRescheduleAppointmentForm());
-              dispatch(clientAppointmentListViewApi({ client: detail.client_id }));
+              dispatch(ClientAppointmentListViewApi({ client: detail.client_id }));
               if (isRangeInfo) {
                 dispatch(appointmentListViewApi(isRangeInfo));
                 dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));

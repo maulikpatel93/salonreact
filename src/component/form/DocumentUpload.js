@@ -10,7 +10,7 @@ import yupconfig from "../../yupconfig";
 import { clientdocumentStoreApi } from "../../store/slices/clientdocumentSlice";
 // import { removeImage } from "../../store/slices/imageSlice";
 import PropTypes from "prop-types";
-import { clientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
+import { ClientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { sweatalert } from "component/Sweatalert2";
 
 const DocumentUpload = (props) => {
@@ -42,7 +42,7 @@ const DocumentUpload = (props) => {
     setLoading(true);
     dispatch(clientdocumentStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        dispatch(clientdocumentGridViewApi({ client_id: props.client_id }));
+        dispatch(ClientdocumentGridViewApi({ client_id: props.client_id }));
         sweatalert({ title: t("uploaded"), text: t("Uploaded successfully"), icon: "success" });
       } else if (action.meta.requestStatus === "rejected") {
         if (action.payload.status === 422) {

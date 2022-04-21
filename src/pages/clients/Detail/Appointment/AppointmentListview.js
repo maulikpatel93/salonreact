@@ -23,7 +23,6 @@ const AppointmentListview = (props) => {
     <>
       {objectData &&
         Object.keys(objectData).map((item) => {
-          console.log(objectData[item]);
           let id = objectData[item].id;
           let client_id = objectData[item].client_id;
           let service_id = objectData[item].service_id;

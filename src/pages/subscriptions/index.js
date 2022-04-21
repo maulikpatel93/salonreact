@@ -140,7 +140,7 @@ const Subscriptions = () => {
           <div className="tab-content px-lg-4 py-lg-5">
             <div className="tab-pane show active" id="allsubscription">
               <div className="row">
-                <a onClick={handleCardPayment}>test</a>
+                {/* <a onClick={handleCardPayment}>test</a> */}
                 {GridView.length > 0 || GridView.data ? (
                   <div className="" id="scrollableGridView">
                     <InfiniteScroll className="row" dataLength={GridView.data && GridView.data.length ? GridView.data.length : "0"} next={fetchDataGrid} scrollableTarget="page-content-grid" hasMore={GridView.next_page_url ? true : false} loader={<PaginationLoader />}>

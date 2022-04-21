@@ -48,16 +48,17 @@ const PriceTierGridView = (props) => {
           let id = objectData[item].id;
           let name = objectData[item].name;
           let totalStaff = objectData[item].totalStaff;
+          let is_default = objectData[item].is_default;
           return (
             <div className="box-image-cover" key={i} data-id={id}>
-              {(checkaccess({ name: "update", role_id: role_id, controller: "pricetiers", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "pricetiers", access })) && (
+              {(checkaccess({ name: "update", role_id: role_id, controller: "pricetiers", access }) || checkaccess({ name: "delete", role_id: role_id, controller: "pricetiers", access })) && is_default === 0 && (
                 <div className="dropdown d-inline-block setting-dropdown">
                   <button className="dropdown-toggle dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
                     <i className="far fa-ellipsis-v"></i>
                   </button>
                   <div className="dropdown-menu dropdown-box dropdown-menu-end" style={{ minWidth: "116px" }} aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
                     <ul className="p-0 m-0 list-unstyled">
-                      {checkaccess({ name: "update", role_id: role_id, controller: "pricetiers", access }) && (
+                      {checkaccess({ name: "update", role_id: role_id, controller: "pricetiers", access }) && is_default === 0 && (
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" onClick={(e) => handleEditForm(e)}>
                             <img src={config.imagepath + "edit.png"} className="me-3" alt="" />
@@ -66,7 +67,7 @@ const PriceTierGridView = (props) => {
                         </li>
                       )}
 
-                      {checkaccess({ name: "delete", role_id: role_id, controller: "pricetiers", access }) && (
+                      {checkaccess({ name: "delete", role_id: role_id, controller: "pricetiers", access }) && is_default === 0 && (
                         <li>
                           <a className="d-flex align-items-center cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handlePriceTierDelete}>
                             <i className="far fa-trash me-3"></i>

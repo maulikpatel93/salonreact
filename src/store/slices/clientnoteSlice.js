@@ -29,7 +29,7 @@ export const clientnoteUpdateApi = createAsyncThunk("clientnote/update", async (
   }
 });
 
-export const clientnoteGridViewApi = createAsyncThunk("clientnote/gridview", async (formValues, thunkAPI) => {
+export const ClientnoteGridViewApi = createAsyncThunk("clientnote/gridview", async (formValues, thunkAPI) => {
   try {
     const resposedata = await clientnoteApiController
       .view(formValues, thunkAPI)
@@ -137,8 +137,8 @@ const clientnoteSlice = createSlice({
       }
     },
     [clientnoteUpdateApi.rejected]: () => {},
-    [clientnoteGridViewApi.pending]: () => {},
-    [clientnoteGridViewApi.fulfilled]: (state, action) => {
+    [ClientnoteGridViewApi.pending]: () => {},
+    [ClientnoteGridViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isGridView.current_page ? state.isGridView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isGridView && state.isGridView.data;
@@ -149,7 +149,7 @@ const clientnoteSlice = createSlice({
       }
       state.isGridView = action.payload;
     },
-    [clientnoteGridViewApi.rejected]: (state) => {
+    [ClientnoteGridViewApi.rejected]: (state) => {
       state.isGridView = [];
     },
     [clientnoteDeleteApi.pending]: () => {},

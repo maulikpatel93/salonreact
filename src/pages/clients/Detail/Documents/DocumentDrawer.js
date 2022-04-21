@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 // import PropTypes from "prop-types";
 // import config from "../../../../config";
 import { swalConfirm } from "../../../../component/Sweatalert2";
-import { clientdocumentGridViewApi, clientdocumentDeleteApi, closeDocumentDrawer } from "store/slices/clientdocumentSlice";
+import { ClientdocumentGridViewApi, clientdocumentDeleteApi, closeDocumentDrawer } from "store/slices/clientdocumentSlice";
 import config from "../../../../config";
 import { ellipseText } from "helpers/functions";
 // import DocumentUpload from "component/form/DocumentUpload";
@@ -28,7 +28,7 @@ const DocumentDrawer = () => {
   const detail = useSelector((state) => state.client.isDetailData);
 
   const fetchDataPhotoList = () => {
-    dispatch(clientdocumentGridViewApi({ client_id: detail.id, next_page_url: documentViews.next_page_url }));
+    dispatch(ClientdocumentGridViewApi({ client_id: detail.id, next_page_url: documentViews.next_page_url }));
   };
 
   const handleClientDelete = (e) => {

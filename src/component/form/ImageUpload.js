@@ -10,7 +10,7 @@ import yupconfig from "../../yupconfig";
 import { clientphotoStoreApi } from "../../store/slices/clientphotoSlice";
 // import { removeImage } from "../../store/slices/imageSlice";
 import PropTypes from "prop-types";
-import { clientphotoGridViewApi } from "store/slices/clientphotoSlice";
+import { ClientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { sweatalert } from "component/Sweatalert2";
 
 const ImageUpload = (props) => {
@@ -41,7 +41,7 @@ const ImageUpload = (props) => {
     setLoading(true);
     dispatch(clientphotoStoreApi({ myFiles, client_id: props.client_id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        dispatch(clientphotoGridViewApi({ client_id: props.client_id }));
+        dispatch(ClientphotoGridViewApi({ client_id: props.client_id }));
         sweatalert({ title: t("uploaded"), text: t("Uploaded successfully"), icon: "success" });
       }
     });

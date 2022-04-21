@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { OpenEditSubscriptionForm, SubscriptionDeleteApi, SubscriptionDetailApi } from "../../../store/slices/subscriptionSlice";
+import { OpenEditSubscriptionForm, SubscriptionDeleteApi, SubscriptionDetailApi, SubscriptionServiceCartApi } from "../../../store/slices/subscriptionSlice";
 import { checkaccess } from "helpers/functions";
 import { SaleSubscriptionToCartApi, openAddSaleForm, SaleTabView } from "store/slices/saleSlice";
+import config from "../../../config";
 
 const SubscriptionGridView = (props) => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const SubscriptionGridView = (props) => {
     dispatch(SubscriptionDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(OpenEditSubscriptionForm());
+        // dispatch(SubscriptionServiceCartApi({ event: "editClick", data: action.payload }));
       }
     });
   };
@@ -61,7 +63,7 @@ const SubscriptionGridView = (props) => {
                 <a className="sell me-1 cursor-pointer" onClick={handleSubscriptionSaleClick}>
                   {t("Sell")}
                 </a>
-                <a className="delete cursor-pointer" onClick={handleSubscriptionDelete}>
+                <a className="delete cursor-pointer" data-obj={JSON.stringify(objectData[item])} onClick={handleSubscriptionDelete}>
                   <img src={config.imagepath + "delete.png"} alt="" />
                 </a>
               </div>

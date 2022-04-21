@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 // import PropTypes from "prop-types";
 // import config from "../../../../config";
 import { swalConfirm } from "../../../../component/Sweatalert2";
-import { clientphotoGridViewApi, clientphotoUpdateApi, clientphotoDeleteApi, closePhotoDrawer } from "store/slices/clientphotoSlice";
+import { ClientphotoGridViewApi, clientphotoUpdateApi, clientphotoDeleteApi, closePhotoDrawer } from "store/slices/clientphotoSlice";
 import config from "../../../../config";
 import ImageUpload from "component/form/ImageUpload";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -25,7 +25,7 @@ const Photos = () => {
   const detail = useSelector((state) => state.client.isDetailData);
 
   const fetchDataPhotoList = () => {
-    dispatch(clientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
+    dispatch(ClientphotoGridViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
   };
 
   const handleClientDelete = (e) => {
@@ -62,7 +62,7 @@ const Photos = () => {
                           className={(is_profile_photo === 1 ? "disabled " : "") + "btn btn-outline-primary btn-sm cursor-pointer"}
                           onClick={() => {
                             dispatch(clientphotoUpdateApi({ id: id, client_id: client_id }));
-                            dispatch(clientphotoGridViewApi({ client_id: client_id }));
+                            dispatch(ClientphotoGridViewApi({ client_id: client_id }));
                           }}
                         >
                           {t("Profile Image")}

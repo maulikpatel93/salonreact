@@ -252,7 +252,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [], vouchers: [], membership: [], onoffvouchers: [] },
+  isCart: { services: [], products: [], vouchers: [], membership: [], onoffvouchers: [], subscription: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
   isSuggetionListView: [],
@@ -617,7 +617,7 @@ const saleSlice = createSlice({
     [SaleSubscriptionToCartApi.pending]: () => {},
     [SaleSubscriptionToCartApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isCart.membership.find((event) => event.id === id);
+      const existingData = state.isCart.subscription.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];

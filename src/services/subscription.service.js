@@ -10,7 +10,11 @@ const create = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    formData.append(value, values[value]);
+    if (["subservice"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
+    } else {
+      formData.append(value, values[value]);
+    }
   }
   const action = "afterlogin/subscription/store";
   formData.append("auth_key", auth_key);
@@ -56,6 +60,7 @@ const view = (values) => {
       sortstring = jsort;
     }
   }
+  console.log(values);
   const pagination = values && values.option ? false : true;
   const action = page ? `afterlogin/subscription/view?page=${page}&${sortstring}` : `afterlogin/subscription/view?${sortstring}`;
   const data = {
@@ -64,7 +69,7 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && values.id ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,credit,cost", // first_name,last_name,email
+    field: values && values.id ? "" : "name,amount,repeats,repeat_time,repeat_time_option,is_active", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
     option: values && values.option ? values.option : "",
@@ -96,10 +101,30 @@ const suggetionlist = (values) => {
     salon_id: auth.user.salon_id,
     pagination: true, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,credit,cost", // first_name,last_name,email
+    field: values && values.id ? "" : "name,amount,repeats,repeat_time,repeat_time_option,is_active", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
   };
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
+};
+
+const services = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const page = values && values.page;
+  const next_page_url = values && values.next_page_url;
+  let service_id = values && values.service_id ? values.service_id : "";
+  let staff = values && values.staff ? values.staff : "";
+  let gprice = values && values.gprice ? values.gprice : "";
+  let q = values && values.q ? values.q : "";
+  const action = page ? `afterlogin/subscription/services?page=${page}&service_id=${service_id}&q=${q}` : `afterlogin/subscription/services?service_id=${service_id}&q=${q}`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    staff: staff,
+    gprice: gprice,
+  };
+  return axios.post(next_page_url ? `${next_page_url}` : API_URL + action, data, { headers: authHeader() });
 };
 
 const subscriptionApiController = {
@@ -108,5 +133,6 @@ const subscriptionApiController = {
   view,
   deleted,
   suggetionlist,
+  services,
 };
 export default subscriptionApiController;

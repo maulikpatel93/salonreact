@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 // import PropTypes from "prop-types";
 import { swalConfirm } from "../../../../component/Sweatalert2";
-import { clientnoteGridViewApi, clientnoteDeleteApi, closeNoteDrawer, openAddNoteForm, openEditNoteForm, clientnoteDetailApi } from "store/slices/clientnoteSlice";
+import { ClientnoteGridViewApi, clientnoteDeleteApi, closeNoteDrawer, openAddNoteForm, openEditNoteForm, clientnoteDetailApi } from "store/slices/clientnoteSlice";
 import config from "../../../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
@@ -25,7 +25,7 @@ const NoteDrawer = () => {
   const detail = useSelector((state) => state.client.isDetailData);
 
   const fetchDataPhotoList = () => {
-    dispatch(clientnoteGridViewApi({ client_id: detail.id, next_page_url: noteViews.next_page_url }));
+    dispatch(ClientnoteGridViewApi({ client_id: detail.id, next_page_url: noteViews.next_page_url }));
   };
 
   const handleClientDelete = (e) => {
