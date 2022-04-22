@@ -28,8 +28,8 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    if (["gender"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, values[value].value);
+    if (["subservice"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
     } else {
       formData.append(value, values[value]);
     }
@@ -60,7 +60,6 @@ const view = (values) => {
       sortstring = jsort;
     }
   }
-  console.log(values);
   const pagination = values && values.option ? false : true;
   const action = page ? `afterlogin/subscription/view?page=${page}&${sortstring}` : `afterlogin/subscription/view?${sortstring}`;
   const data = {

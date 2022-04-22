@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "../../../helpers/functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import { OpenEditSubscriptionForm, SubscriptionDeleteApi, SubscriptionDetailApi, SubscriptionServiceCartApi } from "../../../store/slices/subscriptionSlice";
+import { EditSubscriptionServiceCartApi, OpenEditSubscriptionForm, SubscriptionDeleteApi, SubscriptionDetailApi, SubscriptionServiceApi, SubscriptionServiceCartApi } from "../../../store/slices/subscriptionSlice";
 import { checkaccess } from "helpers/functions";
 import { SaleSubscriptionToCartApi, openAddSaleForm, SaleTabView } from "store/slices/saleSlice";
 import config from "../../../config";
@@ -34,6 +34,20 @@ const SubscriptionGridView = (props) => {
     dispatch(SubscriptionDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(OpenEditSubscriptionForm());
+        dispatch(SubscriptionServiceApi());
+        dispatch({ type: "subscription/subscriptionservicecart/rejected" });
+        const subservice = action.payload.subservice;
+        if (subservice.length > 0) {
+          let subserviceobj = [];
+          Object.keys(subservice).map((item) => {
+            let id = subservice[item].services && subservice[item].services.id;
+            let name = subservice[item].services && subservice[item].services.name;
+            let defaultserviceprice = subservice[item].services && subservice[item].services.defaultserviceprice;
+            let qty = subservice[item].qty;
+            subserviceobj.push({ id, name, qty, defaultserviceprice });
+          });
+          dispatch(EditSubscriptionServiceCartApi(subserviceobj));
+        }
         // dispatch(SubscriptionServiceCartApi({ event: "editClick", data: action.payload }));
       }
     });

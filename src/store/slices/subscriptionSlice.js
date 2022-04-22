@@ -155,6 +155,9 @@ const subscriptionSlice = createSlice({
       const { id } = action.payload;
       state.isSubscriptionServices = state.isSubscriptionServices ? state.isSubscriptionServices.filter((item) => item.id != id) : [];
     },
+    EditSubscriptionServiceCartApi: (state, action) => {
+      state.isSubscriptionServices = action.payload;
+    },
   },
   extraReducers: {
     [SubscriptionStoreApi.pending]: () => {},
@@ -246,5 +249,5 @@ const subscriptionSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName, SubscriptionServiceRemoveToCart } = subscriptionSlice.actions;
+export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName, SubscriptionServiceRemoveToCart,EditSubscriptionServiceCartApi } = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;

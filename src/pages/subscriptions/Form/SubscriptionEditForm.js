@@ -29,12 +29,10 @@ const SubscriptionEditForm = (props) => {
   const isServices = useSelector((state) => state.subscription.isServices);
   const isSubscriptionServicesObj = useSelector((state) => state.subscription.isSubscriptionServices);
   const detail = useSelector((state) => state.subscription.isDetailData);
-  console.log(detail);
-  console.log(isSubscriptionServicesObj);
-  useEffect(() => {
-    dispatch(SubscriptionServiceApi());
-    dispatch({ type: "subscription/subscriptionservicecart/rejected" });
-  }, []);
+
+  // useEffect(() => {
+  //   dispatch(SubscriptionServiceApi());
+  // }, []);
 
   const initialValues = {
     name: "",
@@ -77,7 +75,7 @@ const SubscriptionEditForm = (props) => {
         if (action.meta.requestStatus === "fulfilled") {
           setStatus({ success: true });
           resetForm();
-          sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
+          sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
           dispatch(CloseEditSubscriptionForm());
           if (scriptedRef.current) {
             setLoading(false);
@@ -140,7 +138,7 @@ const SubscriptionEditForm = (props) => {
               const fields = ["id", "name", "amount", "repeat_time_option"];
               fields.forEach((field) => {
                 let detail_field = detail[field] ? detail[field] : "";
-                formik.setFieldValue(field, formik.values[field] ? formik.values[field] : detail_field, false);
+                formik.setFieldValue(field, detail_field, false);
               });
             }
           }, [detail]);
@@ -148,12 +146,13 @@ const SubscriptionEditForm = (props) => {
             if (isSubscriptionServicesObj.length > 0) {
               Object.keys(isSubscriptionServicesObj).map((item) => {
                 let id = isSubscriptionServicesObj[item].id;
+                let editqty = isSubscriptionServicesObj[item].qty ? isSubscriptionServicesObj[item].qty : 1;
                 let defaultPrice = isSubscriptionServicesObj[item].defaultserviceprice;
                 let service_price = defaultPrice.length === 1 ? parseFloat(defaultPrice[0].price) : "";
                 let service_addonprice = defaultPrice.length === 1 ? parseFloat(defaultPrice[0].add_on_price) : "";
-                let qty = formik.values && formik.values.subservice.length > 0 && formik.values.subservice[item] && formik.values.subservice[item].qty ? formik.values.subservice[item].qty : 1;
+                // let qty = formik.values && formik.values.subservice.length > 0 && formik.values.subservice[item] && formik.values.subservice[item].qty ? formik.values.subservice[item].qty : editqty;
                 formik.setFieldValue("subservice[" + item + "][id]", id, false);
-                formik.setFieldValue("subservice[" + item + "][qty]", qty, false);
+                formik.setFieldValue("subservice[" + item + "][qty]", editqty, false);
                 formik.setFieldValue("subservice[" + item + "][service_price]", service_price, false);
                 formik.setFieldValue("subservice[" + item + "][service_addonprice]", service_addonprice, false);
               });
@@ -223,7 +222,17 @@ const SubscriptionEditForm = (props) => {
                               <div className="card card-body mb-3" key={item}>
                                 <div className="d-flex flex-wrap align-items-center">
                                   <div className="col-lg-8 col-12 d-flex align-items-center pe-lg-2 mb-lg-0 mb-2">
-                                    <InputField type="text" name={`subservice[${item}][qty]`} value={qty} className="form-control qty text-center me-xxl-4 me-2" controlId={"subscriptionForm-subservice" + item} />
+                                    <InputField
+                                      type="text"
+                                      name={`subservice[${item}][qty]`}
+                                      value={qty}
+                                      className="form-control qty text-center me-xxl-4 me-2"
+                                      controlId={"subscriptionForm-subservice" + item}
+                                      onChange={(e) => {
+                                        dispatch({ type: "subscription/subscriptionservicecart/fulfilled", payload: { ...isSubscriptionServicesObj[item], qty: e.target.value } });
+                                        formik.handleChange(e);
+                                      }}
+                                    />
                                     <h5 className="fw-semibold mb-0">{service_name}</h5>
                                   </div>
                                   <div className="col-lg-4 col-12 d-flex justify-content-between  align-items-center">
