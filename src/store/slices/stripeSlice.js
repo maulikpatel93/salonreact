@@ -32,6 +32,7 @@ export const StripeCardPaymentApi = createAsyncThunk("stripe/cardpayment", async
 
 const initialState = {
   isOpenedAddForm: "",
+  isStripePaymentStatus: "",
 };
 
 const stripeSlice = createSlice({
@@ -45,6 +46,9 @@ const stripeSlice = createSlice({
     CloseAddStripeForm: (state = initialState) => {
       state.isOpenedAddForm = "";
     },
+    StripePaymentStatus: (state, action) => {
+      state.isStripePaymentStatus = action.payload;
+    },
   },
   extraReducers: {
     [StripeSetupApi.pending]: () => {},
@@ -54,5 +58,5 @@ const stripeSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddStripeForm, CloseAddStripeForm } = stripeSlice.actions;
+export const { reset, OpenAddStripeForm, CloseAddStripeForm, StripePaymentStatus } = stripeSlice.actions;
 export default stripeSlice.reducer;

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { SubscriptionGridViewApi, OpenAddSubscriptionForm } from "../../store/slices/subscriptionSlice";
+import { SubscriptionGridViewApi, OpenAddSubscriptionForm, SubscriptionSuggetionListApi, SubscriptionSearchName, OpenSubscriptionSearchList, CloseSubscriptionSearchList } from "../../store/slices/subscriptionSlice";
 
 import config from "../../config";
 // import SubscriptionPreview from "./List/SubscriptionPreview";
 import SubscriptionAddForm from "./Form/SubscriptionAddForm";
 import SubscriptionEditForm from "./Form/SubscriptionEditForm";
-// import SubscriptionSuggetionListView from "./List/SubscriptionSuggetionListView";
+import SubscriptionSuggetionListView from "./List/SubscriptionSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
 import { checkaccess } from "helpers/functions";
@@ -32,9 +32,14 @@ const Subscriptions = () => {
   const isOpenedEditForm = useSelector((state) => state.subscription.isOpenedEditForm);
   const saleIsOpenedAddForm = useSelector((state) => state.sale.isOpenedAddForm);
   const isOpenedStripeAddForm = useSelector((state) => state.stripe.isOpenedAddForm);
+  const isSearchList = useSelector((state) => state.subscription.isSearchList);
+  const isSearchName = useSelector((state) => state.subscription.isSearchName);
+  const SuggetionView = useSelector((state) => state.subscription.isSuggetionListView);
 
   useEffect(() => {
     dispatch(SubscriptionGridViewApi());
+    dispatch(SubscriptionSearchName(""));
+    dispatch(CloseSubscriptionSearchList());
   }, [dispatch]);
 
   const handleOpenAddSubscriptionForm = () => {
@@ -65,6 +70,39 @@ const Subscriptions = () => {
       }),
     );
   };
+  const fetchDataSuggetionList = () => {
+    dispatch(SubscriptionSuggetionListApi({ next_page_url: SuggetionView.next_page_url, q: isSearchName }));
+  };
+
+  const handleClickSearch = (e) => {
+    let q = e.currentTarget.value;
+    if (q && q.length > 0) {
+      dispatch(OpenSubscriptionSearchList());
+      dispatch(SubscriptionSuggetionListApi({ q: q }));
+    }
+  };
+  const handleKeyUpSearch = (e) => {
+    let q = e.currentTarget.value;
+    dispatch(SubscriptionSearchName(q));
+    if (q && q.length > 0) {
+      dispatch(OpenSubscriptionSearchList());
+      dispatch(SubscriptionSuggetionListApi({ q: q }));
+    } else {
+      dispatch(SubscriptionGridViewApi());
+      dispatch(CloseSubscriptionSearchList());
+    }
+  };
+  const handleCloseSearch = () => {
+    dispatch(SubscriptionSearchName(""));
+    dispatch(CloseSubscriptionSearchList());
+    dispatch(SubscriptionGridViewApi());
+  };
+  const handleOnBlur = () => {
+    // setTimeout(() => {
+    //   dispatch(CloseSubscriptionSearchList());
+    // }, 200);
+  };
+  
   return (
     <>
       <div className="page-content subscription">
@@ -73,7 +111,7 @@ const Subscriptions = () => {
             <ul className="nav nav-tabs mb-0 justify-content-start border-0" role="tablist">
               <li className="nav-item">
                 <a className="nav-link active" id="subscription-stripe-tab" data-bs-toggle="tab" data-bs-target="#subscription-stripe" type="button" role="tab" aria-controls="subscription-stripe" aria-selected="true">
-                  All
+                  {t("All")}
                 </a>
               </li>
             </ul>
@@ -84,47 +122,17 @@ const Subscriptions = () => {
                 <span className="input-group-text">
                   <i className="far fa-search"></i>
                 </span>
-                <input type="text" className="form-control search-input" placeholder="Search" />
-                <a className="close" style={{ display: "none" }}>
+                <input type="text" className="form-control search-input" placeholder={t("Search")} value={isSearchName} onInput={(e) => dispatch(SubscriptionSearchName(e.target.value))} onClick={handleClickSearch} onKeyUp={handleKeyUpSearch} onBlur={handleOnBlur} />
+                <a className="close cursor-pointer" style={{ display: isSearchName ? "block" : "none" }} onClick={handleCloseSearch}>
                   <i className="fal fa-times"></i>
                 </a>
               </div>
-              <div className="search-result dropdown-box">
-                <ul className="p-0 m-0 list-unstyled">
-                  <li>
-                    <a href="#" className="d-flex">
-                      <div className="user-img me-2">
-                        <img src={config.imagepath + "Avatar.png"} alt="" />
-                      </div>
-                      <div className="user-id">
-                        <span className="user-name">Jo Smith</span>
-                        <span className="user-id">jo.smith@gmail.com</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="d-flex">
-                      <div className="user-img me-2">
-                        <img src="assets/images/Avatar.png" alt="" />
-                      </div>
-                      <div className="user-id">
-                        <span className="user-name">Jo Smith</span>
-                        <span className="user-id">jo.smith@gmail.com</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="d-flex">
-                      <div className="user-img me-2">
-                        <img src="assets/images/Avatar.png" alt="" />
-                      </div>
-                      <div className="user-id">
-                        <span className="user-name">Jo Smith</span>
-                        <span className="user-id">jo.smith@gmail.com</span>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
+              <div className={"search-result dropdown-box " + isSearchList} id="search-content">
+                <InfiniteScroll className="" dataLength={SuggetionView && SuggetionView.data && SuggetionView.data.length ? SuggetionView.data.length : "0"} next={fetchDataSuggetionList} scrollableTarget="search-content" hasMore={SuggetionView.next_page_url ? true : false} loader={<PaginationLoader />}>
+                  <ul className="p-0 m-0 list-unstyled">
+                    <SubscriptionSuggetionListView view={SuggetionView} />
+                  </ul>
+                </InfiniteScroll>
               </div>
             </div>
           </div>
@@ -177,7 +185,7 @@ const Subscriptions = () => {
                       (currentUser.stripe_account_id ? (
                         <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
                           <div className="complete-box-wrp text-center ">
-                            <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" onClick={() => dispatch(OpenAddStripeForm())}/>
+                            <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" onClick={() => dispatch(OpenAddStripeForm())} />
                             <h4 className="mb-2 fw-semibold">
                               {t("No subscriptions have been")}
                               <br /> {t("created yet")}.

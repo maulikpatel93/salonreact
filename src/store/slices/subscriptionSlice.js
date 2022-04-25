@@ -108,6 +108,18 @@ export const SubscriptionServiceCartApi = createAsyncThunk("subscription/subscri
   }
 });
 
+export const SubscriptionSuggetionListApi = createAsyncThunk("subscription/suggetionlist", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await subscriptionApiController
+      .suggetionlist(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
+      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -117,6 +129,7 @@ const initialState = {
   isDetailData: "",
   isSearchList: "",
   isSearchName: "",
+  isSearchObj: "",
   isSubscriptionOption: [],
   isServices: [],
   isSubscriptionServices: [],
@@ -157,6 +170,18 @@ const subscriptionSlice = createSlice({
     },
     EditSubscriptionServiceCartApi: (state, action) => {
       state.isSubscriptionServices = action.payload;
+    },
+    OpenSubscriptionSearchList: (state) => {
+      state.isSearchList = "open";
+    },
+    CloseSubscriptionSearchList: (state) => {
+      state.isSearchList = "";
+    },
+    SubscriptionSearchName: (state, action) => {
+      state.isSearchName = action.payload;
+    },
+    SubscriptionSearchObj: (state, action) => {
+      state.isSearchObj = action.payload;
     },
   },
   extraReducers: {
@@ -246,8 +271,23 @@ const subscriptionSlice = createSlice({
     [SubscriptionServiceCartApi.rejected]: (state) => {
       state.isSubscriptionServices = "";
     },
+    [SubscriptionSuggetionListApi.pending]: () => {},
+    [SubscriptionSuggetionListApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isSuggetionListView = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isSuggetionListView.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isSuggetionListView = action.payload;
+    },
+    [SubscriptionSuggetionListApi.rejected]: (state) => {
+      state.isSuggetionListView = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName, SubscriptionServiceRemoveToCart,EditSubscriptionServiceCartApi } = subscriptionSlice.actions;
+export const { reset, OpenAddSubscriptionForm, CloseAddSubscriptionForm, OpenEditSubscriptionForm, CloseEditSubscriptionForm, OpenSubscriptionDetailModal, CloseSubscriptionDetailModal, openSubscriptionSearchList, closesubscriptionsearchList, subscriptionSearchName, SubscriptionServiceRemoveToCart, EditSubscriptionServiceCartApi, OpenSubscriptionSearchList, CloseSubscriptionSearchList, SubscriptionSearchName, SubscriptionSearchObj } = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;

@@ -31,6 +31,7 @@ import subscriptionReducer from "../store/slices/subscriptionSlice";
 import stripeReducer from "../store/slices/stripeSlice";
 import clientmembershipReducer from "../store/slices/clientmembershipSlice";
 import clientsubscriptionReducer from "../store/slices/clientsubscriptionSlice";
+import settingReducer from "../store/slices/settingSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -314,6 +315,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     stripeReducer,
+  ),
+  setting: persistReducer(
+    {
+      key: "setting",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: ["isTabView"],
+    },
+    settingReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

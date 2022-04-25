@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ucfirst } from "helpers/functions";
 import PropTypes from "prop-types";
 // validation Formik
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Field, useFormikContext } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, TextareaField } from "component/form/Field";
 import moment from "moment";
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import { formatCreditCardNumber, formatCVC, formatExpirationDate } from "component/card/CardUtils";
+import CardPaymentForm from "./CardPaymentForm";
+import { StripePaymentStatus } from "store/slices/stripeSlice";
 
 const SaleCheckoutForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -32,54 +34,55 @@ const SaleCheckoutForm = (props) => {
   const appointmentDetail = isCheckoutData.appointmentDetail ? isCheckoutData.appointmentDetail : "";
   const client = appointmentDetail && appointmentDetail.client ? appointmentDetail.client : clientdata;
   const isCart = useSelector((state) => state.sale.isCart);
-  const isRangeInfo = props.isRangeInfo;
+  const isStripePaymentStatus = useSelector((state) => state.stripe.isStripePaymentStatus);
 
+  const isRangeInfo = props.isRangeInfo;
+  
   const initialValues = {
     client_id: "",
     notes: "",
     cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
     appointment_id: "",
+    cost: "",
     eventdate: "",
     is_stripe: 0,
-    cardname: "",
-    cardnumber: "",
-    cardexpiry: "",
-    cardcvc: "",
+    totalprice: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
     notes: Yup.string().trim().label(t("Notes")),
     is_stripe: Yup.mixed(),
-    cardname: Yup.string().trim().label(t("Card Holder Name")),
-    cardnumber: Yup.string()
-      .trim()
-      .nullable()
-      .when("is_stripe", {
-        is: 1,
-        // then: Yup.string().trim().matches(config.cardNumberPattern, t(config.cardNumberPattern_error)).label(t("Card Number")).required(),
-        then: Yup.string().trim().label(t("Card Number")).required(),
-      }),
-    cardexpiry: Yup.string()
-      .trim()
-      .nullable()
-      .when("is_stripe", {
-        is: 1,
-        then: Yup.string().trim().label(t("Card Expiry")).required(),
-      }),
-    cardcvc: Yup.string()
-      .trim()
-      .nullable()
-      .when("is_stripe", {
-        is: 1,
-        then: Yup.string().trim().label(t("CVC")).required(),
-      }),
+    // cardname: Yup.string().trim().label(t("Card Holder Name")),
+    // cardnumber: Yup.string()
+    //   .trim()
+    //   .nullable()
+    //   .when("is_stripe", {
+    //     is: 1,
+    //     // then: Yup.string().trim().matches(config.cardNumberPattern, t(config.cardNumberPattern_error)).label(t("Card Number")).required(),
+    //     then: Yup.string().trim().label(t("Card Number")).required(),
+    //   }),
+    // cardexpiry: Yup.string()
+    //   .trim()
+    //   .nullable()
+    //   .when("is_stripe", {
+    //     is: 1,
+    //     then: Yup.string().trim().label(t("Card Expiry")).required(),
+    //   }),
+    // cardcvc: Yup.string()
+    //   .trim()
+    //   .nullable()
+    //   .when("is_stripe", {
+    //     is: 1,
+    //     then: Yup.string().trim().label(t("CVC")).required(),
+    //   }),
   });
   yupconfig();
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    setLoading(false);
+    setLoading(true);
     try {
       dispatch(saleStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
+          const stripeObj = action.payload;
           setStatus({ success: true });
           resetForm();
           dispatch(closeAddSaleForm());
@@ -100,6 +103,14 @@ const SaleCheckoutForm = (props) => {
           if (status === 422) {
             setErrors(errors);
           }
+          if (status === 410) {
+            const stripeObj = action.payload && action.payload.message;
+            dispatch(StripePaymentStatus(stripeObj));
+            dispatch(OpenCardPaymentForm());
+            // if (payment_status === "requires_confirmation") {
+            //   console.log(payment_status);
+            // }
+          }
           setStatus({ success: false });
           setSubmitting(false);
           if (scriptedRef.current) {
@@ -119,19 +130,31 @@ const SaleCheckoutForm = (props) => {
     dispatch(CloseCheckoutForm());
     dispatch(CloseCardPaymentForm());
   };
+
+  // const MyInput = ({ field, form, ...props }) => {
+  //   // console.log(form.setFieldValue);
+
+  //   return form.setFieldValue("totalprice", props.value);
+  // };
   return (
     <React.Fragment>
       <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handlesaleSubmit}>
         {(formik) => {
           useEffect(() => {
             formik.setFieldValue("client_id", client ? client.id : "");
+          }, [client]);
+          useEffect(() => {
             formik.setFieldValue("appointment_id", appointmentDetail ? appointmentDetail.id : "");
             formik.setFieldValue("eventdate", appointmentDetail ? appointmentDetail.showdate : "");
+            formik.setFieldValue("cost", appointmentDetail ? isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost) : "");
+          }, [appointmentDetail]);
+          useEffect(() => {
             if (isCart && isCart.services.length > 0) {
               Object.keys(isCart.services).map((item) => {
                 let service_id = isCart.services[item].id;
                 let staff = isCart.services[item].staff;
                 let gprice = isCart.services[item].gprice ? isCart.services[item].gprice : "";
+                // totalprice += isNaN(parseFloat(gprice)) === false && parseFloat(gprice);
                 formik.setFieldValue("cart[services][" + item + "][id]", service_id);
                 formik.setFieldValue("cart[services][" + item + "][staff_id]", staff && staff.id);
                 formik.setFieldValue("cart[services][" + item + "][gprice]", String(gprice));
@@ -143,21 +166,22 @@ const SaleCheckoutForm = (props) => {
                 let product_cost_price = isCart.products[item].cost_price;
                 let qty = isCart.products[item].qty;
                 let product_price = qty > 0 ? parseInt(qty) * parseFloat(product_cost_price) : product_cost_price;
-                totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
+                // totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
                 formik.setFieldValue("cart[products][" + item + "][id]", product_id);
                 formik.setFieldValue("cart[products][" + item + "][qty]", String(qty));
-                formik.setFieldValue("cart[products][" + item + "][price]", product_cost_price);
+                formik.setFieldValue("cart[products][" + item + "][cost_price]", product_cost_price);
               });
             }
             if (isCart && isCart.vouchers.length > 0) {
               Object.keys(isCart.vouchers).map((item) => {
                 let voucher_id = isCart.vouchers[item].id;
-                let amount = isCart.vouchers[item].amount;
+                let voucher_price = isCart.vouchers[item].amount;
                 let code = isCart.vouchers[item].code;
                 let voucher_to = isCart.vouchers[item].voucher_to;
+                // totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
                 formik.setFieldValue("cart[vouchers][" + item + "][id]", voucher_id);
                 formik.setFieldValue("cart[vouchers][" + item + "][code]", String(code));
-                formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(amount));
+                formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(voucher_price));
                 formik.setFieldValue("cart[vouchers][" + item + "][voucher_to]", voucher_to);
               });
             }
@@ -171,6 +195,7 @@ const SaleCheckoutForm = (props) => {
                 let email = isCart.onoffvouchers[item].email;
                 let amount = isCart.onoffvouchers[item].amount;
                 let message = isCart.onoffvouchers[item].message;
+                // totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][id]", id ? id : "");
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
                 formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
@@ -185,19 +210,57 @@ const SaleCheckoutForm = (props) => {
               Object.keys(isCart.membership).map((item) => {
                 let id = isCart.membership[item].id;
                 let cost = isCart.membership[item].cost;
+                // totalprice += isNaN(parseFloat(cost)) === false && parseFloat(cost);
                 formik.setFieldValue("cart[membership][" + item + "][id]", id);
                 formik.setFieldValue("cart[membership][" + item + "][cost]", cost);
               });
             }
-          }, [client, isCart, appointmentDetail]);
+          }, [isCart, appointmentDetail]);
+
           let totalprice = 0;
           if (appointmentDetail && appointmentDetail.cost) {
             totalprice += isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost);
           }
-          console.log(formik.values);
+          let isCartForm = isCart;
+          if (isCartForm && isCartForm.services.length > 0) {
+            Object.keys(isCartForm.services).map((item) => {
+              let gprice = isCartForm.services[item].gprice ? isCartForm.services[item].gprice : "";
+              totalprice += isNaN(parseFloat(gprice)) === false && parseFloat(gprice);
+            });
+          }
+          if (isCartForm && isCartForm.products.length > 0) {
+            Object.keys(isCartForm.products).map((item) => {
+              let product_cost_price = isCartForm.products[item].cost_price;
+              let qty = isCartForm.products[item].qty;
+              let product_price = qty > 0 ? parseInt(qty) * parseFloat(product_cost_price) : product_cost_price;
+              totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
+            });
+          }
+          if (isCartForm && isCartForm.vouchers.length > 0) {
+            Object.keys(isCartForm.vouchers).map((item) => {
+              let voucher_price = isCartForm.vouchers[item].amount;
+              totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
+            });
+          }
+
+          if (isCartForm && isCartForm.onoffvouchers.length > 0) {
+            Object.keys(isCartForm.onoffvouchers).map((item) => {
+              let amount = isCartForm.onoffvouchers[item].amount;
+              totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
+            });
+          }
+
+          if (isCartForm && isCartForm.membership.length > 0) {
+            Object.keys(isCartForm.membership).map((item) => {
+              let cost = isCartForm.membership[item].cost;
+              totalprice += isNaN(parseFloat(cost)) === false && parseFloat(cost);
+            });
+          }
+          useEffect(() => {
+            formik.setFieldValue("totalprice", totalprice);
+          }, [totalprice]);
           // console.log(formatCreditCardNumber(formik.values.cardnumber));
           // formik.setFieldValue("cardnumber", formatCreditCardNumber(formik.values.cardnumber));
-
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 salecheckout-drawer " : "") + rightDrawerOpened} id="salecheckout-drawer">
               <div className="drawer-wrp position-relative">
@@ -251,8 +314,7 @@ const SaleCheckoutForm = (props) => {
                             let service_name = isCart.services[item].name;
                             let staff = isCart.services[item].staff;
                             let gprice = isCart.services[item].gprice;
-                            totalprice += isNaN(parseFloat(gprice)) === false && parseFloat(gprice);
-
+                            // totalprice += isNaN(parseFloat(gprice)) === false && parseFloat(gprice);
                             return (
                               <div className="product-box mt-0 mb-3" key={item}>
                                 <div className="product-header" id="#checkout-probox">
@@ -285,7 +347,7 @@ const SaleCheckoutForm = (props) => {
                             let qty = isCart.products[item].qty;
                             let image_url = isCart.products[item].image_url;
                             let product_price = parseInt(qty) && parseInt(qty) > 0 ? parseInt(qty) * parseFloat(cost_price) : parseFloat(cost_price);
-                            totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
+                            // totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
                             return (
                               <div className="product-box mt-0 mb-3 ps-2" key={item}>
                                 <div className="product-header" id="#checkout-probox">
@@ -335,7 +397,7 @@ const SaleCheckoutForm = (props) => {
                             let voucher_price = isCart.vouchers[item].amount;
                             let voucher_to = isCart.vouchers[item].voucher_to;
 
-                            totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
+                            // totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
                             let image_url = config.imagepath + "voucher.png";
                             return (
                               <div className="product-box mt-0 mb-3 ps-2" key={item}>
@@ -387,7 +449,7 @@ const SaleCheckoutForm = (props) => {
                             let last_name = isCart.onoffvouchers[item].last_name;
                             let email = isCart.onoffvouchers[item].email;
                             let amount = isCart.onoffvouchers[item].amount;
-                            totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
+                            // totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
                             let image_url = config.imagepath + "voucher.png";
                             return (
                               <div className="product-box mt-0 mb-3 ps-2" key={item}>
@@ -432,7 +494,7 @@ const SaleCheckoutForm = (props) => {
                             let membership_name = isCart.membership[item].name;
                             let membership_price = isCart.membership[item].cost;
 
-                            totalprice += isNaN(parseFloat(membership_price)) === false && parseFloat(membership_price);
+                            // totalprice += isNaN(parseFloat(membership_price)) === false && parseFloat(membership_price);
                             let image_url = config.imagepath + "membership-lg.png";
                             return (
                               <div className="membership-box mt-0 mb-3 ps-2" key={item}>
@@ -472,10 +534,47 @@ const SaleCheckoutForm = (props) => {
                         </div>
                         <div className="px-4 d-flex py-3 total">
                           <span className="h2 pe-2 mb-0">{t("Total")}</span>
-                          <span className="h2 text-end ms-auto mb-0">${totalprice}</span>
+                          <span className="h2 text-end ms-auto mb-0">${formik.values.totalprice}</span>
                         </div>
-
-                        {isOpenCardPaymentForm ? (
+                        <div className="row">
+                          <div className="col-12 mb-3">
+                            {currentUser.stripe_account_id && (
+                              <button
+                                type="submit"
+                                id="payment-link"
+                                className="btn btn-primary btn-lg w-100 p-3"
+                                disabled={loading}
+                                onClick={() => {
+                                  formik.setFieldValue("is_stripe", 1);
+                                  // dispatch(OpenCardPaymentForm());
+                                  // dispatch(CardPaymentData(formik));
+                                }}
+                              >
+                                {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                {t("Paid by Stripe (Credit Card)")}
+                              </button>
+                            )}
+                          </div>
+                          <div className="col-4">
+                            <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
+                              {loading && <span className="spinner-border spinner-border-sm"></span>}
+                              {t("by Credit Card")}
+                            </button>
+                          </div>
+                          <div className="col-4">
+                            <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
+                              {loading && <span className="spinner-border spinner-border-sm"></span>}
+                              {t("Paid by Cash")}
+                            </button>
+                          </div>
+                          <div className="col-4">
+                            <button type="submit" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading}>
+                              {loading && <span className="spinner-border spinner-border-sm"></span>}
+                              {t("Pay by Voucher")}
+                            </button>
+                          </div>
+                        </div>
+                        {/* {isOpenCardPaymentForm ? (
                           <div className="row gy-3 mt-4">
                             <div className="col-md-4">
                               <InputField type="text" name="cardnumber" value={formatCreditCardNumber(formik.values.cardnumber)} label={t("Card Number")} controlId="checkoutForm-cardnumber" placeholder="**** **** **** ****" />
@@ -493,44 +592,7 @@ const SaleCheckoutForm = (props) => {
                               </button>
                             </div>
                           </div>
-                        ) : (
-                          <div className="row">
-                            <div className="col-4">
-                              {currentUser.stripe_account_id ? (
-                                <button
-                                  type="button"
-                                  id="payment-link"
-                                  className="btn btn-pay btn-lg w-100 p-3"
-                                  disabled={loading}
-                                  onClick={() => {
-                                    formik.setFieldValue("is_stripe", 1);
-                                    dispatch(OpenCardPaymentForm());
-                                  }}
-                                >
-                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                  {t("Paid by Credit Card")}
-                                </button>
-                              ) : (
-                                <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
-                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                  {t("by Credit Card")}
-                                </button>
-                              )}
-                            </div>
-                            <div className="col-4">
-                              <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
-                                {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                {t("Paid by Cash")}
-                              </button>
-                            </div>
-                            <div className="col-4">
-                              <button type="submit" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading}>
-                                {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                {t("Pay by Voucher")}
-                              </button>
-                            </div>
-                          </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -540,6 +602,7 @@ const SaleCheckoutForm = (props) => {
           );
         }}
       </Formik>
+      {isOpenCardPaymentForm && <CardPaymentForm />}
     </React.Fragment>
   );
 };

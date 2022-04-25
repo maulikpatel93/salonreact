@@ -923,7 +923,7 @@ tr {
     height: 100%;
     left: 0;
     background: linear-gradient(180deg, #8f807d 0%, #393332 100%);
-    z-index: 8;
+    z-index: 1050;
 }
 
 .sidemenu {
@@ -3280,421 +3280,6 @@ table .pro-title {
     height: 100%;
 }
 
-.bootstrap-datetimepicker-widget table.table> :not(caption)>*>* {
-    padding: 0px;
-}
-
-.white-space-pre-line {
-    white-space: pre-line !important;
-}
-
-
-/* 04/04/2022 New Sale page vouchers box start*/
-
-.voucher-center-box {
-    background-color: #f4eeeb;
-    max-width: 118px;
-    height: 118px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    border-radius: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.voucher-center-box img {
-    max-width: 51px;
-}
-
-.voucher-center-box span {
-    font-size: 28px;
-    line-height: 31px;
-    font-weight: 600;
-    color: #8c1c4d;
-}
-
-
-/* one-off Voucher page start  */
-
-.one-off-voucher {
-    border-bottom: 1px solid #eee;
-}
-
-.one-off-voucher .cancel_btn {
-    text-decoration: none;
-    text-transform: capitalize;
-    background-color: #f4eeeb;
-    padding: 12px 36px;
-    font-size: 18px;
-    line-height: 25px;
-    color: #333;
-    font-weight: 600;
-}
-
-
-/* from start  */
-
-.gift-vocher-page-form {
-    padding-top: 80px;
-}
-
-.gift_form_cover {
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.gift_form_cover h3 {
-    text-transform: capitalize;
-    font-weight: 700;
-}
-
-.gift_form_cover form input[type="submit"] {
-    padding: 16px 0;
-}
-
-.gift_form_cover form label {
-    color: #333;
-}
-
-.gift_form_cover form input[type="submit"]:hover {
-    color: #000 !important;
-}
-
-.form-control:focus,
-.dropdown-toggle:focus {
-    border-color: unset;
-}
-
-.birthday_vocher {
-    position: relative;
-}
-
-.birdthday_addtop {
-    background-color: #8c1c4d;
-    width: 54px;
-    height: 54px;
-    border-radius: 100%;
-    position: absolute;
-    color: #fff;
-    padding-top: 5px;
-    top: -14px;
-    right: -12px;
-}
-
-.birdthday_addtop p {
-    color: #fff;
-}
-
-
-/*11-04-2022 membership active  */
-
-.event-box-pink {
-    color: #374151;
-    background-color: #F9F6F4;
-    display: block;
-    padding: 15px 24px;
-    border-radius: 6px;
-}
-
-.event-box-pink span.active {
-    background-color: #8C1C4D;
-    color: #fff;
-    font-size: 12px;
-}
-
-.event-box-pink .cancel {
-    font-weight: 600;
-    font-size: 12px;
-    color: #fff;
-    border-radius: 4px;
-    background-color: #3A3432;
-    padding: 2px 6px;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 16px;
-}
-
-
-/* subscription */
-
-.page-content.subscription {
-    background-color: #f9f6f4;
-    height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.subscription .common-tab .nav-tabs li a.active {
-    color: #8c1c4d;
-    border-color: #8c1c4d;
-}
-
-.subscription .complete-box a {
-    color: #8c1c4d;
-    font-size: inherit;
-    cursor: pointer;
-    border-bottom: 2px solid #991d53;
-}
-
-.subscription .complete-box a:hover {
-    color: #8c1c4d;
-    font-size: inherit;
-    cursor: pointer;
-    border-bottom: 1px solid #8c1c4d;
-}
-
-.subscription-service {
-    background-color: #f9f6f4;
-}
-
-.subscription-service .accordion-button {
-    padding: 20px 25px;
-}
-
-.subscription-drawer .add-form,
-.subscription-drawer form,
-.subscription-drawer .row {
-    /* min-height: 100vh; */
-}
-
-.subscription-drawer .qty {
-    width: 37px;
-}
-
-.subscription-drawer .card {
-    padding: 20px;
-}
-
-.subscription-drawer .card .close {
-    color: #ef0000;
-}
-
-.subscription .box-image-cover .user-initial {
-    font-size: 20px;
-}
-
-.box-image-cover .edit,
-.box-image-cover .sell,
-.box-image-cover .delete {
-    background-color: #8f807d;
-    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border-radius: 4px;
-    font-size: 12px;
-    padding: 6px 10px;
-    text-decoration: none;
-    color: #fff;
-    min-height: 27px;
-    min-width: 36px;
-    text-align: center;
-}
-
-.box-image-cover .delete img {
-    max-width: 12px;
-    display: block;
-    filter: brightness(0) invert(1);
-    height: 12px;
-    margin: 1px auto;
-}
-
-.box-image-cover .edit:hover,
-.box-image-cover .sell:hover,
-.box-image-cover .delete:hover {
-    background-color: #828df8;
-}
-
-.substripe-complete {
-    background: #fffbd7;
-    border: 5px solid #ffffff;
-}
-
-.substripe-content {
-    max-width: 450px;
-    margin: 0 auto;
-}
-
-.substripe-content h6 {
-    line-height: 1.5;
-}
-
-.integration-stripe,
-.integration-stripe>.row {
-    min-height: 100vh;
-}
-
-.integration-stripe .content-block {
-    background-color: #8c1c4d;
-    padding: 170px 100px 40px 40px;
-}
-
-.integration-stripe .content-block h2,
-.integration-stripe .form-block h2 {
-    font-weight: 700;
-    font-size: 34px;
-    line-height: 1.2;
-}
-
-.integration-stripe .content-block a {
-    font-weight: 700;
-    font-size: 20px;
-    color: #fff;
-    text-decoration: none;
-}
-
-.integration-stripe .form-block {
-    padding: 170px 40px 40px 120px;
-    max-width: 720px;
-}
-
-.integration-stripe .form-block h2 {
-    color: #3a3432;
-}
-
-.integration-stripe .form-block p {
-    font-weight: 400;
-    font-size: 19px;
-    color: #787878;
-}
-
-.integration-stripe .form-block label {
-    color: #3a3432;
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.integration-stripe .form-control {
-    border-radius: 10px;
-    border: 1px solid #3a3432;
-    font-size: 19px;
-    padding: 14px 25px;
-}
-
-.integration-stripe .form-control::-webkit-input-placeholder {
-    color: #bfbfbf;
-    opacity: 1;
-}
-
-.integration-stripe .form-control::-moz-placeholder {
-    color: #bfbfbf;
-    opacity: 1;
-}
-
-.integration-stripe .form-control:-ms-input-placeholder {
-    color: #bfbfbf;
-    opacity: 1;
-}
-
-.integration-stripe .form-control::-ms-input-placeholder {
-    color: #bfbfbf;
-    opacity: 1;
-}
-
-.integration-stripe .form-control::placeholder {
-    color: #bfbfbf;
-    opacity: 1;
-}
-
-.integration-stripe .btn {
-    font-size: 19px;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 17px 10px;
-}
-
-#subscriptions .alert svg {
-    min-width: 30px;
-}
-
-body .border-block {
-    border-color: #333333;
-}
-
-.voucher-box {
-    background: #f9f6f4;
-    border-radius: 6px;
-    padding: 20px;
-}
-
-.btn-voucher {
-    color: #fff;
-    font-weight: 400;
-    font-size: 12px;
-    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border-radius: 4px;
-    background-color: #8f807d;
-    text-decoration: none;
-    padding: 6px 14px;
-}
-
-.btn-voucher:hover {
-    background-color: #828df8;
-}
-
-.voucher-box .img-wrp img {
-    min-width: 30px;
-}
-
-
-/* New Sale - Pay with Stripe (Credit Card) */
-
-.newsalecreditpay label {
-    color: #374151;
-    font-family: "Source Sans Pro", sans-serif;
-}
-
-.newsalecreditpay .form-control {
-    font-size: 22px;
-    font-family: "Source Sans Pro", sans-serif;
-}
-
-.form-control.cvc {
-    background-image: url(../images/cvc.svg);
-    background-repeat: no-repeat;
-    background-position: 95% center;
-}
-
-.form-control.creditcard {
-    background-image: url(../images/visa.svg), url(../images/mastercard.svg);
-    background-repeat: no-repeat;
-    background-position: 90.2% center, 97.6% center;
-    margin-bottom: -1px;
-}
-
-.newsalecreditpay .form-control.lg {
-    padding: 24px 17px;
-}
-
-.newsalecreditpay .btn {
-    font-size: 26px;
-    font-family: "Source Sans Pro", sans-serif;
-    line-height: 1;
-    padding: 20px 15px;
-}
-
-.newsale-payment-btn .btn {
-    font-size: 20px;
-    font-family: "Source Sans Pro", sans-serif;
-    line-height: 1;
-    padding: 23px 15px;
-}
-
-.newsalecreditpay .month {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.salecheckout-drawer hr {
-    background-color: #eee;
-    opacity: 1;
-    width: calc(100% + 60px);
-    margin-left: -30px;
-}
-
-
-/* newsale-payment-btn */
-
 
 /* Media query */
 
@@ -3965,17 +3550,6 @@ body .border-block {
     }
     .ac-setup .inti-box .img-wrp {
         min-height: 110px;
-    }
-    .newsalecreditpay .form-control.lg {
-        padding: 17px 17px;
-    }
-    .salecheckout-drawer hr {
-        width: 100%;
-        margin-left: 0;
-    }
-    .newsale-payment-btn .btn {
-        font-size: 18px;
-        padding: 20px 15px;
     }
 }
 
@@ -4700,26 +4274,6 @@ body .border-block {
         padding: 0 0 10px;
         margin: 0 0 23px;
     }
-    .newsalecreditpay .form-control.lg {
-        padding: 15px;
-        font-size: 16px;
-    }
-    .newsalecreditpay .btn {
-        padding: 15px;
-        font-size: 22px;
-    }
-    .newsale-payment-btn .btn {
-        padding: 15px 5px;
-        font-size: 15px;
-    }
-    .form-control.cvc {
-        background-position: 89% center;
-        background-size: 35px;
-    }
-    .form-control.creditcard {
-        background-size: 37px, 30px;
-        background-position: 81% center, 96% center;
-    }
 }
 
 @media only screen and (max-width: 575px) {
@@ -4755,4 +4309,360 @@ body .border-block {
     .signup-page h1 {
         font-size: 36px;
     }
+}
+
+.bootstrap-datetimepicker-widget table.table> :not(caption)>*>* {
+    padding: 0px;
+}
+
+.white-space-pre-line {
+    white-space: pre-line !important;
+}
+
+
+/* 04/04/2022 New Sale page vouchers box start*/
+
+.voucher-center-box {
+    background-color: #f4eeeb;
+    max-width: 118px;
+    height: 118px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    border-radius: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voucher-center-box img {
+    max-width: 51px;
+}
+
+.voucher-center-box span {
+    font-size: 28px;
+    line-height: 31px;
+    font-weight: 600;
+    color: #8c1c4d;
+}
+
+
+/* one-off Voucher page start  */
+
+.one-off-voucher {
+    border-bottom: 1px solid #eee;
+}
+
+.one-off-voucher .cancel_btn {
+    text-decoration: none;
+    text-transform: capitalize;
+    background-color: #f4eeeb;
+    padding: 12px 36px;
+    font-size: 18px;
+    line-height: 25px;
+    color: #333;
+    font-weight: 600;
+}
+
+
+/* from start  */
+
+.gift-vocher-page-form {
+    padding-top: 80px;
+}
+
+.gift_form_cover {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.gift_form_cover h3 {
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.gift_form_cover form input[type="submit"] {
+    padding: 16px 0;
+}
+
+.gift_form_cover form label {
+    color: #333;
+}
+
+.gift_form_cover form input[type="submit"]:hover {
+    color: #000 !important;
+}
+
+.form-control:focus,
+.dropdown-toggle:focus {
+    border-color: unset;
+}
+
+.birthday_vocher {
+    position: relative;
+}
+
+.birdthday_addtop {
+    background-color: #8c1c4d;
+    width: 54px;
+    height: 54px;
+    border-radius: 100%;
+    position: absolute;
+    color: #fff;
+    padding-top: 5px;
+    top: -14px;
+    right: -12px;
+}
+
+.birdthday_addtop p {
+    color: #fff;
+}
+
+
+/*11-04-2022 membership active  */
+
+.event-box-pink {
+    color: #374151;
+    background-color: #F9F6F4;
+    display: block;
+    padding: 15px 24px;
+    border-radius: 6px;
+}
+
+.event-box-pink span.active {
+    background-color: #8C1C4D;
+    color: #fff;
+    font-size: 12px;
+}
+
+.event-box-pink .cancel {
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+    background-color: #3A3432;
+    padding: 2px 6px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 16px;
+}
+
+
+/* subscription */
+
+.page-content.subscription {
+    background-color: #f9f6f4;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.subscription .common-tab .nav-tabs li a.active {
+    color: #8c1c4d;
+    border-color: #8c1c4d;
+}
+
+.subscription .complete-box a {
+    color: #8c1c4d;
+    font-size: inherit;
+    cursor: pointer;
+    border-bottom: 2px solid #991d53;
+}
+
+.subscription .complete-box a:hover {
+    color: #8c1c4d;
+    font-size: inherit;
+    cursor: pointer;
+    border-bottom: 1px solid #8c1c4d;
+}
+
+.subscription-service {
+    background-color: #f9f6f4;
+}
+
+.subscription-service .accordion-button {
+    padding: 20px 25px;
+}
+
+.subscription-drawer .add-form,
+.subscription-drawer form,
+.subscription-drawer .row {
+    /* min-height: 100vh; */
+}
+
+.subscription-drawer .qty {
+    width: 37px;
+}
+
+.subscription-drawer .card {
+    padding: 20px;
+}
+
+.subscription-drawer .card .close {
+    color: #ef0000;
+}
+
+.subscription .box-image-cover .user-initial {
+    font-size: 20px;
+}
+
+.box-image-cover .edit,
+.box-image-cover .sell,
+.box-image-cover .delete {
+    background-color: #8f807d;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 6px 10px;
+    text-decoration: none;
+    color: #fff;
+    min-height: 27px;
+    min-width: 36px;
+    text-align: center;
+}
+
+.box-image-cover .delete img {
+    max-width: 12px;
+    display: block;
+    filter: brightness(0) invert(1);
+    height: 12px;
+    margin: 1px auto;
+}
+
+.box-image-cover .edit:hover,
+.box-image-cover .sell:hover,
+.box-image-cover .delete:hover {
+    background-color: #828df8;
+}
+
+.substripe-complete {
+    background: #fffbd7;
+    border: 5px solid #ffffff;
+}
+
+.substripe-content {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.substripe-content h6 {
+    line-height: 1.5;
+}
+
+.integration-stripe,
+.integration-stripe>.row {
+    min-height: 100vh;
+}
+
+.integration-stripe .content-block {
+    background-color: #8c1c4d;
+    padding: 170px 100px 40px 40px;
+}
+
+.integration-stripe .content-block h2,
+.integration-stripe .form-block h2 {
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+.integration-stripe .content-block a {
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.integration-stripe .form-block {
+    padding: 170px 40px 40px 120px;
+    max-width: 720px;
+}
+
+.integration-stripe .form-block h2 {
+    color: #3a3432;
+}
+
+.integration-stripe .form-block p {
+    font-weight: 400;
+    font-size: 19px;
+    color: #787878;
+}
+
+.integration-stripe .form-block label {
+    color: #3a3432;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.integration-stripe .form-control {
+    border-radius: 10px;
+    border: 1px solid #3a3432;
+    font-size: 19px;
+    padding: 14px 25px;
+}
+
+.integration-stripe .form-control::-webkit-input-placeholder {
+    color: #bfbfbf;
+    opacity: 1;
+}
+
+.integration-stripe .form-control::-moz-placeholder {
+    color: #bfbfbf;
+    opacity: 1;
+}
+
+.integration-stripe .form-control:-ms-input-placeholder {
+    color: #bfbfbf;
+    opacity: 1;
+}
+
+.integration-stripe .form-control::-ms-input-placeholder {
+    color: #bfbfbf;
+    opacity: 1;
+}
+
+.integration-stripe .form-control::placeholder {
+    color: #bfbfbf;
+    opacity: 1;
+}
+
+.integration-stripe .btn {
+    font-size: 19px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 17px 10px;
+}
+
+#subscriptions .alert svg {
+    min-width: 30px;
+}
+
+body .border-block {
+    border-color: #333333;
+}
+
+.voucher-box {
+    background: #f9f6f4;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.btn-voucher {
+    color: #fff;
+    font-weight: 400;
+    font-size: 12px;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border-radius: 4px;
+    background-color: #8f807d;
+    text-decoration: none;
+    padding: 6px 14px;
+}
+
+.btn-voucher:hover {
+    background-color: #828df8;
+}
+
+.voucher-box .img-wrp img {
+    min-width: 30px;
 }

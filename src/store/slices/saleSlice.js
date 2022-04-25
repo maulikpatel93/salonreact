@@ -269,6 +269,7 @@ const initialState = {
   isOpenedSaleCompleted: "",
   isSaleCompletedData: "",
   isOpenCardPaymentForm: "",
+  isCardPaymentData: "",
 };
 
 const saleSlice = createSlice({
@@ -409,6 +410,9 @@ const saleSlice = createSlice({
     CloseCardPaymentForm: (state = initialState) => {
       // state.isOpenedEditForm = "";
       state.isOpenCardPaymentForm = "";
+    },
+    CardPaymentData: (state, action) => {
+      state.isCardPaymentData = action.payload;
     },
   },
   extraReducers: {
@@ -651,5 +655,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData } = saleSlice.actions;
 export default saleSlice.reducer;

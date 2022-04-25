@@ -45,6 +45,7 @@ const SaleAddForm = (props) => {
     // notes: "",
     cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
     appointment_id: "",
+    cost: "",
     eventdate: "",
     client: "",
     appointmentDetail: "",
@@ -65,7 +66,7 @@ const SaleAddForm = (props) => {
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly),
           qty: Yup.string().trim().label(t("Quantity")).min(1).required().test("Digits only", t("The field should have digits only"), digitOnly),
-          price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
+          cost_price: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
         }),
       ),
       vouchers: Yup.array().of(
@@ -214,7 +215,7 @@ const SaleAddForm = (props) => {
                 totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
                 formik.setFieldValue("cart[products][" + item + "][id]", product_id);
                 formik.setFieldValue("cart[products][" + item + "][qty]", qty);
-                formik.setFieldValue("cart[products][" + item + "][price]", product_cost_price);
+                formik.setFieldValue("cart[products][" + item + "][cost_price]", product_cost_price);
               });
             }
             if (isCart && isCart.vouchers.length > 0) {
@@ -261,6 +262,7 @@ const SaleAddForm = (props) => {
               formik.setFieldValue("client_id", appointmentDetail.client && appointmentDetail.client.id);
               formik.setFieldValue("appointment_id", appointmentDetail.id);
               formik.setFieldValue("eventdate", appointmentDetail.showdate);
+              formik.setFieldValue("cost", appointmentDetail ? isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost) : "");
               // dispatch(ClientSearchName(appointmentDetail.client && ));
               dispatch(ClientSearchObj(appointmentDetail.client));
               dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
