@@ -44,7 +44,7 @@ const SubscriptionGridView = (props) => {
             let name = subservice[item].services && subservice[item].services.name;
             let defaultserviceprice = subservice[item].services && subservice[item].services.defaultserviceprice;
             let qty = subservice[item].qty;
-            subserviceobj.push( );
+            subserviceobj.push({ id, name, defaultserviceprice, qty });
           });
           dispatch(EditSubscriptionServiceCartApi(subserviceobj));
         }

@@ -318,16 +318,16 @@ textarea.form-control::placeholder {
 }
 
 .btn-cancel {
-    color: #3A3432 !important;
-    background-color: #F4EEEB !important;
-    border-color: #F4EEEB !important;
+    color: #3a3432 !important;
+    background-color: #f4eeeb !important;
+    border-color: #f4eeeb !important;
     padding: 9px 13px !important;
 }
 
 .btn-cancel:hover {
     color: #fff !important;
-    background-color: #8C1C4D !important;
-    border-color: #8C1C4D !important;
+    background-color: #8c1c4d !important;
+    border-color: #8c1c4d !important;
 }
 
 a {
@@ -2086,7 +2086,8 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box,
-.salevoucher-tab .membership-box {
+.salevoucher-tab .membership-box,
+.salevoucher-tab .subscription-box {
     border: 1px solid #d4d4d4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
@@ -2098,7 +2099,8 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box h5,
-.salevoucher-tab .membership-box h5 {
+.salevoucher-tab .membership-box h5,
+.salevoucher-tab .subscription-box h5 {
     font-size: 18px;
 }
 
@@ -3393,14 +3395,14 @@ table .pro-title {
 
 .event-box-pink {
     color: #374151;
-    background-color: #F9F6F4;
+    background-color: #f9f6f4;
     display: block;
     padding: 15px 24px;
     border-radius: 6px;
 }
 
 .event-box-pink span.active {
-    background-color: #8C1C4D;
+    background-color: #8c1c4d;
     color: #fff;
     font-size: 12px;
 }
@@ -3410,7 +3412,7 @@ table .pro-title {
     font-size: 12px;
     color: #fff;
     border-radius: 4px;
-    background-color: #3A3432;
+    background-color: #3a3432;
     padding: 2px 6px;
     display: inline-block;
     vertical-align: middle;

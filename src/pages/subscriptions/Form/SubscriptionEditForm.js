@@ -29,7 +29,6 @@ const SubscriptionEditForm = (props) => {
   const isServices = useSelector((state) => state.subscription.isServices);
   const isSubscriptionServicesObj = useSelector((state) => state.subscription.isSubscriptionServices);
   const detail = useSelector((state) => state.subscription.isDetailData);
-
   // useEffect(() => {
   //   dispatch(SubscriptionServiceApi());
   // }, []);
@@ -68,7 +67,6 @@ const SubscriptionEditForm = (props) => {
   yupconfig();
 
   const handlesubscriptionSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    console.log(values);
     setLoading(true);
     try {
       dispatch(SubscriptionUpdateApi(values)).then((action) => {

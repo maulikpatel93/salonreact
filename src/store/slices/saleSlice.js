@@ -237,6 +237,19 @@ export const SaleEmailInvoiceApi = createAsyncThunk("sale/saleemailinvoice", asy
   }
 });
 
+export const VoucherApplyApi = createAsyncThunk("sale/voucherapply", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .voucherapply(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "voucherapply"))
+      .catch((error) => HandleError(thunkAPI, error, "voucherapply"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedVoucherToForm: "",
@@ -270,6 +283,7 @@ const initialState = {
   isSaleCompletedData: "",
   isOpenCardPaymentForm: "",
   isCardPaymentData: "",
+  isOpenedVoucherApplyForm: "",
 };
 
 const saleSlice = createSlice({
@@ -298,6 +312,14 @@ const saleSlice = createSlice({
     CloseVoucherToForm: (state = initialState) => {
       // state.isOpenedEditForm = "";
       state.isOpenedVoucherToForm = "";
+    },
+    OpenVoucherApplyForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedVoucherApplyForm = "open";
+    },
+    CloseVoucherApplyForm: (state = initialState) => {
+      // state.isOpenedEditForm = "";
+      state.isOpenedVoucherApplyForm = "";
     },
     VoucherToFormData: (state, action) => {
       state.isVoucherToFormData = action.payload;
@@ -336,6 +358,10 @@ const saleSlice = createSlice({
     SaleMembershipRemoveToCart: (state, action) => {
       const { id } = action.payload;
       state.isCart.membership = state.isCart.membership ? state.isCart.membership.filter((item) => item.id != id) : [];
+    },
+    SaleSubscriptionRemoveToCart: (state, action) => {
+      const { id } = action.payload;
+      state.isCart.subscription = state.isCart.subscription ? state.isCart.subscription.filter((item) => item.id != id) : [];
     },
     AppointmentDetail: (state, action) => {
       state.isAppointmentDetail = action.payload;
@@ -652,8 +678,11 @@ const saleSlice = createSlice({
     [SaleEmailInvoiceApi.pending]: () => {},
     [SaleEmailInvoiceApi.fulfilled]: () => {},
     [SaleEmailInvoiceApi.rejected]: () => {},
+    [VoucherApplyApi.pending]: () => {},
+    [VoucherApplyApi.fulfilled]: () => {},
+    [VoucherApplyApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, CloseVoucherApplyForm, SaleSubscriptionRemoveToCart } = saleSlice.actions;
 export default saleSlice.reducer;

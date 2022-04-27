@@ -11,13 +11,14 @@ import yupconfig from "../../../yupconfig";
 import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, TextareaField } from "component/form/Field";
 import moment from "moment";
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, SaleSubscriptionRemoveToCart } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import { formatCreditCardNumber, formatCVC, formatExpirationDate } from "component/card/CardUtils";
 import CardPaymentForm from "./CardPaymentForm";
 import { StripePaymentStatus } from "store/slices/stripeSlice";
+import VoucherApplyForm from "./VoucherApplyForm";
 
 const SaleCheckoutForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -35,12 +36,13 @@ const SaleCheckoutForm = (props) => {
   const client = appointmentDetail && appointmentDetail.client ? appointmentDetail.client : clientdata;
   const isCart = useSelector((state) => state.sale.isCart);
   const isStripePaymentStatus = useSelector((state) => state.stripe.isStripePaymentStatus);
+  const isOpenedVoucherApplyForm = useSelector((state) => state.sale.isOpenedVoucherApplyForm);
 
   const isRangeInfo = props.isRangeInfo;
-  
+
   const initialValues = {
     client_id: "",
-    notes: "",
+    description: "",
     cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
     appointment_id: "",
     cost: "",
@@ -50,7 +52,7 @@ const SaleCheckoutForm = (props) => {
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
-    notes: Yup.string().trim().label(t("Notes")),
+    description: Yup.string().trim().label(t("Notes")),
     is_stripe: Yup.mixed(),
     // cardname: Yup.string().trim().label(t("Card Holder Name")),
     // cardnumber: Yup.string()
@@ -215,6 +217,14 @@ const SaleCheckoutForm = (props) => {
                 formik.setFieldValue("cart[membership][" + item + "][cost]", cost);
               });
             }
+            if (isCart && isCart.subscription.length > 0) {
+              Object.keys(isCart.subscription).map((item) => {
+                let id = isCart.subscription[item].id;
+                let amount = isCart.subscription[item].amount;
+                formik.setFieldValue("cart[subscription][" + item + "][id]", id);
+                formik.setFieldValue("cart[subscription][" + item + "][amount]", String(amount));
+              });
+            }
           }, [isCart, appointmentDetail]);
 
           let totalprice = 0;
@@ -253,6 +263,12 @@ const SaleCheckoutForm = (props) => {
           if (isCartForm && isCartForm.membership.length > 0) {
             Object.keys(isCartForm.membership).map((item) => {
               let cost = isCartForm.membership[item].cost;
+              totalprice += isNaN(parseFloat(cost)) === false && parseFloat(cost);
+            });
+          }
+          if (isCartForm && isCartForm.subscription.length > 0) {
+            Object.keys(isCartForm.subscription).map((item) => {
+              let cost = isCartForm.subscription[item].amount;
               totalprice += isNaN(parseFloat(cost)) === false && parseFloat(cost);
             });
           }
@@ -529,8 +545,49 @@ const SaleCheckoutForm = (props) => {
                               </div>
                             );
                           })}
+                        {isCart &&
+                          isCart.subscription.length > 0 &&
+                          Object.keys(isCart.subscription).map((item) => {
+                            let subscription_id = isCart.subscription[item].id;
+                            let subscription_name = isCart.subscription[item].name;
+                            let subscription_price = isCart.subscription[item].amount;
+                            // totalprice += isNaN(parseFloat(subscription_price)) === false && parseFloat(subscription_price);
+                            let image_url = config.imagepath + "subscription.png";
+                            return (
+                              <div className="membership-box mt-0 mb-3 ps-2" key={item}>
+                                <div className="membership-header" id="#checkout-probox">
+                                  <a
+                                    className="close d-block cursor-pointer"
+                                    onClick={() => {
+                                      dispatch(SaleSubscriptionRemoveToCart({ id: subscription_id }));
+                                      formik.setValues({ ...formik.values, cart: { ...formik.values.cart, subscription: formik.values.cart.subscription && formik.values.cart.subscription.length > 0 ? formik.values.cart.subscription.filter((item) => item.id != subscription_id) : [] } });
+                                    }}
+                                  >
+                                    <i className="fal fa-times"></i>
+                                  </a>
+                                  <div className="d-flex">
+                                    <div className="pro-img align-self-center">
+                                      <div className="user">
+                                        <a data-fancybox="" data-src={image_url}>
+                                          <img src={image_url} alt="" className="object-fit-none h-20 w-auto px-2" />
+                                        </a>
+                                      </div>
+                                    </div>
+                                    <div className="pro-content align-self-center">
+                                      <div className="row">
+                                        <div className="col-9">
+                                          <h4 className="mb-0 fw-semibold">{ucfirst(subscription_name)}</h4>
+                                        </div>
+                                        <h4 className="col-3 mb-0 text-end">${subscription_price}</h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
                         <div className="">
-                          <TextareaField type="text" name="notes" rows={1} placeholder={t("Add a note...")} value={formik.values.notes} label={""} className="form-control lg" controlId="checkoutForm-notes" />
+                          <TextareaField type="text" name="description" rows={1} placeholder={t("Add a note...")} value={formik.values.description} label={""} className="form-control lg" controlId="checkoutForm-description" />
                         </div>
                         <div className="px-4 d-flex py-3 total">
                           <span className="h2 pe-2 mb-0">{t("Total")}</span>
@@ -556,19 +613,36 @@ const SaleCheckoutForm = (props) => {
                             )}
                           </div>
                           <div className="col-4">
-                            <button type="submit" id="payment-link" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "CreditCard")}>
+                            <button
+                              type="submit"
+                              id="payment-link"
+                              className="btn btn-pay btn-lg w-100 p-3"
+                              disabled={loading}
+                              onClick={() => {
+                                formik.setFieldValue("is_stripe", 0);
+                                formik.setFieldValue("paidby", "CreditCard");
+                              }}
+                            >
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("by Credit Card")}
+                              {t("Paid by Credit Card")}
                             </button>
                           </div>
                           <div className="col-4">
-                            <button type="submit" className="btn btn-pay btn-lg w-100 p-3" disabled={loading} onClick={() => formik.setFieldValue("paidby", "Cash")}>
+                            <button
+                              type="submit"
+                              className="btn btn-pay btn-lg w-100 p-3"
+                              disabled={loading}
+                              onClick={() => {
+                                formik.setFieldValue("is_stripe", 0);
+                                formik.setFieldValue("paidby", "Cash");
+                              }}
+                            >
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
                               {t("Paid by Cash")}
                             </button>
                           </div>
                           <div className="col-4">
-                            <button type="submit" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading}>
+                            <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
                               {loading && <span className="spinner-border spinner-border-sm"></span>}
                               {t("Pay by Voucher")}
                             </button>
@@ -603,6 +677,7 @@ const SaleCheckoutForm = (props) => {
         }}
       </Formik>
       {isOpenCardPaymentForm && <CardPaymentForm />}
+      {isOpenedVoucherApplyForm && <VoucherApplyForm client={client} />}
     </React.Fragment>
   );
 };

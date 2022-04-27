@@ -16,7 +16,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, InlineInputField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
 
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, SaleCartUpdate, SaleProductToCartApi } from "../../../store/slices/saleSlice";
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, SaleCartUpdate, SaleProductToCartApi, SaleSubscriptionRemoveToCart } from "../../../store/slices/saleSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -30,7 +30,7 @@ const SaleAddForm = (props) => {
   const scriptedRef = useScriptRef();
 
   const isRangeInfo = props.isRangeInfo;
-  
+
   const isSearchListClient = useSelector((state) => state.client.isSearchList);
   const isSearchNameClient = useSelector((state) => state.client.isSearchName);
   const isSearchObjClient = useSelector((state) => state.client.isSearchObj);
@@ -38,12 +38,12 @@ const SaleAddForm = (props) => {
   const appointmentDetail = props.appointmentDetail;
 
   const isCart = useSelector((state) => state.sale.isCart);
-  
+
   const initialValues = {
     client_id: "",
     client_name: "",
     // notes: "",
-    cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [] },
+    cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [], subscription: [] },
     appointment_id: "",
     cost: "",
     eventdate: "",
@@ -89,6 +89,12 @@ const SaleAddForm = (props) => {
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
           cost: Yup.string().trim().label(t("Cost Price")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
+        }),
+      ),
+      subscription: Yup.array().of(
+        Yup.object().shape({
+          id: Yup.string().trim().label(t("ID")).required().test("Digits only", t("The field should have digits only"), digitOnly).required(),
+          amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
         }),
       ),
     }),
@@ -257,6 +263,14 @@ const SaleAddForm = (props) => {
                 formik.setFieldValue("cart[membership][" + item + "][cost]", String(cost));
               });
             }
+            if (isCart && isCart.subscription.length > 0) {
+              Object.keys(isCart.subscription).map((item) => {
+                let id = isCart.subscription[item].id;
+                let amount = isCart.subscription[item].amount;
+                formik.setFieldValue("cart[subscription][" + item + "][id]", id);
+                formik.setFieldValue("cart[subscription][" + item + "][amount]", String(amount));
+              });
+            }
             if (appointmentDetail) {
               formik.setFieldValue("appointmentDetail", appointmentDetail);
               formik.setFieldValue("client_id", appointmentDetail.client && appointmentDetail.client.id);
@@ -353,7 +367,7 @@ const SaleAddForm = (props) => {
                 )}
                 <InputField type="hidden" name="client_id" id="saleForm-client_id" value={formik.values.client_id} />
               </div>
-              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.onoffvouchers.length > 0 || isCart.membership.length > 0)) ? (
+              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.onoffvouchers.length > 0 || isCart.membership.length > 0 || isCart.subscription.length > 0)) ? (
                 <div className="p-4 newsale-probox">
                   {appointmentDetail && (
                     <div className="product-box mt-0 mb-3">
@@ -643,6 +657,49 @@ const SaleAddForm = (props) => {
                                     <h4 className="mb-0 fw-semibold">{ucfirst(membership_name)}</h4>
                                   </div>
                                   <h4 className="col-3 mb-0 text-end">${membership_price}</h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {isCart &&
+                    isCart.subscription.length > 0 &&
+                    Object.keys(isCart.subscription).map((item) => {
+                      let subscription_id = isCart.subscription[item].id;
+                      let subscription_name = isCart.subscription[item].name;
+                      let subscription_price = isCart.subscription[item].amount;
+
+                      totalprice += isNaN(parseFloat(subscription_price)) === false && parseFloat(subscription_price);
+                      let image_url = config.imagepath + "subscription.png";
+                      return (
+                        <div className="membership-box mt-0 mb-3 ps-2" key={item}>
+                          <div className="membership-header" id="#checkout-probox">
+                            <a
+                              className="close d-block cursor-pointer"
+                              onClick={() => {
+                                dispatch(SaleSubscriptionRemoveToCart({ id: subscription_id }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, subscription: formik.values.cart.subscription && formik.values.cart.subscription.length > 0 ? formik.values.cart.subscription.filter((item) => item.id != subscription_id) : [] } });
+                              }}
+                            >
+                              <i className="fal fa-times"></i>
+                            </a>
+                            <div className="d-flex">
+                              <div className="pro-img align-self-center">
+                                <div className="user">
+                                  <a data-fancybox="" data-src={image_url}>
+                                    <img src={image_url} alt="" className="object-fit-none h-20 w-auto px-2" />
+                                  </a>
+                                </div>
+                              </div>
+                              <div className="pro-content align-self-center">
+                                <div className="row">
+                                  <div className="col-9">
+                                    <h4 className="mb-0 fw-semibold">{ucfirst(subscription_name)}</h4>
+                                  </div>
+                                  <h4 className="col-3 mb-0 text-end">${subscription_price}</h4>
                                 </div>
                               </div>
                             </div>

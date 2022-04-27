@@ -529,5 +529,9 @@
     "Frequency of Payment and Services": "Frequency of Payment and Services",
     "Choose how often the subscription repeats. Note, payment will automatically be taken and the services will reset at this interval.": "Choose how often the subscription repeats. Note, payment will automatically be taken and the services will reset at this interval.",
     "Paid by Stripe (Credit Card)": "Paid by Stripe (Credit Card)",
-    "New Sale - Pay with Stripe (Credit Card)": "New Sale - Pay with Stripe (Credit Card)"
+    "New Sale - Pay with Stripe (Credit Card)": "New Sale - Pay with Stripe (Credit Card)",
+    "Voucher Code": "Voucher Code",
+    "Apply": "Apply",
+    "Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.": "Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.",
+    "No subscription have been added yet.": "No subscription have been added yet."
 }

@@ -252,7 +252,7 @@ const subscription = (values) => {
   const auth_key = auth.user.auth_key;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  let subscription_id = values && values.membership_id ? values.membership_id : "";
+  let subscription_id = values && values.subscription_id ? values.subscription_id : "";
   let q = values && values.q ? values.q : "";
   const action = page ? `afterlogin/sale/subscription?page=${page}&subscription_id=${subscription_id}&q=${q}` : `afterlogin/sale/subscription?subscription_id=${subscription_id}&q=${q}`;
   const data = {
@@ -296,7 +296,19 @@ const sendEmailInvoice = (values) => {
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
-
+const voucherapply = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const formData = new FormData();
+  for (let value in values) {
+    formData.append(value, values[value]);
+  }
+  const action = "afterlogin/sale/voucherapply";
+  formData.append("auth_key", auth_key);
+  formData.append("action", action);
+  formData.append("salon_id", auth.user.salon_id);
+  return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
+};
 const saleApiController = {
   create,
   update,
@@ -311,6 +323,7 @@ const saleApiController = {
   invoiceview,
   createinvoiceview,
   clientsuggetionlist,
-  sendEmailInvoice
+  sendEmailInvoice,
+  voucherapply,
 };
 export default saleApiController;
