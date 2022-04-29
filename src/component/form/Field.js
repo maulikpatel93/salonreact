@@ -48,7 +48,11 @@ const InlineInputField = ({ label, controlId, ...props }) => {
         <Form.Label className="mb-0 me-3">{label}</Form.Label>
         {field.name === "phone_number" || field.name === "business_phone_number" || field.name === "duration" ? <Form.Control as={InputMask} {...field} {...props} isInvalid={meta.touched && !!meta.error} id={controlId} /> : <Form.Control {...field} {...props} isInvalid={meta.touched && !!meta.error} id={controlId} />}
       </div>
-      {meta.touched && <Form.Control.Feedback type="invalid" className="d-block">{meta.error}</Form.Control.Feedback>}
+      {meta.touched && (
+        <Form.Control.Feedback type="invalid" className="d-block">
+          {meta.error}
+        </Form.Control.Feedback>
+      )}
     </>
   );
 };
@@ -207,7 +211,7 @@ const InputFieldImage = ({ label, controlId, page, ...props }) => {
         ""
       )}
 
-      {page === "supplier-form" || page === "product-form" ? (
+      {page === "supplier-form" || page === "product-form" || page === "business-form" ? (
         <>
           <Form.Group className="" controlId={controlId}>
             <div className="input-file position-relative d-flex align-content-center flex-wrap justify-content-center ms-lg-5">

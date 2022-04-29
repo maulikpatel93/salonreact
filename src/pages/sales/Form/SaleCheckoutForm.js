@@ -684,5 +684,6 @@ const SaleCheckoutForm = (props) => {
 SaleCheckoutForm.propTypes = {
   appointmentDetail: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
   isRangeInfo: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  amount: PropTypes.string,
 };
 export default SaleCheckoutForm;

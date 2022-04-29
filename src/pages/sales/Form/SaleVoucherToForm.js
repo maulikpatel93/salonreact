@@ -129,7 +129,7 @@ const SaleVoucherToForm = (props) => {
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
                     <h3 className="mb-0 fw-semibold">{voucher ? voucher.name : t("One-Off Voucher")}</h3>
                     <div className="ms-auto">
-                      <a className="close btn me-1 cursor-pointer" onClick={handleCloseVoucherToForm}>
+                      <a className="close btn btn-primary me-1 cursor-pointer" onClick={handleCloseVoucherToForm}>
                         {t("Cancel")}
                       </a>
                     </div>

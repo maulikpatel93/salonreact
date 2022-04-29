@@ -3131,7 +3131,6 @@ table .pro-title {
     background-color: #fff;
     border-left: 1px solid #eee;
     height: 100%;
-    display: none;
 }
 
 .ac-setup .acsetup-right .tab-content .tab-pane {
@@ -3696,6 +3695,10 @@ body .border-block {
 
 
 /* newsale-payment-btn */
+
+.box-image-cover.listsetup img {
+    width: 100px;
+}
 
 
 /* Media query */

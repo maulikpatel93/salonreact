@@ -32,6 +32,7 @@ import stripeReducer from "../store/slices/stripeSlice";
 import clientmembershipReducer from "../store/slices/clientmembershipSlice";
 import clientsubscriptionReducer from "../store/slices/clientsubscriptionSlice";
 import settingReducer from "../store/slices/settingSlice";
+import businessReducer from "../store/slices/businessSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -63,6 +64,17 @@ const reducer = combineReducers({
     signupReducer,
   ),
   message: messageReducer,
+  business: persistReducer(
+    {
+      key: "business",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    businessReducer,
+  ),
   client: persistReducer(
     {
       key: "client",

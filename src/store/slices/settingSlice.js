@@ -12,12 +12,12 @@ const settingSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    openPhotoDrawer: (state) => {
-      state.isPhotoDrawer = "open";
-    }
+    SettingTabGridView: (state, action) => {
+      state.isTabView = action.payload;
+    },
   },
   extraReducers: {},
 });
 // Action creators are generated for each case reducer function
-export const { reset } = settingSlice.actions;
+export const { reset, SettingTabGridView } = settingSlice.actions;
 export default settingSlice.reducer;

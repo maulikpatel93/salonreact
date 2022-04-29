@@ -36,7 +36,7 @@ const SaleSubscriptionGridView = (props) => {
             );
           } else {
             return (
-              <div className="col-md-6 text-center mb-3" key={i}>
+              <div className="col-md-6 text-center mb-3 cursor-pointer" key={i}>
                 <a id="invoice-link" className="d-block subscription-box cursor-pointer" data-id={id} data-obj={JSON.stringify(objectData[item])} onClick={handleSubscriptionClick}>
                   <h5 className="mb-1 fw-semibold">{name}</h5>
                   <h6 className="mb-0">{`$${amount}`}</h6>

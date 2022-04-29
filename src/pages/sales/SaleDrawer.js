@@ -37,7 +37,11 @@ const SaleDrawer = (props) => {
   const isOpenedVoucherToForm = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isOpenedCheckoutForm = useSelector((state) => state.sale.isOpenedCheckoutForm);
   const isCartCheckout = useSelector((state) => state.sale.isCart);
-
+  const isCartSubscription = useSelector((state) => state.sale.isCart.subscription);
+  const isCartServices = useSelector((state) => state.sale.isCart.services);
+  const isCartProducts = useSelector((state) => state.sale.isCart.products);
+  const isCartVouchers = useSelector((state) => state.sale.isCart.vouchers);
+  const isCartMembership = useSelector((state) => state.sale.isCart.membership);
   useEffect(() => {
     const isCartCount = [];
     if (isCartCheckout) {
@@ -288,103 +292,134 @@ const SaleDrawer = (props) => {
                   <div className="container">
                     <div className="tab-content px-md-2 py-md-4 py-3">
                       <div className={"tab-pane" + (tabview && tabview === "services" ? " show active" : "")} id="services">
-                        <InfiniteScroll className="" dataLength={isServices && isServices.data && isServices.data.length ? isServices.data.length : "0"} next={fetchDataSaleService} scrollableTarget="services" hasMore={isServices.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <SaleServiceListView view={isServices} searchname={isServiceSearchName} />
-                          {!isFetchingServices && isServices.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreServices} className="btn btn-primary">
-                                {t("More")}
-                              </button>
-                            </div>
-                          )}
-                        </InfiniteScroll>
+                        {isCartSubscription.length > 0 ? (
+                          <div className="alert d-flex align-items-center p-4">
+                            <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
+                            <h5 className="mb-0">{t("Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.")}</h5>
+                          </div>
+                        ) : (
+                          <InfiniteScroll className="" dataLength={isServices && isServices.data && isServices.data.length ? isServices.data.length : "0"} next={fetchDataSaleService} scrollableTarget="services" hasMore={isServices.next_page_url ? true : false} loader={<PaginationLoader />}>
+                            <SaleServiceListView view={isServices} searchname={isServiceSearchName} />
+                            {!isFetchingServices && isServices.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreServices} className="btn btn-primary">
+                                  {t("More")}
+                                </button>
+                              </div>
+                            )}
+                          </InfiniteScroll>
+                        )}
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "products" ? " show active" : "")} id="product">
-                        <InfiniteScroll className="" dataLength={isProducts && isProducts.data && isProducts.data.length ? isProducts.data.length : "0"} next={fetchDataSaleProduct} scrollableTarget="product" hasMore={isProducts.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <div className="table-responsive bg-white">
-                            <table className="table table-hover mb-0">
-                              <tbody>
-                                <SaleProductListView view={isProducts} />
-                                {isProducts.length <= 0 && (
-                                  <tr className="">
-                                    <td colSpan={2}>{t("No data found")}</td>
-                                  </tr>
-                                )}
-                              </tbody>
-                            </table>
+                        {isCartSubscription.length > 0 ? (
+                          <div className="alert d-flex align-items-center p-4">
+                            <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
+                            <h5 className="mb-0">{t("Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.")}</h5>
                           </div>
-                          {!isFetchingProducts && isProducts.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreProducts} className="btn btn-primary">
-                                {t("More")}
-                              </button>
+                        ) : (
+                          <InfiniteScroll className="" dataLength={isProducts && isProducts.data && isProducts.data.length ? isProducts.data.length : "0"} next={fetchDataSaleProduct} scrollableTarget="product" hasMore={isProducts.next_page_url ? true : false} loader={<PaginationLoader />}>
+                            <div className="table-responsive bg-white">
+                              <table className="table table-hover mb-0">
+                                <tbody>
+                                  <SaleProductListView view={isProducts} />
+                                  {isProducts.length <= 0 && (
+                                    <tr className="">
+                                      <td colSpan={2}>{t("No data found")}</td>
+                                    </tr>
+                                  )}
+                                </tbody>
+                              </table>
                             </div>
-                          )}
-                        </InfiniteScroll>
+                            {!isFetchingProducts && isProducts.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreProducts} className="btn btn-primary">
+                                  {t("More")}
+                                </button>
+                              </div>
+                            )}
+                          </InfiniteScroll>
+                        )}
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "vouchers" ? " show active" : "")} id="vouchers">
-                        <InfiniteScroll className="row pt-3" dataLength={isVouchers && isVouchers.data && isVouchers.data.length ? isVouchers.data.length : "0"} next={fetchDataSaleVoucher} scrollableTarget="vouchers" hasMore={isVouchers.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <SaleVoucherGridView view={isVouchers} />
-                          {isVouchers.length <= 0 && (
-                            <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                              <div className="complete-box-wrp text-center ">
-                                <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-                                <h4 className="mb-2 fw-semibold">{t("No vouchers have been added yet.")}</h4>
+                        {isCartSubscription.length > 0 ? (
+                          <div className="alert d-flex align-items-center p-4">
+                            <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
+                            <h5 className="mb-0">{t("Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.")}</h5>
+                          </div>
+                        ) : (
+                          <InfiniteScroll className="row pt-3" dataLength={isVouchers && isVouchers.data && isVouchers.data.length ? isVouchers.data.length : "0"} next={fetchDataSaleVoucher} scrollableTarget="vouchers" hasMore={isVouchers.next_page_url ? true : false} loader={<PaginationLoader />}>
+                            <SaleVoucherGridView view={isVouchers} />
+                            {isVouchers.length <= 0 && (
+                              <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                                <div className="complete-box-wrp text-center ">
+                                  <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                                  <h4 className="mb-2 fw-semibold">{t("No vouchers have been added yet.")}</h4>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {!isFetchingVouchers && isVouchers.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreVouchers} className="btn btn-primary">
-                                {t("More")}
-                              </button>
-                            </div>
-                          )}
-                        </InfiniteScroll>
-                      </div>
-                      <div className={"tab-pane" + (tabview && tabview === "subscriptions" ? " show active" : "")} id="subscriptions">
-                        <div className="alert d-flex align-items-center p-4">
-                          <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
-                          <h5 className="mb-0">{t("Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.")}</h5>
-                        </div>
-                        <InfiniteScroll className="row" dataLength={isSubscription && isSubscription.data && isSubscription.data.length ? isSubscription.data.length : "0"} next={fetchDataSaleSubscription} scrollableTarget="subscriptions" hasMore={isSubscription.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <SaleSubscriptionGridView view={isSubscription} />
-                          {isSubscription.length <= 0 && (
-                            <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                              <div className="complete-box-wrp text-center ">
-                                <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" />
-                                <h4 className="mb-2 fw-semibold">{t("No subscription have been added yet.")}</h4>
+                            )}
+                            {!isFetchingVouchers && isVouchers.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreVouchers} className="btn btn-primary">
+                                  {t("More")}
+                                </button>
                               </div>
-                            </div>
-                          )}
-                          {!isFetchingSubscription && isSubscription.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreSubscription} className="btn btn-primary">
-                                {t("More")}
-                              </button>
-                            </div>
-                          )}
-                        </InfiniteScroll>
+                            )}
+                          </InfiniteScroll>
+                        )}
                       </div>
                       <div className={"tab-pane" + (tabview && tabview === "memberships" ? " show active" : "")} id="memberships">
-                        <InfiniteScroll className="row" dataLength={isMembership && isMembership.data && isMembership.data.length ? isMembership.data.length : "0"} next={fetchDataSaleMembership} scrollableTarget="memberships" hasMore={isMembership.next_page_url ? true : false} loader={<PaginationLoader />}>
-                          <SaleMembershipGridView view={isMembership} />
-                          {isMembership.length <= 0 && (
-                            <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
-                              <div className="complete-box-wrp text-center ">
-                                <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
-                                <h4 className="mb-2 fw-semibold">{t("No membership have been added yet.")}</h4>
+                        {isCartSubscription.length > 0 ? (
+                          <div className="alert d-flex align-items-center p-4">
+                            <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
+                            <h5 className="mb-0">{t("Service, product,  voucher or membership cannot be purchased in the same sale as a subscriptions. Please create a new sale for a service, product,  voucher or membership.")}</h5>
+                          </div>
+                        ) : (
+                          <InfiniteScroll className="row" dataLength={isMembership && isMembership.data && isMembership.data.length ? isMembership.data.length : "0"} next={fetchDataSaleMembership} scrollableTarget="memberships" hasMore={isMembership.next_page_url ? true : false} loader={<PaginationLoader />}>
+                            <SaleMembershipGridView view={isMembership} />
+                            {isMembership.length <= 0 && (
+                              <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                                <div className="complete-box-wrp text-center ">
+                                  <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
+                                  <h4 className="mb-2 fw-semibold">{t("No membership have been added yet.")}</h4>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {!isFetchingMembership && isMembership.next_page_url && (
-                            <div className="col-2 m-auto p-3 text-center">
-                              <button onClick={loadMoreMembership} className="btn btn-primary">
-                                {t("More")}
-                              </button>
-                            </div>
-                          )}
-                        </InfiniteScroll>
+                            )}
+                            {!isFetchingMembership && isMembership.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreMembership} className="btn btn-primary">
+                                  {t("More")}
+                                </button>
+                              </div>
+                            )}
+                          </InfiniteScroll>
+                        )}
+                      </div>
+                      <div className={"tab-pane" + (tabview && tabview === "subscriptions" ? " show active" : "")} id="subscriptions">
+                        {isCartServices.length > 0 || isCartProducts.length > 0 || isCartVouchers.length > 0 || isCartMembership.length > 0 || isAppointmentDetail !== "" ? (
+                          <div className="alert d-flex align-items-center p-4">
+                            <i className="fas fa-exclamation-triangle text-primary fa-lg me-3"></i>
+                            <h5 className="mb-0">{t("Subscriptions cannot be purchased in the same sale as a service, product,  voucher or membership. Please create a new sale for a subscription.")}</h5>
+                          </div>
+                        ) : (
+                          <InfiniteScroll className="row" dataLength={isSubscription && isSubscription.data && isSubscription.data.length ? isSubscription.data.length : "0"} next={fetchDataSaleSubscription} scrollableTarget="subscriptions" hasMore={isSubscription.next_page_url ? true : false} loader={<PaginationLoader />}>
+                            <SaleSubscriptionGridView view={isSubscription} />
+                            {isSubscription.length <= 0 && (
+                              <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
+                                <div className="complete-box-wrp text-center ">
+                                  <img src={config.imagepath + "subscription.png"} alt="" className="mb-md-4 mb-3" />
+                                  <h4 className="mb-2 fw-semibold">{t("No subscription have been added yet.")}</h4>
+                                </div>
+                              </div>
+                            )}
+                            {!isFetchingSubscription && isSubscription.next_page_url && (
+                              <div className="col-2 m-auto p-3 text-center">
+                                <button onClick={loadMoreSubscription} className="btn btn-primary">
+                                  {t("More")}
+                                </button>
+                              </div>
+                            )}
+                          </InfiniteScroll>
+                        )}
                       </div>
                     </div>
                   </div>

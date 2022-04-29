@@ -143,7 +143,7 @@ const VoucherAddForm = (props) => {
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
                     <h3 className="mb-0 fw-semibold">{t("New Voucher")}</h3>
                     <div className="ms-auto">
-                      <a className="close btn me-1 cursor-pointer" onClick={handleCloseAddVoucherForm}>
+                      <a className="close btn btn-primary me-1 cursor-pointer" onClick={handleCloseAddVoucherForm}>
                         {t("Cancel")}
                       </a>
                       <button type="submit" className="btn btn-primary" disabled={loading}>

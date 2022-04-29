@@ -173,7 +173,7 @@ const ServiceAddForm = () => {
                   <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
                     <h3 className="mb-0 fw-semibold">{t("New Service")}</h3>
                     <div className="ms-auto">
-                      <button type="button" className="close btn me-1 cursor-pointer" onClick={handleCloseAddServiceForm}>
+                      <button type="button" className="close btn btn-primary me-1 cursor-pointer" onClick={handleCloseAddServiceForm}>
                         {t("Cancel")}
                       </button>
                       <button type="submit" className="btn btn-primary" disabled={loading}>

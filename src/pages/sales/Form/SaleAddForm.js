@@ -199,70 +199,6 @@ const SaleAddForm = (props) => {
             if (isSearchObjClient) {
               formik.setFieldValue("client", isSearchObjClient);
             }
-            if (isCart && isCart.services.length > 0) {
-              Object.keys(isCart.services).map((item) => {
-                let service_id = isCart.services[item].id;
-                let staff = isCart.services[item].staff;
-                let gprice = isCart.services[item].gprice ? isCart.services[item].gprice : "";
-                // let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice > 0 ? formik.values.cart.services[item].gprice : gprice;
-                // let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
-                formik.setFieldValue("cart[services][" + item + "][id]", service_id);
-                formik.setFieldValue("cart[services][" + item + "][staff_id]", staff && staff.id ? staff.id : "");
-                formik.setFieldValue("cart[services][" + item + "][gprice]", String(gprice));
-              });
-            }
-            if (isCart && isCart.products.length > 0) {
-              Object.keys(isCart.products).map((item) => {
-                let product_id = isCart.products[item].id;
-                let product_cost_price = isCart.products[item].cost_price;
-                let qty = isCart.products[item].qty;
-                // let formik_cart_products_qty = formik.values.cart && formik.values.cart.products.length > 0 && formik.values.cart.products[item] && formik.values.cart.products[item].qty ? formik.values.cart.products[item].qty : qty;
-                let product_price = qty > 0 ? parseInt(qty) * parseFloat(product_cost_price) : product_cost_price;
-                totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
-                formik.setFieldValue("cart[products][" + item + "][id]", product_id);
-                formik.setFieldValue("cart[products][" + item + "][qty]", qty);
-                formik.setFieldValue("cart[products][" + item + "][cost_price]", product_cost_price);
-              });
-            }
-            if (isCart && isCart.vouchers.length > 0) {
-              Object.keys(isCart.vouchers).map((item) => {
-                let voucher_id = isCart.vouchers[item].id;
-                let amount = isCart.vouchers[item].amount;
-                let code = isCart.vouchers[item].code;
-                let voucher_to = isCart.vouchers[item].voucher_to;
-                formik.setFieldValue("cart[vouchers][" + item + "][id]", voucher_id);
-                formik.setFieldValue("cart[vouchers][" + item + "][code]", String(code));
-                formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(amount));
-                formik.setFieldValue("cart[vouchers][" + item + "][voucher_to]", voucher_to);
-              });
-            }
-
-            if (isCart && isCart.onoffvouchers.length > 0) {
-              Object.keys(isCart.onoffvouchers).map((item) => {
-                let id = isCart.onoffvouchers[item].id;
-                let first_name = isCart.onoffvouchers[item].first_name;
-                let last_name = isCart.onoffvouchers[item].last_name;
-                let is_send = isCart.onoffvouchers[item].is_send;
-                let email = isCart.onoffvouchers[item].email;
-                let amount = isCart.onoffvouchers[item].amount;
-                let message = isCart.onoffvouchers[item].message;
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][id]", id ? id : "");
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][is_send]", is_send);
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][email]", email);
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][amount]", String(amount));
-                formik.setFieldValue("cart[onoffvouchers][" + item + "][message]", message);
-              });
-            }
-            if (isCart && isCart.membership.length > 0) {
-              Object.keys(isCart.membership).map((item) => {
-                let id = isCart.membership[item].id;
-                let cost = isCart.membership[item].cost;
-                formik.setFieldValue("cart[membership][" + item + "][id]", id);
-                formik.setFieldValue("cart[membership][" + item + "][cost]", String(cost));
-              });
-            }
             if (isCart && isCart.subscription.length > 0) {
               Object.keys(isCart.subscription).map((item) => {
                 let id = isCart.subscription[item].id;
@@ -270,16 +206,82 @@ const SaleAddForm = (props) => {
                 formik.setFieldValue("cart[subscription][" + item + "][id]", id);
                 formik.setFieldValue("cart[subscription][" + item + "][amount]", String(amount));
               });
-            }
-            if (appointmentDetail) {
-              formik.setFieldValue("appointmentDetail", appointmentDetail);
-              formik.setFieldValue("client_id", appointmentDetail.client && appointmentDetail.client.id);
-              formik.setFieldValue("appointment_id", appointmentDetail.id);
-              formik.setFieldValue("eventdate", appointmentDetail.showdate);
-              formik.setFieldValue("cost", appointmentDetail ? isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost) : "");
-              // dispatch(ClientSearchName(appointmentDetail.client && ));
-              dispatch(ClientSearchObj(appointmentDetail.client));
-              dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
+            } else {
+              if (isCart && isCart.services.length > 0) {
+                Object.keys(isCart.services).map((item) => {
+                  let service_id = isCart.services[item].id;
+                  let staff = isCart.services[item].staff;
+                  let gprice = isCart.services[item].gprice ? isCart.services[item].gprice : "";
+                  // let formik_cart_service_gprice = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].gprice > 0 ? formik.values.cart.services[item].gprice : gprice;
+                  // let formik_cart_service_staff_id = formik.values.cart && formik.values.cart.services.length > 0 && formik.values.cart.services[item] && formik.values.cart.services[item].staff_id ? formik.values.cart.services[item].staff_id : "";
+                  formik.setFieldValue("cart[services][" + item + "][id]", service_id);
+                  formik.setFieldValue("cart[services][" + item + "][staff_id]", staff && staff.id ? staff.id : "");
+                  formik.setFieldValue("cart[services][" + item + "][gprice]", String(gprice));
+                });
+              }
+              if (isCart && isCart.products.length > 0) {
+                Object.keys(isCart.products).map((item) => {
+                  let product_id = isCart.products[item].id;
+                  let product_cost_price = isCart.products[item].cost_price;
+                  let qty = isCart.products[item].qty;
+                  // let formik_cart_products_qty = formik.values.cart && formik.values.cart.products.length > 0 && formik.values.cart.products[item] && formik.values.cart.products[item].qty ? formik.values.cart.products[item].qty : qty;
+                  let product_price = qty > 0 ? parseInt(qty) * parseFloat(product_cost_price) : product_cost_price;
+                  totalprice += isNaN(parseFloat(product_price)) === false && parseFloat(product_price);
+                  formik.setFieldValue("cart[products][" + item + "][id]", product_id);
+                  formik.setFieldValue("cart[products][" + item + "][qty]", qty);
+                  formik.setFieldValue("cart[products][" + item + "][cost_price]", product_cost_price);
+                });
+              }
+              if (isCart && isCart.vouchers.length > 0) {
+                Object.keys(isCart.vouchers).map((item) => {
+                  let voucher_id = isCart.vouchers[item].id;
+                  let amount = isCart.vouchers[item].amount;
+                  let code = isCart.vouchers[item].code;
+                  let voucher_to = isCart.vouchers[item].voucher_to;
+                  formik.setFieldValue("cart[vouchers][" + item + "][id]", voucher_id);
+                  formik.setFieldValue("cart[vouchers][" + item + "][code]", String(code));
+                  formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(amount));
+                  formik.setFieldValue("cart[vouchers][" + item + "][voucher_to]", voucher_to);
+                });
+              }
+
+              if (isCart && isCart.onoffvouchers.length > 0) {
+                Object.keys(isCart.onoffvouchers).map((item) => {
+                  let id = isCart.onoffvouchers[item].id;
+                  let first_name = isCart.onoffvouchers[item].first_name;
+                  let last_name = isCart.onoffvouchers[item].last_name;
+                  let is_send = isCart.onoffvouchers[item].is_send;
+                  let email = isCart.onoffvouchers[item].email;
+                  let amount = isCart.onoffvouchers[item].amount;
+                  let message = isCart.onoffvouchers[item].message;
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][id]", id ? id : "");
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][is_send]", is_send);
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][email]", email);
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][amount]", String(amount));
+                  formik.setFieldValue("cart[onoffvouchers][" + item + "][message]", message);
+                });
+              }
+              if (isCart && isCart.membership.length > 0) {
+                Object.keys(isCart.membership).map((item) => {
+                  let id = isCart.membership[item].id;
+                  let cost = isCart.membership[item].cost;
+                  formik.setFieldValue("cart[membership][" + item + "][id]", id);
+                  formik.setFieldValue("cart[membership][" + item + "][cost]", String(cost));
+                });
+              }
+
+              if (appointmentDetail) {
+                formik.setFieldValue("appointmentDetail", appointmentDetail);
+                formik.setFieldValue("client_id", appointmentDetail.client && appointmentDetail.client.id);
+                formik.setFieldValue("appointment_id", appointmentDetail.id);
+                formik.setFieldValue("eventdate", appointmentDetail.showdate);
+                formik.setFieldValue("cost", appointmentDetail ? isNaN(parseFloat(appointmentDetail.cost)) === false && parseFloat(appointmentDetail.cost) : "");
+                // dispatch(ClientSearchName(appointmentDetail.client && ));
+                dispatch(ClientSearchObj(appointmentDetail.client));
+                dispatch(ClientSearchName(appointmentDetail.client && ucfirst(appointmentDetail.client.first_name + " " + appointmentDetail.client.last_name)));
+              }
             }
           }, [isCart, appointmentDetail, isSearchObjClient]);
           let totalprice = 0;
