@@ -19,6 +19,7 @@ import { ClientnoteGridViewApi } from "store/slices/clientnoteSlice";
 import { checkaccess } from "helpers/functions";
 import { ClientAppointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
 import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice";
+import { ClientInvoiceListViewApi } from "store/slices/clientinvoiceSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -175,6 +176,7 @@ const ClientDetailModal = () => {
                     role="tab"
                     onClick={() => {
                       dispatch(ClientDetailTab("invoices"));
+                      dispatch(ClientInvoiceListViewApi({ client_id: detail.id }));
                     }}
                   >
                     {t("Invoices")}
@@ -298,17 +300,7 @@ const ClientDetailModal = () => {
                   </div>
                 )}
                 <div className={"tab-pane fade" + (detailTab && detailTab == "invoices" ? " show active" : "")} id="invoices-tab" role="tabpanel" aria-labelledby="invoices-tab">
-                  <div className="drawer-header">
-                    <h2 className="mb-4 pe-md-5 mb-lg-5">
-                      {t("Invoices")}
-                      <a href="#" className="btn btn-outline btn-sm ms-2">
-                        {t("Print Statement")}
-                      </a>
-                    </h2>
-                  </div>
-                  <div className="content-wrp">
-                    <Invoices />
-                  </div>
+                  {detailTab && detailTab == "invoices" && <Invoices role_id={role_id} access={access} />}
                 </div>
                 {checkaccess({ name: "list", role_id: role_id, controller: "clientdocuments", access }) && (
                   <div className={"tab-pane fade" + (detailTab && detailTab == "documents" ? " show active" : "")} id="documents-tab" role="tabpanel" aria-labelledby="documents-tab">

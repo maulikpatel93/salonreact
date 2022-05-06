@@ -8,6 +8,7 @@ import { SettingTabGridView } from "store/slices/settingSlice";
 import BusinessDetailForm from "./Form/BusinessDetailForm";
 import Integration from "./List/Integration";
 import StripeSetupForm from "pages/account/Form/StripeSetupForm";
+import Closeddate from "./List/Closeddate";
 
 const Setting = () => {
   SalonModule();
@@ -20,7 +21,7 @@ const Setting = () => {
   }, []);
   return (
     <>
-      <div className="page-content ac-setup-page">
+      <div className="page-content ac-setup-page" id={"page-content-" + tabview}>
         <div className="d-flex align-items-start ac-setup">
           <div className="nav flex-column nav-pills acsetup-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <button className={"nav-link cursor-pointer" + (tabview && tabview == "businessdetails" ? " active" : "")} id="v-pills-businessdetails-tab" data-bs-toggle="pill" data-bs-target="#v-pills-businessdetails" type="button" role="tab" aria-controls="v-pills-businessdetails" aria-selected="true" onClick={() => dispatch(SettingTabGridView("businessdetails"))}>
@@ -146,7 +147,9 @@ const Setting = () => {
               <div className={"tab-pane fade " + (tabview && tabview == "businessdetails" ? " show active" : "")} id="v-pills-businessdetails" role="tabpanel" aria-labelledby="v-pills-businessdetails-tab">
                 {tabview && tabview == "businessdetails" && <BusinessDetailForm />}
               </div>
-              <div className={"tab-pane fade " + (tabview && tabview == "ClosedDates" ? " show active" : "")} id="v-pills-ClosedDates" role="tabpanel" aria-labelledby="v-pills-ClosedDates-tab"></div>
+              <div className={"tab-pane fade " + (tabview && tabview == "ClosedDates" ? " show active" : "")} id="v-pills-ClosedDates" role="tabpanel" aria-labelledby="v-pills-ClosedDates-tab">
+                {tabview && tabview == "ClosedDates" && <Closeddate />}
+              </div>
               <div className={"tab-pane fade " + (tabview && tabview == "ClientNotifications" ? " show active" : "")} id="v-pills-ClientNotifications" role="tabpanel" aria-labelledby="v-pills-ClientNotifications-tab"></div>
               <div className={"tab-pane fade " + (tabview && tabview == "CancellationReasons" ? " show active" : "")} id="v-pills-CancellationReasons" role="tabpanel" aria-labelledby="v-pills-CancellationReasons-tab"></div>
               <div className={"tab-pane fade " + (tabview && tabview == "Permissions" ? " show active" : "")} id="v-pills-Permissions" role="tabpanel" aria-labelledby="v-pills-Permissions-tab"></div>

@@ -8,7 +8,11 @@ const CheckoutForm = (props) => {
   const elements = useElements();
 
   const [errorMessage, setErrorMessage] = useState(null);
-  const amount = props.amount;
+
+  const client = props.client;
+  const isStripePaymentStatus = props.isStripePaymentStatus;
+  const amount = isStripePaymentStatus.amount;
+  console.log(isStripePaymentStatus);
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
@@ -21,6 +25,7 @@ const CheckoutForm = (props) => {
     }
     console.log(elements);
     console.log(stripe.card);
+    console.log(isStripePaymentStatus);
     // await stripe
     //   .createPaymentMethod({
     //     type: "card",
@@ -32,19 +37,26 @@ const CheckoutForm = (props) => {
     //   .then(function (result) {
     //     // Handle result.error or result.paymentMethod
     //   });
-    const { error } = await stripe.confirmPayment({
-      //`Elements` instance that was used to create the Payment Element
-      elements,
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          name: "jgon smith",
+    const { error } = await stripe
+      .confirmPayment({
+        //`Elements` instance that was used to create the Payment Element
+        elements,
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            name: client ? client.first_name + "" + client.last_name : "",
+            email: client ? client.email : "",
+            phone: client ? client.phone_number : "",
+          },
         },
-      },
-      confirmParams: {
-        return_url: "http://localhost:3000/return",
-      },
-    });
+        confirmParams: {
+          return_url: "http://localhost:3000/return",
+        },
+      })
+      .then(function (result) {
+        console.log(result);
+        // Handle result.error or result.paymentIntent
+      });
 
     if (error) {
       // This point will only be reached if there is an immediate error when
@@ -72,6 +84,7 @@ const CheckoutForm = (props) => {
   );
 };
 CheckoutForm.propTypes = {
-  amount: PropTypes.string,
+  isStripePaymentStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+  client: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
 };
 export default CheckoutForm;

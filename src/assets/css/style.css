@@ -79,7 +79,7 @@ h6,
 }
 
 .small {
-    font-size: 12px;
+    font-size: 13px !important;
 }
 
 p {
@@ -318,16 +318,16 @@ textarea.form-control::placeholder {
 }
 
 .btn-cancel {
-    color: #3a3432 !important;
-    background-color: #f4eeeb !important;
-    border-color: #f4eeeb !important;
+    color: #3A3432 !important;
+    background-color: #F4EEEB !important;
+    border-color: #F4EEEB !important;
     padding: 9px 13px !important;
 }
 
 .btn-cancel:hover {
     color: #fff !important;
-    background-color: #8c1c4d !important;
-    border-color: #8c1c4d !important;
+    background-color: #8C1C4D !important;
+    border-color: #8C1C4D !important;
 }
 
 a {
@@ -2086,8 +2086,7 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box,
-.salevoucher-tab .membership-box,
-.salevoucher-tab .subscription-box {
+.salevoucher-tab .membership-box {
     border: 1px solid #d4d4d4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
@@ -2099,8 +2098,7 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box h5,
-.salevoucher-tab .membership-box h5,
-.salevoucher-tab .subscription-box h5 {
+.salevoucher-tab .membership-box h5 {
     font-size: 18px;
 }
 
@@ -3089,11 +3087,11 @@ table .pro-title {
     width: calc(100% - 230px);
     position: relative;
     height: 100%;
+    background-color: #f9f6f4;
 }
 
 .ac-setup .acsetup-right .alltab-box {
     padding: 35px 40px;
-    background-color: #f9f6f4;
     height: 100%;
 }
 
@@ -3125,16 +3123,21 @@ table .pro-title {
     margin: 0 -15px;
 }
 
+.ac-setup .acsetup-right .alltab-box .tabs-image img {
+    width: 70px;
+}
+
 .ac-setup .acsetup-right .tab-content {
     position: relative;
     width: 100%;
-    background-color: #fff;
     border-left: 1px solid #eee;
     height: 100%;
+    background-color: #fff;
 }
 
 .ac-setup .acsetup-right .tab-content .tab-pane {
     padding: 35px 40px;
+    height: 100%;
 }
 
 .ac-setup .acsetup-right .tab-content.open {
@@ -3290,6 +3293,80 @@ table .pro-title {
 }
 
 
+/* 29-04-2022 account tabs start */
+
+.ac-setup .acsetup-right .tab-content .tab-pane#v-pills-ClosedDates {
+    padding: 0;
+    background-color: #f9f6f4;
+}
+
+.ac-setup .acsetup-right #v-pills-ClosedDates .left-content {
+    padding: 35px 40px;
+}
+
+.ac-setup .acsetup-right #v-pills-ClosedDates .right-content {
+    padding: 40px;
+}
+
+.acsetup-right #v-pills-ClosedDates .btn,
+.addclosedate-drawer .drawer-body .btn {
+    border-radius: 2px;
+    font-size: 13px;
+    padding: 10px 21px;
+}
+
+.acsetup-right #v-pills-ClosedDates>.row {
+    height: 100%;
+}
+
+.addclosedate-drawer .close {
+    background-color: #f4eeeb;
+    border-color: #f4eeeb;
+    color: #3a3432;
+}
+
+.addclosedate-drawer .close:hover {
+    background-color: #8c1c4d;
+    border-color: #8c1c4d;
+    color: #fff;
+}
+
+.addclosedate-drawer .drawer-body {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.addclosedate-drawer label {
+    color: #3A3432;
+    font-weight: 500;
+}
+
+.addclosedate-drawer input.date {
+    background-position: 8px center !important;
+    padding-right: 10px !important;
+    padding-left: 35px !important;
+}
+
+.acsetup-right #v-pills-ClosedDates .box-image-cover:last-child {
+    margin-bottom: 0;
+}
+
+#v-pills-ClientNotifications .box-image-cover .active {
+    background-color: #04D37C;
+}
+
+#v-pills-ClientNotifications .box-image-cover .active:hover {
+    background-color: #828df8;
+}
+
+#v-pills-ClientNotifications .box-image-cover span {
+    color: #8F807D;
+}
+
+
+/* 29-04-2022 account tabs end */
+
+
 /* 04/04/2022 New Sale page vouchers box start*/
 
 .voucher-center-box {
@@ -3394,14 +3471,14 @@ table .pro-title {
 
 .event-box-pink {
     color: #374151;
-    background-color: #f9f6f4;
+    background-color: #F9F6F4;
     display: block;
     padding: 15px 24px;
     border-radius: 6px;
 }
 
 .event-box-pink span.active {
-    background-color: #8c1c4d;
+    background-color: #8C1C4D;
     color: #fff;
     font-size: 12px;
 }
@@ -3411,7 +3488,7 @@ table .pro-title {
     font-size: 12px;
     color: #fff;
     border-radius: 4px;
-    background-color: #3a3432;
+    background-color: #3A3432;
     padding: 2px 6px;
     display: inline-block;
     vertical-align: middle;
@@ -3479,7 +3556,8 @@ table .pro-title {
 
 .box-image-cover .edit,
 .box-image-cover .sell,
-.box-image-cover .delete {
+.box-image-cover .delete,
+.box-image-cover .active {
     background-color: #8f807d;
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 4px;
@@ -3502,7 +3580,8 @@ table .pro-title {
 
 .box-image-cover .edit:hover,
 .box-image-cover .sell:hover,
-.box-image-cover .delete:hover {
+.box-image-cover .delete:hover,
+.box-image-cover .active:hover {
     background-color: #828df8;
 }
 
@@ -3696,8 +3775,92 @@ body .border-block {
 
 /* newsale-payment-btn */
 
-.box-image-cover.listsetup img {
-    width: 100px;
+
+/* dashboard page css start */
+
+.dashboard {
+    background-color: #F9F6F4;
+    padding: 45px 35px;
+    min-height: 100%;
+}
+
+.box-common {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+}
+
+.dashboard .left-col .user-box .user-initial {
+    font-size: 18px;
+    overflow: hidden;
+}
+
+.dashboard .user-box .user-initial img {
+    display: block;
+}
+
+.dashboard .user-box:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard .box-col {
+    width: 12.5%;
+}
+
+.dashboard .box-col .box-common {
+    height: 100%;
+}
+
+.dashboard .right-col .box-image-cover .user-initial {
+    height: 124px;
+    width: 124px;
+}
+
+.dashboard .view-report {
+    border-radius: 8px;
+}
+
+.chat-avg sup {
+    font-size: 16px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: #969696;
+    vertical-align: top;
+    top: 0;
+    line-height: 1;
+}
+
+.chat-avg .upvalue {
+    color: #00BA34;
+    font-size: 13px;
+    background-color: #E5F8EB;
+    display: inline-block;
+    border-radius: 6px;
+    vertical-align: top;
+    padding: 5px 8px;
+    font-family: "Inter", sans-serif;
+}
+
+.chat-avg .upvalue i {
+    font-size: 11px;
+}
+
+.dashboard .left-col ul {
+    height: calc(100vh - 255px);
+    overflow-y: auto;
+}
+
+.dashboard .left-col ul::-webkit-scrollbar {
+    width: 14px;
+}
+
+.dashboard .left-col ul::-webkit-scrollbar-track {
+    background: linear-gradient(0deg, #F9F6F4, #F9F6F4), #F9F6F4;
+    border-radius: 12px;
+}
+
+.dashboard .left-col ul::-webkit-scrollbar-thumb {
+    background: linear-gradient(0deg, #F0E5E0, #F0E5E0), #F9F6F4;
+    border-radius: 12px;
 }
 
 
@@ -3769,6 +3932,30 @@ body .border-block {
     }
     .signup-page h1 {
         font-size: 60px;
+    }
+    .dashboard {
+        padding: 45px 25px;
+    }
+    .dashboard .left-col ul::-webkit-scrollbar {
+        width: 8px;
+    }
+    .dashboard .left-col .user-box .user-initial {
+        height: 50px;
+        width: 50px;
+        line-height: 50px;
+    }
+    .dashboard .box-col {
+        width: 25%;
+    }
+    .dashboard .right-col .box-image-cover .user-initial {
+        height: 114px;
+        width: 114px;
+    }
+    .dashboard .time {
+        font-size: 13px;
+    }
+    .dashboard .right-col .box-image-cover h5 {
+        font-size: 15px;
     }
 }
 
@@ -3981,6 +4168,16 @@ body .border-block {
     .newsale-payment-btn .btn {
         font-size: 18px;
         padding: 20px 15px;
+    }
+    .ac-setup .acsetup-right #v-pills-ClosedDates .left-content,
+    .ac-setup .acsetup-right #v-pills-ClosedDates .right-content {
+        padding: 30px;
+    }
+    .acsetup-right #v-pills-ClosedDates>.row {
+        height: auto;
+    }
+    .dashboard .left-col ul {
+        height: 525px;
     }
 }
 
@@ -4698,7 +4895,9 @@ body .border-block {
     .ac-setup .alltab-box .box-image-cover {
         min-height: 140px;
     }
-    .ac-setup .acsetup-right .tab-content .tab-pane {
+    .ac-setup .acsetup-right .tab-content .tab-pane,
+    .ac-setup .acsetup-right #v-pills-ClosedDates .left-content,
+    .ac-setup .acsetup-right #v-pills-ClosedDates .right-content {
         padding: 17px;
     }
     .ac-setup .input-field:not(:last-child) {
@@ -4724,6 +4923,18 @@ body .border-block {
     .form-control.creditcard {
         background-size: 37px, 30px;
         background-position: 81% center, 96% center;
+    }
+    .ac-setup {
+        align-content: flex-start;
+    }
+    .dashboard {
+        padding: 30px 15px;
+    }
+    .dashboard .box-col {
+        width: 50%;
+    }
+    .page-content.dashboard-content {
+        padding-top: 115px;
     }
 }
 
@@ -4759,5 +4970,8 @@ body .border-block {
     }
     .signup-page h1 {
         font-size: 36px;
+    }
+    .page-title {
+        font-size: 17px;
     }
 }

@@ -42,7 +42,7 @@ const Documents = () => {
           {t("Documents")} {checkaccess({ name: "create", role_id: role_id, controller: "clientdocuments", access }) && <DocumentUpload name="document" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("Add Document")} page="client-adddocumentform" controlId="clientForm-document" client_id={detail.id} />}
         </h2>
       </div>
-      <div className="content-wrp">
+      <div className="content-wrp" id="documentlist">
         <InfiniteScroll className="row gx-0" dataLength={documentObjectData && documentObjectData.length ? documentObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="documentlist" hasMore={documentViews.next_page_url ? true : false} loader={<PaginationLoader />}>
           {documentObjectData.length > 0 ? (
             <>

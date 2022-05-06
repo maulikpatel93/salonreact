@@ -7,18 +7,20 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { CloseCardPaymentForm } from "store/slices/saleSlice";
 import config from "../../../config";
 import CheckoutForm from "pages/account/CheckoutForm";
+import PropTypes from "prop-types";
 
 const stripePromise = loadStripe("pk_test_51Ko2rOSFsrov7HTSarhjgTN7nrsYLEVvOKqhMM3lq8b4ZOdIbP5Pj7TgUbZxr9C3apilJAmeSvEH9HcwLWbj6Nw400febhX2Ig", { stripeAccount: "acct_1KsMmFSBtAREZzxu" });
-const CardPaymentForm = () => {
+const CardPaymentForm = (props) => {
   //   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const scriptedRef = useScriptRef();
 
+  const client = props.client;
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenCardPaymentForm);
   const isStripePaymentStatus = useSelector((state) => state.stripe.isStripePaymentStatus);
-  
+
   const options = {
     // passing the client secret obtained in step 2
     clientSecret: isStripePaymentStatus.payment_intent_client_secret,
@@ -45,7 +47,7 @@ const CardPaymentForm = () => {
             <div className="row">
               <div className="col-xl-5 col-lg-8 col-md-12 col-sm-12 m-auto">
                 <Elements stripe={stripePromise} options={options}>
-                  <CheckoutForm amount={isStripePaymentStatus.amount} />
+                  <CheckoutForm isStripePaymentStatus={isStripePaymentStatus} client={client} />
                 </Elements>
               </div>
             </div>
@@ -55,7 +57,7 @@ const CardPaymentForm = () => {
     </React.Fragment>
   );
 };
-// CardPaymentForm.propTypes = {
-//   isSaleCompletedData: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
-// };
+CardPaymentForm.propTypes = {
+  client: PropTypes.oneOfType([PropTypes.node, PropTypes.array, PropTypes.object]),
+};
 export default CardPaymentForm;

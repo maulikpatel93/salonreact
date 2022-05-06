@@ -33,6 +33,9 @@ import clientmembershipReducer from "../store/slices/clientmembershipSlice";
 import clientsubscriptionReducer from "../store/slices/clientsubscriptionSlice";
 import settingReducer from "../store/slices/settingSlice";
 import businessReducer from "../store/slices/businessSlice";
+import clientinvoiceReducer from "../store/slices/clientinvoiceSlice";
+import closedateReducer from "../store/slices/closedateSlice";
+import dashboardReducer from "../store/slices/dashboardSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -64,6 +67,17 @@ const reducer = combineReducers({
     signupReducer,
   ),
   message: messageReducer,
+  dashboard: persistReducer(
+    {
+      key: "dashboard",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    dashboardReducer,
+  ),
   business: persistReducer(
     {
       key: "business",
@@ -140,6 +154,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     clientsubscriptionReducer,
+  ),
+  clientinvoice: persistReducer(
+    {
+      key: "clientinvoice",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    clientinvoiceReducer,
   ),
   product: persistReducer(
     {
@@ -338,6 +363,17 @@ const reducer = combineReducers({
       whitelist: ["isTabView"],
     },
     settingReducer,
+  ),
+  closedate: persistReducer(
+    {
+      key: "closedate",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    closedateReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

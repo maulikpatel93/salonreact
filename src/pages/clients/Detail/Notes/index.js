@@ -54,7 +54,7 @@ const Notes = () => {
           )}
         </h2>
       </div>
-      <div className="content-wrp">
+      <div className="content-wrp" id="notelist">
         <InfiniteScroll className="row gx-0" dataLength={noteObjectData && noteObjectData.length ? noteObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="notelist" hasMore={noteViews.next_page_url ? true : false} loader={<PaginationLoader />}>
           {noteObjectData.length > 0 ? (
             <>

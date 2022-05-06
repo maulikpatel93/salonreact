@@ -612,41 +612,45 @@ const SaleCheckoutForm = (props) => {
                               </button>
                             )}
                           </div>
-                          <div className="col-4">
-                            <button
-                              type="submit"
-                              id="payment-link"
-                              className="btn btn-pay btn-lg w-100 p-3"
-                              disabled={loading}
-                              onClick={() => {
-                                formik.setFieldValue("is_stripe", 0);
-                                formik.setFieldValue("paidby", "CreditCard");
-                              }}
-                            >
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Paid by Credit Card")}
-                            </button>
-                          </div>
-                          <div className="col-4">
-                            <button
-                              type="submit"
-                              className="btn btn-pay btn-lg w-100 p-3"
-                              disabled={loading}
-                              onClick={() => {
-                                formik.setFieldValue("is_stripe", 0);
-                                formik.setFieldValue("paidby", "Cash");
-                              }}
-                            >
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Paid by Cash")}
-                            </button>
-                          </div>
-                          <div className="col-4">
-                            <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
-                              {loading && <span className="spinner-border spinner-border-sm"></span>}
-                              {t("Pay by Voucher")}
-                            </button>
-                          </div>
+                          {isCartForm && isCartForm.subscription.length === 0 && (
+                            <>
+                              <div className="col-4">
+                                <button
+                                  type="submit"
+                                  id="payment-link"
+                                  className="btn btn-pay btn-lg w-100 p-3"
+                                  disabled={loading}
+                                  onClick={() => {
+                                    formik.setFieldValue("is_stripe", 0);
+                                    formik.setFieldValue("paidby", "CreditCard");
+                                  }}
+                                >
+                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                  {t("Paid by Credit Card")}
+                                </button>
+                              </div>
+                              <div className="col-4">
+                                <button
+                                  type="submit"
+                                  className="btn btn-pay btn-lg w-100 p-3"
+                                  disabled={loading}
+                                  onClick={() => {
+                                    formik.setFieldValue("is_stripe", 0);
+                                    formik.setFieldValue("paidby", "Cash");
+                                  }}
+                                >
+                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                  {t("Paid by Cash")}
+                                </button>
+                              </div>
+                              <div className="col-4">
+                                <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
+                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                  {t("Pay by Voucher")}
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                         {/* {isOpenCardPaymentForm ? (
                           <div className="row gy-3 mt-4">
@@ -676,7 +680,7 @@ const SaleCheckoutForm = (props) => {
           );
         }}
       </Formik>
-      {isOpenCardPaymentForm && <CardPaymentForm />}
+      {isOpenCardPaymentForm && <CardPaymentForm client={client} />}
       {isOpenedVoucherApplyForm && <VoucherApplyForm client={client} />}
     </React.Fragment>
   );

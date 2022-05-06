@@ -551,5 +551,17 @@
     "Add Business": "Add Business",
     "Time Zone": "Time Zone",
     "Add Business Logo": "Add Business Logo",
-    "Has already setup": "Has already setup"
+    "Has already setup": "Has already setup",
+    "Pay": "Pay",
+    "Service, product,  voucher or membership cannot be purchased in the same sale as a subscriptions. Please create a new sale for a service, product,  voucher or membership.": "Service, product,  voucher or membership cannot be purchased in the same sale as a subscriptions. Please create a new sale for a service, product,  voucher or membership.",
+    "Add any dates your business will be closed, for example for public holidays, scheduled maintenance, staff training days etc. Bookings will not be able to be placed during these dates.": "Add any dates your business will be closed, for example for public holidays, scheduled maintenance, staff training days etc. Bookings will not be able to be placed during these dates.",
+    "Add Closed Date": "Add Closed Date",
+    "Office Refurbishment": "Office Refurbishment",
+    "Closed From": "Closed From",
+    "Closed To": "Closed To",
+    "end date can't be before start date": "end date can't be before start date",
+    "Add an explanation, for example “Public Holiday": "Add an explanation, for example “Public Holiday",
+    "Reason for Closure": "Reason for Closure",
+    "Update Closed Date": "Update Closed Date",
+    "Upcoming Appointments": "Upcoming Appointments"
 }

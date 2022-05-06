@@ -42,8 +42,8 @@ const Photos = () => {
           {t("Photos")} {checkaccess({ name: "create", role_id: role_id, controller: "clientphotos", access }) && <ImageUpload name="photo" className="btn btn-outline btn-sm ms-2" accept="image/*" label={t("Add Photo")} page="client-addphotoform" controlId="clientForm-photo" client_id={detail.id} />}
         </h2>
       </div>
-      <div className="content-wrp">
-        <InfiniteScroll className="row" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="documentlist" hasMore={photoViews.next_page_url ? true : false} loader={<PaginationLoader />}>
+      <div className="content-wrp" id="photolist">
+        <InfiniteScroll className="row" dataLength={photoObjectData && photoObjectData.length ? photoObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="photolist" hasMore={photoViews.next_page_url ? true : false} loader={<PaginationLoader />}>
           {photoObjectData.length > 0 ? (
             <>
               {Object.keys(photoObjectData).map((item, i) => {

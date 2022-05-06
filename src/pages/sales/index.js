@@ -59,7 +59,7 @@ const Sales = () => {
   }, [tabview, labeldaterange]);
 
   const fetchDataGridView = () => {
-    dispatch(InvoiceListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(InvoiceListViewApi({ next_page_url: ViewInvoiceList.next_page_url }));
   };
   const [isFetchingView, setIsFetchingView] = useState(false);
   const loadMoreItemView = () => {
@@ -72,7 +72,7 @@ const Sales = () => {
   };
 
   const fetchDataGridCreate = () => {
-    dispatch(InvoiceListViewApi({ next_page_url: ListView.next_page_url }));
+    dispatch(InvoiceListViewApi({ next_page_url: CreateInvoiceList.next_page_url }));
   };
   const [isFetchingCreate, setIsFetchingCreate] = useState(false);
   const loadMoreItemCreate = () => {
@@ -137,10 +137,10 @@ const Sales = () => {
   };
   return (
     <>
-      <div className="page-content">
+      <div className="page-content" id={"page-content-" + tabview}>
         <section className="sales-list">
-          <div className="container">
-            <div className="row justify-content-between py-3 sales-list-header sticky-top">
+          <div className="container sticky-top bg-white">
+            <div className="row justify-content-between py-3 sales-list-header">
               <div className="col-xl-8 col-lg-7 d-md-flex align-items-center">
                 <div className="list-group custom-tab me-sm-2 mb-sm-0 mb-2" id="myList" role="tablist">
                   <a className={"list-group-item list-group-item-action " + (tabview && tabview === "viewinvoice" ? " active" : "")} data-bs-toggle="list" href="#viewinvoices" role="tab" onClick={() => dispatch(InvoiceTabView("viewinvoice"))}>
@@ -207,7 +207,7 @@ const Sales = () => {
               {tabview && tabview == "viewinvoice" && (
                 <div className="row">
                   <div className="col-12">
-                    <InfiniteScroll className="" dataLength={ViewInvoiceList && ViewInvoiceList.data && ViewInvoiceList.data.length ? ViewInvoiceList.data.length : "0"} next={fetchDataGridView} scrollableTarget="page-content-category" hasMore={ViewInvoiceList.next_page_url ? true : false} loader={<PaginationLoader />}>
+                    <InfiniteScroll className="" dataLength={ViewInvoiceList && ViewInvoiceList.data && ViewInvoiceList.data.length ? ViewInvoiceList.data.length : "0"} next={fetchDataGridView} scrollableTarget="page-content-viewinvoice" hasMore={ViewInvoiceList.next_page_url ? true : false} loader={<PaginationLoader />}>
                       <div className="table-responsive">
                         <table className="table mb-0 table-hover">
                           <thead>
@@ -242,7 +242,7 @@ const Sales = () => {
               {tabview && tabview == "createinvoice" && (
                 <div className="row">
                   <div className="col-12">
-                    <InfiniteScroll className="" dataLength={CreateInvoiceList && CreateInvoiceList.data && CreateInvoiceList.data.length ? CreateInvoiceList.data.length : "0"} next={fetchDataGridCreate} scrollableTarget="page-content-category" hasMore={CreateInvoiceList.next_page_url ? true : false} loader={<PaginationLoader />}>
+                    <InfiniteScroll className="" dataLength={CreateInvoiceList && CreateInvoiceList.data && CreateInvoiceList.data.length ? CreateInvoiceList.data.length : "0"} next={fetchDataGridCreate} scrollableTarget="page-content-createinvoice" hasMore={CreateInvoiceList.next_page_url ? true : false} loader={<PaginationLoader />}>
                       <div className="table-responsive">
                         <table className="table mb-0 table-hover">
                           <thead>
@@ -259,7 +259,7 @@ const Sales = () => {
                           </tbody>
                         </table>
                       </div>
-                      {!isFetchingCreate && ViewInvoiceList.next_page_url && (
+                      {!isFetchingCreate && CreateInvoiceList.next_page_url && (
                         <div className="col-2 m-auto text-center">
                           <button onClick={loadMoreItemCreate} className="btn btn-primary m-4">
                             {t("More")}

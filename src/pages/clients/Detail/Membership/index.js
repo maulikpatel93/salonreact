@@ -20,8 +20,8 @@ const Membership = () => {
   const membershipObjectData = membershipViews && membershipViews.data ? membershipViews.data : membershipViews;
   const detail = useSelector((state) => state.client.isDetailData);
 
-  const fetchDataPhotoList = () => {
-    dispatch(ClientMembershipListViewApi({ client_id: detail.id, next_page_url: photoViews.next_page_url }));
+  const fetchDataMembershipList = () => {
+    dispatch(ClientMembershipListViewApi({ client_id: detail.id, next_page_url: membershipViews.next_page_url }));
   };
 
   return (
@@ -29,8 +29,8 @@ const Membership = () => {
       <div className="drawer-header">
         <h2 className="mb-4 pe-md-5 mb-lg-5">{t("Membership")}</h2>
       </div>
-      <div className="content-wrp">
-        <InfiniteScroll className="row gx-0" dataLength={membershipObjectData && membershipObjectData.length ? membershipObjectData.length : "0"} next={fetchDataPhotoList} scrollableTarget="notelist" hasMore={membershipViews.next_page_url ? true : false} loader={<PaginationLoader />}>
+      <div className="content-wrp" id="membershiplist">
+        <InfiniteScroll className="row gx-0" dataLength={membershipObjectData && membershipObjectData.length ? membershipObjectData.length : "0"} next={fetchDataMembershipList} scrollableTarget="membershiplist" hasMore={membershipViews.next_page_url ? true : false} loader={<PaginationLoader />}>
           {membershipObjectData.length > 0 ? (
             <>
               {Object.keys(membershipObjectData).map((item, i) => {
