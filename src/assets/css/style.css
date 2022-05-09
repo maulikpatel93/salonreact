@@ -2086,7 +2086,8 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box,
-.salevoucher-tab .membership-box {
+.salevoucher-tab .membership-box,
+.salevoucher-tab .subscription-box {
     border: 1px solid #d4d4d4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
@@ -2098,7 +2099,8 @@ header .search .search-wrapper.open {
 }
 
 .salevoucher-tab .voucher-box h5,
-.salevoucher-tab .membership-box h5 {
+.salevoucher-tab .membership-box h5,
+.salevoucher-tab .subscription-box h5 {
     font-size: 18px;
 }
 
