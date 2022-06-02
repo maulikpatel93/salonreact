@@ -16,7 +16,7 @@ import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, InlineInputField, ReactSelectField } from "component/form/Field";
 import moment from "moment";
 
-import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, SaleCartUpdate, SaleProductToCartApi, SaleSubscriptionRemoveToCart } from "../../../store/slices/saleSlice";
+import { SaleServiceRemoveToCart, SaleProductRemoveToCart, saleStoreApi, closeAddSaleForm, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, VoucherToFormData, SaleRemoveToCart, SaleCheckoutData, OpenCheckoutForm, SaleCartUpdate, SaleProductToCartApi, SaleSubscriptionRemoveToCart } from "../../../store/slices/saleSlice";
 import { OpenAddClientForm, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientSearchObj } from "store/slices/clientSlice";
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -43,7 +43,7 @@ const SaleAddForm = (props) => {
     client_id: "",
     client_name: "",
     // notes: "",
-    cart: { services: [], products: [], vouchers: [], onoffvouchers: [], membership: [], subscription: [] },
+    cart: { services: [], products: [], vouchers: [], oneoffvoucher: [], membership: [], subscription: [] },
     appointment_id: "",
     cost: "",
     eventdate: "",
@@ -75,7 +75,7 @@ const SaleAddForm = (props) => {
           amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
         }),
       ),
-      onoffvouchers: Yup.array().of(
+      oneoffvoucher: Yup.array().of(
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).test("Digits only", t("The field should have digits only"), digitOnly),
           first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
@@ -245,22 +245,22 @@ const SaleAddForm = (props) => {
                 });
               }
 
-              if (isCart && isCart.onoffvouchers.length > 0) {
-                Object.keys(isCart.onoffvouchers).map((item) => {
-                  let id = isCart.onoffvouchers[item].id;
-                  let first_name = isCart.onoffvouchers[item].first_name;
-                  let last_name = isCart.onoffvouchers[item].last_name;
-                  let is_send = isCart.onoffvouchers[item].is_send;
-                  let email = isCart.onoffvouchers[item].email;
-                  let amount = isCart.onoffvouchers[item].amount;
-                  let message = isCart.onoffvouchers[item].message;
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][id]", id ? id : "");
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][first_name]", first_name);
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][last_name]", last_name);
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][is_send]", is_send);
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][email]", email);
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][amount]", String(amount));
-                  formik.setFieldValue("cart[onoffvouchers][" + item + "][message]", message);
+              if (isCart && isCart.oneoffvoucher.length > 0) {
+                Object.keys(isCart.oneoffvoucher).map((item) => {
+                  let id = isCart.oneoffvoucher[item].id;
+                  let first_name = isCart.oneoffvoucher[item].first_name;
+                  let last_name = isCart.oneoffvoucher[item].last_name;
+                  let is_send = isCart.oneoffvoucher[item].is_send;
+                  let email = isCart.oneoffvoucher[item].email;
+                  let amount = isCart.oneoffvoucher[item].amount;
+                  let message = isCart.oneoffvoucher[item].message;
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][id]", id ? id : "");
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][first_name]", first_name);
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][last_name]", last_name);
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][is_send]", is_send);
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][email]", email);
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][amount]", String(amount));
+                  formik.setFieldValue("cart[oneoffvoucher][" + item + "][message]", message);
                 });
               }
               if (isCart && isCart.membership.length > 0) {
@@ -369,7 +369,7 @@ const SaleAddForm = (props) => {
                 )}
                 <InputField type="hidden" name="client_id" id="saleForm-client_id" value={formik.values.client_id} />
               </div>
-              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.onoffvouchers.length > 0 || isCart.membership.length > 0 || isCart.subscription.length > 0)) ? (
+              {appointmentDetail || (isCart && (isCart.services.length > 0 || isCart.products.length > 0 || isCart.vouchers.length > 0 || isCart.oneoffvoucher.length > 0 || isCart.membership.length > 0 || isCart.subscription.length > 0)) ? (
                 <div className="p-4 newsale-probox">
                   {appointmentDetail && (
                     <div className="product-box mt-0 mb-3">
@@ -573,12 +573,12 @@ const SaleAddForm = (props) => {
                     })}
 
                   {isCart &&
-                    isCart.onoffvouchers.length > 0 &&
-                    Object.keys(isCart.onoffvouchers).map((item) => {
-                      let id = isCart.onoffvouchers[item].id;
-                      let first_name = isCart.onoffvouchers[item].first_name;
-                      let last_name = isCart.onoffvouchers[item].last_name;
-                      let amount = isCart.onoffvouchers[item].amount;
+                    isCart.oneoffvoucher.length > 0 &&
+                    Object.keys(isCart.oneoffvoucher).map((item) => {
+                      let id = isCart.oneoffvoucher[item].id;
+                      let first_name = isCart.oneoffvoucher[item].first_name;
+                      let last_name = isCart.oneoffvoucher[item].last_name;
+                      let amount = isCart.oneoffvoucher[item].amount;
 
                       totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
                       let image_url = config.imagepath + "voucher.png";
@@ -588,9 +588,9 @@ const SaleAddForm = (props) => {
                             <a
                               className="close d-block cursor-pointer"
                               onClick={() => {
-                                dispatch(SaleOnOffVoucherRemoveToCart({ id: id }));
-                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.filter((ov) => ov.id != id) : [] } });
-                                // formik.setValues({ ...formik.values, cart: { ...formik.values.cart, onoffvouchers: formik.values.cart.onoffvouchers && formik.values.cart.onoffvouchers.length > 0 ? formik.values.cart.onoffvouchers.slice(0, item).concat(formik.values.cart.onoffvouchers.slice(item + 1, formik.values.cart.onoffvouchers.length)) : [] } });
+                                dispatch(SaleOneOffVoucherRemoveToCart({ id: id }));
+                                formik.setValues({ ...formik.values, cart: { ...formik.values.cart, oneoffvoucher: formik.values.cart.oneoffvoucher && formik.values.cart.oneoffvoucher.length > 0 ? formik.values.cart.oneoffvoucher.filter((ov) => ov.id != id) : [] } });
+                                // formik.setValues({ ...formik.values, cart: { ...formik.values.cart, oneoffvoucher: formik.values.cart.oneoffvoucher && formik.values.cart.oneoffvoucher.length > 0 ? formik.values.cart.oneoffvoucher.slice(0, item).concat(formik.values.cart.oneoffvoucher.slice(item + 1, formik.values.cart.oneoffvoucher.length)) : [] } });
                               }}
                             >
                               <i className="fal fa-times"></i>
@@ -606,9 +606,9 @@ const SaleAddForm = (props) => {
                               <div
                                 className="pro-content cursor-pointer"
                                 onClick={() => {
-                                  const onoffvouchersdata = isCart.onoffvouchers[item];
+                                  const oneoffvoucherdata = isCart.oneoffvoucher[item];
                                   dispatch(OpenVoucherToForm());
-                                  dispatch(VoucherToFormData({ type: "OnOffVoucher", onoffvoucher: onoffvouchersdata }));
+                                  dispatch(VoucherToFormData({ type: "OneOffVoucher", onoffvoucher: oneoffvoucherdata }));
                                 }}
                               >
                                 <div className="row">

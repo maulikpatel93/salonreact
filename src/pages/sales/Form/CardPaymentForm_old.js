@@ -150,9 +150,9 @@ const CardPaymentForm = () => {
             });
           }
 
-          if (isCart && isCart.onoffvouchers.length > 0) {
-            Object.keys(isCart.onoffvouchers).map((item) => {
-              let amount = isCart.onoffvouchers[item].amount;
+          if (isCart && isCart.oneoffvoucher.length > 0) {
+            Object.keys(isCart.oneoffvoucher).map((item) => {
+              let amount = isCart.oneoffvoucher[item].amount;
               totalprice += isNaN(parseFloat(amount)) === false && parseFloat(amount);
             });
           }

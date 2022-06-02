@@ -13,7 +13,7 @@ import { decimalOnly } from "../../../component/form/Validation";
 
 import useScriptRef from "../../../hooks/useScriptRef";
 import config from "config";
-import { CloseVoucherToForm, SaleVoucherToCartApi, SaleOnOffVoucherToCartApi } from "store/slices/saleSlice";
+import { CloseVoucherToForm, SaleVoucherToCartApi, SaleOneOffVoucherToCartApi } from "store/slices/saleSlice";
 
 const SaleVoucherToForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const SaleVoucherToForm = (props) => {
   const rightDrawerOpened = useSelector((state) => state.sale.isOpenedVoucherToForm);
   const isVoucherToFormData = useSelector((state) => state.sale.isVoucherToFormData);
   const voucher = isVoucherToFormData.type === "Voucher" ? isVoucherToFormData.voucher : "";
-  const onoffvoucher = isVoucherToFormData.type === "OnOffVoucher" ? isVoucherToFormData.onoffvoucher : "";
+  const onoffvoucher = isVoucherToFormData.type === "OneOffVoucher" ? isVoucherToFormData.onoffvoucher : "";
   const initialValues = {
     voucher_id: "",
     amount: "",
@@ -81,7 +81,7 @@ const SaleVoucherToForm = (props) => {
           }
         });
       } else {
-        dispatch(SaleOnOffVoucherToCartApi(values));
+        dispatch(SaleOneOffVoucherToCartApi(values));
         setStatus({ success: true });
         resetForm();
         dispatch(CloseVoucherToForm());
@@ -120,7 +120,7 @@ const SaleVoucherToForm = (props) => {
                 formik.setFieldValue(field, onoffvoucher[field] ? onoffvoucher[field] : "", false);
               });
             }
-            formik.setFieldValue("type", voucher ? "Voucher" : "OnOffVoucher");
+            formik.setFieldValue("type", voucher ? "Voucher" : "OneOffVoucher");
           }, [voucher, onoffvoucher]);
           return (
             <div className={(rightDrawerOpened ? "full-screen-drawer p-0 " : "") + rightDrawerOpened} id="addproduct-drawer">

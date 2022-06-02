@@ -124,7 +124,7 @@ const SaleCompleted = (props) => {
                           </li>
                         );
                       }
-                      if (type === "OnOffVoucher") {
+                      if (type === "OneOffVoucher") {
                         let cost = CartObject[item].cost;
                         let voucher_to = CartObject[item].voucherto && CartObject[item].voucherto.length > 0 && CartObject[item].voucherto[0];
                         let voucher_to_name = voucher_to && ucfirst(voucher_to.first_name) + " " + ucfirst(voucher_to.last_name);

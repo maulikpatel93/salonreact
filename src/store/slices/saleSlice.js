@@ -278,7 +278,7 @@ const initialState = {
   isProducts: [],
   isProductSearch: "",
   isProductSearchName: "",
-  isCart: { services: [], products: [], vouchers: [], membership: [], onoffvouchers: [], subscription: [] },
+  isCart: { services: [], products: [], vouchers: [], membership: [], oneoffvoucher: [], subscription: [] },
   isCartTotalPrice: [],
   isAppointmentDetail: "",
   isSuggetionListView: [],
@@ -364,10 +364,10 @@ const saleSlice = createSlice({
       const { id } = action.payload;
       state.isCart.vouchers = state.isCart.vouchers ? state.isCart.vouchers.filter((item) => item.id != id) : [];
     },
-    SaleOnOffVoucherRemoveToCart: (state, action) => {
+    SaleOneOffVoucherRemoveToCart: (state, action) => {
       const { id } = action.payload;
-      state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.filter((item) => item.id != id) : [];
-      // state.isCart.onoffvouchers = state.isCart.onoffvouchers ? state.isCart.onoffvouchers.slice(0, i).concat(state.isCart.onoffvouchers.slice(i + 1, state.isCart.onoffvouchers.length)) : [];
+      state.isCart.oneoffvoucher = state.isCart.oneoffvoucher ? state.isCart.oneoffvoucher.filter((item) => item.id != id) : [];
+      // state.isCart.oneoffvoucher = state.isCart.oneoffvoucher ? state.isCart.oneoffvoucher.slice(0, i).concat(state.isCart.oneoffvoucher.slice(i + 1, state.isCart.oneoffvoucher.length)) : [];
     },
     SaleMembershipRemoveToCart: (state, action) => {
       const { id } = action.payload;
@@ -392,17 +392,17 @@ const saleSlice = createSlice({
     ClientSearchObj: (state, action) => {
       state.isSearchObj = action.payload;
     },
-    SaleOnOffVoucherToCartApi: (state, action) => {
+    SaleOneOffVoucherToCartApi: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isCart.onoffvouchers.find((event) => event.id === id);
+      const existingData = state.isCart.oneoffvoucher.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       } else {
-        action.payload = { ...action.payload, id: state.isCart.onoffvouchers.length + 1 };
-        const onoffvouchers = [...state.isCart.onoffvouchers, action.payload];
-        state.isCart.onoffvouchers = onoffvouchers;
+        action.payload = { ...action.payload, id: state.isCart.oneoffvoucher.length + 1 };
+        const oneoffvoucher = [...state.isCart.oneoffvoucher, action.payload];
+        state.isCart.oneoffvoucher = oneoffvoucher;
       }
     },
     SaleCheckoutData: (state, action) => {
@@ -706,5 +706,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, CloseVoucherApplyForm, SaleSubscriptionRemoveToCart, RemoveApplyVoucherCode } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOneOffVoucherToCartApi, SaleOneOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, CloseVoucherApplyForm, SaleSubscriptionRemoveToCart, RemoveApplyVoucherCode } = saleSlice.actions;
 export default saleSlice.reducer;

@@ -48,8 +48,8 @@ const VoucherApplyForm = (props) => {
           setStatus({ success: true });
           resetForm();
           dispatch(CloseVoucherApplyForm());
-          const response = action.payload && action.payload.message && action.payload.message;
-          Notify({ text: t("Success"), title: response && response.message, type: "success" });
+          // const response = action.payload && action.payload.message && action.payload.message;
+          // Notify({ text: t("Success"), title: response && response.message, type: "success" });
           // sweatalert({ title: t("Created"), text: t("Created Successfully"), icon: "success" });
         } else if (action.meta.requestStatus === "rejected") {
           const status = action.payload && action.payload.status;

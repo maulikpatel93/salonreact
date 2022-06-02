@@ -17,15 +17,15 @@ const SaleVoucherGridView = (props) => {
     dispatch(OpenVoucherToForm());
     dispatch(VoucherToFormData({ type: "Voucher", voucher: voucherdata }));
   };
-  const handleOnOffVoucherClick = () => {
+  const handleOneOffVoucherClick = () => {
     dispatch(OpenVoucherToForm());
-    dispatch(VoucherToFormData({ type: "OnOffVoucher" }));
+    dispatch(VoucherToFormData({ type: "OneOffVoucher" }));
   };
 
   return (
     <>
       <div className="col-xxl-3 col-lg-4 col-md-6 text-center mb-3">
-        <a id="invoice-link" className="d-block voucher-box" onClick={handleOnOffVoucherClick}>
+        <a id="invoice-link" className="d-block voucher-box" onClick={handleOneOffVoucherClick}>
           <div className="voucher-center-box">
             <img src={config.imagepath + "Frame.png"} alt="icon" />
           </div>
