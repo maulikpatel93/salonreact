@@ -349,14 +349,14 @@ const SaleDrawer = (props) => {
                         ) : (
                           <InfiniteScroll className="row pt-3" dataLength={isVouchers && isVouchers.data && isVouchers.data.length ? isVouchers.data.length : "0"} next={fetchDataSaleVoucher} scrollableTarget="vouchers" hasMore={isVouchers.next_page_url ? true : false} loader={<PaginationLoader />}>
                             <SaleVoucherGridView view={isVouchers} />
-                            {isVouchers.length <= 0 && (
+                            {/* {isVouchers.length <= 0 && (
                               <div className="complete-box text-center d-flex flex-column justify-content-center my-md-5 my-4 bg-white">
                                 <div className="complete-box-wrp text-center ">
                                   <img src={config.imagepath + "service.png"} alt="" className="mb-md-4 mb-3" />
                                   <h4 className="mb-2 fw-semibold">{t("No vouchers have been added yet.")}</h4>
                                 </div>
                               </div>
-                            )}
+                            )} */}
                             {!isFetchingVouchers && isVouchers.next_page_url && (
                               <div className="col-2 m-auto p-3 text-center">
                                 <button onClick={loadMoreVouchers} className="btn btn-primary">

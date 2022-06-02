@@ -297,6 +297,7 @@ const initialState = {
   isOpenCardPaymentForm: "",
   isCardPaymentData: "",
   isOpenedVoucherApplyForm: "",
+  isApplyVoucherCodeData: "",
 };
 
 const saleSlice = createSlice({
@@ -452,6 +453,9 @@ const saleSlice = createSlice({
     },
     CardPaymentData: (state, action) => {
       state.isCardPaymentData = action.payload;
+    },
+    RemoveApplyVoucherCode: (state) => {
+      state.isApplyVoucherCodeData = "";
     },
   },
   extraReducers: {
@@ -692,7 +696,9 @@ const saleSlice = createSlice({
     [SaleEmailInvoiceApi.fulfilled]: () => {},
     [SaleEmailInvoiceApi.rejected]: () => {},
     [VoucherApplyApi.pending]: () => {},
-    [VoucherApplyApi.fulfilled]: () => {},
+    [VoucherApplyApi.fulfilled]: (state, action) => {
+      state.isApplyVoucherCodeData = action.payload;
+    },
     [VoucherApplyApi.rejected]: () => {},
     [ReturnPaymentApi.pending]: () => {},
     [ReturnPaymentApi.fulfilled]: () => {},
@@ -700,5 +706,5 @@ const saleSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, CloseVoucherApplyForm, SaleSubscriptionRemoveToCart } = saleSlice.actions;
+export const { reset, InvoiceTabView, openAddSaleForm, closeAddSaleForm, openSaleDetailModal, closeSaleDetailModal, SaleTabView, SaleProductSearchName, SaleServiceSearchName, SaleServiceRemoveToCart, SaleProductRemoveToCart, AppointmentDetail, OpenClientSearchList, CloseClientSearchList, ClientSearchName, ClientSearchObj, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, OpenVoucherToForm, CloseVoucherToForm, VoucherToFormData, SaleOnOffVoucherToCartApi, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenCheckoutForm, CloseCheckoutForm, SaleCartUpdate, OpenSaleCompleted, CloseSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, CloseVoucherApplyForm, SaleSubscriptionRemoveToCart, RemoveApplyVoucherCode } = saleSlice.actions;
 export default saleSlice.reducer;

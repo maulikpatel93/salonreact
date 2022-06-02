@@ -11,7 +11,7 @@ import yupconfig from "../../../yupconfig";
 import useScriptRef from "../../../hooks/useScriptRef";
 import { InputField, TextareaField } from "component/form/Field";
 import moment from "moment";
-import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, SaleSubscriptionRemoveToCart } from "../../../store/slices/saleSlice";
+import { saleStoreApi, closeAddSaleForm, CloseCheckoutForm, SaleServiceRemoveToCart, SaleProductRemoveToCart, SaleVoucherRemoveToCart, SaleMembershipRemoveToCart, SaleOnOffVoucherRemoveToCart, SaleCheckoutData, OpenSaleCompleted, SaleCompletedData, OpenCardPaymentForm, CloseCardPaymentForm, CardPaymentData, OpenVoucherApplyForm, SaleSubscriptionRemoveToCart, RemoveApplyVoucherCode } from "../../../store/slices/saleSlice";
 
 import { closeAppointmentDetailModal, appointmentListViewApi } from "../../../store/slices/appointmentSlice";
 import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
@@ -37,7 +37,8 @@ const SaleCheckoutForm = (props) => {
   const isCart = useSelector((state) => state.sale.isCart);
   const isStripePaymentStatus = useSelector((state) => state.stripe.isStripePaymentStatus);
   const isOpenedVoucherApplyForm = useSelector((state) => state.sale.isOpenedVoucherApplyForm);
-
+  const isApplyVoucherCodeData = useSelector((state) => state.sale.isApplyVoucherCodeData);
+  console.log(isApplyVoucherCodeData);
   const isRangeInfo = props.isRangeInfo;
 
   const initialValues = {
@@ -145,6 +146,14 @@ const SaleCheckoutForm = (props) => {
           useEffect(() => {
             formik.setFieldValue("client_id", client ? client.id : "");
           }, [client]);
+
+          useEffect(() => {
+            formik.setFieldValue("applyVoucherAmount", isApplyVoucherCodeData ? isApplyVoucherCodeData.amount : "");
+            formik.setFieldValue("code", isApplyVoucherCodeData ? isApplyVoucherCodeData.code : "");
+            formik.setFieldValue("voucher_to_id", isApplyVoucherCodeData ? isApplyVoucherCodeData.id : "");
+            formik.setFieldValue("voucher_id", isApplyVoucherCodeData && isApplyVoucherCodeData.voucher ? isApplyVoucherCodeData.voucher.id : "");
+          }, [isApplyVoucherCodeData]);
+
           useEffect(() => {
             formik.setFieldValue("appointment_id", appointmentDetail ? appointmentDetail.id : "");
             formik.setFieldValue("eventdate", appointmentDetail ? appointmentDetail.showdate : "");
@@ -178,11 +187,9 @@ const SaleCheckoutForm = (props) => {
               Object.keys(isCart.vouchers).map((item) => {
                 let voucher_id = isCart.vouchers[item].id;
                 let voucher_price = isCart.vouchers[item].amount;
-                let code = isCart.vouchers[item].code;
                 let voucher_to = isCart.vouchers[item].voucher_to;
                 // totalprice += isNaN(parseFloat(voucher_price)) === false && parseFloat(voucher_price);
                 formik.setFieldValue("cart[vouchers][" + item + "][id]", voucher_id);
-                formik.setFieldValue("cart[vouchers][" + item + "][code]", String(code));
                 formik.setFieldValue("cart[vouchers][" + item + "][amount]", String(voucher_price));
                 formik.setFieldValue("cart[vouchers][" + item + "][voucher_to]", voucher_to);
               });
@@ -593,65 +600,102 @@ const SaleCheckoutForm = (props) => {
                           <span className="h2 pe-2 mb-0">{t("Total")}</span>
                           <span className="h2 text-end ms-auto mb-0">${formik.values.totalprice}</span>
                         </div>
-                        <div className="row">
-                          <div className="col-12 mb-3">
-                            {currentUser.stripe_account_id && (
+                        <div className="px-4 d-flex py-1 total">
+                          <span className="h5 pe-2 mb-0">
+                            {t("Applied Voucher Code")}
+                            <p className="h5 pe-2 mb-0 text-success">{isApplyVoucherCodeData && isApplyVoucherCodeData.code} <a className="ms-2 remove" onClick={() => dispatch(RemoveApplyVoucherCode())}><i className="fas fa-trash"></i></a></p>
+                          </span>
+                          <span className="h5 text-end ms-auto mb-0">${formik.values.applyVoucherAmount}</span>
+                        </div>
+                        <div className="px-4 d-flex py-3 total">
+                          <span className="h4 pe-2 mb-0">{t("Balance")}</span>
+                          <span className="h4 text-end ms-auto mb-0">${(formik.values.totalprice - formik.values.applyVoucherAmount)}</span>
+                        </div>
+                        {isApplyVoucherCodeData ? (
+                          <div className="row">
+                            <div className="col-6">
                               <button
                                 type="submit"
-                                id="payment-link"
-                                className="btn btn-primary btn-lg w-100 p-3"
+                                className="btn btn-pay btn-lg w-100 p-3"
                                 disabled={loading}
                                 onClick={() => {
-                                  formik.setFieldValue("is_stripe", 1);
-                                  // dispatch(OpenCardPaymentForm());
-                                  // dispatch(CardPaymentData(formik));
+                                  formik.setFieldValue("is_stripe", 0);
+                                  formik.setFieldValue("paidby", "Cash");
                                 }}
                               >
                                 {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                {t("Paid by Stripe (Credit Card)")}
+                                {t("Paid by Cash")}
                               </button>
-                            )}
+                            </div>
+                            <div className="col-6">
+                              <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
+                                {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                {t("Pay by Voucher")}
+                              </button>
+                            </div>
                           </div>
-                          {isCartForm && isCartForm.subscription.length === 0 && (
-                            <>
-                              <div className="col-4">
+                        ) : (
+                          <div className="row">
+                            <div className="col-12 mb-3">
+                              {currentUser.stripe_account_id && (
                                 <button
                                   type="submit"
                                   id="payment-link"
-                                  className="btn btn-pay btn-lg w-100 p-3"
+                                  className="btn btn-primary btn-lg w-100 p-3"
                                   disabled={loading}
                                   onClick={() => {
-                                    formik.setFieldValue("is_stripe", 0);
-                                    formik.setFieldValue("paidby", "CreditCard");
+                                    formik.setFieldValue("is_stripe", 1);
+                                    // dispatch(OpenCardPaymentForm());
+                                    // dispatch(CardPaymentData(formik));
                                   }}
                                 >
                                   {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                  {t("Paid by Credit Card")}
+                                  {t("Paid by Stripe (Credit Card)")}
                                 </button>
-                              </div>
-                              <div className="col-4">
-                                <button
-                                  type="submit"
-                                  className="btn btn-pay btn-lg w-100 p-3"
-                                  disabled={loading}
-                                  onClick={() => {
-                                    formik.setFieldValue("is_stripe", 0);
-                                    formik.setFieldValue("paidby", "Cash");
-                                  }}
-                                >
-                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                  {t("Paid by Cash")}
-                                </button>
-                              </div>
-                              <div className="col-4">
-                                <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
-                                  {loading && <span className="spinner-border spinner-border-sm"></span>}
-                                  {t("Pay by Voucher")}
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
+                              )}
+                            </div>
+                            {isCartForm && isCartForm.subscription.length === 0 && (
+                              <>
+                                <div className="col-4">
+                                  <button
+                                    type="submit"
+                                    id="payment-link"
+                                    className="btn btn-pay btn-lg w-100 p-3"
+                                    disabled={loading}
+                                    onClick={() => {
+                                      formik.setFieldValue("is_stripe", 0);
+                                      formik.setFieldValue("paidby", "CreditCard");
+                                    }}
+                                  >
+                                    {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                    {t("Paid by Credit Card")}
+                                  </button>
+                                </div>
+                                <div className="col-4">
+                                  <button
+                                    type="submit"
+                                    className="btn btn-pay btn-lg w-100 p-3"
+                                    disabled={loading}
+                                    onClick={() => {
+                                      formik.setFieldValue("is_stripe", 0);
+                                      formik.setFieldValue("paidby", "Cash");
+                                    }}
+                                  >
+                                    {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                    {t("Paid by Cash")}
+                                  </button>
+                                </div>
+                                <div className="col-4">
+                                  <button type="button" className="btn btn-pay-voucher btn-lg w-100 pay-voucher p-3" disabled={loading} onClick={() => dispatch(OpenVoucherApplyForm())}>
+                                    {loading && <span className="spinner-border spinner-border-sm"></span>}
+                                    {t("Pay by Voucher")}
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+
                         {/* {isOpenCardPaymentForm ? (
                           <div className="row gy-3 mt-4">
                             <div className="col-md-4">
