@@ -34,6 +34,7 @@ import clientsubscriptionReducer from "../store/slices/clientsubscriptionSlice";
 import settingReducer from "../store/slices/settingSlice";
 import businessReducer from "../store/slices/businessSlice";
 import clientinvoiceReducer from "../store/slices/clientinvoiceSlice";
+import clientvoucherReducer from "../store/slices/clientvoucherSlice";
 import closedateReducer from "../store/slices/closedateSlice";
 import dashboardReducer from "../store/slices/dashboardSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
@@ -165,6 +166,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     clientinvoiceReducer,
+  ),
+  clientvoucher: persistReducer(
+    {
+      key: "clientvoucher",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    clientvoucherReducer,
   ),
   product: persistReducer(
     {

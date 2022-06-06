@@ -94,6 +94,19 @@ export const ClientSuggetionListApi = createAsyncThunk("client/suggetionlist", a
   }
 });
 
+export const ClientImportApi = createAsyncThunk("client/Clientimport", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await clientApiController
+      .clientimport(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "Clientimport"))
+      .catch((error) => HandleError(thunkAPI, error, "Clientimport"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isTabView: "grid",
   isOpenedAddForm: "",
@@ -161,7 +174,7 @@ const clientSlice = createSlice({
     },
     ClientSearchObj: (state, action) => {
       state.isSearchObj = action.payload;
-    }
+    },
   },
   extraReducers: {
     [ClientStoreApi.pending]: () => {},
@@ -255,6 +268,9 @@ const clientSlice = createSlice({
       state.isGridView.data = state.isGridView.data ? state.isGridView.data.filter((item) => item.id != id) : state.isGridView.filter((item) => item.id != id);
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
+    [ClientImportApi.pending]: () => {},
+    [ClientImportApi.fulfilled]: () => {},
+    [ClientImportApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

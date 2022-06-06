@@ -13,6 +13,8 @@ import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice"
 import { ClientphotoGridViewApi } from "store/slices/clientphotoSlice";
 import { ClientdocumentGridViewApi } from "store/slices/clientdocumentSlice";
 import { ClientnoteGridViewApi } from "store/slices/clientnoteSlice";
+import { ClientInvoiceListViewApi } from "store/slices/clientinvoiceSlice";
+import { ClientVoucherListViewApi } from "store/slices/clientvoucherSlice";
 
 const ClientGridView = (props) => {
   const dispatch = useDispatch();
@@ -48,7 +50,7 @@ const ClientGridView = (props) => {
           dispatch(ClientphotoGridViewApi({ client_id: id }));
         }
         if (props && props.tab === "invoices") {
-          // dispatch(ClientInvoiceListViewApi({ client_id: id }));
+          dispatch(ClientInvoiceListViewApi({ client_id: id }));
         }
         if (props && props.tab === "documents") {
           dispatch(ClientdocumentGridViewApi({ client_id: id }));
@@ -58,6 +60,9 @@ const ClientGridView = (props) => {
         }
         if (props && props.tab === "memberships") {
           dispatch(ClientMembershipListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "vouchers") {
+          dispatch(ClientVoucherListViewApi({ client_id: id }));
         }
       }
     });

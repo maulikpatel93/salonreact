@@ -565,5 +565,14 @@
     "Update Closed Date": "Update Closed Date",
     "Upcoming Appointments": "Upcoming Appointments",
     "Apply Voucher Code": "Apply Voucher Code",
-    "Code": "Code"
+    "Code": "Code",
+    "Sale Failed": "Sale Failed",
+    "Sale Pending": "Sale Pending",
+    "Email Voucher To Recipient": "Email Voucher To Recipient",
+    "Email Voucher To Customer": "Email Voucher To Customer",
+    "Applied Voucher": "Applied Voucher",
+    "Expires on {{date}}": "Expires on {{date}}",
+    "Initial Value": "Initial Value",
+    "Import Clients": "Import Clients",
+    "Export Clients": "Export Clients"
 }

@@ -19,6 +19,7 @@ import { busytimeListViewApi } from "../../../store/slices/busytimeSlice";
 import CardPaymentForm from "./CardPaymentForm";
 import { StripePaymentStatus } from "store/slices/stripeSlice";
 import VoucherApplyForm from "./VoucherApplyForm";
+import { swalConfirm, sweatalert } from "component/Sweatalert2";
 
 const SaleCheckoutForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ const SaleCheckoutForm = (props) => {
     is_stripe: 0,
     totalprice: "",
     paidby: "",
+    confirmbtn: "",
   };
   const validationSchema = Yup.object().shape({
     client_id: Yup.lazy((val) => (Array.isArray(val) ? Yup.array().of(Yup.string()).nullable().min(1).required() : Yup.string().nullable().label(t("Client")).required())),
@@ -82,45 +84,50 @@ const SaleCheckoutForm = (props) => {
   yupconfig();
   const handlesaleSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
+    console.log(values);
     try {
-      dispatch(saleStoreApi(values)).then((action) => {
-        if (action.meta.requestStatus === "fulfilled") {
-          const stripeObj = action.payload;
-          setStatus({ success: true });
-          resetForm();
-          dispatch(closeAddSaleForm());
-          dispatch(closeAppointmentDetailModal());
-          dispatch(SaleCompletedData(action.payload));
-          dispatch(OpenSaleCompleted());
-          // sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
-          if (isRangeInfo) {
-            dispatch(appointmentListViewApi(isRangeInfo));
-            dispatch(busytimeListViewApi(isRangeInfo));
+      if (values.confirmbtn == true) {
+        dispatch(saleStoreApi(values)).then((action) => {
+          if (action.meta.requestStatus === "fulfilled") {
+            const stripeObj = action.payload;
+            setStatus({ success: true });
+            resetForm();
+            dispatch(closeAddSaleForm());
+            dispatch(closeAppointmentDetailModal());
+            dispatch(SaleCompletedData(action.payload));
+            dispatch(OpenSaleCompleted());
+            // sweatalert({ title: t("Sale Completed"), text: t("Sale Completed Successfully"), icon: "success" });
+            if (isRangeInfo) {
+              dispatch(appointmentListViewApi(isRangeInfo));
+              dispatch(busytimeListViewApi(isRangeInfo));
+            }
+            if (scriptedRef.current) {
+              setLoading(false);
+            }
+          } else if (action.meta.requestStatus === "rejected") {
+            const status = action.payload && action.payload.status;
+            const errors = action.payload && action.payload.message && action.payload.message.errors;
+            if (status === 422) {
+              setErrors(errors);
+            }
+            if (status === 410) {
+              const stripeObj = action.payload && action.payload.message;
+              dispatch(StripePaymentStatus(stripeObj));
+              dispatch(OpenCardPaymentForm());
+              // if (payment_status === "requires_confirmation") {
+              //   console.log(payment_status);
+              // }
+            }
+            setStatus({ success: false });
+            setSubmitting(false);
+            if (scriptedRef.current) {
+              setLoading(false);
+            }
           }
-          if (scriptedRef.current) {
-            setLoading(false);
-          }
-        } else if (action.meta.requestStatus === "rejected") {
-          const status = action.payload && action.payload.status;
-          const errors = action.payload && action.payload.message && action.payload.message.errors;
-          if (status === 422) {
-            setErrors(errors);
-          }
-          if (status === 410) {
-            const stripeObj = action.payload && action.payload.message;
-            dispatch(StripePaymentStatus(stripeObj));
-            dispatch(OpenCardPaymentForm());
-            // if (payment_status === "requires_confirmation") {
-            //   console.log(payment_status);
-            // }
-          }
-          setStatus({ success: false });
-          setSubmitting(false);
-          if (scriptedRef.current) {
-            setLoading(false);
-          }
-        }
-      });
+        });
+      } else {
+        setLoading(false);
+      }
     } catch (err) {
       if (scriptedRef.current) {
         setErrors(err.message);
@@ -638,9 +645,13 @@ const SaleCheckoutForm = (props) => {
                                 type="submit"
                                 className="btn btn-pay btn-lg w-100 p-3"
                                 disabled={loading}
-                                onClick={() => {
-                                  formik.setFieldValue("is_stripe", 0);
-                                  formik.setFieldValue("paidby", "Cash");
+                                onClick={(e) => {
+                                  let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to payment?"), message: "", confirmButtonText: t("Yes, pay it!") });
+                                  if (confirmbtn == true) {
+                                    formik.setFieldValue("confirmbtn", confirmbtn);
+                                    formik.setFieldValue("is_stripe", 0);
+                                    formik.setFieldValue("paidby", "Cash");
+                                  }
                                 }}
                               >
                                 {loading && <span className="spinner-border spinner-border-sm"></span>}
@@ -683,9 +694,13 @@ const SaleCheckoutForm = (props) => {
                                     id="payment-link"
                                     className="btn btn-pay btn-lg w-100 p-3"
                                     disabled={loading}
-                                    onClick={() => {
-                                      formik.setFieldValue("is_stripe", 0);
-                                      formik.setFieldValue("paidby", "CreditCard");
+                                    onClick={(e) => {
+                                      let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to payment?"), message: "", confirmButtonText: t("Yes, pay it!") });
+                                      if (confirmbtn == true) {
+                                        formik.setFieldValue("confirmbtn", confirmbtn);
+                                        formik.setFieldValue("is_stripe", 0);
+                                        formik.setFieldValue("paidby", "CreditCard");
+                                      }
                                     }}
                                   >
                                     {loading && <span className="spinner-border spinner-border-sm"></span>}
@@ -697,9 +712,13 @@ const SaleCheckoutForm = (props) => {
                                     type="submit"
                                     className="btn btn-pay btn-lg w-100 p-3"
                                     disabled={loading}
-                                    onClick={() => {
-                                      formik.setFieldValue("is_stripe", 0);
-                                      formik.setFieldValue("paidby", "Cash");
+                                    onClick={(e) => {
+                                      let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to payment?"), message: "", confirmButtonText: t("Yes, pay it!") });
+                                      if (confirmbtn == true) {
+                                        formik.setFieldValue("confirmbtn", confirmbtn);
+                                        formik.setFieldValue("is_stripe", 0);
+                                        formik.setFieldValue("paidby", "Cash");
+                                      }
                                     }}
                                   >
                                     {loading && <span className="spinner-border spinner-border-sm"></span>}

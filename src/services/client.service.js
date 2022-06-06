@@ -107,11 +107,31 @@ const suggetionlist = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&q=${q}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const clientimport = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const action = `afterlogin/client/clientimport`;
+  const formData = new FormData();
+  for (let value in values) {
+    if (["gender"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, values[value].value);
+    } else {
+      formData.append(value, values[value]);
+    }
+  }
+  formData.append("auth_key", auth_key);
+  formData.append("action", action);
+  formData.append("role_id", 6);
+  formData.append("salon_id", auth.user.salon_id);
+  return axios.post(API_URL + action, formData, { headers: authHeader() });
+};
+
 const clientApiController = {
   create,
   update,
   view,
   deleted,
-  suggetionlist
+  suggetionlist,
+  clientimport,
 };
 export default clientApiController;

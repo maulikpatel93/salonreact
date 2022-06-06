@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { OpenAddClientForm, ClientTabListView, ClientTabGridView, ClientGridViewApi, ClientListViewApi, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName } from "../../store/slices/clientSlice";
+import { OpenAddClientForm, ClientTabListView, ClientTabGridView, ClientGridViewApi, ClientListViewApi, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientImportApi } from "../../store/slices/clientSlice";
 
 import config from "../../config";
 import ClientAddForm from "./Form/ClientAddForm";
@@ -13,6 +13,7 @@ import ClientSuggetionListView from "./List/ClientSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
 import { checkaccess } from "helpers/functions";
+import { Notify } from "component/Toastr";
 
 const Clients = () => {
   SalonModule();
@@ -110,7 +111,51 @@ const Clients = () => {
     //   dispatch(CloseClientSearchList());
     // }, 200);
   };
-
+  const inputFile = useRef(null);
+  const onButtonClick = () => {
+    // `current` points to the mounted file input element
+    inputFile.current.click();
+    // dispatch(ClientImportApi());
+  };
+  const handleFileUpload = (e) => {
+    const { files } = e.target;
+    if (files && files.length) {
+      const filename = files[0].name;
+      var parts = filename.split(".");
+      const fileType = parts[parts.length - 1];
+      // console.log("fileType", fileType); //ex: zip, rar, jpg, svg etc.
+      // console.log(files[0]);
+      dispatch(ClientImportApi({ excelfile: files[0] })).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          const response = action.payload && action.payload.message && action.payload.message;
+          const NotifyContent = () => {
+            return (
+              <>
+                <p className="mb-2 text-white text-justify">{response}</p>
+              </>
+            );
+          };
+          Notify({ text: <NotifyContent />, title: response && response.message, type: "success" });
+          dispatch(ClientGridViewApi());
+          dispatch(ClientListViewApi());
+        } else if (action.meta.requestStatus === "rejected") {
+          const status = action.payload && action.payload.status;
+          const errors = action.payload && action.payload.message && action.payload.message.errors;
+          const response = action.payload && action.payload.message && action.payload.message;
+          if (status === 422) {
+            const NotifyContent = () => {
+              return (
+                <>
+                  <p className="mb-2 text-white text-justify">{response && response.message}</p>
+                </>
+              );
+            };
+            Notify({ text: <NotifyContent />, title: response && response.message, type: "error" });
+          }
+        }
+      });
+    }
+  };
   return (
     <>
       <div className="page-content bg-pink" id={"page-content-" + tabview}>
@@ -171,15 +216,16 @@ const Clients = () => {
               <div className="dropdown-menu dropdown-box dropdown-menu-end" aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-end">
                 <ul className="p-0 m-0 list-unstyled">
                   <li>
-                    <a id="addclient-drawer-link" className="d-flex align-items-center cursor-pointer">
+                    <input type="file" id="file" ref={inputFile} style={{ display: "none" }} onChange={handleFileUpload} />
+                    <a id="addclient-drawer-link" className="d-flex align-items-center cursor-pointer" onClick={onButtonClick}>
                       <img src={config.imagepath + "import.png"} className="me-3" alt="" />
-                      Import Clients
+                      {t("Import Clients")}
                     </a>
                   </li>
                   <li>
                     <a id="addsale-drawer-link" className="d-flex align-items-center cursor-pointer">
                       <img src={config.imagepath + "export.png"} className="me-3" alt="" />
-                      Export Clients
+                      {t("Export Clients")}
                     </a>
                   </li>
                 </ul>

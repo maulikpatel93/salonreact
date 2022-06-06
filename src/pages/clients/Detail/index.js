@@ -20,6 +20,7 @@ import { checkaccess } from "helpers/functions";
 import { ClientAppointmentListViewApi, openAppointmentFilter } from "store/slices/appointmentSlice";
 import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice";
 import { ClientInvoiceListViewApi } from "store/slices/clientinvoiceSlice";
+import { ClientVoucherListViewApi } from "store/slices/clientvoucherSlice";
 
 const ClientDetailModal = () => {
   const rightDrawerOpened = useSelector((state) => state.client.isOpenedDetailModal);
@@ -121,7 +122,18 @@ const ClientDetailModal = () => {
                   </li>
                 )}
                 <li className="nav-item" role="presentation">
-                  <button className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")} id="vouchers" data-bs-toggle="tab" data-bs-target="#vouchers-tab" type="button" role="tab" onClick={() => dispatch(ClientDetailTab("vouchers"))}>
+                  <button
+                    className={"nav-link" + (detailTab && detailTab == "vouchers" ? " active" : "")}
+                    id="vouchers"
+                    data-bs-toggle="tab"
+                    data-bs-target="#vouchers-tab"
+                    type="button"
+                    role="tab"
+                    onClick={() => {
+                      dispatch(ClientDetailTab("vouchers"));
+                      dispatch(ClientVoucherListViewApi({ client_id: detail.id }));
+                    }}
+                  >
                     {t("Vouchers")}
                   </button>
                 </li>

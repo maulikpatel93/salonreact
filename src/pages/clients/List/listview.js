@@ -35,11 +35,30 @@ const ClientListView = (props) => {
     dispatch(ClientDetailApi({ id })).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(OpenClientDetailModal());
+
         if (props && props.tab === "clientdetail") {
           dispatch(ClientDetailTab("clientdetail"));
         }
         if (props && props.tab === "appointment") {
           dispatch(ClientAppointmentListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "photos") {
+          dispatch(ClientphotoGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "invoices") {
+          dispatch(ClientInvoiceListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "documents") {
+          dispatch(ClientdocumentGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "notes") {
+          dispatch(ClientnoteGridViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "memberships") {
+          dispatch(ClientMembershipListViewApi({ client_id: id }));
+        }
+        if (props && props.tab === "vouchers") {
+          dispatch(ClientVoucherListViewApi({ client_id: id }));
         }
       }
     });
