@@ -323,6 +323,20 @@ const returnpayment = (values) => {
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
 
+const sendemailvoucher = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const formData = new FormData();
+  for (let value in values) {
+    formData.append(value, values[value]);
+  }
+  const action = "afterlogin/sale/sendemailvoucher";
+  formData.append("auth_key", auth_key);
+  formData.append("action", action);
+  formData.append("salon_id", auth.user.salon_id);
+  return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
+};
+
 const saleApiController = {
   create,
   update,
@@ -340,5 +354,6 @@ const saleApiController = {
   sendEmailInvoice,
   voucherapply,
   returnpayment,
+  sendemailvoucher,
 };
 export default saleApiController;

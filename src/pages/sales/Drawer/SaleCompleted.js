@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { CloseSaleCompleted } from "store/slices/saleSlice";
+import { CloseSaleCompleted, SendEmailVoucher } from "store/slices/saleSlice";
 import { ucfirst } from "helpers/functions";
 import Moment from "react-moment";
 import moment from "moment";
@@ -135,7 +135,7 @@ const SaleCompleted = (props) => {
                                     <h5 className="mb-0">{`${t("To (Recipient)")} ${voucher_to_name}`}</h5>
                                     <h5 className="mb-0">{`${t("Code")} : ${voucher_to.code}`}</h5>
                                     <a className="me-1 btn-voucher mt-2 text-white cursor-pointer">{t("Email Voucher To Recipient")}</a>
-                                    <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white cursor-pointer">
+                                    <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white cursor-pointer" onClick={() => dispatch(SendEmailVoucher(voucher_to))}>
                                       {t("Email Voucher To Customer")}
                                     </a>
                                     <a className=" mt-2 cursor-pointer" download="">
@@ -180,7 +180,7 @@ const SaleCompleted = (props) => {
                                     <a href="#" className="me-1 btn-voucher mt-2 text-white">
                                       {t("Email Voucher To Recipient")}
                                     </a>
-                                    <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white">
+                                    <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white" onClick={() => dispatch(SendEmailVoucher(voucher_to))}>
                                       {t("Email Voucher To Customer")}
                                     </a>
                                     <a href="#" className=" mt-2" download="">

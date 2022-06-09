@@ -674,8 +674,12 @@ const SaleCheckoutForm = (props) => {
                                   id="payment-link"
                                   className="btn btn-primary btn-lg w-100 p-3"
                                   disabled={loading}
-                                  onClick={() => {
-                                    formik.setFieldValue("is_stripe", 1);
+                                  onClick={(e) => {
+                                    let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to payment?"), message: "", confirmButtonText: t("Yes, pay it!") });
+                                    if (confirmbtn == true) {
+                                      formik.setFieldValue("confirmbtn", confirmbtn);
+                                      formik.setFieldValue("is_stripe", 1);
+                                    }
                                     // formik.setFieldValue("paidby", "StripeCreditCard");
                                     // dispatch(OpenCardPaymentForm());
                                     // dispatch(CardPaymentData(formik));

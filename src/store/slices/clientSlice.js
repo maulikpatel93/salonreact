@@ -107,6 +107,19 @@ export const ClientImportApi = createAsyncThunk("client/Clientimport", async (fo
   }
 });
 
+export const ClientExportApi = createAsyncThunk("client/Clientexport", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await clientApiController
+      .clientexport(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "Clientexport"))
+      .catch((error) => HandleError(thunkAPI, error, "Clientexport"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isTabView: "grid",
   isOpenedAddForm: "",
@@ -271,6 +284,9 @@ const clientSlice = createSlice({
     [ClientImportApi.pending]: () => {},
     [ClientImportApi.fulfilled]: () => {},
     [ClientImportApi.rejected]: () => {},
+    [ClientExportApi.pending]: () => {},
+    [ClientExportApi.fulfilled]: () => {},
+    [ClientExportApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

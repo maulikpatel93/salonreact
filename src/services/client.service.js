@@ -113,11 +113,7 @@ const clientimport = (values) => {
   const action = `afterlogin/client/clientimport`;
   const formData = new FormData();
   for (let value in values) {
-    if (["gender"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, values[value].value);
-    } else {
-      formData.append(value, values[value]);
-    }
+    formData.append(value, values[value]);
   }
   formData.append("auth_key", auth_key);
   formData.append("action", action);
@@ -125,7 +121,20 @@ const clientimport = (values) => {
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader() });
 };
-
+const clientexport = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const action = `afterlogin/client/clientexport`;
+  const formData = new FormData();
+  for (let value in values) {
+    formData.append(value, values[value]);
+  }
+  formData.append("auth_key", auth_key);
+  formData.append("action", action);
+  formData.append("role_id", 6);
+  formData.append("salon_id", auth.user.salon_id);
+  return axios.post(API_URL + action, formData, { headers: authHeader() });
+};
 const clientApiController = {
   create,
   update,
@@ -133,5 +142,6 @@ const clientApiController = {
   deleted,
   suggetionlist,
   clientimport,
+  clientexport,
 };
 export default clientApiController;

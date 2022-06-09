@@ -12,7 +12,7 @@ const CheckoutForm = (props) => {
   const client = props.client;
   const isStripePaymentStatus = props.isStripePaymentStatus;
   const amount = isStripePaymentStatus.amount;
-  console.log(isStripePaymentStatus);
+  
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.

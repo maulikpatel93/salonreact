@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { OpenAddClientForm, ClientTabListView, ClientTabGridView, ClientGridViewApi, ClientListViewApi, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientImportApi } from "../../store/slices/clientSlice";
+import { OpenAddClientForm, ClientTabListView, ClientTabGridView, ClientGridViewApi, ClientListViewApi, ClientSort, ClientSortRemove, OpenClientSearchList, CloseClientSearchList, ClientSuggetionListApi, ClientSearchName, ClientImportApi, ClientExportApi } from "../../store/slices/clientSlice";
 
 import config from "../../config";
 import ClientAddForm from "./Form/ClientAddForm";
@@ -112,10 +112,18 @@ const Clients = () => {
     // }, 200);
   };
   const inputFile = useRef(null);
-  const onButtonClick = () => {
+  const onButtonClickImport = () => {
     // `current` points to the mounted file input element
     inputFile.current.click();
     // dispatch(ClientImportApi());
+  };
+  const onButtonClickExport = () => {
+    // `current` points to the mounted file input element
+    dispatch(ClientExportApi()).then((action) => {
+      console.log(action.payload);
+      var blob = new Blob([action.payload], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      saveAs(blob, title + ".xlsx");
+    });
   };
   const handleFileUpload = (e) => {
     const { files } = e.target;
@@ -217,13 +225,13 @@ const Clients = () => {
                 <ul className="p-0 m-0 list-unstyled">
                   <li>
                     <input type="file" id="file" ref={inputFile} style={{ display: "none" }} onChange={handleFileUpload} />
-                    <a id="addclient-drawer-link" className="d-flex align-items-center cursor-pointer" onClick={onButtonClick}>
+                    <a id="addclient-drawer-link" className="d-flex align-items-center cursor-pointer" onClick={onButtonClickImport}>
                       <img src={config.imagepath + "import.png"} className="me-3" alt="" />
                       {t("Import Clients")}
                     </a>
                   </li>
                   <li>
-                    <a id="addsale-drawer-link" className="d-flex align-items-center cursor-pointer">
+                    <a id="addsale-drawer-link" className="d-flex align-items-center cursor-pointer" onClick={onButtonClickExport}>
                       <img src={config.imagepath + "export.png"} className="me-3" alt="" />
                       {t("Export Clients")}
                     </a>

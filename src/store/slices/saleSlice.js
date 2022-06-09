@@ -263,6 +263,19 @@ export const ReturnPaymentApi = createAsyncThunk("sale/returnpayment", async (fo
   }
 });
 
+export const SendEmailVoucher = createAsyncThunk("sale/SendEmailVoucher", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await saleApiController
+      .sendemailvoucher(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "SendEmailVoucher"))
+      .catch((error) => HandleError(thunkAPI, error, "SendEmailVoucher"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedVoucherToForm: "",
@@ -703,6 +716,9 @@ const saleSlice = createSlice({
     [ReturnPaymentApi.pending]: () => {},
     [ReturnPaymentApi.fulfilled]: () => {},
     [ReturnPaymentApi.rejected]: () => {},
+    [SendEmailVoucher.pending]: () => {},
+    [SendEmailVoucher.fulfilled]: () => {},
+    [SendEmailVoucher.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function
