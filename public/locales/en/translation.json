@@ -574,5 +574,8 @@
     "Expires on {{date}}": "Expires on {{date}}",
     "Initial Value": "Initial Value",
     "Import Clients": "Import Clients",
-    "Export Clients": "Export Clients"
+    "Export Clients": "Export Clients",
+    "Cancellation reasons": "Cancellation reasons",
+    "Add Cancellation": "Add Cancellation",
+    "Add Cancellation reason": "Add Cancellation reason"
 }

@@ -318,16 +318,16 @@ textarea.form-control::placeholder {
 }
 
 .btn-cancel {
-    color: #3A3432 !important;
-    background-color: #F4EEEB !important;
-    border-color: #F4EEEB !important;
+    color: #3a3432 !important;
+    background-color: #f4eeeb !important;
+    border-color: #f4eeeb !important;
     padding: 9px 13px !important;
 }
 
 .btn-cancel:hover {
     color: #fff !important;
-    background-color: #8C1C4D !important;
-    border-color: #8C1C4D !important;
+    background-color: #8c1c4d !important;
+    border-color: #8c1c4d !important;
 }
 
 a {
@@ -3311,7 +3311,8 @@ table .pro-title {
 }
 
 .acsetup-right #v-pills-ClosedDates .btn,
-.addclosedate-drawer .drawer-body .btn {
+.addclosedate-drawer .drawer-body .btn,
+.addcancellationreason-drawer .drawer-body .btn {
     border-radius: 2px;
     font-size: 13px;
     padding: 10px 21px;
@@ -3321,25 +3322,29 @@ table .pro-title {
     height: 100%;
 }
 
-.addclosedate-drawer .close {
+.addclosedate-drawer .close,
+.addcancellationreason-drawer .close {
     background-color: #f4eeeb;
     border-color: #f4eeeb;
     color: #3a3432;
 }
 
-.addclosedate-drawer .close:hover {
+.addclosedate-drawer .close:hover,
+.addcancellationreason-drawer .close:hover {
     background-color: #8c1c4d;
     border-color: #8c1c4d;
     color: #fff;
 }
 
-.addclosedate-drawer .drawer-body {
+.addclosedate-drawer .drawer-body,
+.addcancellationreason-drawer .drawer-body {
     max-width: 450px;
     margin: 0 auto;
 }
 
-.addclosedate-drawer label {
-    color: #3A3432;
+.addclosedate-drawer label,
+.addcancellationreason-drawer label {
+    color: #3a3432;
     font-weight: 500;
 }
 
@@ -3354,7 +3359,7 @@ table .pro-title {
 }
 
 #v-pills-ClientNotifications .box-image-cover .active {
-    background-color: #04D37C;
+    background-color: #04d37c;
 }
 
 #v-pills-ClientNotifications .box-image-cover .active:hover {
@@ -3362,7 +3367,7 @@ table .pro-title {
 }
 
 #v-pills-ClientNotifications .box-image-cover span {
-    color: #8F807D;
+    color: #8f807d;
 }
 
 
@@ -3473,14 +3478,14 @@ table .pro-title {
 
 .event-box-pink {
     color: #374151;
-    background-color: #F9F6F4;
+    background-color: #f9f6f4;
     display: block;
     padding: 15px 24px;
     border-radius: 6px;
 }
 
 .event-box-pink span.active {
-    background-color: #8C1C4D;
+    background-color: #8c1c4d;
     color: #fff;
     font-size: 12px;
 }
@@ -3490,7 +3495,7 @@ table .pro-title {
     font-size: 12px;
     color: #fff;
     border-radius: 4px;
-    background-color: #3A3432;
+    background-color: #3a3432;
     padding: 2px 6px;
     display: inline-block;
     vertical-align: middle;
@@ -3781,7 +3786,7 @@ body .border-block {
 /* dashboard page css start */
 
 .dashboard {
-    background-color: #F9F6F4;
+    background-color: #f9f6f4;
     padding: 45px 35px;
     min-height: 100%;
 }
@@ -3832,9 +3837,9 @@ body .border-block {
 }
 
 .chat-avg .upvalue {
-    color: #00BA34;
+    color: #00ba34;
     font-size: 13px;
-    background-color: #E5F8EB;
+    background-color: #e5f8eb;
     display: inline-block;
     border-radius: 6px;
     vertical-align: top;
@@ -3856,12 +3861,12 @@ body .border-block {
 }
 
 .dashboard .left-col ul::-webkit-scrollbar-track {
-    background: linear-gradient(0deg, #F9F6F4, #F9F6F4), #F9F6F4;
+    background: linear-gradient(0deg, #f9f6f4, #f9f6f4), #f9f6f4;
     border-radius: 12px;
 }
 
 .dashboard .left-col ul::-webkit-scrollbar-thumb {
-    background: linear-gradient(0deg, #F0E5E0, #F0E5E0), #F9F6F4;
+    background: linear-gradient(0deg, #f0e5e0, #f0e5e0), #f9f6f4;
     border-radius: 12px;
 }
 

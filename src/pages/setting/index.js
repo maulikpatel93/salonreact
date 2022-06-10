@@ -10,6 +10,7 @@ import Integration from "./List/Integration";
 import StripeSetupForm from "pages/account/Form/StripeSetupForm";
 import Closeddate from "./List/Closeddate";
 import ClientNotification from "./List/ClientNotification";
+import Cancellationreason from "./List/Cancellationreason";
 
 const Setting = () => {
   SalonModule();
@@ -154,7 +155,9 @@ const Setting = () => {
               <div className={"tab-pane fade " + (tabview && tabview == "ClientNotifications" ? " show active" : "")} id="v-pills-ClientNotifications" role="tabpanel" aria-labelledby="v-pills-ClientNotifications-tab">
                 {tabview && tabview == "ClientNotifications" && <ClientNotification />}
               </div>
-              <div className={"tab-pane fade " + (tabview && tabview == "CancellationReasons" ? " show active" : "")} id="v-pills-CancellationReasons" role="tabpanel" aria-labelledby="v-pills-CancellationReasons-tab"></div>
+              <div className={"tab-pane fade " + (tabview && tabview == "CancellationReasons" ? " show active" : "")} id="v-pills-CancellationReasons" role="tabpanel" aria-labelledby="v-pills-CancellationReasons-tab">
+                {tabview && tabview == "CancellationReasons" && <Cancellationreason />}
+              </div>
               <div className={"tab-pane fade " + (tabview && tabview == "Permissions" ? " show active" : "")} id="v-pills-Permissions" role="tabpanel" aria-labelledby="v-pills-Permissions-tab"></div>
               <div className={"tab-pane fade " + (tabview && tabview == "SMSUsage" ? " show active" : "")} id="v-pills-SMSUsage" role="tabpanel" aria-labelledby="v-pills-SMSUsage-tab"></div>
               <div className={"tab-pane fade " + (tabview && tabview == "Integrations" ? " show active" : "")} id="v-pills-Integrations" role="tabpanel" aria-labelledby="v-pills-Integrations-tab">
