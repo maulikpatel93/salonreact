@@ -11,6 +11,7 @@ import StripeSetupForm from "pages/account/Form/StripeSetupForm";
 import Closeddate from "./List/Closeddate";
 import ClientNotification from "./List/ClientNotification";
 import Cancellationreason from "./List/Cancellationreason";
+import Consultation from "./List/Consultation";
 
 const Setting = () => {
   SalonModule();
@@ -163,7 +164,9 @@ const Setting = () => {
               <div className={"tab-pane fade " + (tabview && tabview == "Integrations" ? " show active" : "")} id="v-pills-Integrations" role="tabpanel" aria-labelledby="v-pills-Integrations-tab">
                 {tabview && tabview == "Integrations" && <Integration />}
               </div>
-              <div className={"tab-pane fade " + (tabview && tabview == "ConsultationForms" ? " show active" : "")} id="v-pills-ConsultationForms" role="tabpanel" aria-labelledby="v-pills-ConsultationForms-tab"></div>
+              <div className={"tab-pane fade " + (tabview && tabview == "ConsultationForms" ? " show active" : "")} id="v-pills-ConsultationForms" role="tabpanel" aria-labelledby="v-pills-ConsultationForms-tab">
+                {tabview && tabview == "ConsultationForms" && <Consultation />}
+              </div>
               <div className={"tab-pane fade " + (tabview && tabview == "Analytics" ? " show active" : "")} id="v-pills-Analytics" role="tabpanel" aria-labelledby="v-pills-Analytics-tab"></div>
             </div>
           </div>

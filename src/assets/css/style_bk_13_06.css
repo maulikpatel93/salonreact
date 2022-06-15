@@ -174,8 +174,8 @@ textarea.form-control::placeholder {
 .btn {
     font-weight: normal;
     font-size: 16px;
-    box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
-    border-radius: 2px;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border-radius: 6px;
     line-height: normal;
     padding: 9px 13px;
 }
@@ -246,29 +246,18 @@ textarea.form-control::placeholder {
     border-color: #ef0000 !important;
 }
 
-.btn-preview {
-    color: #3a3432;
-    background-color: #fbd2c3;
-    border-color: #fbd2c3;
-}
-
-.btn-preview:hover {
-    background-color: #eeab92 !important;
-    border-color: #eeab92 !important;
-}
-
 .btn-dark {
-    color: #3a3432;
-    background-color: #fbd2c3;
-    border: 1px solid #fbd2c3;
+    color: #fff;
+    background-color: #3a3432;
+    border: 1px solid #3a3432;
     /* box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 16px;
-  text-decoration: none;
-  padding: 9px 15px;
-  text-align: center;
-  line-height: normal; */
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 9px 15px;
+    text-align: center;
+    line-height: normal; */
 }
 
 .btn-dark:hover {
@@ -3305,84 +3294,56 @@ table .pro-title {
     white-space: pre-line !important;
 }
 
+
+/* 29-04-2022 account tabs start */
+
+.ac-setup .acsetup-right .tab-content .tab-pane#v-pills-ClosedDates {
+    padding: 0;
+    background-color: #f9f6f4;
+}
+
+.ac-setup .acsetup-right #v-pills-ClosedDates .left-content {
+    padding: 35px 40px;
+}
+
+.ac-setup .acsetup-right #v-pills-ClosedDates .right-content {
+    padding: 40px;
+}
+
+.acsetup-right #v-pills-ClosedDates .btn,
+.addclosedate-drawer .drawer-body .btn,
 .addcancellationreason-drawer .drawer-body .btn {
     border-radius: 2px;
     font-size: 13px;
     padding: 10px 21px;
 }
 
+.acsetup-right #v-pills-ClosedDates>.row {
+    height: 100%;
+}
+
+.addclosedate-drawer .close,
 .addcancellationreason-drawer .close {
     background-color: #f4eeeb;
     border-color: #f4eeeb;
     color: #3a3432;
 }
 
+.addclosedate-drawer .close:hover,
 .addcancellationreason-drawer .close:hover {
     background-color: #8c1c4d;
     border-color: #8c1c4d;
     color: #fff;
 }
 
+.addclosedate-drawer .drawer-body,
 .addcancellationreason-drawer .drawer-body {
     max-width: 450px;
     margin: 0 auto;
 }
 
+.addclosedate-drawer label,
 .addcancellationreason-drawer label {
-    color: #3a3432;
-    font-weight: 500;
-}
-
-
-/* 29-04-2022 account tabs start */
-
-.ac-setup .acsetup-right .tab-content .tab-pane#v-pills-ClosedDates,
-.ac-setup .acsetup-right .tab-content .tab-pane#v-pills-ConsultationForms {
-    padding: 0;
-    background-color: #f9f6f4;
-}
-
-.ac-setup .acsetup-right #v-pills-ClosedDates .left-content,
-.ac-setup .acsetup-right #v-pills-ConsultationForms .left-content {
-    padding: 35px 40px;
-}
-
-.ac-setup .acsetup-right #v-pills-ClosedDates .right-content,
-.ac-setup .acsetup-right #v-pills-ConsultationForms .right-content {
-    padding: 40px;
-}
-
-.acsetup-right #v-pills-ClosedDates .btn,
-.addclosedate-drawer .drawer-body .btn,
-.acsetup-right #v-pills-ConsultationForms .btn {
-    border-radius: 2px;
-    font-size: 13px;
-    padding: 10px 21px;
-}
-
-.acsetup-right #v-pills-ClosedDates>.row,
-.acsetup-right .tab-content .tab-pane#v-pills-ConsultationForms>.row {
-    height: 100%;
-}
-
-.addclosedate-drawer .close {
-    background-color: #f4eeeb;
-    border-color: #f4eeeb;
-    color: #3a3432;
-}
-
-.addclosedate-drawer .close:hover {
-    background-color: #8c1c4d;
-    border-color: #8c1c4d;
-    color: #fff;
-}
-
-.addclosedate-drawer .drawer-body {
-    max-width: 450px;
-    margin: 0 auto;
-}
-
-.addclosedate-drawer label {
     color: #3a3432;
     font-weight: 500;
 }
@@ -3411,15 +3372,6 @@ table .pro-title {
 
 
 /* 29-04-2022 account tabs end */
-
-.drawer-form-nofound {
-    background: #ffffff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 6px;
-    text-align: center;
-    padding: 50px;
-    margin-bottom: 20px;
-}
 
 
 /* 04/04/2022 New Sale page vouchers box start*/
@@ -3623,7 +3575,6 @@ table .pro-title {
     min-height: 27px;
     min-width: 36px;
     text-align: center;
-    cursor: pointer;
 }
 
 .box-image-cover .delete img {
@@ -3918,325 +3869,6 @@ body .border-block {
     background: linear-gradient(0deg, #f0e5e0, #f0e5e0), #f9f6f4;
     border-radius: 12px;
 }
-
-
-/* Consultation Form Start By Zankhana */
-
-.Consultation-Preview-Modal,
-.black-backdrop {
-    background-color: rgb(0 0 0 / 60%);
-}
-
-.editconsulationform-drawer .drawer-body {
-    height: calc(100vh - 74px);
-    overflow-y: auto;
-    background-color: #f9f6f4;
-}
-
-.editconsulationform-drawer .box-image-cover {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 20px;
-    padding: 35px 10px;
-}
-
-.editconsulationform-drawer .left-content {
-    padding: 28px 32px;
-}
-
-.editconsulationform-drawer .right-content {
-    padding: 47px;
-}
-
-.editconsulationform-drawer .box-image-cover .image-content span {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    color: #3a3432;
-}
-
-.editconsulationform-drawer .box-image-cover .image-content {
-    padding-top: 15px;
-}
-
-.editconsulationform-drawer .right-content .drawer-form-box {
-    background: #ffffff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 6px;
-    padding: 12px 15px;
-}
-
-.editconsulationform-drawer .right-content .form-header h3 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 25px;
-    color: #8f807d;
-}
-
-.editconsulationform-drawer .right-content .form-body .drawer-form-box {
-    padding: 20px 28px;
-}
-
-.editconsulationform-drawer .right-content .form-body .drawer-form-box label.form-label {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    color: #3a3432;
-}
-
-.editconsulationform-drawer .right-content .form-body .drawer-form-box h2 {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 28px;
-    color: #333333;
-}
-
-.drawer-form-box .edit,
-.drawer-form-box .delete {
-    background-color: #8f807d;
-    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
-    border-radius: 4px;
-    font-size: 12px;
-    padding: 6px 10px;
-    text-decoration: none;
-    color: #fff;
-    min-height: 27px;
-    min-width: 36px;
-    text-align: center;
-    cursor: pointer;
-}
-
-.drawer-form-box .edit:hover,
-.drawer-form-box .delete:hover {
-    background-color: #828df8;
-}
-
-
-/* Preview Modal Css Start */
-
-.edit-paradetails-modal .modal-dialog {
-    max-width: 600px;
-}
-
-.Edit-modal .modal-header h4 {
-    font-size: 15px;
-    line-height: 19px;
-    color: #8f807d;
-    font-weight: 400;
-}
-
-.Edit-modal .modal-content {
-    padding: 25px 35px;
-}
-
-.Edit-modal .consent-check-control .form-check {
-    padding-left: 20px;
-    display: flex;
-    align-items: flex-start;
-}
-
-.Edit-modal .modal-body label {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    color: #3a3432;
-}
-
-.Edit-modal .modal-body p {
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 22px;
-    color: #333333;
-}
-
-.Edit-modal .consent-check-control .form-check label {
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 19px;
-    color: #333333;
-    margin-left: 15px;
-}
-
-.Edit-modal .btn-close {
-    padding: 0;
-    opacity: 1;
-    width: 25px;
-    height: 25px;
-    font-size: 25px;
-}
-
-.Edit-modal .btn-close:hover {
-    opacity: 0.5;
-}
-
-.Edit-modal .btn {
-    min-width: 100px;
-}
-
-.consent-check-control .form-check .form-check-input {
-    width: 28px;
-    height: 26px;
-    margin-left: -20px;
-    border-color: #e5e7eb;
-}
-
-
-/* Preview Modal Css End */
-
-
-/* Consultation Form End */
-
-
-/* Reports Page Start */
-
-.reports-content h3 {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 30px;
-    color: #333333;
-}
-
-.reports-content h4 {
-    font-weight: 600;
-    font-size: 19px;
-    line-height: 24px;
-    color: #8c1c4d;
-    margin-bottom: 5px;
-}
-
-.reports-content p {
-    color: #8f807d;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.reports-content .report-box {
-    padding: 40px 40px;
-}
-
-.reports-content .report-box a {
-    display: block;
-}
-
-.report-box.border-bottom {
-    border-bottom: 0.75px solid #eeeeee !important;
-}
-
-.border-left-right {
-    position: relative;
-}
-
-.border-left-right::before,
-.border-left-right::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: auto;
-    top: 0;
-    border-left: 0.75px solid #eeeeee;
-    width: 1px;
-    height: 100vh;
-}
-
-.border-left-right::after {
-    border-left: 0.75px solid #eeeeee;
-    left: auto;
-    right: 0;
-}
-
-.edit-paradetails-modal .para-box {
-    padding: 15px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
-    border-radius: 4px;
-}
-
-
-/* Performance Summary Modal Css Start */
-
-.Reports-drawer .drawer-body {
-    padding: 28px 36px;
-}
-
-.drawer-panel-header {
-    background-color: #f9f6f4;
-    border-radius: 13px;
-    height: 73px;
-    padding: 18px 22px;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.dropdown.staff-dropdown .dropdown-toggle {
-    font-size: 14px;
-    padding: 6px 25px 6px 8px;
-}
-
-.export-dropdown .dropdown-toggle {
-    padding: 8px 15px;
-    min-width: 115px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 20px;
-    color: #3a3432;
-    border: none;
-    border-radius: 2px;
-    box-shadow: none;
-    background: #fff;
-}
-
-.export-dropdown .dropdown-box.show {
-    right: 0 !important;
-    left: auto !important;
-}
-
-.drawer-panel-body table>thead>tr>th {
-    color: #3a3432;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 20px;
-    padding: 10px 13px;
-}
-
-.table.border-less th,
-.table.border-less td {
-    border: none;
-}
-
-.drawer-panel-body table {
-    width: 100%;
-}
-
-.drawer-panel-body table tbody td {
-    text-align: inherit;
-    vertical-align: top;
-    border-collapse: collapse;
-    padding: 15px 15px;
-}
-
-.drawer-panel-body .table.nested-table th {
-    padding: 15px 0 15px 15px;
-}
-
-.drawer-panel-body table tbody td.p-0 {
-    border-bottom: none;
-}
-
-.drawer-panel-body .table> :not(:last-child)> :last-child>* {
-    border-color: inherit;
-}
-
-
-/* Performance Summary Modal Css Start */
-
-
-/* Reports Page End */
 
 
 /* Media query */
@@ -4964,9 +4596,6 @@ body .border-block {
         right: 5px;
         top: 5px;
     }
-    .editconsulationform-drawer .box-image-cover {
-        padding: 30px 10px 30px;
-    }
     .tabs-image img {
         max-width: 50px;
     }
@@ -5043,9 +4672,6 @@ body .border-block {
         min-width: auto;
         padding: 5px 8px;
         font-size: 14px;
-    }
-    .drawer-header .btn-cancel {
-        padding: 5px 8px !important;
     }
     .service .add-new-btn.btn {
         font-size: 13px;
@@ -5316,22 +4942,6 @@ body .border-block {
     }
     .page-content.dashboard-content {
         padding-top: 115px;
-    }
-    .editconsulationform-drawer .right-content,
-    .editconsulationform-drawer .right-content .form-body .drawer-form-box,
-    .editconsulationform-drawer .left-content,
-    .reports-content .report-box {
-        padding: 15px;
-    }
-    .border-left-right::before,
-    .border-left-right::after {
-        display: none;
-    }
-}
-
-@media only screen and (min-width: 992px) {
-    .report-box.border-bottom.border-lg-0 {
-        border-bottom: 0 !important;
     }
 }
 
