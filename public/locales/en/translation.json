@@ -632,5 +632,8 @@
     "Select which details you wish the client to enter Select which details you wish the client to enter": "Select which details you wish the client to enter Select which details you wish the client to enter",
     "Form Sections": "Form Sections",
     "Add sections to your form": "Add sections to your form",
-    "Select which details you wish the client to enter": "Select which details you wish the client to enter"
+    "Select which details you wish the client to enter": "Select which details you wish the client to enter",
+    "Export": "Export",
+    "Export to CSV": "Export to CSV",
+    "Export to Excel": "Export to Excel"
 }

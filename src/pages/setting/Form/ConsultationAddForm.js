@@ -8,7 +8,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddConsultationForm, ConsultationStoreApi, HandleFormData, HandleFormDataDelete, reset } from "store/slices/consultationSlice";
+import { CloseAddConsultationForm, ConsultationStoreApi, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, reset } from "store/slices/consultationSlice";
 import config from "../../../config";
 
 const ConsultationAddForm = () => {
@@ -186,8 +186,8 @@ const ConsultationAddForm = () => {
                                   let image = clientDetailObj[item].image;
                                   //console.log(clientDetailObj[item]);
                                   return (
-                                    <div className="col-sm-4 col-6" key={i} onClick={() => handleFormData(clientDetailObj[item])}>
-                                      <a className="box-image-cover">
+                                    <div className="col-sm-4 col-6" key={i}>
+                                      <a className="box-image-cover cursor-pointer" onClick={() => handleFormData(clientDetailObj[item])}>
                                         <div className="tabs-image">
                                           <img src={image} alt="" />
                                         </div>
@@ -211,7 +211,7 @@ const ConsultationAddForm = () => {
                                   let image = formsectionObj[item].image;
                                   return (
                                     <div className="col-sm-4 col-6" key={i}>
-                                      <a className="box-image-cover">
+                                      <a className="box-image-cover cursor-pointer" onClick={() => handleFormData(formsectionObj[item])}>
                                         <div className="tabs-image">
                                           <img src={image} alt="" />
                                         </div>
@@ -246,8 +246,8 @@ const ConsultationAddForm = () => {
                                               <label className="form-label">{title}</label>
                                             </div>
                                             <div className="col-xxl-4 col-md-4 col-6 text-end">
-                                              <a href="#editconsulationforms" className="edit me-1 cursor-pointer">
-                                                Edit
+                                              <a className="edit me-1 cursor-pointer" onClick={() => dispatch(OpenedEditHandleForm("open"))}>
+                                                {t("Edit")}
                                               </a>
                                               <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete(uniqueName))}>
                                                 <i className="fas fa-trash-alt text-sm"></i>
@@ -280,6 +280,24 @@ const ConsultationAddForm = () => {
             );
           }}
         </Formik>
+
+        <div className="modal Edit-modal black-backdrop edit-paradetails-modal" id="editParaDetailModal">
+          <div className="modal-dialog modal-md modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body p-0">
+                <h3 className="modal-title fw-semibold mb-2">Edit</h3>
+                <p>Add a paragraph of text</p>
+                <p className="para-box">We take your privacy seriously. For the safety of our clients, we maintain records of any health or medical conditions which may indicate that a particular service or treatment should not go ahead (eg allergies, pregnancy, skin conditions) or a particular product should not be used (eg products containing nuts, fish oils etc). These health records are not used for any other purpose. Client records are held securely within our salon software system and can only be seen by members of the salon team.</p>
+              </div>
+              <div className="ms-auto mt-4">
+                <a className="btn me-1 cursor-pointer btn-cancel" data-bs-dismiss="modal">
+                  Cancel
+                </a>
+                <a className="save btn btn btn-primary">Save</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </React.Fragment>
     </>
   );

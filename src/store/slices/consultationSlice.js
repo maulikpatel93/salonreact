@@ -105,6 +105,7 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isHandleFormData: [],
+  isOpenedEditHandleForm: "",
 };
 
 const consultationSlice = createSlice({
@@ -159,6 +160,9 @@ const consultationSlice = createSlice({
     HandleFormDataDelete: (state, action) => {
       const uniqueName = action.payload;
       state.isHandleFormData = state.isHandleFormData.length > 0 ? state.isHandleFormData.filter((item) => item.uniqueName != uniqueName) : state.isHandleFormData.filter((item) => item.uniqueName != uniqueName);
+    },
+    OpenedEditHandleForm: (state, action) => {
+      state.isOpenedEditHandleForm = action.payload;
     },
   },
   extraReducers: {
@@ -228,5 +232,5 @@ const consultationSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddConsultationForm, CloseAddConsultationForm, OpenEditConsultationForm, CloseEditConsultationForm, OpenConsultationDetailModal, CloseConsultationDetailModal, OpenConsultationSearchList, CloseConsultationsearchList, ConsultationSearchName, HandleFormData, HandleFormDataDelete } = consultationSlice.actions;
+export const { reset, OpenAddConsultationForm, CloseAddConsultationForm, OpenEditConsultationForm, CloseEditConsultationForm, OpenConsultationDetailModal, CloseConsultationDetailModal, OpenConsultationSearchList, CloseConsultationsearchList, ConsultationSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm } = consultationSlice.actions;
 export default consultationSlice.reducer;

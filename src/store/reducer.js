@@ -39,6 +39,7 @@ import closedateReducer from "../store/slices/closedateSlice";
 import dashboardReducer from "../store/slices/dashboardSlice";
 import cancellationreasonReducer from "../store/slices/cancellationreasonSlice";
 import consultationReducer from "../store/slices/consultationSlice";
+import reportReducer from "../store/slices/reportSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -410,6 +411,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     consultationReducer,
+  ),
+  report: persistReducer(
+    {
+      key: "report",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    reportReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,
