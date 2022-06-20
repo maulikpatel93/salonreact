@@ -12,6 +12,11 @@ import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import PerformanceSummary from "./PerformanceSummary";
+import SpinLoader from "component/SpinLoader";
+import NoDataFound from "component/NoDataFound";
+import Clientretention from "./Clientretention";
+import CancelledAppointments from "./CancelledAppointments";
+import AppointmentSchedule from "./AppointmentSchedule";
 
 const ReportListView = () => {
   SalonModule();
@@ -27,12 +32,18 @@ const ReportListView = () => {
   const isStaffOptionDropdown = useSelector((state) => state.staff.isStaffOptionDropdown);
   const labeldaterange = start && end ? start.format("YYYY-MM-DD") + " - " + end.format("YYYY-MM-DD") : "";
 
+  const [isLoaderList, setIsLoaderList] = useState(true);
+
   useEffect(() => {
     dispatch(staffOptionsDropdown({ dropdown: true }));
     if (isStaffFilter) {
-      dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, staff_id: isStaffFilter.id, daterange: labeldaterange }));
+      dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, staff_id: isStaffFilter.id, daterange: labeldaterange })).then(() => {
+        setIsLoaderList(false);
+      });
     } else {
-      dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, daterange: labeldaterange }));
+      dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, daterange: labeldaterange })).then(() => {
+        setIsLoaderList(false);
+      });
     }
   }, [labeldaterange]);
 
@@ -44,7 +55,6 @@ const ReportListView = () => {
     //picker.element.val("");
     setState({ start: "", end: "" });
   };
-
   const ListView = useSelector((state) => state.report.isListView);
 
   const fetchDataList = () => {
@@ -72,8 +82,8 @@ const ReportListView = () => {
               </a>
             </div>
           </div>
-          <div className="drawer-body pt-0">
-            <div className="drawer-panel-header mt-4">
+          <div className="drawer-body">
+            <div className="drawer-panel-header">
               <div className="row">
                 <div className="col-md-7">
                   <div className="d-flex flex-wrap align-items-center">
@@ -106,52 +116,56 @@ const ReportListView = () => {
                         </div>
                       </DateRangePicker>
                     </form>
-                    <div className="col-sm-3">
-                      <div className="dropdown staff-dropdown">
-                        <div className="btn-group w-100">
-                          <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            {isStaffFilter ? isStaffFilter.name : t("All Staff")}
-                          </button>
-                          <span
-                            className="btn btn-primary"
-                            onClick={() => {
-                              dispatch(ResetStaffFilter());
-                              dispatch(ReportListViewApi());
-                            }}
-                          >
-                            x
-                          </span>
-                          <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
-                            <ul className="p-0 m-0 list-unstyled">
-                              {isStaffOptionDropdown &&
-                                Object.keys(isStaffOptionDropdown).map((item, i) => {
-                                  let id = isStaffOptionDropdown[item].id;
-                                  let first_name = isStaffOptionDropdown[item].first_name;
-                                  let last_name = isStaffOptionDropdown[item].last_name;
-                                  let image_url = isStaffOptionDropdown[item].profile_photo_url;
-                                  let name = ucfirst(first_name) + " " + ucfirst(last_name);
-                                  return (
-                                    <li key={i} data-id={id}>
-                                      <a
-                                        className="d-flex align-items-center cursor-pointer"
-                                        onClick={() => {
-                                          dispatch(StaffFilter({ id, name }));
-                                          dispatch(ReportListViewApi({ staff_id: id }));
-                                        }}
-                                      >
-                                        <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
-                                        <div className="user-id">
-                                          <span className="user-name">{name}</span>
-                                        </div>
-                                      </a>
-                                    </li>
-                                  );
-                                })}
-                            </ul>
+                    {isScreenReport.uniquename === "performance_summary" || isScreenReport.uniquename === "cancelled_appointments" || isScreenReport.uniquename === "appointment_schedule" ? (
+                      <div className="col-sm-3">
+                        <div className="dropdown staff-dropdown">
+                          <div className="btn-group w-100">
+                            <button className="dropdown-toggle color-wine w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              {isStaffFilter ? isStaffFilter.name : t("All Staff")}
+                            </button>
+                            <span
+                              className="btn btn-primary"
+                              onClick={() => {
+                                dispatch(ResetStaffFilter());
+                                dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, daterange: labeldaterange }));
+                              }}
+                            >
+                              x
+                            </span>
+                            <div className="dropdown-menu dropdown-box" aria-labelledby="dropdownMenuButton1">
+                              <ul className="p-0 m-0 list-unstyled">
+                                {isStaffOptionDropdown &&
+                                  Object.keys(isStaffOptionDropdown).map((item, i) => {
+                                    let id = isStaffOptionDropdown[item].id;
+                                    let first_name = isStaffOptionDropdown[item].first_name;
+                                    let last_name = isStaffOptionDropdown[item].last_name;
+                                    let image_url = isStaffOptionDropdown[item].profile_photo_url;
+                                    let name = ucfirst(first_name) + " " + ucfirst(last_name);
+                                    return (
+                                      <li key={i} data-id={id}>
+                                        <a
+                                          className="d-flex align-items-center cursor-pointer"
+                                          onClick={() => {
+                                            dispatch(StaffFilter({ id, name }));
+                                            dispatch(ReportListViewApi({ ScreenReport: isScreenReport.uniquename, staff_id: id, daterange: labeldaterange }));
+                                          }}
+                                        >
+                                          <div className="user-img me-2">{image_url ? <img src={image_url} alt="" className="rounded-circle wh-32" /> : <div className="user-initial">{first_name.charAt(0) + last_name.charAt(0)}</div>}</div>
+                                          <div className="user-id">
+                                            <span className="user-name">{name}</span>
+                                          </div>
+                                        </a>
+                                      </li>
+                                    );
+                                  })}
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div className="col-md-5">
@@ -184,49 +198,16 @@ const ReportListView = () => {
             </div>
             <div className="drawer-panel-body mt-4">
               <InfiniteScroll dataLength={ListView && ListView.data && ListView.data.length ? ListView.data.length : "0"} next={fetchDataList} scrollableTarget="page-content-product" hasMore={ListView.next_page_url ? true : false} loader={<PaginationLoader />} style={{ overflow: ListView.next_page_url ? "auto" : "inherit" }}>
-                <div className="table-responsive">
-                  <table className="table bg-white">
-                    <thead className="sticky-top bg-white">
-                      <tr>
-                        <th>Staff</th>
-                        <th colSpan="2">Customers</th>
-                        <th colSpan="5">Appointments</th>
-                        <th colSpan="3">Sales</th>
-                      </tr>
-                      <tr>
-                        <th className="fw-500">Staff Name</th>
-                        <th className="fw-600">Total</th>
-                        <th className="fw-600">New</th>
-                        <th className="fw-600">Total</th>
-                        <th className="fw-600">Services Booked</th>
-                        <th className="fw-600">Retained</th>
-                        <th className="fw-600">Online Bookings</th>
-                        <th className="fw-600">Total Value</th>
-                        <th className="fw-600">Services Invoiced</th>
-                        <th className="fw-600">Products Invoiced</th>
-                        <th className="fw-600">Sales Total</th>
-                      </tr>
-                    </thead>
-                    <tbody className="report-table-data">
-                      <PerformanceSummary view={ListView} />
-                    </tbody>
-                    <tfoot className="">
-                      <tr>
-                        <th className="fw-normal">Staff Name</th>
-                        <th className="fw-normal">Total</th>
-                        <th className="fw-normal">New</th>
-                        <th className="fw-normal">Total</th>
-                        <th className="fw-normal">Services Booked</th>
-                        <th className="fw-normal">Retained</th>
-                        <th className="fw-normal">Online Bookings</th>
-                        <th className="fw-normal">Total Value</th>
-                        <th className="fw-normal">Services Invoiced</th>
-                        <th className="fw-normal">Products Invoiced</th>
-                        <th className="fw-normal">Sales Total</th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
+                {isLoaderList === true ? (
+                  <SpinLoader />
+                ) : (
+                  <>
+                    {isScreenReport.uniquename === "performance_summary" ? <PerformanceSummary view={ListView} /> : ""}
+                    {isScreenReport.uniquename === "client_retention" ? <Clientretention view={ListView} /> : ""}
+                    {isScreenReport.uniquename === "cancelled_appointments" ? <CancelledAppointments view={ListView} /> : ""}
+                    {isScreenReport.uniquename === "appointment_schedule" ? <AppointmentSchedule view={ListView} /> : ""}
+                  </>
+                )}
                 {!isFetching && ListView.next_page_url && (
                   <div className="col-2 m-auto p-3 text-center">
                     <button onClick={loadMoreItems} className="btn btn-primary">

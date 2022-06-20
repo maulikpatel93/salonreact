@@ -635,5 +635,19 @@
     "Select which details you wish the client to enter": "Select which details you wish the client to enter",
     "Export": "Export",
     "Export to CSV": "Export to CSV",
-    "Export to Excel": "Export to Excel"
+    "Export to Excel": "Export to Excel",
+    "Customers": "Customers",
+    "Staff Name": "Staff Name",
+    "New": "New",
+    "Retained": "Retained",
+    "Online Bookings": "Online Bookings",
+    "Total Value": "Total Value",
+    "Services Invoiced": "Services Invoiced",
+    "Products Invoiced": "Products Invoiced",
+    "Sales Total": "Sales Total",
+    "Services Booked": "Services Booked",
+    "Client Name": "Client Name",
+    "Last Appointment": "Last Appointment",
+    "Days Absent": "Days Absent",
+    "Cancelled Date": "Cancelled Date"
 }

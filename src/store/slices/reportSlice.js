@@ -46,19 +46,15 @@ const reportSlice = createSlice({
   },
   extraReducers: {
     [ReportListViewApi.fulfilled]: (state, action) => {
-      if (checkobject(action.payload) === true) {
-        state.isListView = [action.payload];
-      } else {
-        let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
-        let new_current_page = action.payload.current_page ? action.payload.current_page : "";
-        let viewdata = state.isListView && state.isListView.data;
-        let newviewdata = action.payload && action.payload.data;
-        state.isListView = action.payload;
-        if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
-          viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
-        }
-        state.isListView = action.payload;
+      let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isListView && state.isListView.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isListView = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isListView.data = [...viewdata, ...newviewdata]) : action.payload;
       }
+      state.isListView = action.payload;
     },
     [ReportListViewApi.rejected]: (state) => {
       state.isListView = [];
@@ -66,5 +62,5 @@ const reportSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenListModal, ScreenReport, StaffFilter,ResetStaffFilter } = reportSlice.actions;
+export const { reset, OpenListModal, ScreenReport, StaffFilter, ResetStaffFilter } = reportSlice.actions;
 export default reportSlice.reducer;

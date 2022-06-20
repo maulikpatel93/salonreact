@@ -20,7 +20,7 @@ const Reports = () => {
       shortdescription: t("View a summary of sales, customers and appointments."),
     },
     {
-      uniqueid: 2,
+      uniquename: "client_retention",
       title: t("Client retention"),
       shortdescription: t("View your overall client retention rates, as well as retention rates by each staff member."),
     },

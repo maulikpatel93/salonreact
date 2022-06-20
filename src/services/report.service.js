@@ -12,8 +12,14 @@ const view = (values) => {
   const next_page_url = values && values.next_page_url;
   const result = values && values.result ? values.result : "";
   const ScreenReport = values && values.ScreenReport ? values.ScreenReport : "";
+  const daterange = values && values.daterange ? values.daterange : "";
+  const staff_id = values && values.staff_id ? values.staff_id : "";
 
-  const pagination = values && values.option ? false : true;
+  let pagination = values && values.option ? false : true;
+  // if (ScreenReport == "performance_summary") {
+    
+  // }
+  pagination = false;
   const action = page ? `afterlogin/report/view?page=${page}` : `afterlogin/report/view`;
   const data = {
     auth_key: auth_key,
@@ -22,6 +28,8 @@ const view = (values) => {
     pagination: values && values.id ? false : pagination, //true or false
     result: result, //business_name,owner_name
     ScreenReport: ScreenReport,
+    daterange: daterange,
+    staff_id: staff_id,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };

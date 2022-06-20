@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import config from "../../../config";
 import yupconfig from "../../../yupconfig";
 import { InputField, ReactSelectField, SelectField, TextareaField, SwitchField } from "../../../component/form/Field";
-import { swalConfirm, sweatalert } from "../../../component/Sweatalert2";
+import { swalConfirm, swalConfirmInput, sweatalert } from "../../../component/Sweatalert2";
 import PropTypes from "prop-types";
 
 import useScriptRef from "../../../hooks/useScriptRef";
@@ -101,7 +101,7 @@ const AppointmentEditForm = (props) => {
           dispatch(ClientAppointmentListViewApi({ client: detail.client_id }));
           if (isRangeInfo) {
             dispatch(appointmentListViewApi(isRangeInfo));
-            dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));
+            dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate: detail.showdate }));
             dispatch(busytimeListViewApi(isRangeInfo));
           }
           sweatalert({ title: t("Appointment booking Updated"), text: t("Appointment Booked Successfully"), icon: "success" });
@@ -343,9 +343,10 @@ const AppointmentEditForm = (props) => {
                           className="btn btn-danger w-100 btn-lg"
                           disabled={loading}
                           onClick={(e) => {
-                            let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure you want to cancel the appointment?"), message: "", confirmButtonText: t("Yes, cancelled it!") });
+                            let confirmbtn = swalConfirmInput(e.currentTarget, { title: t("Are you sure you want to cancel the appointment?"), message: "", confirmButtonText: t("Yes, cancelled it!") });
                             if (confirmbtn == true) {
-                              dispatch(appointmentUpdateApi({ id: formik.values.id, client_id: formik.values.client_id, status: "Cancelled", clickEvent: "statusupdate" })).then((action) => {
+                              let cancellation_reason = e.target.getAttribute("reason");
+                              dispatch(appointmentUpdateApi({ id: formik.values.id, client_id: formik.values.client_id, status: "Cancelled", clickEvent: "statusupdate", cancellation_reason: cancellation_reason })).then((action) => {
                                 if (action.meta.requestStatus === "fulfilled") {
                                   formik.setStatus({ success: true });
                                   formik.resetForm();
@@ -354,7 +355,7 @@ const AppointmentEditForm = (props) => {
                                   dispatch(ClientAppointmentListViewApi({ client: detail.id }));
                                   if (isRangeInfo) {
                                     dispatch(appointmentListViewApi(isRangeInfo));
-                                    dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate:detail.showdate }));
+                                    dispatch(appointmentDetailApi({ id: detail.id, client_id: detail.client_id, showdate: detail.showdate }));
                                   }
                                   sweatalert({ title: t("Appointment booking Cancelled"), text: t("Appointment booking Cancelled"), icon: "success" });
                                 }

@@ -4224,6 +4224,14 @@ body .border-block {
     padding: 15px 15px;
 }
 
+.drawer-panel-body table tfoot td {
+    text-align: inherit;
+    vertical-align: top;
+    border-collapse: collapse;
+    padding: 15px 15px;
+    font-weight: bold;
+}
+
 .drawer-panel-body .table.nested-table th {
     padding: 15px 0 15px 15px;
 }
@@ -4234,6 +4242,11 @@ body .border-block {
 
 .drawer-panel-body .table> :not(:last-child)> :last-child>* {
     border-color: inherit;
+}
+
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+    background-color: #8c1c4d !important;
 }
 
 
