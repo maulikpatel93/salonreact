@@ -14,12 +14,23 @@ const view = (values) => {
   const ScreenReport = values && values.ScreenReport ? values.ScreenReport : "";
   const daterange = values && values.daterange ? values.daterange : "";
   const staff_id = values && values.staff_id ? values.staff_id : "";
+  const supplier_id = values && values.supplier_id ? values.supplier_id : "";
+  const service_id = values && values.service_id ? values.service_id : "";
+  const product_id = values && values.product_id ? values.product_id : "";
+  const month = values && values.month ? values.month : "";
 
-  let pagination = values && values.option ? false : true;
-  // if (ScreenReport == "performance_summary") {
-    
-  // }
-  pagination = false;
+  let pagination = values && values.pagination ? values.pagination : "";
+
+  if (pagination) {
+    pagination = values && values.option ? false : true;
+  } else {
+    pagination = false;
+  }
+
+  if (ScreenReport === "gift_vouchers") {
+    pagination = true;
+  }
+
   const action = page ? `afterlogin/report/view?page=${page}` : `afterlogin/report/view`;
   const data = {
     auth_key: auth_key,
@@ -30,6 +41,10 @@ const view = (values) => {
     ScreenReport: ScreenReport,
     daterange: daterange,
     staff_id: staff_id,
+    supplier_id: supplier_id,
+    service_id: service_id,
+    product_id: product_id,
+    month: month,
   };
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };

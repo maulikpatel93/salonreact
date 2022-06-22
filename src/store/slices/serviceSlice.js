@@ -24,7 +24,7 @@ export const serviceUpdateApi = createAsyncThunk("service/update", async (formva
       .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString(); 
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     return thunkAPI.rejectWithValue({ status: error.response.status, message: message });
   }
 });
@@ -111,8 +111,8 @@ export const serviceOptions = createAsyncThunk("service/serviceOptions", async (
   try {
     const resposedata = await serviceApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'serviceOptions'))
-      .catch((error) => HandleError(thunkAPI, error, 'serviceOptions'));
+      .then((response) => HandleResponse(thunkAPI, response, "serviceOptions"))
+      .catch((error) => HandleError(thunkAPI, error, "serviceOptions"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -123,8 +123,21 @@ export const servicePriceApi = createAsyncThunk("service/serviceprice", async (f
   try {
     const resposedata = await serviceApiController
       .serviceprice(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'serviceprice'))
-      .catch((error) => HandleError(thunkAPI, error, 'serviceprice'));
+      .then((response) => HandleResponse(thunkAPI, response, "serviceprice"))
+      .catch((error) => HandleError(thunkAPI, error, "serviceprice"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const ServiceOptionsDropdown = createAsyncThunk("service/ServiceOptionsDropdown", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await serviceApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "ServiceOptionsDropdown"))
+      .catch((error) => HandleError(thunkAPI, error, "ServiceOptionsDropdown"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -147,6 +160,7 @@ const initialState = {
   isAddonStaff: [],
   isServiceOption: [],
   isServicePrice: [],
+  isServiceOptionDropdown: [],
 };
 
 const serviceSlice = createSlice({
@@ -317,6 +331,13 @@ const serviceSlice = createSlice({
     },
     [servicePriceApi.rejected]: (state) => {
       state.isServicePrice = [];
+    },
+    [ServiceOptionsDropdown.pending]: () => {},
+    [ServiceOptionsDropdown.fulfilled]: (state, action) => {
+      state.isServiceOptionDropdown = action.payload;
+    },
+    [ServiceOptionsDropdown.rejected]: (state) => {
+      state.isServiceOptionDropdown = [];
     },
   },
 });

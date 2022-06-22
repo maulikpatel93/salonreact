@@ -6,7 +6,7 @@ import { SalonModule } from "pages";
 import { ucfirst } from "helpers/functions";
 import Moment from "react-moment";
 
-const Clientretention = () => {
+const ClientBirthdays = () => {
   SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -23,9 +23,12 @@ const Clientretention = () => {
               <th className="fw-500">{t("Client Name")}</th>
               <th className="fw-600">{t("Email")}</th>
               <th className="fw-600">{t("Mobile")}</th>
+              <th className="fw-600">{t("Gender")}</th>
+              <th className="fw-600">{t("Added")}</th>
+              <th className="fw-600">{t("Appointments")}</th>
               <th className="fw-600">{t("Last Appointment")}</th>
-              <th className="fw-600">{t("Days Absent")}</th>
-              <th className="fw-600">{t("Staff")}</th>
+              <th className="fw-600">{t("No Shows")}</th>
+              <th className="fw-600">{t("Opt-in Marketing")}</th>
               <th className="fw-600">{t("Total Sales")}</th>
             </tr>
           </thead>
@@ -37,8 +40,12 @@ const Clientretention = () => {
                 let last_name = objectData[item].last_name;
                 let email = objectData[item].email;
                 let phone_number = objectData[item].phone_number;
+                let gender = objectData[item].gender;
+                let created_at = objectData[item].created_at;
+                let recieve_marketing_email = objectData[item].recieve_marketing_email;
                 let lastappointment = objectData[item].lastappointment;
                 let TotalSales = objectData[item].TotalSales;
+                let TotalAppointments = objectData[item].TotalAppointments;
 
                 let name = ucfirst(first_name) + " " + ucfirst(last_name);
                 return (
@@ -46,9 +53,12 @@ const Clientretention = () => {
                     <td className="">{name}</td>
                     <td className="">{email}</td>
                     <td className="">{phone_number}</td>
-                    <td className="">{lastappointment ? <Moment format="DD MMMM YYYY">{lastappointment.dateof}</Moment> : ""}</td>
+                    <td className="">{gender}</td>
+                    <td className="">{created_at ? <Moment format="DD MMMM YYYY">{created_at}</Moment> : ""}</td>
+                    <td className="">{TotalAppointments}</td>
+                    <td className="">{lastappointment ? <Moment format="DD MMMM YYYY">{lastappointment.dateof}</Moment> : "-"}</td>
                     <td className="">80%</td>
-                    <td className="">3</td>
+                    <td className="">{recieve_marketing_email === 1 ? t("Yes") : t("No")}</td>
                     <td className="">${TotalSales}</td>
                   </tr>
                 );
@@ -67,4 +77,4 @@ const Clientretention = () => {
   );
 };
 
-export default Clientretention;
+export default ClientBirthdays;

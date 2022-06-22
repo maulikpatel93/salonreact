@@ -29,7 +29,7 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    formData.append(value, values[value] === null ? '' : values[value]);
+    formData.append(value, values[value] === null ? "" : values[value]);
   }
   const action = "afterlogin/products/update/" + values.id;
   formData.append("auth_key", auth_key);
@@ -45,7 +45,8 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const dropdown = values && values.dropdown ? values.dropdown : "";
+  const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
     let sortArray = [];
@@ -56,32 +57,48 @@ const view = (values) => {
           sortSubArray[subindex] = `sort[${key}][${subkey}]=${sort[key][subkey]}`;
         });
       }
-      if(key != 'supplier'){
+      if (key != "supplier") {
         sortArray[index] = `sort[${key}]=${sort[key]}`;
       }
     });
     if (sortSubArray.length > 0) {
       let jsubsort = sortSubArray.join("&");
       sortstring = jsubsort;
-    } 
+    }
     if (sortArray.length > 0) {
       let jsort = sortArray.join("&");
       sortstring = jsort;
     }
   }
   const action = page ? `afterlogin/products/view?page=${page}&${sortstring}` : `afterlogin/products/view?${sortstring}`;
-  const data = {
-    auth_key: auth_key,
-    action: action,
-    salon_id: auth.user.salon_id,
-    pagination: values && values.id ? false : true, //true or false
-    id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,image,sku,description,cost_price,retail_price,stock_quantity", // first_name,last_name,email
-    salon_field: false, //business_name,owner_name
-    supplier_field: 'name', //business_name,owner_name
-    tax_field: 'name', //business_name,owner_name
-    result: result, //business_name,owner_name
-  };
+  let productdata;
+  if (dropdown) {
+    productdata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: false, //true or false
+      id: "",
+      field: "name,image,sku,description,cost_price,retail_price,stock_quantity", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      result: result, //business_name,owner_name
+    };
+  } else {
+    productdata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: values && values.id ? false : true, //true or false
+      id: values && values.id ? values.id : "",
+      field: values && values.id ? "" : "name,image,sku,description,cost_price,retail_price,stock_quantity", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      supplier_field: "name", //business_name,owner_name
+      tax_field: "name", //business_name,owner_name
+      result: result, //business_name,owner_name
+    };
+  }
+
+  const data = productdata;
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
 

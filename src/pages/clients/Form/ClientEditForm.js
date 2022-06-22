@@ -51,7 +51,7 @@ const ClientEditForm = () => {
     last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
-    date_of_birth: Yup.string().trim().label(t("Date Of Birth")),
+    date_of_birth: Yup.string().trim().label(t("Date Of Birth")).required(),
     gender: Yup.string().trim().label(t("Gender")).required().nullable(),
     address: Yup.string().trim().label(t("Address")),
     street: Yup.string().trim().label(t("Street")),
@@ -146,7 +146,7 @@ const ClientEditForm = () => {
                 </div>
               </div>
               <div className="mb-3">
-              <MapAddressField name="address" label={t("Address")} value={formik.values.address} placeholder={t("Start typing address")} controlId="clientForm-address" />
+                <MapAddressField name="address" label={t("Address")} value={formik.values.address} placeholder={t("Start typing address")} controlId="clientForm-address" />
               </div>
               <div className="row gx-2">
                 <div className="mb-3">

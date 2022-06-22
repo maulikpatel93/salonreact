@@ -24,6 +24,9 @@ const initialState = {
   isOpenListModal: "",
   isScreenReport: "",
   isStaffFilter: "",
+  isSupplierFilter: "",
+  isServiceFilter: "",
+  isProductFilter: "",
 };
 
 const reportSlice = createSlice({
@@ -42,6 +45,24 @@ const reportSlice = createSlice({
     },
     ResetStaffFilter: (state) => {
       state.isStaffFilter = "";
+    },
+    SupplierFilter: (state, action) => {
+      state.isSupplierFilter = action.payload;
+    },
+    ResetSupplierFilter: (state) => {
+      state.isSupplierFilter = "";
+    },
+    ServiceFilter: (state, action) => {
+      state.isServiceFilter = action.payload;
+    },
+    ResetServiceFilter: (state) => {
+      state.isServiceFilter = "";
+    },
+    ProductFilter: (state, action) => {
+      state.isProductFilter = action.payload;
+    },
+    ResetProductFilter: (state) => {
+      state.isProductFilter = "";
     },
   },
   extraReducers: {
@@ -62,5 +83,5 @@ const reportSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenListModal, ScreenReport, StaffFilter, ResetStaffFilter } = reportSlice.actions;
+export const { reset, OpenListModal, ScreenReport, StaffFilter, ResetStaffFilter, SupplierFilter, ResetSupplierFilter, ServiceFilter, ResetServiceFilter, ProductFilter, ResetProductFilter } = reportSlice.actions;
 export default reportSlice.reducer;

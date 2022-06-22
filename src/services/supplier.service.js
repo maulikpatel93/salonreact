@@ -48,7 +48,8 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
-  const result = values && values.result ? values.result : '';
+  const dropdown = values && values.dropdown ? values.dropdown : "";
+  const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
     let sortArray = [];
@@ -62,17 +63,33 @@ const view = (values) => {
   }
   const pagination = values && values.option ? false : true;
   const action = page ? `afterlogin/suppliers/view?page=${page}&${sortstring}` : `afterlogin/suppliers/view?${sortstring}`;
-  const data = {
-    auth_key: auth_key,
-    action: action,
-    salon_id: auth.user.salon_id,
-    pagination: values && values.id ? false : pagination, //true or false
-    id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,first_name,last_name,email,logo,phone_number,website", // first_name,last_name,email
-    salon_field: false, //business_name,owner_name
-    result: result, //business_name,owner_name
-    option: values && values.option ? values.option : ''
-  };
+
+  let supplierdata;
+  if (dropdown) {
+    supplierdata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: false, //true or false
+      id: "",
+      field: "name,first_name,last_name,email,logo,phone_number,website", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      result: result, //business_name,owner_name
+    };
+  } else {
+    supplierdata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: values && values.id ? false : pagination, //true or false
+      id: values && values.id ? values.id : "",
+      field: values && values.id ? "" : "name,first_name,last_name,email,logo,phone_number,website", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      result: result, //business_name,owner_name
+      option: values && values.option ? values.option : "",
+    };
+  }
+  const data = supplierdata;
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
 

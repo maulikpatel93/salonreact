@@ -49,6 +49,7 @@ const view = (values) => {
   const sort = values && values.sort;
   const page = values && values.page;
   const next_page_url = values && values.next_page_url;
+  const dropdown = values && values.dropdown ? values.dropdown : "";
   const result = values && values.result ? values.result : "";
   let sortstring = "";
   if (sort) {
@@ -74,23 +75,39 @@ const view = (values) => {
     }
   }
   const action = page ? `afterlogin/services/view?page=${page}&${sortstring}` : `afterlogin/services/view?${sortstring}`;
-  const data = {
-    auth_key: auth_key,
-    action: action,
-    salon_id: auth.user.salon_id,
-    pagination: values && values.id ? false : true, //true or false
-    id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
-    salon_field: false, //business_name,owner_name
-    serviceprice_field: values && values.option ? "0" : "price_tier_id,price,add_on_price", //business_name,owner_name
-    supplier_field: values && values.option ? "0" : "name", //business_name,owner_name
-    tax_field: values && values.option ? "0" : "name", //business_name,owner_name
-    addOnService_field: values && values.option ? "0" : "name", //business_name,owner_name
-    addOnStaff_field: values && values.option ? "0" : "name", //business_name,owner_name
-    category_field: values && values.option ? "0" : "name", //business_name,owner_name
-    result: result, //business_name,owner_name
-    option: values && values.option ? values.option : "",
-  };
+  let servicedata;
+  if (dropdown) {
+    servicedata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: false, //true or false
+      id: "",
+      field: "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      result: result, //business_name,owner_name
+    };
+  } else {
+    servicedata = {
+      auth_key: auth_key,
+      action: action,
+      salon_id: auth.user.salon_id,
+      pagination: values && values.id ? false : true, //true or false
+      id: values && values.id ? values.id : "",
+      field: values && values.id ? "" : "name,description,duration,padding_time,color,service_booked_online,deposit_booked_online,deposit_booked_price", // first_name,last_name,email
+      salon_field: false, //business_name,owner_name
+      serviceprice_field: values && values.option ? "0" : "price_tier_id,price,add_on_price", //business_name,owner_name
+      supplier_field: values && values.option ? "0" : "name", //business_name,owner_name
+      tax_field: values && values.option ? "0" : "name", //business_name,owner_name
+      addOnService_field: values && values.option ? "0" : "name", //business_name,owner_name
+      addOnStaff_field: values && values.option ? "0" : "name", //business_name,owner_name
+      category_field: values && values.option ? "0" : "name", //business_name,owner_name
+      result: result, //business_name,owner_name
+      option: values && values.option ? values.option : "",
+    };
+  }
+
+  const data = servicedata;
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
 

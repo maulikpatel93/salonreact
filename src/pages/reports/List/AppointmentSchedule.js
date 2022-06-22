@@ -58,7 +58,7 @@ const AppointmentSchedule = () => {
                     <td className="">{<Moment format="hh:mm a">{dateof + " " + start_time}</Moment>}</td>
                     <td className="">{<Moment format="hh:mm a">{dateof + " " + end_time}</Moment>}</td>
                     <td className="">{staff_name}</td>
-                    <td className="">{price}</td>
+                    <td className="">${price}</td>
                   </tr>
                 );
               })}

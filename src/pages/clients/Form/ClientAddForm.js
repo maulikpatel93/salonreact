@@ -49,7 +49,7 @@ const ClientAddForm = () => {
     profile_photo: Yup.mixed(),
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
-    date_of_birth: Yup.string().trim().label(t("Date Of Birth")),
+    date_of_birth: Yup.string().trim().label(t("Date Of Birth")).required(),
     gender: Yup.string().trim().label(t("Gender")).required().nullable(),
     address: Yup.string().trim().label(t("Address")),
     street: Yup.string().trim().label(t("Street")),

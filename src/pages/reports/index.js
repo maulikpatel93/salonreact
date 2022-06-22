@@ -49,7 +49,7 @@ const Reports = () => {
 
   const Sales = [
     {
-      uniquename: "sales-by_type",
+      uniquename: "sales_by_type",
       title: t("Sales by type"),
       shortdescription: t("View a summary of sales by type"),
     },
@@ -64,7 +64,7 @@ const Reports = () => {
       shortdescription: t("View a summary of product sales"),
     },
     {
-      uniquename: "sales_by_staff member",
+      uniquename: "sales_by_staffmember",
       title: t("Sales by staff member"),
       shortdescription: t("View a summary of sales by each team member"),
     },
@@ -97,7 +97,8 @@ const Reports = () => {
       shortdescription: t("A list of clients with gift vouchers and details of use."),
     },
     {
-      uniquename: "absent_clients",
+      // uniquename: "absent_clients", same ass client_retention data
+      uniquename: "client_retention",
       title: t("Absent clients"),
       shortdescription: t("View clients who haven't had a booking between two selected dates."),
     },

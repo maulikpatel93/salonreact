@@ -7,8 +7,8 @@ export const productStoreApi = createAsyncThunk("product/create", async (formval
   try {
     const resposedata = await productApiController
       .create(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'create'))
-      .catch((error) => HandleError(thunkAPI, error, 'create'));
+      .then((response) => HandleResponse(thunkAPI, response, "create"))
+      .catch((error) => HandleError(thunkAPI, error, "create"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -20,8 +20,8 @@ export const productUpdateApi = createAsyncThunk("product/update", async (formva
   try {
     const resposedata = await productApiController
       .update(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'update'))
-      .catch((error) => HandleError(thunkAPI, error, 'update'));
+      .then((response) => HandleResponse(thunkAPI, response, "update"))
+      .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -33,8 +33,8 @@ export const productListViewApi = createAsyncThunk("product/listview", async (fo
   try {
     const resposedata = await productApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'listview'))
-      .catch((error) => HandleError(thunkAPI, error, 'listview'));
+      .then((response) => HandleResponse(thunkAPI, response, "listview"))
+      .catch((error) => HandleError(thunkAPI, error, "listview"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -46,8 +46,8 @@ export const productDetailApi = createAsyncThunk("product/detail", async (formVa
   try {
     const resposedata = await productApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'detail'))
-      .catch((error) => HandleError(thunkAPI, error, 'detail'));
+      .then((response) => HandleResponse(thunkAPI, response, "detail"))
+      .catch((error) => HandleError(thunkAPI, error, "detail"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -59,8 +59,8 @@ export const productDeleteApi = createAsyncThunk("product/delete", async (formVa
   try {
     const resposedata = await productApiController
       .deleted(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'delete'))
-      .catch((error) => HandleError(thunkAPI, error, 'delete'));
+      .then((response) => HandleResponse(thunkAPI, response, "delete"))
+      .catch((error) => HandleError(thunkAPI, error, "delete"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -72,8 +72,21 @@ export const productSuggetionListApi = createAsyncThunk("product/suggetionlist",
   try {
     const resposedata = await productApiController
       .suggetionlist(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, 'suggetionlist'))
-      .catch((error) => HandleError(thunkAPI, error, 'suggetionlist'));
+      .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
+      .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const ProductOptionsDropdown = createAsyncThunk("product/ProductOptionsDropdown", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await productApiController
+      .view(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "ProductOptionsDropdown"))
+      .catch((error) => HandleError(thunkAPI, error, "ProductOptionsDropdown"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -93,6 +106,7 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isProductManageStock: 0,
+  isProductOptionDropdown: [],
 };
 
 const productSlice = createSlice({
@@ -221,6 +235,13 @@ const productSlice = createSlice({
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
     [productDeleteApi.rejected]: () => {},
+    [ProductOptionsDropdown.pending]: () => {},
+    [ProductOptionsDropdown.fulfilled]: (state, action) => {
+      state.isProductOptionDropdown = action.payload;
+    },
+    [ProductOptionsDropdown.rejected]: (state) => {
+      state.isProductOptionDropdown = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
