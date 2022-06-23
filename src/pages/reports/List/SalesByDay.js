@@ -14,19 +14,23 @@ const SalesByDay = () => {
   const reportlist = useSelector((state) => state.report.isListView);
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
 
+  let total_service_sold = 0;
+  let total_product_sold = 0;
+  let total_net_sales = 0;
+  let total_tax = 0;
+  let total_gross_sale = 0;
   return (
     <>
       <div className="table-responsive">
         <table className="table bg-white">
           <thead className="">
             <tr>
-              <th className="fw-500">{t("Client Name")}</th>
-              <th className="fw-600">{t("Email")}</th>
-              <th className="fw-600">{t("Mobile")}</th>
-              <th className="fw-600">{t("Last Appointment")}</th>
-              <th className="fw-600">{t("Days Absent")}</th>
-              <th className="fw-600">{t("Staff")}</th>
-              <th className="fw-600">{t("Total Sales")}</th>
+              <th className="fw-500">{t("Day")}</th>
+              <th className="fw-600">{t("Services Sold")}</th>
+              <th className="fw-600">{t("Products Sold")}</th>
+              <th className="fw-600">{t("Net Sale")}</th>
+              <th className="fw-600">{t("Tax")}</th>
+              <th className="fw-600">{t("Gross Sales")}</th>
             </tr>
           </thead>
           <tbody className="report-table-data">
@@ -35,25 +39,40 @@ const SalesByDay = () => {
                 let id = objectData[item].id;
                 let first_name = objectData[item].first_name;
                 let last_name = objectData[item].last_name;
-                let email = objectData[item].email;
-                let phone_number = objectData[item].phone_number;
-                let lastappointment = objectData[item].lastappointment;
-                let TotalSales = objectData[item].TotalSales;
-                let TotalStaff = objectData[item].TotalStaff;
+                let TotalServiceSold = objectData[item].TotalServiceSold;
+                let TotalProductSold = objectData[item].TotalProductSold;
+                let net_sales = objectData[item].TotalNetSale;
+                let tax = objectData[item].TotalTax;
+                let gross_sale = objectData[item].TotalGrossSale;
 
                 let name = ucfirst(first_name) + " " + ucfirst(last_name);
+
+                total_service_sold += parseInt(TotalServiceSold);
+                total_product_sold += parseInt(TotalProductSold);
+                total_net_sales += parseFloat(net_sales);
+                total_tax += parseFloat(tax);
+                total_gross_sale += parseFloat(gross_sale);
                 return (
                   <tr key={i} data-id={id}>
                     <td className="">{name}</td>
-                    <td className="">{email}</td>
-                    <td className="">{phone_number}</td>
-                    <td className="">{lastappointment ? <Moment format="DD MMMM YYYY">{lastappointment.dateof}</Moment> : ""}</td>
-                    <td className="">80%</td>
-                    <td className="">{TotalStaff}</td>
-                    <td className="">${TotalSales}</td>
+                    <td className="">{TotalServiceSold}</td>
+                    <td className="">{TotalProductSold}</td>
+                    <td className="">${net_sales}</td>
+                    <td className="">${tax}</td>
+                    <td className="">${gross_sale}</td>
                   </tr>
                 );
               })}
+            {objectData.length > 0 && (
+              <tr className="fw-bold">
+                <td className="">{t("Total")}</td>
+                <td className="">{total_service_sold}</td>
+                <td className="">{total_product_sold}</td>
+                <td className="">${total_net_sales}</td>
+                <td className="">${total_tax}</td>
+                <td className="">${total_gross_sale}</td>
+              </tr>
+            )}
             {objectData.length === 0 && (
               <tr>
                 <td className="text-center" colSpan="10">

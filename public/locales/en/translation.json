@@ -668,5 +668,12 @@
     "All Products": "All Products",
     "Purchased": "Purchased",
     "Last Product Purchased": "Last Product Purchased",
-    "--Select Months--": "--Select Months--"
+    "--Select Months--": "--Select Months--",
+    "Type": "Type",
+    "Item Sold": "Item Sold",
+    "Net Sale": "Net Sale",
+    "Gross Sales": "Gross Sales",
+    "Product": "Product",
+    "Services Sold": "Services Sold",
+    "Products Sold": "Products Sold"
 }

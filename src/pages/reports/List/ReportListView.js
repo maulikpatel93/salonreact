@@ -13,7 +13,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import PerformanceSummary from "./PerformanceSummary";
 import SpinLoader from "component/SpinLoader";
-import NoDataFound from "component/NoDataFound";
 import Clientretention from "./Clientretention";
 import CancelledAppointments from "./CancelledAppointments";
 import AppointmentSchedule from "./AppointmentSchedule";
@@ -175,7 +174,7 @@ const ReportListView = () => {
                       )}
                     </form>
 
-                    {isScreenReport.uniquename === "performance_summary" || isScreenReport.uniquename === "cancelled_appointments" || isScreenReport.uniquename === "appointment_schedule"  || isScreenReport.uniquename === "sales_by_type" ? (
+                    {isScreenReport.uniquename === "performance_summary" || isScreenReport.uniquename === "cancelled_appointments" || isScreenReport.uniquename === "appointment_schedule" ? (
                       <div className="col-sm-3">
                         <div className="dropdown staff-dropdown">
                           <div className="btn-group w-100">

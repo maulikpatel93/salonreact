@@ -1,10 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import config from "../../../config";
 import { SalonModule } from "pages";
-import { ucfirst } from "helpers/functions";
-import Moment from "react-moment";
 
 const SalesByService = () => {
   SalonModule();
@@ -14,46 +11,56 @@ const SalesByService = () => {
   const reportlist = useSelector((state) => state.report.isListView);
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
 
+  let total_item_sold = 0;
+  let total_net_sales = 0;
+  let total_tax = 0;
+  let total_gross_sale = 0;
   return (
     <>
       <div className="table-responsive">
         <table className="table bg-white">
           <thead className="">
             <tr>
-              <th className="fw-500">{t("Client Name")}</th>
-              <th className="fw-600">{t("Email")}</th>
-              <th className="fw-600">{t("Mobile")}</th>
-              <th className="fw-600">{t("Last Appointment")}</th>
-              <th className="fw-600">{t("Days Absent")}</th>
-              <th className="fw-600">{t("Staff")}</th>
-              <th className="fw-600">{t("Total Sales")}</th>
+              <th className="fw-500">{t("Service")}</th>
+              <th className="fw-600">{t("Item Sold")}</th>
+              <th className="fw-600">{t("Net Sale")}</th>
+              <th className="fw-600">{t("Tax")}</th>
+              <th className="fw-600">{t("Gross Sales")}</th>
             </tr>
           </thead>
           <tbody className="report-table-data">
             {objectData.length > 0 &&
               Object.keys(objectData).map((item, i) => {
                 let id = objectData[item].id;
-                let first_name = objectData[item].first_name;
-                let last_name = objectData[item].last_name;
-                let email = objectData[item].email;
-                let phone_number = objectData[item].phone_number;
-                let lastappointment = objectData[item].lastappointment;
-                let TotalSales = objectData[item].TotalSales;
-                let TotalStaff = objectData[item].TotalStaff;
+                let name = objectData[item].name;
+                let item_sold = objectData[item].TotalItemSold;
+                let net_sales = objectData[item].TotalNetSale;
+                let tax = objectData[item].TotalTax;
+                let gross_sale = objectData[item].TotalGrossSale;
 
-                let name = ucfirst(first_name) + " " + ucfirst(last_name);
+                total_item_sold += parseInt(item_sold);
+                total_net_sales += parseFloat(net_sales);
+                total_tax += parseFloat(tax);
+                total_gross_sale += parseFloat(gross_sale);
                 return (
                   <tr key={i} data-id={id}>
                     <td className="">{name}</td>
-                    <td className="">{email}</td>
-                    <td className="">{phone_number}</td>
-                    <td className="">{lastappointment ? <Moment format="DD MMMM YYYY">{lastappointment.dateof}</Moment> : ""}</td>
-                    <td className="">80%</td>
-                    <td className="">{TotalStaff}</td>
-                    <td className="">${TotalSales}</td>
+                    <td className="">{item_sold}</td>
+                    <td className="">${net_sales}</td>
+                    <td className="">${tax}</td>
+                    <td className="">${gross_sale}</td>
                   </tr>
                 );
               })}
+            {objectData.length > 0 && (
+              <tr className="fw-bold">
+                <td className="">{t("Total")}</td>
+                <td className="">{total_item_sold}</td>
+                <td className="">${total_net_sales}</td>
+                <td className="">${total_tax}</td>
+                <td className="">${total_gross_sale}</td>
+              </tr>
+            )}
             {objectData.length === 0 && (
               <tr>
                 <td className="text-center" colSpan="10">
