@@ -14,46 +14,57 @@ const GiftVouchersActivity = () => {
   const reportlist = useSelector((state) => state.report.isListView);
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
 
+  let total_TotalQuantity = 0;
+  let total_TotalValue = 0;
+  let total_TotalValueRedeemed = 0;
+  let total_NetAmount = 0;
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
-              <th className="fw-500">{t("Client Name")}</th>
-              <th className="fw-600">{t("Email")}</th>
-              <th className="fw-600">{t("Mobile")}</th>
-              <th className="fw-600">{t("Last Appointment")}</th>
-              <th className="fw-600">{t("Days Absent")}</th>
-              <th className="fw-600">{t("Staff")}</th>
-              <th className="fw-600">{t("Total Sales")}</th>
+              <th className="fw-500">{t("Gift Voucher")}</th>
+              <th className="fw-600">{t("Quantity Purchased")}</th>
+              <th className="fw-600">{t("Total Value Purchased")}</th>
+              <th className="fw-600">{t("Total Value Redeemed")}</th>
+              <th className="fw-600">{t("Net Amount")}</th>
             </tr>
           </thead>
           <tbody className="report-table-data">
             {objectData.length > 0 &&
               Object.keys(objectData).map((item, i) => {
                 let id = objectData[item].id;
-                let first_name = objectData[item].first_name;
-                let last_name = objectData[item].last_name;
-                let email = objectData[item].email;
-                let phone_number = objectData[item].phone_number;
-                let lastappointment = objectData[item].lastappointment;
-                let TotalSales = objectData[item].TotalSales;
-                let TotalStaff = objectData[item].TotalStaff;
+                let name = objectData[item].name;
+                let TotalQuantity = objectData[item].TotalQuantity;
+                let TotalValue = objectData[item].TotalValue;
+                let TotalValueRedeemed = objectData[item].TotalValueRedeemed;
+                let NetAmount = parseFloat(TotalValue) - parseFloat(TotalValueRedeemed);
+                name = ucfirst(name);
 
-                let name = ucfirst(first_name) + " " + ucfirst(last_name);
+                total_TotalQuantity += parseInt(TotalQuantity);
+                total_TotalValue += parseFloat(TotalValue);
+                total_TotalValueRedeemed += parseFloat(TotalValue);
+                total_NetAmount += parseFloat(TotalValue);
                 return (
                   <tr key={i} data-id={id}>
                     <td className="">{name}</td>
-                    <td className="">{email}</td>
-                    <td className="">{phone_number}</td>
-                    <td className="">{lastappointment ? <Moment format="DD MMMM YYYY">{lastappointment.dateof}</Moment> : ""}</td>
-                    <td className="">80%</td>
-                    <td className="">{TotalStaff}</td>
-                    <td className="">${TotalSales}</td>
+                    <td className="">{TotalQuantity}</td>
+                    <td className="">{TotalValue}</td>
+                    <td className="">{TotalValueRedeemed}</td>
+                    <td className="">{NetAmount}</td>
                   </tr>
                 );
               })}
+            {objectData.length > 0 && (
+              <tr className="fw-bold">
+                <td className="">{t("Total")}</td>
+                <td className="">{total_TotalQuantity}</td>
+                <td className="">${parseFloat(total_TotalValue).toFixed(2)}</td>
+                <td className="">${parseFloat(total_TotalValueRedeemed).toFixed(2)}</td>
+                <td className="">${parseFloat(total_NetAmount).toFixed(2)}</td>
+              </tr>
+            )}
             {objectData.length === 0 && (
               <tr>
                 <td className="text-center" colSpan="10">

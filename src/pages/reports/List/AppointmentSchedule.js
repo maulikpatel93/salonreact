@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { SalonModule } from "pages";
 import { ucfirst } from "helpers/functions";
 import Moment from "react-moment";
+import { PrintContent } from "store/slices/reportSlice";
 
 const AppointmentSchedule = () => {
   SalonModule();
@@ -13,11 +14,10 @@ const AppointmentSchedule = () => {
 
   const reportlist = useSelector((state) => state.report.isListView);
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
-
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
               <th className="fw-600">{t("Date")}</th>
@@ -64,7 +64,9 @@ const AppointmentSchedule = () => {
               })}
             {objectData.length === 0 && (
               <tr>
-                <td className="text-center" colSpan="10">{t("No data found")}</td>
+                <td className="text-center" colSpan="10">
+                  {t("No data found")}
+                </td>
               </tr>
             )}
           </tbody>

@@ -38,7 +38,7 @@ import clientvoucherReducer from "../store/slices/clientvoucherSlice";
 import closedateReducer from "../store/slices/closedateSlice";
 import dashboardReducer from "../store/slices/dashboardSlice";
 import cancellationreasonReducer from "../store/slices/cancellationreasonSlice";
-import consultationReducer from "../store/slices/consultationSlice";
+import formReducer from "./slices/formSlice";
 import reportReducer from "../store/slices/reportSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
@@ -401,16 +401,16 @@ const reducer = combineReducers({
     },
     cancellationreasonReducer,
   ),
-  consultation: persistReducer(
+  form: persistReducer(
     {
-      key: "consultation",
+      key: "form",
       storage,
       keyPrefix: "salon-",
       debug: false,
       timeout: 20000,
       whitelist: [],
     },
-    consultationReducer,
+    formReducer,
   ),
   report: persistReducer(
     {

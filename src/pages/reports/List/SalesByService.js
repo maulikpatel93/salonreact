@@ -17,8 +17,8 @@ const SalesByService = () => {
   let total_gross_sale = 0;
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
               <th className="fw-500">{t("Service")}</th>

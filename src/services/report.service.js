@@ -49,7 +49,12 @@ const view = (values) => {
   return axios.post(next_page_url ? `${next_page_url}&${sortstring}` : API_URL + action, data, { headers: authHeader() });
 };
 
+const printout = (values) => {
+  
+};
+
 const reportApiController = {
   view,
+  printout,
 };
 export default reportApiController;

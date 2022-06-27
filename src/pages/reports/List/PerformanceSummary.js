@@ -22,8 +22,8 @@ const PerformanceSummary = () => {
   let sumSalesTotal = 0;
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
               <th>{t("Staff")}</th>

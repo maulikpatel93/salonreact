@@ -8,10 +8,10 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseEditConsultationForm, ConsultationUpdateApi, reset } from "store/slices/consultationSlice";
+import { CloseEditFormForm, FormUpdateApi, reset } from "store/slices/formSlice";
 import moment from "moment";
 
-const ConsultationEditForm = () => {
+const ConsultationAddForm = () => {
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -19,8 +19,8 @@ const ConsultationEditForm = () => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
-  const rightDrawerOpened = useSelector((state) => state.consultation.isOpenedEditForm);
-  const detail = useSelector((state) => state.consultation.isDetailData);
+  const rightDrawerOpened = useSelector((state) => state.form.isOpenedEditForm);
+  const detail = useSelector((state) => state.form.isDetailData);
 
   const initialValues = {
     reason: "",
@@ -33,10 +33,10 @@ const ConsultationEditForm = () => {
   const handleClosedDateSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(ConsultationUpdateApi(values)).then((action) => {
+      dispatch(FormUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           reset();
-          dispatch(CloseEditConsultationForm());
+          dispatch(CloseEditFormForm());
           setStatus({ success: true });
           setLoading(false);
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
@@ -81,13 +81,13 @@ const ConsultationEditForm = () => {
               }
             }, [detail]);
             return (
-              <div className={"full-screen-drawer p-0 addconsultation-drawer " + rightDrawerOpened} id="addconsultation-drawer">
+              <div className={"full-screen-drawer p-0 addform-drawer " + rightDrawerOpened} id="addform-drawer">
                 <div className="drawer-wrp position-relative">
                   <form noValidate onSubmit={formik.handleSubmit} className="position-relative">
                     <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
                       <h3 className="mb-0 fw-semibold">{t("Add Closed Date")}</h3>
                       <div className="ms-auto">
-                        <a className="close btn me-1 cursor-pointer" onClick={() => dispatch(CloseEditConsultationForm())}>
+                        <a className="close btn me-1 cursor-pointer" onClick={() => dispatch(CloseEditFormForm())}>
                           {t("Cancel")}
                         </a>
                       </div>
@@ -116,4 +116,4 @@ const ConsultationEditForm = () => {
   );
 };
 
-export default ConsultationEditForm;
+export default ConsultationAddForm;

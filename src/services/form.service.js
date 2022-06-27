@@ -12,7 +12,7 @@ const create = (values) => {
   for (let value in values) {
     formData.append(value, values[value]);
   }
-  const action = "afterlogin/consultation/store";
+  const action = "afterlogin/form/store";
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("salon_id", auth.user.salon_id);
@@ -30,7 +30,7 @@ const update = (values) => {
       formData.append(value, values[value]);
     }
   }
-  const action = "afterlogin/consultation/update/" + values.id;
+  const action = "afterlogin/form/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
   formData.append("role_id", 6);
@@ -57,7 +57,7 @@ const view = (values) => {
     }
   }
   const pagination = values && values.option ? false : true;
-  const action = page ? `afterlogin/consultation/view?page=${page}&${sortstring}` : `afterlogin/consultation/view?${sortstring}`;
+  const action = page ? `afterlogin/form/view?page=${page}&${sortstring}` : `afterlogin/form/view?${sortstring}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -75,7 +75,7 @@ const view = (values) => {
 const deleted = (values) => {
   const auth = store.getState().auth;
   const auth_key = auth.user.auth_key;
-  const action = `afterlogin/consultation/delete/${values.id}`;
+  const action = `afterlogin/form/delete/${values.id}`;
   const data = {
     auth_key: auth_key,
     action: action,
@@ -83,10 +83,25 @@ const deleted = (values) => {
   return axios.post(API_URL + action, data, { headers: authHeader() });
 };
 
-const consultationApiController = {
+const formelementtype = (values) => {
+  const auth = store.getState().auth;
+  const auth_key = auth.user.auth_key;
+  const action = `afterlogin/form/formelementtype`;
+  const data = {
+    auth_key: auth_key,
+    action: action,
+    salon_id: auth.user.salon_id,
+    pagination: false, //true or false
+    id: values && values.id ? values.id : "",
+  };
+  return axios.post(API_URL + action, data, { headers: authHeader() });
+};
+
+const formApiController = {
   create,
   update,
   view,
   deleted,
+  formelementtype,
 };
-export default consultationApiController;
+export default formApiController;

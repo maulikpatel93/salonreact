@@ -493,15 +493,26 @@ const Calendar = () => {
 
   const getselectedDatePicker = selectedDate;
   const getselectedDatePickerRange = selectedDateRange;
-  // const fetchDataGrid = () => {
-  //   console.log("next");
-  // };
+
+  let handlePrintContent = () => {
+    var printContents = document.getElementById("calendarsection").innerHTML;
+    console.log(printContents);
+    var winprint = window.open("", "_blank");
+    winprint.document.open();
+    winprint.document.write("<html>");
+    winprint.document.write(`<title>Print Calender</title><head><style></style>`);
+    winprint.document.write('</head><body onload="window.focus(); window.print(); window.close()"><h4>Calender</h4>');
+    winprint.document.write(printContents);
+    winprint.document.write("</body></html>");
+    winprint.document.close();
+    winprint.focus();
+  };
   return (
     <>
       <div className="page-content">
         <section className="calendar">
           <div className="calendar-header sticky-top bg-white">
-            <div className="container">
+            <div className="container" id="calendarsection">
               <div className="row">
                 <div className="col-sm-auto col-12 pt-lg-4 pt-md-3 pt-2">
                   <div className="dropdown staff-dropdown">
@@ -614,7 +625,7 @@ const Calendar = () => {
                   </div>
                 </div>
                 <div className="col-auto pt-lg-4 pt-md-3 pt-2 text-end ms-auto">
-                  <a href="#" className="btn btn-secondary me-1 print-img" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Print Calendar">
+                  <a className="btn btn-secondary me-1 print-img cursor-pointer" onClick={handlePrintContent}>
                     <img src={config.imagepath + "print.png"} alt="" />
                   </a>
                   <div className="dropdown d-inline-block create-dropdown">

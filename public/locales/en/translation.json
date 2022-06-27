@@ -675,5 +675,15 @@
     "Gross Sales": "Gross Sales",
     "Product": "Product",
     "Services Sold": "Services Sold",
-    "Products Sold": "Products Sold"
+    "Products Sold": "Products Sold",
+    "Quantity Purchased": "Quantity Purchased",
+    "Total Value Purchased": "Total Value Purchased",
+    "Total Value Redeemed": "Total Value Redeemed",
+    "Net Amount": "Net Amount",
+    "Start": "Start",
+    "End": "End",
+    "Consent Form for a Beauty Records": "Consent Form for a Beauty Records",
+    "Edit {{ label }}": "Edit {{ label }}",
+    "This field": "This field",
+    "Add heading for the section": "Add heading for the section"
 }

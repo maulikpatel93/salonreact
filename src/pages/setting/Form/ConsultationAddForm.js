@@ -8,8 +8,9 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddConsultationForm, ConsultationStoreApi, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, reset } from "store/slices/consultationSlice";
+import { CloseAddFormForm, FormStoreApi, HandleFormData, HandleFormDataDelete, HandleFormDetailData, OpenedEditHandleForm, reset } from "store/slices/formSlice";
 import config from "../../../config";
+import ModalForm from "./ModalForm";
 
 const ConsultationAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -19,24 +20,29 @@ const ConsultationAddForm = () => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
-  const rightDrawerOpened = useSelector((state) => state.consultation.isOpenedAddForm);
-  const isHandleFormData = useSelector((state) => state.consultation.isHandleFormData);
+  const rightDrawerOpened = useSelector((state) => state.form.isOpenedAddForm);
+  const isHandleFormData = useSelector((state) => state.form.isHandleFormData);
+  const isFormElementTypeObjectData = useSelector((state) => state.form.isFormElementTypeListView);
+  const clientDetailObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "ClientDetail") : "";
+  const formsectionObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "FormSection") : "";
+  const modalform = useSelector((state) => state.form.isOpenedEditHandleForm);
 
   const initialValues = {
     title: "",
+    formdata: [],
   };
   const validationSchema = Yup.object().shape({
     title: Yup.string().trim().max(50).label(t("Title")).required(),
   });
   yupconfig();
 
-  const handleConsultationSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+  const handleFormSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      dispatch(ConsultationStoreApi(values)).then((action) => {
+      dispatch(FormStoreApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           reset();
-          dispatch(CloseAddConsultationForm());
+          dispatch(CloseAddFormForm());
           setStatus({ success: true });
           setLoading(false);
           sweatalert({ title: t("Updated"), text: t("Updated Successfully"), icon: "success" });
@@ -62,98 +68,29 @@ const ConsultationAddForm = () => {
     }
   };
 
-  let clientDetailObj = [
-    {
-      uniqueName: "first_name",
-      title: t("First Name"),
-      image: config.imagepath + "User-Name.png",
-      inputype: "text",
-    },
-    {
-      uniqueName: "last_name",
-      title: t("Last Name"),
-      image: config.imagepath + "User-Name.png",
-      inputype: "text",
-    },
-    {
-      uniqueName: "email",
-      title: t("Email"),
-      image: config.imagepath + "Email.png",
-      inputype: "email",
-    },
-    {
-      uniqueName: "mobile",
-      title: t("Mobile"),
-      image: config.imagepath + "Mobile.png",
-      inputype: "text",
-    },
-    {
-      uniqueName: "address",
-      title: t("Address Name"),
-      image: config.imagepath + "Address.png",
-      inputype: "textarea",
-    },
-    {
-      uniqueName: "birthday",
-      title: t("Birthday"),
-      image: config.imagepath + "Birthday.png",
-      inputype: "date",
-    },
-  ];
-
-  let formsectionObj = [
-    {
-      uniqueName: "Heading",
-      title: t("Heading"),
-      image: config.imagepath + "Heading.png",
-    },
-    {
-      uniqueName: "text_block",
-      title: t("Text Block"),
-      image: config.imagepath + "Text-Block.png",
-    },
-    {
-      uniqueName: "drop_down",
-      title: t("Drop Down"),
-      image: config.imagepath + "Drop-Down.png",
-    },
-    {
-      uniqueName: "multiple_choice",
-      title: t("Multiple-Choice"),
-      image: config.imagepath + "Multiple-Choice.png",
-    },
-    {
-      uniqueName: "short_answer",
-      title: t("Short Answer"),
-      image: config.imagepath + "Short-Answer.png",
-    },
-    {
-      uniqueName: "long_answer",
-      title: t("Long Answer"),
-      image: config.imagepath + "Long-Answer.png",
-    },
-    {
-      uniqueName: "yes_or_no",
-      title: t("Yes or No"),
-      image: config.imagepath + "Yes-or-No.png",
-    },
-    {
-      uniqueName: "checkbox",
-      title: t("Checkbox"),
-      image: config.imagepath + "Checkbox.png",
-    },
-  ];
-
   const handleFormData = (obj) => {
     dispatch(HandleFormData(obj));
   };
-  console.log(isHandleFormData);
   return (
     <>
       <React.Fragment>
-        <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleConsultationSubmit}>
+        <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleFormSubmit}>
           {(formik) => {
-            // console.log(formik.errors);
+            useEffect(() => {
+              {
+                isHandleFormData.length > 0 &&
+                  Object.keys(isHandleFormData).map((item, i) => {
+                    let id = isHandleFormData[item].id;
+                    let title = isHandleFormData[item].name;
+                    let section_type = isHandleFormData[item].section_type;
+                    let caption = isHandleFormData[item].caption;
+                    formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id);
+                    formik.setFieldValue("formdata[" + i + "][section_type]", section_type);
+                    formik.setFieldValue("formdata[" + i + "][title]", title);
+                  });
+              }
+            }, [isHandleFormData]);
+            console.log(formik.values);
             return (
               <div className={"full-screen-drawer p-0 editconsulationform-drawer " + rightDrawerOpened} id="editconsulationform-drawer">
                 <div className="drawer-wrp position-relative">
@@ -161,10 +98,10 @@ const ConsultationAddForm = () => {
                     <div className="drawer-header px-md-4 px-3 py-3 d-flex flex-wrap align-items-center">
                       <h3 className="mb-0 fw-semibold">{t("Create Consultation Form")}</h3>
                       <div className="ms-auto">
-                        <a className="close btn btn-secondary me-1 cursor-pointer" onClick={() => dispatch(CloseAddConsultationForm())}>
+                        <a className="close btn btn-secondary me-1 cursor-pointer" onClick={() => dispatch(CloseAddFormForm())}>
                           {t("Cancel")}
                         </a>
-                        <a href="#ConsultationPreviewModal" data-bs-toggle="modal" data-bs-target="#ConsultationPreviewModal" className="preview btn me-1 cursor-pointer btn-preview">
+                        <a href="#FormPreviewModal" data-bs-toggle="modal" data-bs-target="#FormPreviewModal" className="preview btn me-1 cursor-pointer btn-preview">
                           {t("Preview")}
                         </a>
                         <button type="submit" className="save btn btn-primary fw-semibold" disabled={loading}>
@@ -182,8 +119,8 @@ const ConsultationAddForm = () => {
                             <div className="row">
                               {clientDetailObj.length > 0 &&
                                 Object.keys(clientDetailObj).map((item, i) => {
-                                  let title = clientDetailObj[item].title;
-                                  let image = clientDetailObj[item].image;
+                                  let title = clientDetailObj[item].name;
+                                  let image = config.imagepath + clientDetailObj[item].icon;
                                   //console.log(clientDetailObj[item]);
                                   return (
                                     <div className="col-sm-4 col-6" key={i}>
@@ -207,8 +144,8 @@ const ConsultationAddForm = () => {
                             <div className="row">
                               {formsectionObj.length > 0 &&
                                 Object.keys(formsectionObj).map((item, i) => {
-                                  let title = formsectionObj[item].title;
-                                  let image = formsectionObj[item].image;
+                                  let title = formsectionObj[item].name;
+                                  let image = config.imagepath + formsectionObj[item].icon;
                                   return (
                                     <div className="col-sm-4 col-6" key={i}>
                                       <a className="box-image-cover cursor-pointer" onClick={() => handleFormData(formsectionObj[item])}>
@@ -228,15 +165,17 @@ const ConsultationAddForm = () => {
                         <div className="col-xl-9 right-content">
                           <div className="mx-auto col-xxl-6 col-lg-8">
                             <div className="drawer-form-box mb-3">
-                              <InputField type="text" name="title" className="form-control" placeholder={t("Title")} />
+                              <InputField type="text" name="title" className="form-control" placeholder={t("Consent Form for a Beauty Records")} />
                               {/* <div className="form-header"><h3 className="mb-0">Consent Form for Beauty Records</h3></div> */}
                             </div>
                             <div className="form-body">
                               {isHandleFormData.length > 0 &&
                                 Object.keys(isHandleFormData).map((item, i) => {
-                                  let title = isHandleFormData[item].title;
-                                  let uniqueName = isHandleFormData[item].uniqueName;
-                                  let inputype = isHandleFormData[item].inputype;
+                                  let id = isHandleFormData[item].id;
+                                  let title = isHandleFormData[item].name;
+                                  let section_type = isHandleFormData[item].section_type;
+                                  let caption = isHandleFormData[item].caption;
+
                                   return (
                                     <div className="drawer-form-box  mb-3" key={i}>
                                       <div className="drawer-box-wrapper">
@@ -246,10 +185,18 @@ const ConsultationAddForm = () => {
                                               <label className="form-label">{title}</label>
                                             </div>
                                             <div className="col-xxl-4 col-md-4 col-6 text-end">
-                                              <a className="edit me-1 cursor-pointer" onClick={() => dispatch(OpenedEditHandleForm("open"))}>
-                                                {t("Edit")}
-                                              </a>
-                                              <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete(uniqueName))}>
+                                              {section_type === "FormSection" && (
+                                                <a
+                                                  className="edit me-1 cursor-pointer"
+                                                  onClick={() => {
+                                                    dispatch(HandleFormDetailData(isHandleFormData[item]));
+                                                    dispatch(OpenedEditHandleForm("open"));
+                                                  }}
+                                                >
+                                                  {t("Edit")}
+                                                </a>
+                                              )}
+                                              <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete({id, i}))}>
                                                 <i className="fas fa-trash-alt text-sm"></i>
                                               </a>
                                             </div>
@@ -257,6 +204,9 @@ const ConsultationAddForm = () => {
                                           {/* <div className="drawer-box-detail">
                                             <h2 className="mb-0 mt-2">Add a heading for the section</h2>
                                           </div> */}
+                                        </div>
+                                        <div className="drawer-box-detail">
+                                          <h2 className="mb-0 mt-2">{caption}</h2>
                                         </div>
                                       </div>
                                     </div>
@@ -280,25 +230,8 @@ const ConsultationAddForm = () => {
             );
           }}
         </Formik>
-
-        <div className="modal Edit-modal black-backdrop edit-paradetails-modal" id="editParaDetailModal">
-          <div className="modal-dialog modal-md modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-body p-0">
-                <h3 className="modal-title fw-semibold mb-2">Edit</h3>
-                <p>Add a paragraph of text</p>
-                <p className="para-box">We take your privacy seriously. For the safety of our clients, we maintain records of any health or medical conditions which may indicate that a particular service or treatment should not go ahead (eg allergies, pregnancy, skin conditions) or a particular product should not be used (eg products containing nuts, fish oils etc). These health records are not used for any other purpose. Client records are held securely within our salon software system and can only be seen by members of the salon team.</p>
-              </div>
-              <div className="ms-auto mt-4">
-                <a className="btn me-1 cursor-pointer btn-cancel" data-bs-dismiss="modal">
-                  Cancel
-                </a>
-                <a className="save btn btn btn-primary">Save</a>
-              </div>
-            </div>
-          </div>
-        </div>
       </React.Fragment>
+      {modalform && <ModalForm />}
     </>
   );
 };

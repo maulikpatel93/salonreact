@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
@@ -107,6 +108,39 @@ const ReportListView = () => {
     }, 2000);
   };
   const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  let handlePrintContent = () => {
+    var printContents = document.getElementById("printtable").innerHTML;
+
+    var winprint = window.open("", "_blank");
+    winprint.document.open();
+    winprint.document.write("<html><head>");
+    winprint.document.write(`<title>Print</title><style>
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    table td, table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    table tr:nth-child(even){background-color: #f2f2f2;}
+    table tr:hover {background-color: #ddd;}
+    table th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+    </style>`);
+    winprint.document.write('</head><body onload="window.focus(); window.print(); window.close()"><h4>' + isScreenReport.title + "</h4>");
+    winprint.document.write(printContents);
+    winprint.document.write("</body></html>");
+    winprint.document.close();
+    winprint.focus();
+  };
   return (
     <>
       <div className={rightDrawerOpened + " full-screen-drawer p-0 Reports-drawer"} id="PerformanceSummary-drawer">
@@ -121,6 +155,11 @@ const ReportListView = () => {
           </div>
           <div className="drawer-body">
             <div className="drawer-panel-header">
+              {/* <div className="row">
+                <div className="col-12">
+                  <PrintComponent />
+                </div>
+              </div> */}
               <div className="row">
                 <div className="col-md-7">
                   <div className="d-flex flex-wrap align-items-center">
@@ -424,10 +463,11 @@ const ReportListView = () => {
                 </div>
                 <div className="col-md-5">
                   <div className="text-end">
-                    <a href="#" className="me-1 print-img" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Print Calendar">
+                    <a className="me-1 print-img cursor-pointer" onClick={handlePrintContent}>
                       <img src={config.imagepath + "print.png"} alt="" />
                     </a>
-                    <div className="dropdown d-inline-block export-dropdown">
+                    <ReactHTMLTableToExcel id="test-table-xls-button" className="download-table-xls-button" table="table-to-xls" filename={isScreenReport.uniquename + "_" + moment().format("YYYY-MM-DD_HH-m-s")} sheet="tablexls" buttonText={t("Export")} />
+                    {/* <div className="dropdown d-inline-block export-dropdown">
                       <button className="dropdown-toggle btn dropdown-toggle-icon-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         {t("Export")}
                       </button>
@@ -445,7 +485,7 @@ const ReportListView = () => {
                           </li>
                         </ul>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -16,8 +16,8 @@ const ClientList = () => {
 
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
               <th className="fw-500">{t("Client Name")}</th>

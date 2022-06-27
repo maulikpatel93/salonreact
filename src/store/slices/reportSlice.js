@@ -19,6 +19,19 @@ export const ReportListViewApi = createAsyncThunk("report/listview", async (form
   }
 });
 
+export const PrintoutApi = createAsyncThunk("report/Printout", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await reportApiController
+      .printout(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "Printout"))
+      .catch((error) => HandleError(thunkAPI, error, "Printout"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isListView: [],
   isOpenListModal: "",
@@ -27,6 +40,7 @@ const initialState = {
   isSupplierFilter: "",
   isServiceFilter: "",
   isProductFilter: "",
+  isPrint: "",
 };
 
 const reportSlice = createSlice({
@@ -64,6 +78,9 @@ const reportSlice = createSlice({
     ResetProductFilter: (state) => {
       state.isProductFilter = "";
     },
+    PrintContent: (state, action) => {
+      state.isPrint = action.payload;
+    },
   },
   extraReducers: {
     [ReportListViewApi.fulfilled]: (state, action) => {
@@ -80,8 +97,15 @@ const reportSlice = createSlice({
     [ReportListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
+    [PrintoutApi.pending]: () => {},
+    [PrintoutApi.fulfilled]: (state, action) => {
+      state.isPrint = action.payload;
+    },
+    [PrintoutApi.rejected]: (state) => {
+      state.isPrint = "";
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenListModal, ScreenReport, StaffFilter, ResetStaffFilter, SupplierFilter, ResetSupplierFilter, ServiceFilter, ResetServiceFilter, ProductFilter, ResetProductFilter } = reportSlice.actions;
+export const { reset, OpenListModal, ScreenReport, StaffFilter, ResetStaffFilter, SupplierFilter, ResetSupplierFilter, ServiceFilter, ResetServiceFilter, ProductFilter, ResetProductFilter, PrintContent } = reportSlice.actions;
 export default reportSlice.reducer;

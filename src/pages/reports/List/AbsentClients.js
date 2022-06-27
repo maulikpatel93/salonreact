@@ -13,10 +13,9 @@ const AbsentClients = () => {
 
   const reportlist = useSelector((state) => state.report.isListView);
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
-
   return (
     <>
-      <div className="table-responsive">
+      <div className="table-responsive" id="printtable">
         <table className="table bg-white">
           <thead className="">
             <tr>

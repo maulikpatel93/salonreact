@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { ConsultationDeleteApi, ConsultationDetailApi, ConsultationListViewApi, OpenAddConsultationForm, OpenEditConsultationForm } from "store/slices/consultationSlice";
+import { FormDeleteApi, FormDetailApi, FormElementTypeListApi, FormListViewApi, OpenAddFormForm, OpenEditFormForm } from "store/slices/formSlice";
 import ConsultationAddForm from "../Form/ConsultationAddForm";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
@@ -16,24 +16,24 @@ const Consultation = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
 
-  const isListView = useSelector((state) => state.consultation.isListView);
+  const isListView = useSelector((state) => state.form.isListView);
   const isListViewObjectData = isListView && isListView.data ? isListView.data : isListView;
-  const isOpenedAddForm = useSelector((state) => state.consultation.isOpenedAddForm);
-  const isOpenedEditForm = useSelector((state) => state.consultation.isOpenedEditForm);
+  const isOpenedAddForm = useSelector((state) => state.form.isOpenedAddForm);
+  const isOpenedEditForm = useSelector((state) => state.form.isOpenedEditForm);
 
   useEffect(() => {
-    dispatch(ConsultationListViewApi());
+    dispatch(FormListViewApi());
   }, []);
 
   const fetchDataList = () => {
-    dispatch(ConsultationListViewApi({ next_page_url: isListView.next_page_url }));
+    dispatch(FormListViewApi({ next_page_url: isListView.next_page_url }));
   };
 
   const handleClosedDelete = (e) => {
     const event = JSON.parse(e.currentTarget.dataset.obj);
     let confirmbtn = swalConfirm(e.currentTarget, { title: t("Are you sure want to delete?"), message: "", confirmButtonText: t("Yes, delete it!") });
     if (confirmbtn == true) {
-      dispatch(ConsultationDeleteApi({ id: event.id }));
+      dispatch(FormDeleteApi({ id: event.id }));
     }
   };
 
@@ -43,7 +43,14 @@ const Consultation = () => {
         <div className="col-xl-6 left-content bg-white text-md-start text-center">
           <h4 className="fw-semibold mb-2">{t("Consultation Forms")}</h4>
           <h6>{t("Collect any client details you need before an appointment takes place by sending online forms to your clients via SMS or email which are saved in their client records.")}</h6>
-          <a id="addclosedate" className="btn btn-primary fw-bold cursor-pointer" onClick={() => dispatch(OpenAddConsultationForm())}>
+          <a
+            id="addclosedate"
+            className="btn btn-primary fw-bold cursor-pointer"
+            onClick={() => {
+              dispatch(OpenAddFormForm());
+              dispatch(FormElementTypeListApi());
+            }}
+          >
             {t("Create a Consultation Form")}
           </a>
         </div>
@@ -65,11 +72,11 @@ const Consultation = () => {
                     </div>
                     <div className="col-xxl-3 col-md-4 text-end">
                       <a
-                        id="editconsultation"
+                        id="editform"
                         className="edit me-1 cursor-pointer"
                         onClick={() => {
-                          dispatch(OpenEditConsultationForm());
-                          dispatch(ConsultationDetailApi({ id }));
+                          dispatch(OpenEditFormForm());
+                          dispatch(FormDetailApi({ id }));
                         }}
                       >
                         {t("Edit")}

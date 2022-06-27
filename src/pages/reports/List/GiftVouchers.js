@@ -15,8 +15,8 @@ const GiftVouchers = () => {
   const objectData = reportlist && reportlist.data ? reportlist.data : reportlist;
   return (
     <>
-      <div className="table-responsive">
-        <table className="table bg-white">
+      <div className="table-responsive" id="printtable">
+        <table className="table bg-white" id="table-to-xls">
           <thead className="">
             <tr>
               <th className="fw-500">{t("Client Name")}</th>
@@ -55,7 +55,7 @@ const GiftVouchers = () => {
                     <td className="">{voucher_type === "Voucher" && voucher && voucher.is_active === 0 ? t("InActive") : t("Active")}</td>
                     <td className="">{voucher_type === "Voucher" && voucher && voucher.expiry_at ? <Moment format="DD MMMM YYYY">{voucher.expiry_at}</Moment> : "-"}</td>
                     <td className="">${amount}</td>
-                    <td className="">${(amount-remaining_balance)}</td>
+                    <td className="">${amount - remaining_balance}</td>
                     <td className="">${remaining_balance}</td>
                   </tr>
                 );

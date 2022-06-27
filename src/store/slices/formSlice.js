@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import consultationApiController from "../../services/consultation.service";
+import formApiController from "../../services/form.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 export const usersAdapter = createEntityAdapter();
 
-export const ConsultationStoreApi = createAsyncThunk("consultation/create", async (formvalues, thunkAPI) => {
+export const FormStoreApi = createAsyncThunk("form/create", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .create(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "create"))
       .catch((error) => HandleError(thunkAPI, error, "create"));
@@ -17,9 +17,9 @@ export const ConsultationStoreApi = createAsyncThunk("consultation/create", asyn
   }
 });
 
-export const ConsultationUpdateApi = createAsyncThunk("consultation/update", async (formvalues, thunkAPI) => {
+export const FormUpdateApi = createAsyncThunk("form/update", async (formvalues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .update(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "update"))
       .catch((error) => HandleError(thunkAPI, error, "update"));
@@ -30,9 +30,9 @@ export const ConsultationUpdateApi = createAsyncThunk("consultation/update", asy
   }
 });
 
-export const ConsultationListViewApi = createAsyncThunk("consultation/listview", async (formValues, thunkAPI) => {
+export const FormListViewApi = createAsyncThunk("form/listview", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "listview"))
       .catch((error) => HandleError(thunkAPI, error, "listview"));
@@ -43,12 +43,12 @@ export const ConsultationListViewApi = createAsyncThunk("consultation/listview",
   }
 });
 
-export const ConsultationOptions = createAsyncThunk("consultation/consultationOptions", async (formValues, thunkAPI) => {
+export const FormOptions = createAsyncThunk("form/formOptions", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .view(formValues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "consultationOptions"))
-      .catch((error) => HandleError(thunkAPI, error, "consultationOptions"));
+      .then((response) => HandleResponse(thunkAPI, response, "formOptions"))
+      .catch((error) => HandleError(thunkAPI, error, "formOptions"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -56,9 +56,9 @@ export const ConsultationOptions = createAsyncThunk("consultation/consultationOp
   }
 });
 
-export const ConsultationDetailApi = createAsyncThunk("consultation/detail", async (formValues, thunkAPI) => {
+export const FormDetailApi = createAsyncThunk("form/detail", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .view(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "detail"))
       .catch((error) => HandleError(thunkAPI, error, "detail"));
@@ -69,9 +69,9 @@ export const ConsultationDetailApi = createAsyncThunk("consultation/detail", asy
   }
 });
 
-export const ConsultationDeleteApi = createAsyncThunk("consultation/delete", async (formValues, thunkAPI) => {
+export const FormDeleteApi = createAsyncThunk("form/delete", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .deleted(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "delete"))
       .catch((error) => HandleError(thunkAPI, error, "delete"));
@@ -82,12 +82,25 @@ export const ConsultationDeleteApi = createAsyncThunk("consultation/delete", asy
   }
 });
 
-export const ConsultationSuggetionListApi = createAsyncThunk("consultation/suggetionlist", async (formValues, thunkAPI) => {
+export const FormSuggetionListApi = createAsyncThunk("form/suggetionlist", async (formValues, thunkAPI) => {
   try {
-    const resposedata = await consultationApiController
+    const resposedata = await formApiController
       .suggetionlist(formValues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "suggetionlist"))
       .catch((error) => HandleError(thunkAPI, error, "suggetionlist"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const FormElementTypeListApi = createAsyncThunk("form/FormElementType", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await formApiController
+      .formelementtype(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "FormElementType"))
+      .catch((error) => HandleError(thunkAPI, error, "FormElementType"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -105,50 +118,63 @@ const initialState = {
   isSearchList: "",
   isSearchName: "",
   isHandleFormData: [],
+  isHandleFormDetailData: "",
   isOpenedEditHandleForm: "",
+  isFormElementTypeListView: "",
 };
 
-const consultationSlice = createSlice({
-  name: "consultation",
+const formSlice = createSlice({
+  name: "form",
   initialState,
   reducers: {
     reset: () => initialState,
-    OpenAddConsultationForm: (state = initialState) => {
+    OpenAddFormForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "open";
     },
-    CloseAddConsultationForm: (state = initialState) => {
+    CloseAddFormForm: (state = initialState) => {
       state.isOpenedEditForm = "";
       state.isOpenedAddForm = "";
     },
-    OpenEditConsultationForm: (state = initialState) => {
+    OpenEditFormForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "open";
     },
-    CloseEditConsultationForm: (state = initialState) => {
+    CloseEditFormForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
     },
-    OpenConsultationDetailModal: (state = initialState) => {
+    OpenFormDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "open";
     },
-    CloseConsultationDetailModal: (state = initialState) => {
+    CloseFormDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedDetailModal = "";
     },
-    OpenConsultationSearchList: (state) => {
+    OpenFormSearchList: (state) => {
       state.isSearchList = "open";
     },
-    CloseConsultationsearchList: (state) => {
+    CloseFormsearchList: (state) => {
       state.isSearchList = "";
     },
-    ConsultationSearchName: (state, action) => {
+    FormSearchName: (state, action) => {
       state.isSearchName = action.payload;
     },
     HandleFormData: (state, action) => {
-      const { uniqueName, ...changes } = action.payload;
-      const existingData = state.isHandleFormData.find((event) => event.uniqueName === uniqueName);
+      const { id, ...changes } = action.payload;
+      const existingData = state.isHandleFormData.find((event) => event.id === id && event.can_repeat === 0);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        state.isHandleFormData = [...state.isHandleFormData, action.payload];
+      }
+    },
+    UpdateHandleFormData: (state, action) => {
+      const { id, ...changes } = action.payload;
+      const existingData = state.isHandleFormData.find((event, index) => item.id === id && index === i);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
@@ -158,25 +184,28 @@ const consultationSlice = createSlice({
       }
     },
     HandleFormDataDelete: (state, action) => {
-      const uniqueName = action.payload;
-      state.isHandleFormData = state.isHandleFormData.length > 0 ? state.isHandleFormData.filter((item) => item.uniqueName != uniqueName) : state.isHandleFormData.filter((item) => item.uniqueName != uniqueName);
+      const { id, i } = action.payload;
+      state.isHandleFormData = state.isHandleFormData.length > 0 ? state.isHandleFormData.filter((item, index) => (item.id === id && index !== i) || (item.id !== id && index !== i)) : [];
     },
     OpenedEditHandleForm: (state, action) => {
       state.isOpenedEditHandleForm = action.payload;
     },
+    HandleFormDetailData: (state, action) => {
+      state.isHandleFormDetailData = action.payload;
+    },
   },
   extraReducers: {
-    [ConsultationStoreApi.pending]: () => {},
-    [ConsultationStoreApi.fulfilled]: (state, action) => {
+    [FormStoreApi.pending]: () => {},
+    [FormStoreApi.fulfilled]: (state, action) => {
       if (state.isListView && state.isListView.data) {
         state.isListView.data = [action.payload, ...state.isListView.data];
       } else {
         state.isListView = { data: [action.payload] };
       }
     },
-    [ConsultationStoreApi.rejected]: () => {},
-    [ConsultationUpdateApi.pending]: () => {},
-    [ConsultationUpdateApi.fulfilled]: (state, action) => {
+    [FormStoreApi.rejected]: () => {},
+    [FormUpdateApi.pending]: () => {},
+    [FormUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
       const existingData = state.isListView.data.find((event) => event.id === id);
       if (existingData) {
@@ -185,9 +214,9 @@ const consultationSlice = createSlice({
         });
       }
     },
-    [ConsultationUpdateApi.rejected]: () => {},
-    [ConsultationListViewApi.pending]: () => {},
-    [ConsultationListViewApi.fulfilled]: (state, action) => {
+    [FormUpdateApi.rejected]: () => {},
+    [FormListViewApi.pending]: () => {},
+    [FormListViewApi.fulfilled]: (state, action) => {
       let old_current_page = state.isListView.current_page ? state.isListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isListView && state.isListView.data;
@@ -198,11 +227,11 @@ const consultationSlice = createSlice({
       }
       state.isListView = action.payload;
     },
-    [ConsultationListViewApi.rejected]: (state) => {
+    [FormListViewApi.rejected]: (state) => {
       state.isListView = [];
     },
-    [ConsultationSuggetionListApi.pending]: () => {},
-    [ConsultationSuggetionListApi.fulfilled]: (state, action) => {
+    [FormSuggetionListApi.pending]: () => {},
+    [FormSuggetionListApi.fulfilled]: (state, action) => {
       let old_current_page = state.isSuggetionListView.current_page ? state.isSuggetionListView.current_page : "";
       let new_current_page = action.payload.current_page ? action.payload.current_page : "";
       let viewdata = state.isSuggetionListView && state.isSuggetionListView.data;
@@ -213,24 +242,39 @@ const consultationSlice = createSlice({
       }
       state.isSuggetionListView = action.payload;
     },
-    [ConsultationSuggetionListApi.rejected]: (state) => {
+    [FormSuggetionListApi.rejected]: (state) => {
       state.isSuggetionListView = [];
     },
-    [ConsultationDetailApi.pending]: () => {},
-    [ConsultationDetailApi.fulfilled]: (state, action) => {
+    [FormDetailApi.pending]: () => {},
+    [FormDetailApi.fulfilled]: (state, action) => {
       state.isDetailData = action.payload;
     },
-    [ConsultationDetailApi.rejected]: (state) => {
+    [FormDetailApi.rejected]: (state) => {
       state.isDetailData = "";
     },
-    [ConsultationDeleteApi.pending]: () => {},
-    [ConsultationDeleteApi.fulfilled]: (state, action) => {
+    [FormDeleteApi.pending]: () => {},
+    [FormDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
       state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
     },
-    [ConsultationDeleteApi.rejected]: () => {},
+    [FormDeleteApi.rejected]: () => {},
+    [FormElementTypeListApi.pending]: () => {},
+    [FormElementTypeListApi.fulfilled]: (state, action) => {
+      let old_current_page = state.isFormElementTypeListView.current_page ? state.isFormElementTypeListView.current_page : "";
+      let new_current_page = action.payload.current_page ? action.payload.current_page : "";
+      let viewdata = state.isFormElementTypeListView && state.isFormElementTypeListView.data;
+      let newviewdata = action.payload && action.payload.data;
+      state.isFormElementTypeListView = action.payload;
+      if (old_current_page && new_current_page && old_current_page < new_current_page && old_current_page != new_current_page) {
+        viewdata && newviewdata ? (state.isFormElementTypeListView.data = [...viewdata, ...newviewdata]) : action.payload;
+      }
+      state.isFormElementTypeListView = action.payload;
+    },
+    [FormElementTypeListApi.rejected]: (state) => {
+      state.isFormElementTypeListView = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddConsultationForm, CloseAddConsultationForm, OpenEditConsultationForm, CloseEditConsultationForm, OpenConsultationDetailModal, CloseConsultationDetailModal, OpenConsultationSearchList, CloseConsultationsearchList, ConsultationSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm } = consultationSlice.actions;
-export default consultationSlice.reducer;
+export const { reset, OpenAddFormForm, CloseAddFormForm, OpenEditFormForm, CloseEditFormForm, OpenFormDetailModal, CloseFormDetailModal, OpenFormSearchList, CloseFormsearchList, FormSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, HandleFormDetailData, UpdateHandleFormData } = formSlice.actions;
+export default formSlice.reducer;
