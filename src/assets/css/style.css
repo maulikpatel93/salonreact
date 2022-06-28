@@ -4075,7 +4075,7 @@ body .border-block {
     opacity: 0.5;
 }
 
-.Edit-modal .btn {
+.Edit-modal .btn-edit-modal {
     min-width: 100px;
 }
 

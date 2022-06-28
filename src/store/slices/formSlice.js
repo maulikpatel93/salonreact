@@ -108,6 +108,16 @@ export const FormElementTypeListApi = createAsyncThunk("form/FormElementType", a
   }
 });
 
+export const UpdateHandleFormDataApi = createAsyncThunk("form/UpdateHandleFormData", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = formValues;
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
@@ -173,8 +183,8 @@ const formSlice = createSlice({
       }
     },
     UpdateHandleFormData: (state, action) => {
-      const { id, ...changes } = action.payload;
-      const existingData = state.isHandleFormData.find((event, index) => item.id === id && index === i);
+      const { id, index, ...changes } = action.payload;
+      const existingData = state.isHandleFormData.find((event, i) => event.id === id && i === index);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
@@ -273,6 +283,19 @@ const formSlice = createSlice({
     [FormElementTypeListApi.rejected]: (state) => {
       state.isFormElementTypeListView = [];
     },
+    [UpdateHandleFormDataApi.pending]: () => {},
+    [UpdateHandleFormDataApi.fulfilled]: (state, action) => {
+      const { id, index, ...changes } = action.payload;
+      const existingData = state.isHandleFormData.find((event, i) => event.id === id && i === index);
+      if (existingData) {
+        Object.keys(changes).map((keyName) => {
+          existingData[keyName] = changes[keyName];
+        });
+      } else {
+        state.isHandleFormData = [...state.isHandleFormData, action.payload];
+      }
+    },
+    [UpdateHandleFormDataApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

@@ -33,6 +33,50 @@ const ConsultationAddForm = () => {
   };
   const validationSchema = Yup.object().shape({
     title: Yup.string().trim().max(50).label(t("Title")).required(),
+    formdata: Yup.array().of(
+      Yup.object().shape({
+        form_element_type_id: Yup.string().required(t("Required")), // these constraints take precedence
+        section_type: Yup.string().required(t("Required")), // these constraints take precedence
+        title: Yup.string().required(t("Required")), // these constraints take precedence
+        is_edit: Yup.bool().required(t("Required")), // these constraints take precedence
+        form_type: Yup.string().required(t("Required")), // these constraints take precedence
+        caption: Yup.mixed().when(["is_edit"], {
+          is: (is_edit) => {
+            if (is_edit === 1 || is_edit === "1") {
+              return true;
+            }
+            return false;
+          },
+          then: Yup.string().required(t("Required")), // these constraints take precedence
+        }),
+        options: Yup.mixed().when(["form_type"], {
+          is: (form_type) => {
+            if (form_type === "select" || form_type === "multicheckbox" || form_type === "radio") {
+              return true;
+            }
+            return false;
+          },
+          then: Yup.string().required(t("Required")), // these constraints take precedence
+        }),
+      }),
+    ),
+    formdata: Yup.array().when(["form_type"], {
+      is: (sck) => {
+        if (sck === "select" || sck === "multicheckbox" || sck === "radio") {
+          return true;
+        }
+        return false;
+      },
+      then: Yup.array()
+        .of(
+          Yup.object().shape({
+            optvalue: Yup.string().required(t("Required")), // these constraints take precedence
+          }),
+        )
+        .required("Must have friends")
+        .min(1, "Minimum of 1 friends"),
+      // otherwise: Yup.mixed().nullable(),
+    }),
   });
   yupconfig();
 
@@ -71,6 +115,7 @@ const ConsultationAddForm = () => {
   const handleFormData = (obj) => {
     dispatch(HandleFormData(obj));
   };
+  console.log(isHandleFormData);
   return (
     <>
       <React.Fragment>
@@ -84,13 +129,23 @@ const ConsultationAddForm = () => {
                     let title = isHandleFormData[item].name;
                     let section_type = isHandleFormData[item].section_type;
                     let caption = isHandleFormData[item].caption;
+                    let is_edit = isHandleFormData[item].is_edit;
+                    let form_type = isHandleFormData[item].form_type;
+                    let options = isHandleFormData[item].options ? isHandleFormData[item].options : [];
+                    console.log(isHandleFormData[item]);
                     formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id);
                     formik.setFieldValue("formdata[" + i + "][section_type]", section_type);
                     formik.setFieldValue("formdata[" + i + "][title]", title);
+                    formik.setFieldValue("formdata[" + i + "][is_edit]", is_edit);
+                    formik.setFieldValue("formdata[" + i + "][form_type]", form_type);
+                    formik.setFieldValue("formdata[" + i + "][caption]", "");
+                    formik.setFieldValue("formdata[" + i + "][form_id]", "");
+                    formik.setFieldValue("formdata[" + i + "][options]", options.length > 0 ? JSON.stringify(options) : "");
                   });
               }
             }, [isHandleFormData]);
             console.log(formik.values);
+            console.log(formik.errors);
             return (
               <div className={"full-screen-drawer p-0 editconsulationform-drawer " + rightDrawerOpened} id="editconsulationform-drawer">
                 <div className="drawer-wrp position-relative">
@@ -174,8 +229,10 @@ const ConsultationAddForm = () => {
                                   let id = isHandleFormData[item].id;
                                   let title = isHandleFormData[item].name;
                                   let section_type = isHandleFormData[item].section_type;
-                                  let caption = isHandleFormData[item].caption;
-
+                                  let form_type = isHandleFormData[item].form_type;
+                                  let is_edit = isHandleFormData[item].is_edit;
+                                  let caption = isHandleFormData[item].caption ? isHandleFormData[item].caption : isHandleFormData[item].captionholder;
+                                  let options = isHandleFormData[item].options ? isHandleFormData[item].options : [];
                                   return (
                                     <div className="drawer-form-box  mb-3" key={i}>
                                       <div className="drawer-box-wrapper">
@@ -183,20 +240,23 @@ const ConsultationAddForm = () => {
                                           <div className="row align-items-center">
                                             <div className="col-xxl-8 col-md-8 col-6 drawer-box-heading">
                                               <label className="form-label">{title}</label>
+                                              <InputField type="hidden" name={"formdata[" + i + "][form_element_type_id]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].form_element_type_id} />
+                                              <InputField type="hidden" name={"formdata[" + i + "][is_edit]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].is_edit} />
+                                              <InputField type="hidden" name={"formdata[" + i + "][form_type]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].form_type} />
                                             </div>
                                             <div className="col-xxl-4 col-md-4 col-6 text-end">
-                                              {section_type === "FormSection" && (
+                                              {is_edit === 1 && (
                                                 <a
                                                   className="edit me-1 cursor-pointer"
                                                   onClick={() => {
-                                                    dispatch(HandleFormDetailData(isHandleFormData[item]));
+                                                    dispatch(HandleFormDetailData({ ...isHandleFormData[item], index: i }));
                                                     dispatch(OpenedEditHandleForm("open"));
                                                   }}
                                                 >
                                                   {t("Edit")}
                                                 </a>
                                               )}
-                                              <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete({id, i}))}>
+                                              <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete({ id, i }))}>
                                                 <i className="fas fa-trash-alt text-sm"></i>
                                               </a>
                                             </div>
@@ -207,6 +267,54 @@ const ConsultationAddForm = () => {
                                         </div>
                                         <div className="drawer-box-detail">
                                           <h2 className="mb-0 mt-2">{caption}</h2>
+                                          {options.length > 0 && (
+                                            <div className="row d-flex flex-wrap align-items-center">
+                                              <div className="col-auto">
+                                                <p className="mb-0 mt-2">{t("Option List")}</p>
+                                              </div>
+                                              <div className="col-auto">
+                                                {form_type === "select" && (
+                                                  <select className="form-select mt-3">
+                                                    {Object.keys(options).map((item, j) => {
+                                                      return (
+                                                        <option value={options[item].optvalue} key={j}>
+                                                          {options[item].optvalue}
+                                                        </option>
+                                                      );
+                                                    })}
+                                                  </select>
+                                                )}
+                                                {form_type === "multicheckbox" && (
+                                                  <div className="mt-3">
+                                                    {Object.keys(options).map((item, j) => {
+                                                      return (
+                                                        <div className="form-check" key={j}>
+                                                          <input className="form-check-input" disabled type="checkbox" value={options[item].optvalue} id="flexCheckDefault" />
+                                                          <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                            {options[item].optvalue}
+                                                          </label>
+                                                        </div>
+                                                      );
+                                                    })}
+                                                  </div>
+                                                )}
+                                                {form_type === "radio" && (
+                                                  <div className="mt-3">
+                                                    {Object.keys(options).map((item, j) => {
+                                                      return (
+                                                        <div className="form-check" key={j}>
+                                                          <input className="form-check-input" disabled type="radio" value={options[item].optvalue} id="flexCheckDefault" />
+                                                          <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                            {options[item].optvalue}
+                                                          </label>
+                                                        </div>
+                                                      );
+                                                    })}
+                                                  </div>
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
                                     </div>

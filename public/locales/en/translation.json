@@ -685,5 +685,9 @@
     "Consent Form for a Beauty Records": "Consent Form for a Beauty Records",
     "Edit {{ label }}": "Edit {{ label }}",
     "This field": "This field",
-    "Add heading for the section": "Add heading for the section"
+    "Add heading for the section": "Add heading for the section",
+    "Option List": "Option List",
+    "Add Question": "Add Question",
+    "option {{ no }}": "option {{ no }}",
+    "Add Option": "Add Option"
 }

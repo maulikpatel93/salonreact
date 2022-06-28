@@ -171,7 +171,7 @@ const SignupForm = () => {
       <>
         <input type="text" id="email_verified" className="swal2-input" placeholder="####" />
         <a className="cursor-pointer" onClick={() => handleSignupSubmit(otpformprops.values, otpformprops.formik)}>
-          Resend
+          {t("Resend")}
         </a>
       </>
     );
