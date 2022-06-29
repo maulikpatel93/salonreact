@@ -131,6 +131,7 @@ const initialState = {
   isHandleFormDetailData: "",
   isOpenedEditHandleForm: "",
   isFormElementTypeListView: "",
+  isFormElementDelete: [],
 };
 
 const formSlice = createSlice({
@@ -197,11 +198,29 @@ const formSlice = createSlice({
       const { id, i } = action.payload;
       state.isHandleFormData = state.isHandleFormData.length > 0 ? state.isHandleFormData.filter((item, index) => (item.id === id && index !== i) || (item.id !== id && index !== i)) : [];
     },
+    ResetHandleFormData: (state) => {
+      state.isHandleFormData = [];
+    },
     OpenedEditHandleForm: (state, action) => {
       state.isOpenedEditHandleForm = action.payload;
     },
     HandleFormDetailData: (state, action) => {
       state.isHandleFormDetailData = action.payload;
+    },
+    FormElementDelete: (state, action) => {
+      if (action.payload) {
+        const { form_element_id, ...changes } = action.payload;
+        const existingData = state.isFormElementDelete.find((event) => event.form_element_id === form_element_id);
+        if (existingData) {
+          Object.keys(changes).map((keyName) => {
+            existingData[keyName] = changes[keyName];
+          });
+        } else {
+          state.isFormElementDelete = [...state.isFormElementDelete, action.payload];
+        }
+      } else {
+        state.isFormElementDelete = [];
+      }
     },
   },
   extraReducers: {
@@ -299,5 +318,5 @@ const formSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddFormForm, CloseAddFormForm, OpenEditFormForm, CloseEditFormForm, OpenFormDetailModal, CloseFormDetailModal, OpenFormSearchList, CloseFormsearchList, FormSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, HandleFormDetailData, UpdateHandleFormData } = formSlice.actions;
+export const { reset, OpenAddFormForm, CloseAddFormForm, OpenEditFormForm, CloseEditFormForm, OpenFormDetailModal, CloseFormDetailModal, OpenFormSearchList, CloseFormsearchList, FormSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, HandleFormDetailData, UpdateHandleFormData, ResetHandleFormData, FormElementDelete } = formSlice.actions;
 export default formSlice.reducer;

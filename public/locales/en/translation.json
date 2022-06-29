@@ -689,5 +689,15 @@
     "Option List": "Option List",
     "Add Question": "Add Question",
     "option {{ no }}": "option {{ no }}",
-    "Add Option": "Add Option"
+    "Add Option": "Add Option",
+    "Please add {{ question_error }}": "Please add {{ question_error }}",
+    "Please add {{ options_error }}": "Please add {{ options_error }}",
+    "Please add {{ question_error }} and {{ options_error }}": "Please add {{ question_error }} and {{ options_error }}",
+    "Question": "Question",
+    "Question Or Text": "Question Or Text",
+    "Options": "Options",
+    "Add your first section": "Add your first section",
+    "Select your first section to add to the form": "Select your first section to add to the form",
+    "Minimum of 1 options": "Minimum of 1 options",
+    "Must have options": "Must have options"
 }

@@ -27,12 +27,12 @@ const ModalForm = () => {
 
   const initialValues = {
     form_type: "",
-    caption: "",
+    question: "",
     options: [{ optvalue: "" }],
   };
   const validationSchema = Yup.object().shape({
     form_type: Yup.string(),
-    caption: Yup.string().trim().max(50).label(t("This field")).required(),
+    question: Yup.string().trim().max(50).label(t("This field")).required(),
     options: Yup.array().when(["form_type"], {
       is: (sck) => {
         if (sck === "select" || sck === "multicheckbox" || sck === "radio") {
@@ -46,8 +46,8 @@ const ModalForm = () => {
             optvalue: Yup.string().required(t("Required")), // these constraints take precedence
           }),
         )
-        .required("Must have friends")
-        .min(1, "Minimum of 1 friends"),
+        .required(t("Must have options"))
+        .min(1, t("Minimum of 1 options")),
       // otherwise: Yup.mixed().nullable(),
     }),
   });
@@ -56,7 +56,6 @@ const ModalForm = () => {
   const handleFormSubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
     setLoading(true);
     try {
-      console.log(values);
       dispatch(UpdateHandleFormDataApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           // reset();
@@ -85,7 +84,6 @@ const ModalForm = () => {
       setLoading(false);
     }
   };
-  console.log(HandleFormDetail);
   return (
     <>
       <React.Fragment>
@@ -103,7 +101,7 @@ const ModalForm = () => {
                 let optvaluedata = HandleFormDetail.options && HandleFormDetail.options.length > 0 ? HandleFormDetail.options : isOption;
                 formik.setFieldValue("id", HandleFormDetail.id);
                 formik.setFieldValue("index", HandleFormDetail.index);
-                formik.setFieldValue("caption", HandleFormDetail.caption);
+                formik.setFieldValue("question", HandleFormDetail.question);
                 formik.setFieldValue("form_type", HandleFormDetail.form_type);
                 formik.setFieldValue("options", optvaluedata);
               }
@@ -117,13 +115,13 @@ const ModalForm = () => {
                         <h3 className="modal-title fw-semibold mb-2">{t("Edit")}</h3>
                       </div>
                       <div className="modal-body">
-                        {(HandleFormDetail.form_type === "text" || HandleFormDetail.form_type === "checkbox") && <InputField type="text" name="caption" label={HandleFormDetail.name} className="form-control" placeholder={HandleFormDetail.captionholder} controlId="ModalForm-caption" />}
-                        {HandleFormDetail.form_type === "date" && <InputField type="date" name="caption" label={t(HandleFormDetail.name)} value={formik.values.caption} className="form-control" placeholder={t(HandleFormDetail.captionholder)} controlId="ModalForm-caption" />}
-                        {HandleFormDetail.form_type === "textarea" && <TextareaField name="caption" label={t(HandleFormDetail.name)} value={formik.values.caption} placeholder={t(HandleFormDetail.captionholder)} controlId="ModalForm-caption" />}
+                        {(HandleFormDetail.form_type === "text" || HandleFormDetail.form_type === "checkbox") && <InputField type="text" name="question" label={HandleFormDetail.name} className="form-control" placeholder={HandleFormDetail.questionholder} controlId="ModalForm-question" />}
+                        {HandleFormDetail.form_type === "date" && <InputField type="date" name="question" label={t(HandleFormDetail.name)} value={formik.values.question} className="form-control" placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />}
+                        {HandleFormDetail.form_type === "textarea" && <TextareaField name="question" label={t(HandleFormDetail.name)} value={formik.values.question} placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />}
                         {(HandleFormDetail.form_type === "select" || HandleFormDetail.form_type === "multicheckbox" || HandleFormDetail.form_type === "radio") && (
                           <>
                             <div className="mb-3">
-                              <InputField name="caption" label={t(HandleFormDetail.name)} value={formik.values.caption} placeholder={t(HandleFormDetail.captionholder)} controlId="ModalForm-caption" />
+                              <InputField name="question" label={t(HandleFormDetail.name)} value={formik.values.question} placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />
                             </div>
                             <FieldArray
                               name={`options`}

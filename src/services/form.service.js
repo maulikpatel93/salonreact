@@ -10,7 +10,11 @@ const create = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    formData.append(value, values[value]);
+    if (["formdata"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
+    } else {
+      formData.append(value, values[value]);
+    }
   }
   const action = "afterlogin/form/store";
   formData.append("auth_key", auth_key);
@@ -24,8 +28,8 @@ const update = (values) => {
   const auth_key = auth.user.auth_key;
   const formData = new FormData();
   for (let value in values) {
-    if (["gender"].includes(value) && values[value] && typeof values[value] === "object") {
-      formData.append(value, values[value].value);
+    if (["formdata", "delete_form_element_id"].includes(value) && values[value] && typeof values[value] === "object") {
+      formData.append(value, JSON.stringify(values[value]));
     } else {
       formData.append(value, values[value]);
     }
@@ -33,7 +37,6 @@ const update = (values) => {
   const action = "afterlogin/form/update/" + values.id;
   formData.append("auth_key", auth_key);
   formData.append("action", action);
-  formData.append("role_id", 6);
   formData.append("salon_id", auth.user.salon_id);
   return axios.post(API_URL + action, formData, { headers: authHeader({ contentType: "multipart/form-data" }) });
 };
@@ -64,7 +67,7 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && values.id ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "reason", // first_name,last_name,email
+    field: values && values.id ? "" : "title", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
     option: values && values.option ? values.option : "",

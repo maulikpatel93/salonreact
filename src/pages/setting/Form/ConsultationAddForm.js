@@ -21,62 +21,51 @@ const ConsultationAddForm = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const rightDrawerOpened = useSelector((state) => state.form.isOpenedAddForm);
+  
   const isHandleFormData = useSelector((state) => state.form.isHandleFormData);
   const isFormElementTypeObjectData = useSelector((state) => state.form.isFormElementTypeListView);
   const clientDetailObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "ClientDetail") : "";
   const formsectionObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "FormSection") : "";
   const modalform = useSelector((state) => state.form.isOpenedEditHandleForm);
-
+  
   const initialValues = {
     title: "",
     formdata: [],
   };
   const validationSchema = Yup.object().shape({
     title: Yup.string().trim().max(50).label(t("Title")).required(),
-    formdata: Yup.array().of(
-      Yup.object().shape({
-        form_element_type_id: Yup.string().required(t("Required")), // these constraints take precedence
-        section_type: Yup.string().required(t("Required")), // these constraints take precedence
-        title: Yup.string().required(t("Required")), // these constraints take precedence
-        is_edit: Yup.bool().required(t("Required")), // these constraints take precedence
-        form_type: Yup.string().required(t("Required")), // these constraints take precedence
-        caption: Yup.mixed().when(["is_edit"], {
-          is: (is_edit) => {
-            if (is_edit === 1 || is_edit === "1") {
-              return true;
-            }
-            return false;
-          },
-          then: Yup.string().required(t("Required")), // these constraints take precedence
-        }),
-        options: Yup.mixed().when(["form_type"], {
-          is: (form_type) => {
-            if (form_type === "select" || form_type === "multicheckbox" || form_type === "radio") {
-              return true;
-            }
-            return false;
-          },
-          then: Yup.string().required(t("Required")), // these constraints take precedence
-        }),
-      }),
-    ),
-    formdata: Yup.array().when(["form_type"], {
-      is: (sck) => {
-        if (sck === "select" || sck === "multicheckbox" || sck === "radio") {
-          return true;
-        }
-        return false;
-      },
-      then: Yup.array()
-        .of(
-          Yup.object().shape({
-            optvalue: Yup.string().required(t("Required")), // these constraints take precedence
+    formdata: Yup.array()
+      .of(
+        Yup.object().shape({
+          form_element_type_id: Yup.string().required(t("Required")), // these constraints take precedence
+          section_type: Yup.string().required(t("Required")), // these constraints take precedence
+          title: Yup.string().required(t("Required")), // these constraints take precedence
+          is_edit: Yup.bool().required(t("Required")), // these constraints take precedence
+          form_type: Yup.string().required(t("Required")), // these constraints take precedence
+          question: Yup.string().when(["is_edit"], {
+            is: true,
+            then: Yup.string().required(t("Question Or Text")), // these constraints take precedence
           }),
-        )
-        .required("Must have friends")
-        .min(1, "Minimum of 1 friends"),
-      // otherwise: Yup.mixed().nullable(),
-    }),
+          options: Yup.array().when(["form_type"], {
+            is: (sck) => {
+              if (sck === "select" || sck === "multicheckbox" || sck === "radio") {
+                return true;
+              }
+              return false;
+            },
+            then: Yup.array()
+              .of(
+                Yup.object().shape({
+                  optvalue: Yup.string().required(t("Required")), // these constraints take precedence
+                }),
+              )
+              .required(t("Must have options"))
+              .min(1, t("Minimum of 1 options")),
+            // otherwise: Yup.mixed().nullable(),
+          }),
+        }),
+      )
+      .min(1, t("Required")),
   });
   yupconfig();
 
@@ -115,37 +104,48 @@ const ConsultationAddForm = () => {
   const handleFormData = (obj) => {
     dispatch(HandleFormData(obj));
   };
-  console.log(isHandleFormData);
+  //console.log(isHandleFormData);
   return (
     <>
       <React.Fragment>
         <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleFormSubmit}>
           {(formik) => {
             useEffect(() => {
-              {
-                isHandleFormData.length > 0 &&
-                  Object.keys(isHandleFormData).map((item, i) => {
-                    let id = isHandleFormData[item].id;
-                    let title = isHandleFormData[item].name;
-                    let section_type = isHandleFormData[item].section_type;
-                    let caption = isHandleFormData[item].caption;
-                    let is_edit = isHandleFormData[item].is_edit;
-                    let form_type = isHandleFormData[item].form_type;
-                    let options = isHandleFormData[item].options ? isHandleFormData[item].options : [];
-                    console.log(isHandleFormData[item]);
-                    formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id);
-                    formik.setFieldValue("formdata[" + i + "][section_type]", section_type);
-                    formik.setFieldValue("formdata[" + i + "][title]", title);
-                    formik.setFieldValue("formdata[" + i + "][is_edit]", is_edit);
-                    formik.setFieldValue("formdata[" + i + "][form_type]", form_type);
-                    formik.setFieldValue("formdata[" + i + "][caption]", "");
-                    formik.setFieldValue("formdata[" + i + "][form_id]", "");
-                    formik.setFieldValue("formdata[" + i + "][options]", options.length > 0 ? JSON.stringify(options) : "");
-                  });
+              if (isHandleFormData.length > 0) {
+                Object.keys(isHandleFormData).map((item, i) => {
+                  let id = isHandleFormData[item].id;
+                  let title = isHandleFormData[item].name;
+                  let section_type = isHandleFormData[item].section_type;
+                  let question = isHandleFormData[item].question ? isHandleFormData[item].question : "";
+                  let form_id = isHandleFormData[item].form_id ? isHandleFormData[item].form_id : "";
+                  let form_element_id = isHandleFormData[item].form_id ? isHandleFormData[item].form_element_id : "";
+                  let is_edit = isHandleFormData[item].is_edit;
+                  let form_type = isHandleFormData[item].form_type;
+                  let options = isHandleFormData[item].options ? isHandleFormData[item].options : [];
+                  if (question) {
+                    setTimeout(() => {
+                      formik.setFieldTouched("formdata[" + i + "][question]", true);
+                    }, 100);
+                  }
+                  if (options.length > 0) {
+                    setTimeout(() => {
+                      formik.setFieldTouched("formdata[" + i + "][options]", true);
+                    }, 100);
+                  }
+                  formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id);
+                  formik.setFieldValue("formdata[" + i + "][section_type]", section_type);
+                  formik.setFieldValue("formdata[" + i + "][title]", title);
+                  formik.setFieldValue("formdata[" + i + "][is_edit]", is_edit);
+                  formik.setFieldValue("formdata[" + i + "][form_type]", form_type);
+                  formik.setFieldValue("formdata[" + i + "][question]", question);
+                  formik.setFieldValue("formdata[" + i + "][form_id]", form_id);
+                  formik.setFieldValue("formdata[" + i + "][form_element_id]", form_element_id);
+                  formik.setFieldValue("formdata[" + i + "][options]", options.length > 0 ? options : []);
+                });
               }
             }, [isHandleFormData]);
-            console.log(formik.values);
-            console.log(formik.errors);
+            // console.log(formik.values);
+            // console.log(typeof formik.errors.formdata);
             return (
               <div className={"full-screen-drawer p-0 editconsulationform-drawer " + rightDrawerOpened} id="editconsulationform-drawer">
                 <div className="drawer-wrp position-relative">
@@ -231,8 +231,19 @@ const ConsultationAddForm = () => {
                                   let section_type = isHandleFormData[item].section_type;
                                   let form_type = isHandleFormData[item].form_type;
                                   let is_edit = isHandleFormData[item].is_edit;
-                                  let caption = isHandleFormData[item].caption ? isHandleFormData[item].caption : isHandleFormData[item].captionholder;
+                                  let question = isHandleFormData[item].question ? isHandleFormData[item].question : isHandleFormData[item].questionholder;
                                   let options = isHandleFormData[item].options ? isHandleFormData[item].options : [];
+                                  let question_error = formik.errors.formdata && formik.errors.formdata[i] && formik.errors.formdata[i].question;
+                                  let options_error = formik.errors.formdata && formik.errors.formdata[i] && formik.errors.formdata[i].options;
+
+                                  let errormsg = "";
+                                  if (question_error && options_error) {
+                                    errormsg = t("Please add {{ question_error }} and {{ options_error }}", { question_error: question_error, options_error: options_error });
+                                  } else if (question_error && !options_error) {
+                                    errormsg = t("Please add {{ question_error }}", { question_error: question_error });
+                                  } else if (!question_error && options_error) {
+                                    errormsg = t("Please add {{ options_error }}", { options_error: options_error });
+                                  }
                                   return (
                                     <div className="drawer-form-box  mb-3" key={i}>
                                       <div className="drawer-box-wrapper">
@@ -240,9 +251,10 @@ const ConsultationAddForm = () => {
                                           <div className="row align-items-center">
                                             <div className="col-xxl-8 col-md-8 col-6 drawer-box-heading">
                                               <label className="form-label">{title}</label>
-                                              <InputField type="hidden" name={"formdata[" + i + "][form_element_type_id]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].form_element_type_id} />
-                                              <InputField type="hidden" name={"formdata[" + i + "][is_edit]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].is_edit} />
-                                              <InputField type="hidden" name={"formdata[" + i + "][form_type]"} className="form-control"  value={formik.values.formdata[i] && formik.values.formdata[i].form_type} />
+                                              {/* <InputField type="text" name={"formdata[" + i + "][form_element_type_id]"} className="form-control" value={formik.values.formdata[i] && formik.values.formdata[i].form_element_type_id} />
+                                              <InputField type="text" name={"formdata[" + i + "][is_edit]"} className="form-control" value={formik.values.formdata[i] && formik.values.formdata[i].is_edit} />
+                                              <InputField type="text" name={"formdata[" + i + "][form_type]"} className="form-control" value={formik.values.formdata[i] && formik.values.formdata[i].form_type} />
+                                              <InputField type="text" name={"formdata[" + i + "][question]"} className="form-control" value={formik.values.formdata[i] && formik.values.formdata[i].question} /> */}
                                             </div>
                                             <div className="col-xxl-4 col-md-4 col-6 text-end">
                                               {is_edit === 1 && (
@@ -256,7 +268,15 @@ const ConsultationAddForm = () => {
                                                   {t("Edit")}
                                                 </a>
                                               )}
-                                              <a className="delete cursor-pointer" onClick={() => dispatch(HandleFormDataDelete({ id, i }))}>
+                                              <a
+                                                className="delete cursor-pointer"
+                                                onClick={() => {
+                                                  // console.log("values", formik.values);
+                                                  dispatch(HandleFormDataDelete({ id, i }));
+                                                  formik.setFieldValue("formdata[" + i + "]");
+                                                  formik.setValues({ ...formik.values, formdata: formik.values.formdata ? formik.values.formdata.filter((newE, j) => j !== i) : [] });
+                                                }}
+                                              >
                                                 <i className="fas fa-trash-alt text-sm"></i>
                                               </a>
                                             </div>
@@ -266,7 +286,8 @@ const ConsultationAddForm = () => {
                                           </div> */}
                                         </div>
                                         <div className="drawer-box-detail">
-                                          <h2 className="mb-0 mt-2">{caption}</h2>
+                                          <h2 className="mb-0 mt-2">{question}</h2>
+                                          {errormsg && <p className="mb-0 invalid-feedback d-block">{errormsg}</p>}
                                           {options.length > 0 && (
                                             <div className="row d-flex flex-wrap align-items-center">
                                               <div className="col-auto">
@@ -323,8 +344,9 @@ const ConsultationAddForm = () => {
                               {isHandleFormData.length === 0 && (
                                 <div className="drawer-form-nofound">
                                   <img src={config.imagepath + "consulatation_nofound.png"} className="mb-2" />
-                                  <h3 className="mb-0 fw-bold">Add your first section</h3>
-                                  <h6 className="mb-0">Select your first section to add to the form</h6>
+                                  <h3 className="mb-0 fw-bold">{t("Add your first section")}</h3>
+                                  <h6 className="mb-0">{t("Select your first section to add to the form")}</h6>
+                                  {formik.errors && typeof formik.errors.formdata === "string" ? <p className="mb-0 invalid-feedback d-block">{formik.errors.formdata}</p> : ""}
                                 </div>
                               )}
                             </div>

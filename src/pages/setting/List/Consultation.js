@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { FormDeleteApi, FormDetailApi, FormElementTypeListApi, FormListViewApi, OpenAddFormForm, OpenEditFormForm } from "store/slices/formSlice";
+import { FormDeleteApi, FormDetailApi, FormElementDelete, FormElementTypeListApi, FormListViewApi, HandleFormData, OpenAddFormForm, OpenEditFormForm, ResetHandleFormData } from "store/slices/formSlice";
 import ConsultationAddForm from "../Form/ConsultationAddForm";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import ConsultationEditForm from "../Form/ConsultationEditForm";
 import { swalConfirm } from "../../../component/Sweatalert2";
-import Moment from "react-moment";
 
 const Consultation = () => {
   const { t } = useTranslation();
@@ -20,7 +19,7 @@ const Consultation = () => {
   const isListViewObjectData = isListView && isListView.data ? isListView.data : isListView;
   const isOpenedAddForm = useSelector((state) => state.form.isOpenedAddForm);
   const isOpenedEditForm = useSelector((state) => state.form.isOpenedEditForm);
-
+ 
   useEffect(() => {
     dispatch(FormListViewApi());
   }, []);
@@ -58,25 +57,26 @@ const Consultation = () => {
           <InfiniteScroll className="row" dataLength={isListViewObjectData && isListViewObjectData.length ? isListViewObjectData.length : "0"} next={fetchDataList} scrollableTarget="page-content-CancellationReasons" hasMore={isListView.next_page_url ? true : false} loader={<PaginationLoader />}>
             {Object.keys(isListViewObjectData).map((item, i) => {
               let id = isListViewObjectData[item].id;
-              let start_date = isListViewObjectData[item].start_date;
-              let end_date = isListViewObjectData[item].end_date;
-              let reason = isListViewObjectData[item].reason;
+              let title = isListViewObjectData[item].title;
               return (
                 <div className="box-image-cover w-100 mx-0 p-md-4 p-3 text-start" key={i}>
                   <div className="row align-items-center">
                     <div className="col-xxl-9 col-md-8 mb-md-0 mb-2">
-                      <h5 className="fw-semibold mb-1">
-                        <Moment format="ddd, MMMM Do YYYY">{start_date}</Moment> - <Moment format="ddd, MMMM Do YYYY">{end_date}</Moment>
-                      </h5>
-                      <h6 className="mb-0">{reason}</h6>
+                      <h5 className="fw-semibold mb-1">{title}</h5>
                     </div>
                     <div className="col-xxl-3 col-md-4 text-end">
                       <a
                         id="editform"
                         className="edit me-1 cursor-pointer"
                         onClick={() => {
-                          dispatch(OpenEditFormForm());
-                          dispatch(FormDetailApi({ id }));
+                          dispatch(ResetHandleFormData());
+                          dispatch(FormElementDelete(""));
+                          dispatch(FormDetailApi({ id })).then((action) => {
+                            if (action.meta.requestStatus === "fulfilled") {
+                              dispatch(OpenEditFormForm());
+                              dispatch(FormElementTypeListApi());
+                            }
+                          });
                         }}
                       >
                         {t("Edit")}
