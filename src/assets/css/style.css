@@ -4086,6 +4086,61 @@ body .border-block {
     border-color: #e5e7eb;
 }
 
+.Edit-modal-preview .modal-header h4 {
+    font-size: 15px;
+    line-height: 19px;
+    color: #8f807d;
+    font-weight: 400;
+}
+
+.Edit-modal-preview .modal-content {
+    padding: 25px 35px;
+}
+
+.Edit-modal-preview .consent-check-control .form-check {
+    padding-left: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.Edit-modal-preview .modal-body label {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #3a3432;
+}
+
+.Edit-modal-preview .modal-body p {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    color: #333333;
+}
+
+.Edit-modal-preview .consent-check-control .form-check .form-check-label {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 19px;
+    color: #333333;
+    margin-left: 15px;
+}
+
+.Edit-modal-preview .btn-close {
+    padding: 0;
+    opacity: 1;
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+}
+
+.Edit-modal-preview .btn-close:hover {
+    opacity: 0.5;
+}
+
+.Edit-modal-preview .btn-edit-modal {
+    min-width: 100px;
+}
+
 
 /* Preview Modal Css End */
 

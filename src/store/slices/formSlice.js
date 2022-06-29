@@ -121,6 +121,7 @@ export const UpdateHandleFormDataApi = createAsyncThunk("form/UpdateHandleFormDa
 const initialState = {
   isOpenedAddForm: "",
   isOpenedEditForm: "",
+  isOpenedPreviewForm: "",
   isOpenedDetailModal: "",
   isListView: [],
   isSuggetionListView: [],
@@ -154,6 +155,9 @@ const formSlice = createSlice({
     CloseEditFormForm: (state = initialState) => {
       state.isOpenedAddForm = "";
       state.isOpenedEditForm = "";
+    },
+    OpenedPreviewForm: (state, action) => {
+      state.isOpenedPreviewForm = action.payload;
     },
     OpenFormDetailModal: (state = initialState) => {
       state.isOpenedAddForm = "";
@@ -318,5 +322,5 @@ const formSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenAddFormForm, CloseAddFormForm, OpenEditFormForm, CloseEditFormForm, OpenFormDetailModal, CloseFormDetailModal, OpenFormSearchList, CloseFormsearchList, FormSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, HandleFormDetailData, UpdateHandleFormData, ResetHandleFormData, FormElementDelete } = formSlice.actions;
+export const { reset, OpenAddFormForm, CloseAddFormForm, OpenEditFormForm, CloseEditFormForm, OpenFormDetailModal, CloseFormDetailModal, OpenFormSearchList, CloseFormsearchList, FormSearchName, HandleFormData, HandleFormDataDelete, OpenedEditHandleForm, HandleFormDetailData, UpdateHandleFormData, ResetHandleFormData, FormElementDelete, OpenedPreview, OpenedPreviewForm } = formSlice.actions;
 export default formSlice.reducer;

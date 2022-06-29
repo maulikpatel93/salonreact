@@ -19,7 +19,7 @@ const Consultation = () => {
   const isListViewObjectData = isListView && isListView.data ? isListView.data : isListView;
   const isOpenedAddForm = useSelector((state) => state.form.isOpenedAddForm);
   const isOpenedEditForm = useSelector((state) => state.form.isOpenedEditForm);
- 
+
   useEffect(() => {
     dispatch(FormListViewApi());
   }, []);
@@ -46,6 +46,8 @@ const Consultation = () => {
             id="addclosedate"
             className="btn btn-primary fw-bold cursor-pointer"
             onClick={() => {
+              dispatch(ResetHandleFormData());
+              dispatch(FormElementDelete(""));
               dispatch(OpenAddFormForm());
               dispatch(FormElementTypeListApi());
             }}

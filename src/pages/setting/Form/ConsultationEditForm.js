@@ -8,9 +8,10 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddFormForm, FormElementDelete, FormUpdateApi, HandleFormData, HandleFormDataDelete, HandleFormDetailData, OpenedEditHandleForm, reset } from "store/slices/formSlice";
+import { CloseAddFormForm, FormElementDelete, FormUpdateApi, HandleFormData, HandleFormDataDelete, HandleFormDetailData, OpenedEditHandleForm, OpenedPreviewForm, reset } from "store/slices/formSlice";
 import config from "../../../config";
 import ModalForm from "./ModalForm";
+import PreviewForm from "./PreviewForm";
 
 const ConsultationEditForm = () => {
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,7 @@ const ConsultationEditForm = () => {
   const modalform = useSelector((state) => state.form.isOpenedEditHandleForm);
   const detail = useSelector((state) => state.form.isDetailData);
   const isFormElementDelete = useSelector((state) => state.form.isFormElementDelete);
+  const previewform = useSelector((state) => state.form.isOpenedPreviewForm);
 
   const initialValues = {
     title: "",
@@ -194,7 +196,7 @@ const ConsultationEditForm = () => {
                         <a className="close btn btn-secondary me-1 cursor-pointer" onClick={() => dispatch(CloseAddFormForm())}>
                           {t("Cancel")}
                         </a>
-                        <a href="#FormPreviewModal" data-bs-toggle="modal" data-bs-target="#FormPreviewModal" className="preview btn me-1 cursor-pointer btn-preview">
+                        <a className="preview btn me-1 cursor-pointer btn-preview" onClick={() => dispatch(OpenedPreviewForm("open"))}>
                           {t("Preview")}
                         </a>
                         <button type="submit" className="save btn btn-primary fw-semibold" disabled={loading}>
@@ -403,6 +405,7 @@ const ConsultationEditForm = () => {
         </Formik>
       </React.Fragment>
       {modalform && <ModalForm />}
+      {previewform && <PreviewForm />}
     </>
   );
 };

@@ -8,9 +8,10 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { CloseAddFormForm, FormStoreApi, HandleFormData, HandleFormDataDelete, HandleFormDetailData, OpenedEditHandleForm, reset } from "store/slices/formSlice";
+import { CloseAddFormForm, FormStoreApi, HandleFormData, HandleFormDataDelete, HandleFormDetailData, OpenedEditHandleForm, OpenedPreviewForm, reset } from "store/slices/formSlice";
 import config from "../../../config";
 import ModalForm from "./ModalForm";
+import PreviewForm from "./PreviewForm";
 
 const ConsultationAddForm = () => {
   const [loading, setLoading] = useState(false);
@@ -21,13 +22,14 @@ const ConsultationAddForm = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const rightDrawerOpened = useSelector((state) => state.form.isOpenedAddForm);
-  
+
   const isHandleFormData = useSelector((state) => state.form.isHandleFormData);
   const isFormElementTypeObjectData = useSelector((state) => state.form.isFormElementTypeListView);
   const clientDetailObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "ClientDetail") : "";
   const formsectionObj = isFormElementTypeObjectData.length > 0 ? isFormElementTypeObjectData.filter((item) => item.section_type === "FormSection") : "";
   const modalform = useSelector((state) => state.form.isOpenedEditHandleForm);
-  
+  const previewform = useSelector((state) => state.form.isOpenedPreviewForm);
+
   const initialValues = {
     title: "",
     formdata: [],
@@ -156,7 +158,7 @@ const ConsultationAddForm = () => {
                         <a className="close btn btn-secondary me-1 cursor-pointer" onClick={() => dispatch(CloseAddFormForm())}>
                           {t("Cancel")}
                         </a>
-                        <a href="#FormPreviewModal" data-bs-toggle="modal" data-bs-target="#FormPreviewModal" className="preview btn me-1 cursor-pointer btn-preview">
+                        <a className="preview btn me-1 cursor-pointer btn-preview" onClick={() => dispatch(OpenedPreviewForm("open"))}>
                           {t("Preview")}
                         </a>
                         <button type="submit" className="save btn btn-primary fw-semibold" disabled={loading}>
@@ -310,8 +312,8 @@ const ConsultationAddForm = () => {
                                                     {Object.keys(options).map((item, j) => {
                                                       return (
                                                         <div className="form-check" key={j}>
-                                                          <input className="form-check-input" disabled type="checkbox" value={options[item].optvalue} id="flexCheckDefault" />
-                                                          <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                          <input className="form-check-input" disabled type="checkbox" value={options[item].optvalue} id={"flexCheckDefault" + j} />
+                                                          <label className="form-check-label" htmlFor={"flexCheckDefault" + j}>
                                                             {options[item].optvalue}
                                                           </label>
                                                         </div>
@@ -324,8 +326,8 @@ const ConsultationAddForm = () => {
                                                     {Object.keys(options).map((item, j) => {
                                                       return (
                                                         <div className="form-check" key={j}>
-                                                          <input className="form-check-input" disabled type="radio" value={options[item].optvalue} id="flexCheckDefault" />
-                                                          <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                          <input className="form-check-input" disabled type="radio" value={options[item].optvalue} id={"flexradioDefault" + j} />
+                                                          <label className="form-check-label" htmlFor={"flexradioDefault" + j}>
                                                             {options[item].optvalue}
                                                           </label>
                                                         </div>
@@ -362,6 +364,7 @@ const ConsultationAddForm = () => {
         </Formik>
       </React.Fragment>
       {modalform && <ModalForm />}
+      {previewform && <PreviewForm />}
     </>
   );
 };

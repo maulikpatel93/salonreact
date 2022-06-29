@@ -115,9 +115,9 @@ const ModalForm = () => {
                         <h3 className="modal-title fw-semibold mb-2">{t("Edit")}</h3>
                       </div>
                       <div className="modal-body">
-                        {(HandleFormDetail.form_type === "text" || HandleFormDetail.form_type === "checkbox") && <InputField type="text" name="question" label={HandleFormDetail.name} className="form-control" placeholder={HandleFormDetail.questionholder} controlId="ModalForm-question" />}
+                        {(HandleFormDetail.form_type === "text" || HandleFormDetail.form_type === "texthead" || HandleFormDetail.form_type === "checkbox") && <InputField type="text" name="question" label={HandleFormDetail.name} className="form-control" placeholder={HandleFormDetail.questionholder} controlId="ModalForm-question" />}
                         {HandleFormDetail.form_type === "date" && <InputField type="date" name="question" label={t(HandleFormDetail.name)} value={formik.values.question} className="form-control" placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />}
-                        {HandleFormDetail.form_type === "textarea" && <TextareaField name="question" label={t(HandleFormDetail.name)} value={formik.values.question} placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />}
+                        {(HandleFormDetail.form_type === "textarea" || HandleFormDetail.form_type === "textblock") && <TextareaField name="question" label={t(HandleFormDetail.name)} value={formik.values.question} placeholder={t(HandleFormDetail.questionholder)} controlId="ModalForm-question" />}
                         {(HandleFormDetail.form_type === "select" || HandleFormDetail.form_type === "multicheckbox" || HandleFormDetail.form_type === "radio") && (
                           <>
                             <div className="mb-3">
