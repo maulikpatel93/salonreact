@@ -15,7 +15,7 @@ import StaffEditForm from "./form/StaffEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import Access from "./Access";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Staff = () => {
   SalonModule();

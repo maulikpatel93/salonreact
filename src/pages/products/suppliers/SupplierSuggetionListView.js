@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import { supplierGridViewApi, closeSupplierSearchList, supplierSearchName } from "../../../store/slices/supplierSlice";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 
 // import ReactPaginate from 'react-paginate';
 

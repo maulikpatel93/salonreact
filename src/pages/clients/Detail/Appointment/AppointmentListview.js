@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import Moment from "react-moment";
 import config from "../../../../config";
 import { appointmentDetailApi, openEditAppointmentForm } from "store/slices/appointmentSlice";

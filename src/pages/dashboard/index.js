@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import { DashboardViewApi, UpcomingAppointmentListViewApi } from "store/slices/dashboardSlice";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import Moment from "react-moment";
 import config from "../../config";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Dashboard = () => {
   SalonModule();

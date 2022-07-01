@@ -19,7 +19,7 @@ import ProductAddForm from "./form/ProductAddForm";
 import ProductEditForm from "./form/ProductEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Products = () => {
   SalonModule();

@@ -11,7 +11,7 @@ import MembershipEditForm from "./Form/MembershipEditForm";
 // import MembershipSuggetionListView from "./List/MembershipSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import MembershipGridView from "./List/MembershipGridView";
 import SaleDrawer from "pages/sales/SaleDrawer";
 

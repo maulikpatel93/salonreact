@@ -1,3 +1,6 @@
+import moment, { tz } from "moment";
+import { useSelector } from "react-redux";
+
 export const ucfirst = (str) => {
   return str.length ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 };
@@ -99,3 +102,24 @@ export const uniqueArrayofObject = (arr, keyProps) => {
   const map = new Map(kvArray);
   return Array.from(map.values());
 };
+
+export const authuser = () => {
+  const auth = useSelector((state) => state.auth);
+  const currentUser = auth.user;
+  return currentUser;
+};
+export const localtimezone = () => {
+  return authuser() ? authuser().salon.timezone : "";
+};
+
+export const MomentFormat = (date = "", format = "YYYY-MMMM-DD") => {
+  return moment(date).format(format);
+};
+
+export const MomentFormatWithLocalTimezone = (date = "", format = "YYYY-MMMM-DD") => {
+  return moment(date).format(format).tz(localtimezone());
+};
+
+const Functions = {};
+
+export default Functions;

@@ -5,14 +5,14 @@ import { useTranslation } from "react-i18next";
 
 import config from "../../../config";
 import { staffOptionsDropdown } from "../../../store/slices/staffSlice";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import { rosterListViewApi, openAddRosterForm, openEditRosterForm, closeAddRosterForm, closeEditRosterForm, closeDeleteModal, rosterDeleteApi, staffFilter, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import Moment from "react-moment";
 import AddTimeForm from "./AddTimeForm";
 import EditTimeForm from "./EditTimeForm";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Roster = () => {
   const { t } = useTranslation();

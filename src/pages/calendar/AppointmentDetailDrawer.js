@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../config";
 import { appointmentDeleteApi, appointmentListViewApi, appointmentUpdateApi, ClientAppointmentListViewApi, closeAppointmentDetailModal, closeEditAppointmentForm, openAddAppointmentForm, openRescheduleAppointmentForm } from "store/slices/appointmentSlice";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import { appointmentDetailApi, openEditAppointmentForm } from "store/slices/appointmentSlice";
 import { serviceOptions, servicePriceApi } from "store/slices/serviceSlice";
 import { staffOptions } from "store/slices/staffSlice";

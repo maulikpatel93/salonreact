@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import config from "../../../config";
 import { useTranslation } from "react-i18next";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Sidebar = () => {
   const { t } = useTranslation();

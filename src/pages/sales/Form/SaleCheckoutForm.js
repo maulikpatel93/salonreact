@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import PropTypes from "prop-types";
 // validation Formik
 import * as Yup from "yup";

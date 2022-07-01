@@ -72,7 +72,7 @@ const view = (values) => {
     salon_id: auth.user.salon_id,
     pagination: values && (values.id || start_date) ? false : pagination, //true or false
     id: values && values.id ? values.id : "",
-    field: values && values.id ? "" : "dateof,start_time,end_time,repeats,repeat_time,repeat_time_option,ending,reason", // first_name,last_name,email
+    field: values && values.id ? "" : "dateof,start_time,end_time,start_datetime,end_datetime,repeats,repeat_time,repeat_time_option,ending,reason", // first_name,last_name,email
     salon_field: false, //business_name,owner_name
     result: result, //business_name,owner_name
     option: values && values.option ? values.option : "",

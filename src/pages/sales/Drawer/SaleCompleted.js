@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { CloseSaleCompleted, SendEmailVoucher } from "store/slices/saleSlice";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import Moment from "react-moment";
 import moment from "moment";
 import SaleEmailInvoiceForm from "../Form/SaleEmailInvoiceForm";

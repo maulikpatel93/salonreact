@@ -15,7 +15,7 @@ import { closeEditAppointmentForm, appointmentUpdateApi, appointmentListViewApi,
 import { servicePriceApi } from "../../../store/slices/serviceSlice";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
-import { MinutesToHours, getHours, getMinutes } from "helpers/functions";
+import { MinutesToHours, getHours, getMinutes } from "helpers/Functions";
 import { decimalOnly } from "../../../component/form/Validation";
 import { busytimeListViewApi } from "store/slices/busytimeSlice";
 import { Notify } from "component/Toastr";

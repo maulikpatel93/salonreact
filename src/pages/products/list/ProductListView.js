@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { productManageStock, productDeleteApi, productDetailApi, openEditProductForm } from "../../../store/slices/productSlice";
 import { supplierOptions } from "../../../store/slices/supplierSlice";

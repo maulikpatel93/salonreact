@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 // import { ClientListViewApi, CloseClientSearchList, ClientSearchName, ClientSearchObj } from "../../../store/slices/saSlice";
 import { CreateInvoiceListViewApi, InvoiceListViewApi, ClientSearchName, CloseClientSearchList, ClientSearchObj } from "store/slices/saleSlice";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
 

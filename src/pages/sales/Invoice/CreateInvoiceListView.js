@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import Moment from "react-moment";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import { AppointmentDetail, openAddSaleForm } from "store/slices/saleSlice";
 // import config from "../../../config";
 

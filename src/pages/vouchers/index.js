@@ -11,7 +11,7 @@ import VoucherEditForm from "./Form/VoucherEditForm";
 // import VoucherSuggetionListView from "./List/VoucherSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import VoucherGridView from "./List/VoucherGridView";
 import SaleDrawer from "pages/sales/SaleDrawer";
 

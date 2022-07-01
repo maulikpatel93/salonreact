@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { SalonModule } from "pages";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 
 const PerformanceSummary = () => {
   SalonModule();

@@ -10,7 +10,7 @@ import { sweatalert } from "../../../component/Sweatalert2";
 import { rosterListViewApi, rosterUpdateApi, closeAddRosterForm, closeEditRosterForm, openDeleteModal, resetStaffFilter } from "../../../store/slices/rosterSlice";
 import useScriptRef from "../../../hooks/useScriptRef";
 import PropTypes from "prop-types";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const EditTimeForm = (props) => {
   const [loading, setLoading] = useState(false);

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../../config";
-import { ucfirst } from "../../../../helpers/functions";
+import { ucfirst } from "../../../../helpers/Functions";
 import { swalConfirm } from "../../../../component/Sweatalert2";
 import { clientDelete, openclientDetail } from "../../../../store/slices/clientSlice";
 // import InfiniteScroll from "react-infinite-scroll-component";

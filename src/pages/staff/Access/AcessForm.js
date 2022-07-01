@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import yupconfig from "../../../yupconfig";
 import { sweatalert } from "../../../component/Sweatalert2";
 // import { decimalOnly } from "../../../component/form/Validation";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 // import { salonaccessUpdateApi } from "../../../store/slices/salonaccessSlice";
 import { salonmoduleListViewApi, salonModuleAccessUpdateApi, salonModuleAccessAction } from "../../../store/slices/salonmoduleSlice";

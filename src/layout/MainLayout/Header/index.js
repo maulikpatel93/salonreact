@@ -1,6 +1,6 @@
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 import React, { useEffect } from "react";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import { Link, useLocation } from "react-router-dom";
 import config from "../../../config";
 import ProfileSection from "./ProfileSection";

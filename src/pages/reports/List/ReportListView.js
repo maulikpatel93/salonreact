@@ -6,7 +6,7 @@ import config from "../../../config";
 import { SalonModule } from "pages";
 import { OpenListModal, ProductFilter, ReportListViewApi, ResetProductFilter, ResetServiceFilter, ResetStaffFilter, ResetSupplierFilter, ServiceFilter, StaffFilter, SupplierFilter } from "store/slices/reportSlice";
 import { staffOptionsDropdown } from "../../../store/slices/staffSlice";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import moment from "moment";

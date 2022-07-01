@@ -11,7 +11,7 @@ import SubscriptionEditForm from "./Form/SubscriptionEditForm";
 import SubscriptionSuggetionListView from "./List/SubscriptionSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import SubscriptionGridView from "./List/SubscriptionGridView";
 import SaleDrawer from "pages/sales/SaleDrawer";
 import { OpenAddStripeForm, StripeCardPaymentApi } from "store/slices/stripeSlice";

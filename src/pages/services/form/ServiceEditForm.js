@@ -8,7 +8,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, SwitchField, TextareaField, ReactSelectField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import { decimalOnly } from "../../../component/form/Validation";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import Swal from "sweetalert2";
 
 import { closeEditServiceForm, serviceUpdateApi, addonservices, addonservicesAction, addonstaffAction } from "../../../store/slices/serviceSlice";

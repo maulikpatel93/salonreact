@@ -20,7 +20,7 @@ import ServiceAddForm from "./form/ServiceAddForm";
 import ServiceEditForm from "./form/ServiceEditForm";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Services = () => {
   SalonModule();

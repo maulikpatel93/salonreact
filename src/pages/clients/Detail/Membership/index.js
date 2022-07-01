@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import { ClientMembershipListViewApi } from "store/slices/clientmembershipSlice";
 import Moment from "react-moment";
 

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/too
 import reportApiController from "../../services/report.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
-import { checkobject } from "helpers/functions";
+import { checkobject } from "helpers/Functions";
 
 export const usersAdapter = createEntityAdapter();
 

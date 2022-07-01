@@ -7,7 +7,7 @@ import config from "../../../config";
 import VoucherListView from "./VoucherListView";
 import { VoucherGridViewApi } from "../../../store/slices/voucherSlice";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const VoucherList = () => {
   const { t } = useTranslation();

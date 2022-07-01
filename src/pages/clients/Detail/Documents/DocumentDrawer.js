@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 import { swalConfirm } from "../../../../component/Sweatalert2";
 import { ClientdocumentGridViewApi, clientdocumentDeleteApi, closeDocumentDrawer } from "store/slices/clientdocumentSlice";
 import config from "../../../../config";
-import { ellipseText } from "helpers/functions";
+import { ellipseText } from "helpers/Functions";
 // import DocumentUpload from "component/form/DocumentUpload";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const DocumentDrawer = () => {
   const dispatch = useDispatch();

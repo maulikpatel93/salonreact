@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { SalonModule } from "pages";
 import config from "../../config";
-import { checkaccess, ucfirst } from "helpers/functions";
+import { checkaccess, ucfirst } from "helpers/Functions";
 import { ClientSearchName, ClientSearchObj, CloseClientSearchList, OpenAddClientForm } from "../../store/slices/clientSlice";
 import { busytimeDetailApi, busytimeListViewApi, closeAddBusytimeForm, closeEditBusytimeForm, openAddBusytimeForm, openEditBusytimeForm } from "store/slices/busytimeSlice";
 import { appointmentDetailApi, appointmentListViewApi, closeAddAppointmentForm, closeAppointmentDetailModal, closeEditAppointmentForm, closeRescheduleAppointmentForm, openAddAppointmentForm, openAppointmentDetailModal } from "store/slices/appointmentSlice";

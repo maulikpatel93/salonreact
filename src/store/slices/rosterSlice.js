@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import { checkobject } from "helpers/functions";
+import { checkobject } from "helpers/Functions";
 import rosterApiController from "../../services/roster.service";
 import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";

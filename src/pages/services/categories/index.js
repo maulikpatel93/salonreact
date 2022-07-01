@@ -7,7 +7,7 @@ import config from "../../../config";
 import CategoryListView from "./CategoryListView";
 import { openAddCategoryForm, categoryListViewApi } from "../../../store/slices/categorySlice";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Categories = () => {
   const { t } = useTranslation();

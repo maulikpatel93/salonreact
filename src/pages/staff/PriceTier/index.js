@@ -9,7 +9,7 @@ import { openAddPriceTierForm, pricetierGridViewApi } from "../../../store/slice
 import PriceTierAddForm from "./PriceTierAddForm";
 import PriceTierEditForm from "./PriceTierEditForm";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const PriceTier = () => {
   const { t } = useTranslation();

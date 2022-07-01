@@ -19,7 +19,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
 import DatePicker from "react-multi-date-picker";
 import moment from "moment";
-import { MinutesToHours, getHours, getMinutes, ucfirst } from "helpers/functions";
+import { MinutesToHours, getHours, getMinutes, ucfirst, authuser, localtimezone } from "helpers/Functions";
 import { decimalOnly } from "../../../component/form/Validation";
 import { busytimeListViewApi } from "store/slices/busytimeSlice";
 import { Notify } from "component/Toastr";
@@ -304,6 +304,7 @@ const AppointmentAddForm = (props) => {
                         minDate={new Date()}
                         onChange={(e) => {
                           let getselectedDatePicker = e ? moment(e?.toDate?.().toString()).format("dddd, DD MMMM YYYY") : "";
+                          console.log(getselectedDatePicker);
                           formik.setFieldValue("dateof", getselectedDatePicker);
                         }}
                       />

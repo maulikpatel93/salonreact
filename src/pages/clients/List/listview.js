@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { ClientDeleteApi, OpenClientDetailModal, ClientDetailApi, ClientDetailTab } from "../../../store/slices/clientSlice";
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import { ClientAppointmentListViewApi } from "store/slices/appointmentSlice";
 
 const ClientListView = (props) => {

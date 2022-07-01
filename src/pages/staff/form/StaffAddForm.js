@@ -9,7 +9,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, InputFieldImage, SelectField, SwitchField, MapAddressField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 // import { decimalOnly } from "../../../component/form/Validation";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 // import { closeNewCategoryForm } from "../../../store/slices/categorySlice";
 import { closeAddStaffForm, staffStoreApi, addonserviceAction } from "../../../store/slices/staffSlice";
 import { removeImage } from "../../../store/slices/imageSlice";

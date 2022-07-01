@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
-import { ucfirst } from "helpers/functions";
+import { ucfirst } from "helpers/Functions";
 import PropTypes from "prop-types";
 // validation Formik
 import * as Yup from "yup";

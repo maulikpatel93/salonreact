@@ -165,15 +165,15 @@ const ConsultationEditForm = () => {
                       formik.setFieldTouched("formdata[" + i + "][options]", true);
                     }, 100);
                   }
-                  formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id);
-                  formik.setFieldValue("formdata[" + i + "][section_type]", section_type);
-                  formik.setFieldValue("formdata[" + i + "][title]", title);
-                  formik.setFieldValue("formdata[" + i + "][is_edit]", is_edit);
-                  formik.setFieldValue("formdata[" + i + "][form_type]", form_type);
-                  formik.setFieldValue("formdata[" + i + "][question]", question);
-                  formik.setFieldValue("formdata[" + i + "][form_id]", form_id);
-                  formik.setFieldValue("formdata[" + i + "][form_element_id]", form_element_id);
-                  formik.setFieldValue("formdata[" + i + "][options]", options.length > 0 ? options : []);
+                  formik.setFieldValue("formdata[" + i + "][form_element_type_id]", id, false);
+                  formik.setFieldValue("formdata[" + i + "][section_type]", section_type, false);
+                  formik.setFieldValue("formdata[" + i + "][title]", title, false);
+                  formik.setFieldValue("formdata[" + i + "][is_edit]", is_edit, false);
+                  formik.setFieldValue("formdata[" + i + "][form_type]", form_type, false);
+                  formik.setFieldValue("formdata[" + i + "][question]", question, false);
+                  formik.setFieldValue("formdata[" + i + "][form_id]", form_id, false);
+                  formik.setFieldValue("formdata[" + i + "][form_element_id]", form_element_id, false);
+                  formik.setFieldValue("formdata[" + i + "][options]", options.length > 0 ? options : [], false);
                 });
               }
             }, [isHandleFormData]);

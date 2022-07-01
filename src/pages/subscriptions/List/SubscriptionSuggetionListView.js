@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 import { SubscriptionGridViewApi, CloseSubscriptionSearchList, SubscriptionSearchName, SubscriptionSearchObj } from "../../../store/slices/subscriptionSlice";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 import PropTypes from "prop-types";
 // import ReactPaginate from 'react-paginate';
 

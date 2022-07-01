@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 import { swalConfirm } from "../../../component/Sweatalert2";
 import { openEditVoucherForm, voucherDeleteApi, voucherDetailApi } from "../../../store/slices/voucherSlice";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import { openAddSaleForm, SaleTabView } from "store/slices/saleSlice";
 
 const VoucherListView = (props) => {

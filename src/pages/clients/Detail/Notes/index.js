@@ -8,7 +8,7 @@ import { ClientnoteGridViewApi, clientnoteDeleteApi, closeNoteDrawer, openAddNot
 import config from "../../../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PaginationLoader from "component/PaginationLoader";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import NoteFormDrawer from "./NoteFormDrawer";
 
 const Notes = () => {

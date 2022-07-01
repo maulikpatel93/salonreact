@@ -13,7 +13,7 @@ import "bootstrap-daterangepicker/daterangepicker.css";
 import moment from "moment";
 import SaleCompleted from "./Drawer/SaleCompleted";
 import SaleDrawer from "./SaleDrawer";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 
 const Sales = () => {
   SalonModule();

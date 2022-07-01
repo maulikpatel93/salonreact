@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { serviceListViewApi, closeServiceSearchList, serviceSearchName } from "../../../store/slices/serviceSlice";
-import { ucfirst } from "../../../helpers/functions";
+import { ucfirst } from "../../../helpers/Functions";
 
 const ServiceSuggetionListView = (props) => {
   const { t } = useTranslation();

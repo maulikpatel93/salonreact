@@ -12,7 +12,7 @@ import ClientListView from "./List/listview";
 import ClientSuggetionListView from "./List/ClientSuggetionListView";
 import PaginationLoader from "component/PaginationLoader";
 import { SalonModule } from "pages";
-import { checkaccess } from "helpers/functions";
+import { checkaccess } from "helpers/Functions";
 import { Notify } from "component/Toastr";
 
 const Clients = () => {
