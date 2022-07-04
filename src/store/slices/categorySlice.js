@@ -207,7 +207,7 @@ const categorySlice = createSlice({
     [categoryDeleteApi.pending]: () => {},
     [categoryDeleteApi.fulfilled]: (state, action) => {
       const { id } = action.payload;
-      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : state.isListView.filter((item) => item.id != id);
+      state.isListView.data = state.isListView.data ? state.isListView.data.filter((item) => item.id != id) : [];
     },
     [categoryDeleteApi.rejected]: () => {},
     [categoryOptions.pending]: () => {},
