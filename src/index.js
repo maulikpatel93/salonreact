@@ -7,6 +7,7 @@ import "./assets/css/font-awsome.css";
 import "./assets/scss/react-bootstrap.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "./assets/css/style.css";
+import "./assets/css/custom.css";
 import "./assets/scss/custom.scss";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 

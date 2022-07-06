@@ -129,7 +129,15 @@ img {
 .fw-semibold {
     font-weight: 600 !important;
 }
-
+.fw-regular{
+    font-weight: 400 !important;
+}
+.f-18{
+    font-size: 18px;
+}
+.f-16{
+    font-size: 16px;
+}
 .text-jusitfy {
     text-align: justify;
 }
@@ -478,6 +486,7 @@ textarea.form-control {
 
 textarea.form-control {
     resize: none;
+    font-family: 'Source Sans Pro';
 }
 
 .form-control:hover,
@@ -1646,7 +1655,7 @@ header .search .search-wrapper.open {
     font-family: "Source Sans Pro", sans-serif;
 }
 
-.voucher-form p {
+.voucher-form p , p.input-para-conent{
     box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
     border-radius: 4px;
     border: 1px solid #e5e7eb;
@@ -3089,7 +3098,9 @@ table .pro-title {
 .signup-page .steps.active {
     display: block;
 }
-
+.alltab-box{
+    height: 100vh;
+}
 
 /* aacount setup page css  */
 
@@ -3109,7 +3120,6 @@ table .pro-title {
 
 .ac-setup .acsetup-right .alltab-box {
     padding: 35px 40px;
-    height: 100%;
 }
 
 .ac-setup .acsetup-left .nav-link {
@@ -4304,15 +4314,264 @@ body .border-block {
     background-color: #8c1c4d !important;
 }
 
-
+.staff-dropdown .user-img img {
+    max-width: 24px;
+}
 /* Performance Summary Modal Css Start */
-
-
 /* Reports Page End */
 
+/* 30-06-2022- Marketing Page By Zankhana Start*/
+.theme-btn{
+    min-width: 114px;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 700;
+}
+.page-marketing p{
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #374151;
+}
+.page-marketing .box-image-cover{
+    margin: 0 0 15px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+}
+/* Birthday Offer Modal Start */
 
+.birthdayoffer-drawer .right-content {
+    border-left: 1px solid #eee;
+}
+.birthdayoffer-drawer .left-content .input-field label {
+    font-family: 'Source Sans Pro';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #3A3432;
+}
+.birthdayoffer-drawer .left-content .input-field {
+    border-bottom: 0.75px solid #EEEEEE;
+    position: relative;
+    padding: 30px 50px;
+}
+.birthdayoffer-drawer .left-content .input-field input.form-control::placeholder {
+    color: #374151;
+}
+.birthdayoffer-drawer .left-content .input-field p {
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 16px;
+}
+.birthdayoffer-drawer .left-content .input-field .subtitle-text{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #999999;
+}
+.birthdayoffer-drawer .left-content .input-field select.form-control {
+    color: #6B7280;
+}
+.bordered-btn{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #374151;
+    border: 1px solid #E5E7EB;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px rgba(31, 41, 55, 0.08);
+    border-radius: 4px;
+    width: 180px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.bordered-btn:hover{
+    background-color:#f4eeeb;
+    color: #374151;
+}
+/* Birthday Offer Modal End */
+/* 30-06-2022- Marketing Page By Zankhana End */
+
+/* Choose an image Modal 01-07-2022-By Zankhana Start */
+.chooseimg-section .tab-content {
+    overflow-y: auto;
+    max-height: calc(100vh - 435px);
+}
+.change-headerimg-modal .modal-lg {
+    max-width: 872px;
+    max-height: 779px;
+}
+.change-headerimg-modal .modal-content {
+    padding: 0;
+}
+.change-headerimg-modal .btn-close {
+    padding: 0;
+    opacity: 1;
+    width: 25px;
+    height: 25px;
+    font-size: 0;
+    opacity: 0.5;
+}
+.change-headerimg-modal .btn-close:hover{
+    opacity: 1;
+}
+.change-headerimg-modal .modal-content .modal-header {
+    padding: 25px 35px 0;
+}
+.change-headerimg-modal .common-tab .nav {
+    padding: 0 37px;
+    border-bottom: 3px solid #F4EEEB;
+}
+.change-headerimg-modal .common-tab .nav-tabs li a {
+    margin-bottom: -3px;
+    font-size: 16px;
+    font-weight: 400;
+}
+.chooseimg-section .tab-content {
+    overflow-y: auto;
+}
+.chooseimg-section .tab-content::-webkit-scrollbar {
+    width: 10px;
+  }
+   
+  .chooseimg-section .tab-content::-webkit-scrollbar-track {
+    background: #C4C4C4;
+    border-radius: 20px;
+  }
+   
+  .chooseimg-section .tab-content::-webkit-scrollbar-thumb {
+    background-color: #BB5876;
+    outline: none;
+    border-radius: 20px;
+  }
+  .preview-offer h1 {
+    font-family: "Abhaya Libre", serif;
+    font-size: 50px;
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .preview-offer p.offer-subtitle-txt{
+    font-family: "Abhaya Libre", serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 28px;
+    color: #374151;
+    margin: 0 auto 30px;
+  }
+  .preview-offer .offer-box{
+    padding: 48px 45px;
+    max-width: 408px;
+    background: #FDC668;
+    border-radius: 20px;
+    margin: 0 auto 30px;
+  }
+  .preview-offer .offer-box h1{
+    font-family: 'Abhaya Libre';
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 100%;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+  }
+  .preview-offer .offer-box p{
+    font-family: 'Abhaya Libre';
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    color: #FFFFFF;
+  }
+  .preview-offer .offer-address p, .preview-offer .offer-address h6{
+    font-family: 'Abhaya Libre ExtraBold';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    color: #374151;
+    margin-bottom: 30px;
+  }
+  .preview-offer .offer-address h6{
+    font-weight: 800;
+    line-height: 18px;
+    margin-bottom: 15px;
+  }
+  .preview-offer .offer-details{
+    font-family: 'Source Sans Pro';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;   
+    color: rgba(0, 0, 0, 0.8);
+    width: 65%;
+    margin: 0 auto;
+    text-align: justify;
+  }
+/* Choose an image Modal 01-07-2022-By Zankhana Start End */
+.oneoff-tab .box-image-cover .tabs-image {
+    width: 107px;
+    height: 107px;
+    margin: 0 auto 0;
+    border-radius: 50%;
+    background: #F9F6F4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.create-campaigns-drawer .box-image-cover {
+    width: 350px;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30px;
+    margin: 0 20px;
+}
+.mobile-data {
+    max-width: 295px;
+    margin: 0 auto;
+    padding-top: 520px;
+}
+.mobile-data .mobile-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.mobile-data .mobile-txt {
+    top: 80px;
+    background-color: #8C1C4D;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border-radius: 11px;
+    position: absolute;
+    margin: 0 26px;
+}
+.mobile-data .mobile-txt a {
+    color: #fff;
+}
+.pest-link {
+    background-color: #F9F6F4;
+    border-radius: 5px;
+    padding: 8px 14px;
+    word-break: break-all;
+}
 /* Media query */
-
+@media only screen and (min-width: 1360px){
+    .row.gutter-40 {
+        margin-left: -25px;
+        margin-right: -25px;
+    }
+    
+    .row.gutter-40 > div[class^="col"] {
+        padding-left: 25px;
+        padding-right: 25px;
+        margin-bottom: 50px;
+    }
+}
 @media only screen and (min-width: 768px) {
     .addphoto-drawer,
     .client-invoice-drawer,
@@ -4330,6 +4589,9 @@ body .border-block {
     .drawer.busytime-drawer {
         width: 450px;
     }
+    .box-image-cover {
+        padding: 25px 15px;
+    }    
 }
 
 @media only screen and (max-width: 1599px) {
@@ -4405,7 +4667,11 @@ body .border-block {
         font-size: 15px;
     }
 }
-
+@media only screen and (max-width: 1280px){
+    .row.gutter-40 > div[class^="col"] {
+        margin-bottom: 20px;
+    }
+}
 @media only screen and (max-width: 1199px) {
     h1,
     .h1 {
@@ -4698,6 +4964,9 @@ body .border-block {
     .full-screen-drawer .drawer-body {
         height: calc(100vh - 68px);
     }
+    .Reports-drawer .drawer-body {
+        padding: 15px;
+    }
     .product-box .product-header p,
     .newsale-probox .membership-box .product-header p {
         font-size: 16px;
@@ -4883,6 +5152,9 @@ body .border-block {
         position: static;
         margin-top: 15px;
     }
+    .full-screen-drawer .drawer-panel-header {
+        height: initial;
+    }
 }
 
 @media only screen and (max-width: 767px) {
@@ -5029,7 +5301,7 @@ body .border-block {
         width: calc(50% - 20px);
         max-width: 100%;
         margin: 0 10px 20px;
-        padding: 30px 10px 10px;
+        padding: 30px 10px 30px;
     }
     .box-image-cover .setting-dropdown {
         position: absolute;
@@ -5304,7 +5576,7 @@ body .border-block {
     .signup-page .signup-content {
         padding: 90px 0 40px;
     }
-    .signup-page h1 {
+    .signup-page h1 ,.preview-offer h1,.preview-offer .offer-box h1{
         font-size: 40px;
     }
     .signup-page p {
@@ -5399,6 +5671,20 @@ body .border-block {
     .border-left-right::after {
         display: none;
     }
+    .preview-offer .offer-box p{
+        font-size: 25px;
+    }
+
+    .create-campaigns-drawer .box-image-cover {
+        margin: 15px 15px 0;
+        height: 100%;
+        padding: 50px 30px;
+        height: initial;
+    }
+    .create-campaigns-drawer .drawer-body {
+        margin: 0 20px;
+        height: calc(100vh - 100px);
+    }
 }
 
 @media only screen and (min-width: 992px) {
@@ -5421,7 +5707,11 @@ body .border-block {
         font-size: 14px;
     }
     .sales-list .custom-tab,
-    .sales-list form {
+    .sales-list form ,
+    .preview-offer .offer-details,
+    .preview-offer p.offer-subtitle-txt,
+    .preview-offer .offer-box,
+    .page-marketing .box-image-cover{
         width: 100%;
     }
     .sales-list .sales-list-header .form-control {
@@ -5442,5 +5732,11 @@ body .border-block {
     }
     .page-title {
         font-size: 17px;
+    }
+    .birthdayoffer-drawer .left-content .input-field {
+        padding: 30px 30px;
+    }
+    .preview-offer .offer-box {
+        padding: 30px 20px;
     }
 }

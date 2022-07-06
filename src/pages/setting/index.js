@@ -12,6 +12,11 @@ import Closeddate from "./List/Closeddate";
 import ClientNotification from "./List/ClientNotification";
 import Cancellationreason from "./List/Cancellationreason";
 import Consultation from "./List/Consultation";
+import BookingButtons from "./List/BookingButtons";
+import SMSUsage from "./List/SMSUsage";
+import Permissions from "./List/Permissions";
+import Analytics from "./List/Analytics";
+import { SendEmailVoucher } from "store/slices/saleSlice";
 
 const Setting = () => {
   SalonModule();
@@ -59,6 +64,9 @@ const Setting = () => {
             </button>
           </div>
           <div className="acsetup-right">
+            <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white cursor-pointer" onClick={() => dispatch(SendEmailVoucher({ code: "dsd", client_id: 22 }))}>
+              {t("Email Voucher To Customer")}
+            </a>
             {!tabview && (
               <div className="alltab-box">
                 <div className="row">
@@ -159,15 +167,24 @@ const Setting = () => {
               <div className={"tab-pane fade " + (tabview && tabview == "CancellationReasons" ? " show active" : "")} id="v-pills-CancellationReasons" role="tabpanel" aria-labelledby="v-pills-CancellationReasons-tab">
                 {tabview && tabview == "CancellationReasons" && <Cancellationreason />}
               </div>
-              <div className={"tab-pane fade " + (tabview && tabview == "Permissions" ? " show active" : "")} id="v-pills-Permissions" role="tabpanel" aria-labelledby="v-pills-Permissions-tab"></div>
-              <div className={"tab-pane fade " + (tabview && tabview == "SMSUsage" ? " show active" : "")} id="v-pills-SMSUsage" role="tabpanel" aria-labelledby="v-pills-SMSUsage-tab"></div>
+              <div className={"tab-pane fade " + (tabview && tabview == "Permissions" ? " show active" : "")} id="v-pills-Permissions" role="tabpanel" aria-labelledby="v-pills-Permissions-tab">
+                {tabview && tabview == "Permissions" && <Permissions />}
+              </div>
+              <div className={"tab-pane p-0 fade " + (tabview && tabview == "SMSUsage" ? " show active" : "")} id="v-pills-SMSUsage" role="tabpanel" aria-labelledby="v-pills-SMSUsage-tab">
+                {tabview && tabview == "SMSUsage" && <SMSUsage />}
+              </div>
               <div className={"tab-pane fade " + (tabview && tabview == "Integrations" ? " show active" : "")} id="v-pills-Integrations" role="tabpanel" aria-labelledby="v-pills-Integrations-tab">
                 {tabview && tabview == "Integrations" && <Integration />}
               </div>
               <div className={"tab-pane fade " + (tabview && tabview == "ConsultationForms" ? " show active" : "")} id="v-pills-ConsultationForms" role="tabpanel" aria-labelledby="v-pills-ConsultationForms-tab">
                 {tabview && tabview == "ConsultationForms" && <Consultation />}
               </div>
-              <div className={"tab-pane fade " + (tabview && tabview == "Analytics" ? " show active" : "")} id="v-pills-Analytics" role="tabpanel" aria-labelledby="v-pills-Analytics-tab"></div>
+              <div className={"tab-pane p-0 fade " + (tabview && tabview == "BookingButtons" ? " show active" : "")} id="v-pills-BookingButtons" role="tabpanel" aria-labelledby="v-pills-BookingButtons-tab">
+                {tabview && tabview == "BookingButtons" && <BookingButtons />}
+              </div>
+              <div className={"tab-pane fade " + (tabview && tabview == "Analytics" ? " show active" : "")} id="v-pills-Analytics" role="tabpanel" aria-labelledby="v-pills-Analytics-tab">
+                {tabview && tabview == "Analytics" && <Analytics />}
+              </div>
             </div>
           </div>
         </div>

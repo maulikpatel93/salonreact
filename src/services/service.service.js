@@ -104,6 +104,7 @@ const view = (values) => {
       category_field: values && values.option ? "0" : "name", //business_name,owner_name
       result: result, //business_name,owner_name
       option: values && values.option ? values.option : "",
+      category_id: values && values.category_id ? values.category_id : "",
     };
   }
 

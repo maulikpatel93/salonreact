@@ -40,6 +40,8 @@ import dashboardReducer from "../store/slices/dashboardSlice";
 import cancellationreasonReducer from "../store/slices/cancellationreasonSlice";
 import formReducer from "./slices/formSlice";
 import reportReducer from "../store/slices/reportSlice";
+import bookingbuttonReducer from "../store/slices/bookingbuttonSlice";
+import marketingReducer from "../store/slices/marketingSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -422,6 +424,28 @@ const reducer = combineReducers({
       whitelist: [],
     },
     reportReducer,
+  ),
+  bookingbutton: persistReducer(
+    {
+      key: "bookingbutton",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    bookingbuttonReducer,
+  ),
+  marketing: persistReducer(
+    {
+      key: "marketing",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    marketingReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

@@ -5,6 +5,7 @@ import { servicePriceApi } from "store/slices/serviceSlice";
 import { useDispatch } from "react-redux";
 import { staffOptions } from "store/slices/staffSlice";
 import { SaleServiceToCartApi } from "store/slices/saleSlice";
+import { BookingServiceOptionReset, BookingServiceOptions, BookingStaffOptionReset, BookingStaffOptions } from "store/slices/bookingbuttonSlice";
 // interface Option {
 //   label: string;
 //   value: string;
@@ -21,6 +22,22 @@ export const CustomSelect = ({ className, placeholder, field, form, options, isM
   const selectRef = useRef();
   const dispatch = useDispatch();
   const onChange = (option) => {
+    if (field.name === "category_id" && controlId === "bookingButtonForm-category_id") {
+      dispatch(BookingStaffOptionReset());
+      dispatch(BookingServiceOptionReset());
+      if (option && option.value) {
+        dispatch(BookingServiceOptions({ option: { valueField: "id", labelField: "name" }, category_id: option && option.value }));
+      } else {
+        dispatch(BookingServiceOptionReset());
+      }
+    }
+    if (field.name === "service_id" && controlId === "bookingButtonForm-service_id") {
+      if (option && option.value) {
+        dispatch(BookingStaffOptions({ option: { valueField: "users.id", labelField: "CONCAT(users.last_name,' ',users.first_name)" }, service_id: option && option.value }));
+      } else {
+        dispatch(BookingStaffOptionReset());
+      }
+    }
     if (field.name === "service_id" && controlId === "appointmentForm-service_id") {
       dispatch(servicePriceApi({ service_id: option && option.value })).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {

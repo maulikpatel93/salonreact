@@ -4,7 +4,7 @@ import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 
 const initialState = {
-  isTabView: [],
+  isTabView: "",
 };
 
 const settingSlice = createSlice({

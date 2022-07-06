@@ -1,0 +1,76 @@
+/* account setup  */
+.ac-setup #v-pills-BookingButtons .left-content,
+.ac-setup #v-pills-SMSUsage .left-content{
+    padding: 35px 40px;
+}
+.ac-setup #v-pills-BookingButtons .right-content,
+.ac-setup #v-pills-SMSUsage .right-content{
+    padding: 40px;
+}
+.ac-setup #v-pills-BookingButtons,
+.ac-setup #v-pills-SMSUsage{
+    background-color: #f9f6f4;
+}
+.ac-setup .round-icon{
+    min-width: 35px;
+    min-height: 35px;
+    background-color: #BB5876;
+    border-radius: 100%;
+}
+.color-default{
+    color: #3A3432 !important;
+}
+.pest-link {
+    background-color: #F9F6F4;
+    border-radius: 5px;
+    padding: 8px 14px;
+}
+.btnlight-pink.btn {
+    background-color: #F4EEEB;
+    border-color: #F4EEEB;
+    color: #3A3432;
+}
+.disable span{
+    color: #9CA3AF !important;
+}
+.cursor-poniter {
+    cursor: pointer;
+}
+.border-left{
+    border-left: 1px solid #eee;
+}
+.border-bottom{
+    border-bottom: 1px solid #eee;
+}
+.border-right{
+    border-right: 1px solid #eee;
+}
+textarea.textarea-lg {
+    min-height: 176px;
+}
+.f-18{
+    font-size: 18px !important;
+}
+.mobile-data {
+    max-width: 295px;
+    margin: 0 auto;
+    padding-top: 520px;
+}
+.mobile-data .mobile-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.mobile-data .mobile-txt {
+    top: 80px;
+    background-color: #8C1C4D;
+    box-shadow: 0px 1px 2px rgb(31 41 55 / 8%);
+    border-radius: 11px;
+    position: absolute;
+    margin: 0 26px;
+}
+.mobile-data .mobile-txt a {
+    color: #fff;
+}
