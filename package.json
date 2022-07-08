@@ -54,6 +54,7 @@
         "react-infinite-scroll-component": "^6.1.0",
         "react-input-mask": "^3.0.0-alpha.2",
         "react-lines-ellipsis": "^0.15.1",
+        "react-mailchimp-subscribe": "^2.1.3",
         "react-moment": "^1.1.2",
         "react-multi-date-picker": "^3.3.0",
         "react-redux": "^8.0.2",
@@ -73,6 +74,7 @@
         "sweetalert2": "^11.4.19",
         "sweetalert2-react": "^0.8.3",
         "sweetalert2-react-content": "^5.0.1",
+        "to-querystring": "^1.1.1",
         "toastr": "^2.1.4",
         "web-vitals": "^2.1.4",
         "yup": "^0.32.11"
