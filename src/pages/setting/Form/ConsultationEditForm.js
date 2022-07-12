@@ -37,7 +37,7 @@ const ConsultationEditForm = () => {
     delete_form_element_id: [],
   };
   const validationSchema = Yup.object().shape({
-    title: Yup.string().trim().max(50).label(t("Title")).required(),
+    title: Yup.string().trim().label(t("Title")).required(),
     formdata: Yup.array()
       .of(
         Yup.object().shape({

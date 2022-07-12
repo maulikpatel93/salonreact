@@ -48,7 +48,7 @@ const VoucherEditForm = (props) => {
     // service_id: [],
   };
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(50).label(t("Voucher Name")).required(),
+    name: Yup.string().trim().max(100).label(t("Voucher Name")).required(),
     description: Yup.string().trim().label(t("Description")),
     amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     valid: Yup.string().trim().label(t("Valid For")).required(),

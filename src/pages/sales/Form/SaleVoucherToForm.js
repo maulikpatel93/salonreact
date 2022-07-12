@@ -43,8 +43,8 @@ const SaleVoucherToForm = (props) => {
         is: (v) => v === "" || v === null || v === undefined,
         then: Yup.string().trim(t("Required")).label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
       }),
-    first_name: Yup.string().trim().max(50).label(t("Membership Name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("Membership Name")).required(),
+    first_name: Yup.string().trim().max(100).label(t("Membership Name")).required(),
+    last_name: Yup.string().trim().max(100).label(t("Membership Name")).required(),
     is_send: Yup.mixed().nullable(),
     email: Yup.string()
       .nullable()

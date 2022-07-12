@@ -78,8 +78,8 @@ const SaleAddForm = (props) => {
       oneoffvoucher: Yup.array().of(
         Yup.object().shape({
           id: Yup.string().trim().label(t("ID")).test("Digits only", t("The field should have digits only"), digitOnly),
-          first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
-          last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
+          first_name: Yup.string().trim().max(100).label(t("First Name")).required(),
+          last_name: Yup.string().trim().max(100).label(t("Last Name")).required(),
           email: Yup.string().trim().max(100).email().label(t("Email Address")),
           amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly).required(),
           message: Yup.string().trim().label(t("Message")),

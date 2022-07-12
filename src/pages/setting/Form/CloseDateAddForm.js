@@ -18,7 +18,7 @@ const CloseDateAddForm = () => {
 
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
-  const rightDrawerOpened = useSelector((state) => state.closedate.isOpenedAddForm);
+  const rightDrawerOpened = useSelector((state) => state.closedate.isNotificationForm);
 
   const initialValues = {
     start_date: "",

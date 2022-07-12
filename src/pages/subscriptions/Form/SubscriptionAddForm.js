@@ -43,7 +43,7 @@ const SubscriptionAddForm = (props) => {
     subservice: [],
   };
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(50).label(t("Subscription Name")).required(),
+    name: Yup.string().trim().max(100).label(t("Subscription Name")).required(),
     amount: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     repeats: Yup.string().trim().label(t("Repeats")).required(),
     repeat_time: Yup.string()

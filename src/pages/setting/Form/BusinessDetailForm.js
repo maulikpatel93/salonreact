@@ -50,7 +50,7 @@ const BusinessDetailForm = () => {
 
   const validationSchema = Yup.object().shape({
     image: Yup.mixed().nullable(),
-    business_name: Yup.string().trim().max(50).label(t("Business Name")).required(),
+    business_name: Yup.string().trim().max(100).label(t("Business Name")).required(),
     business_website: Yup.string().matches(regMatch, t("Website should be a valid URL")),
     business_address: Yup.string().trim().label(t("Business Location")).required(),
     salon_type: Yup.string().trim().label(t("Business Type")).required(),

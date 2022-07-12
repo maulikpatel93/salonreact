@@ -13,7 +13,6 @@ import config from "../../../config";
 import ModalForm from "./ModalForm";
 import PreviewForm from "./PreviewForm";
 import { MailChimpSubscribeApi, OpenMailchimpForm } from "store/slices/settingSlice";
-import MailchimpSubscribe from "react-mailchimp-subscribe";
 
 const MailchimpForm = () => {
   const [loading, setLoading] = useState(false);

@@ -32,7 +32,7 @@ const ModalForm = () => {
   };
   const validationSchema = Yup.object().shape({
     form_type: Yup.string(),
-    question: Yup.string().trim().max(50).label(t("This field")).required(),
+    question: Yup.string().trim().label(t("This field")).required(),
     options: Yup.array().when(["form_type"], {
       is: (sck) => {
         if (sck === "select" || sck === "multicheckbox" || sck === "radio") {

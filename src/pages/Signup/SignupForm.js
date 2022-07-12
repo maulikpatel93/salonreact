@@ -54,8 +54,8 @@ const SignupForm = () => {
   };
 
   const Step1Schema = Yup.object().shape({
-    first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
+    first_name: Yup.string().trim().max(100).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(100).label(t("Last Name")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
   });
   const Step2Schema = Yup.object().shape({
@@ -70,7 +70,7 @@ const SignupForm = () => {
     terms: Yup.boolean().oneOf([true], "You must accept the terms and conditions"),
   });
   const Step3Schema = Yup.object().shape({
-    business_name: Yup.string().trim().max(50).label(t("Business Name")).required(),
+    business_name: Yup.string().trim().max(100).label(t("Business Name")).required(),
     business_address: Yup.string().trim().label(t("Business Location")).required(),
     salon_type: Yup.string().trim().label(t("Business Type")).required(),
     business_phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Business Phone Number")).required(),

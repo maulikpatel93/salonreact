@@ -47,8 +47,8 @@ const ClientEditForm = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
+    first_name: Yup.string().trim().max(100).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(100).label(t("Last Name")).required(),
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
     phone_number: Yup.string().trim().matches(config.phone_number_pattern, t(config.phone_number_334_error)).label(t("Mobile")).required(),
     date_of_birth: Yup.string().trim().label(t("Date Of Birth")).required(),

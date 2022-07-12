@@ -30,7 +30,7 @@ const CloseDateEditForm = () => {
   const validationSchema = Yup.object().shape({
     start_date: Yup.date().label(t("Closed From")).required(),
     end_date: Yup.date().label(t("Closed To")).min(Yup.ref("start_date"), t("end date can't be before start date")).required(),
-    reason: Yup.string().trim().max(50).label(t("Reason")).required(),
+    reason: Yup.string().trim().max(100).label(t("Reason")).required(),
   });
   yupconfig();
 

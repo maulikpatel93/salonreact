@@ -26,7 +26,7 @@ const CancellationreasonEditForm = () => {
     reason: "",
   };
   const validationSchema = Yup.object().shape({
-    reason: Yup.string().trim().max(50).label(t("Reason")).required(),
+    reason: Yup.string().trim().max(100).label(t("Reason")).required(),
   });
   yupconfig();
 

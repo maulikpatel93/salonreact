@@ -44,8 +44,8 @@ const SupplierAddForm = () => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().max(100).label(t("Supplier_name")).required(),
-    first_name: Yup.string().trim().max(50).label(t("First Name")).required(),
-    last_name: Yup.string().trim().max(50).label(t("Last Name")).required(),
+    first_name: Yup.string().trim().max(100).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(100).label(t("Last Name")).required(),
     logo: Yup.mixed(),
     // logo: Yup.string().trim().label(t("logo")),
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),

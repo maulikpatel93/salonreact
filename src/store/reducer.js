@@ -42,6 +42,7 @@ import formReducer from "./slices/formSlice";
 import reportReducer from "../store/slices/reportSlice";
 import bookingbuttonReducer from "../store/slices/bookingbuttonSlice";
 import marketingReducer from "../store/slices/marketingSlice";
+import notificationReducer from "../store/slices/notificationSlice";
 //-----------------------|| COMBINE REDUCER ||-----------------------//
 // const rootPersistConfig = {
 //   key: "root",
@@ -446,6 +447,17 @@ const reducer = combineReducers({
       whitelist: [],
     },
     marketingReducer,
+  ),
+  notification: persistReducer(
+    {
+      key: "notification",
+      storage,
+      keyPrefix: "salon-",
+      debug: false,
+      timeout: 20000,
+      whitelist: [],
+    },
+    notificationReducer,
   ),
   tax: taxReducer,
   socket: socketReducer,

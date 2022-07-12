@@ -30,7 +30,7 @@ const AddBirthdayOfferForm = (props) => {
     cost: "",
   };
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(50).label(t("Birthday Offer Name")).required(),
+    name: Yup.string().trim().max(100).label(t("Birthday Offer Name")).required(),
     credit: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     cost: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
   });

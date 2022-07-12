@@ -31,7 +31,7 @@ const MembershipEditForm = (props) => {
     cost: "",
   };
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().max(50).label(t("Membership Name")).required(),
+    name: Yup.string().trim().max(100).label(t("Membership Name")).required(),
     cost: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
     credit: Yup.string().trim().label(t("Amount")).required().test("Decimal only", t("The field should have decimal only"), decimalOnly),
   });
