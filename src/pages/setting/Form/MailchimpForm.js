@@ -26,9 +26,13 @@ const MailchimpForm = () => {
 
   const initialValues = {
     email: "",
+    first_name: "",
+    last_name: "",
   };
   const validationSchema = Yup.object().shape({
     email: Yup.string().trim().max(100).email().label(t("Email Address")).required(),
+    first_name: Yup.string().trim().max(100).label(t("First Name")).required(),
+    last_name: Yup.string().trim().max(100).label(t("Last Name")).required(),
   });
   yupconfig();
 
@@ -88,6 +92,14 @@ const MailchimpForm = () => {
                             <div className="mb-4 pb-xxl-2">
                               <div hidden={true}>
                                 <input type="hidden" name="tags" value="2141222" />
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-6">
+                                  <InputField type="text" name="first_name" value={formik.values.first_name} placeholder={t("First Name")} label={t("First Name")} controlId="stripesetupForm-email" />
+                                </div>
+                                <div className="col-6">
+                                  <InputField type="text" name="last_name" value={formik.values.last_name} placeholder={t("Last Name")} label={t("Last Name")} controlId="stripesetupForm-email" />
+                                </div>
                               </div>
                               <InputField type="text" name="email" value={formik.values.email} placeholder="me@example.com" label={t("Email")} controlId="stripesetupForm-email" />
                             </div>

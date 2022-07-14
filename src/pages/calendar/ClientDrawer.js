@@ -114,7 +114,7 @@ const ClientDrawer = () => {
                 <textarea id="my-textarea" className="form-control" name="" rows="5" placeholder="For example, allergic to latex"></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="">Notifcations</label>
+                <label htmlFor="">Notifications</label>
                 <div className="form-check form-switch">
                   <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
                   <span>Send SMS notifications to client</span>

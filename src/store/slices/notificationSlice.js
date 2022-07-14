@@ -4,12 +4,12 @@ import HandleError from "../HandleError";
 import HandleResponse from "../HandleResponse";
 export const usersAdapter = createEntityAdapter();
 
-export const NotificationViewApi = createAsyncThunk("notification/NotificationView", async (formvalues, thunkAPI) => {
+export const NotifyDetailListViewApi = createAsyncThunk("notification/NotifyListView", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await notificationApiController
-      .notificationview(formvalues, thunkAPI)
-      .then((response) => HandleResponse(thunkAPI, response, "NotificationView"))
-      .catch((error) => HandleError(thunkAPI, error, "NotificationView"));
+      .notifylistview(formvalues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "NotifyListView"))
+      .catch((error) => HandleError(thunkAPI, error, "NotifyListView"));
     return resposedata;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -17,10 +17,10 @@ export const NotificationViewApi = createAsyncThunk("notification/NotificationVi
   }
 });
 
-export const NotifcationUpdateApi = createAsyncThunk("notification/update", async (formvalues, thunkAPI) => {
+export const NotifyDetailUpdateApi = createAsyncThunk("notification/update", async (formvalues, thunkAPI) => {
   try {
     const resposedata = await notificationApiController
-      .update(formvalues, thunkAPI)
+      .notifyupdate(formvalues, thunkAPI)
       .then((response) => HandleResponse(thunkAPI, response, "update"))
       .catch((error) => HandleError(thunkAPI, error, "update"));
     return resposedata;
@@ -34,6 +34,7 @@ const initialState = {
   isOpenNotificationForm: "",
   isNotifyDetail: "",
   isNotifyPreview: "",
+  isNotifyDetailListView: "",
 };
 
 const notificationSlice = createSlice({
@@ -52,22 +53,27 @@ const notificationSlice = createSlice({
     },
   },
   extraReducers: {
-    [NotificationViewApi.pending]: () => {},
-    [NotificationViewApi.fulfilled]: (state, action) => {
-      state.isNotification = action.payload;
+    // [NotificationViewApi.pending]: () => {},
+    // [NotificationViewApi.fulfilled]: (state, action) => {
+    //   state.isNotification = action.payload;
+    // },
+    // [NotificationViewApi.rejected]: () => {},
+    [NotifyDetailListViewApi.pending]: () => {},
+    [NotifyDetailListViewApi.fulfilled]: (state, action) => {
+      state.isNotifyDetailListView = action.payload;
     },
-    [NotificationViewApi.rejected]: () => {},
-    [NotifcationUpdateApi.pending]: () => {},
-    [NotifcationUpdateApi.fulfilled]: (state, action) => {
+    [NotifyDetailListViewApi.rejected]: () => {},
+    [NotifyDetailUpdateApi.pending]: () => {},
+    [NotifyDetailUpdateApi.fulfilled]: (state, action) => {
       const { id, ...changes } = action.payload;
-      const existingData = state.isGridView.data.find((event) => event.id === id);
+      const existingData = state.isNotifyDetailListView.find((event) => event.id === id);
       if (existingData) {
         Object.keys(changes).map((keyName) => {
           existingData[keyName] = changes[keyName];
         });
       }
     },
-    [NotifcationUpdateApi.rejected]: () => {},
+    [NotifyDetailUpdateApi.rejected]: () => {},
   },
 });
 // Action creators are generated for each case reducer function

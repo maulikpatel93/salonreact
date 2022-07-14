@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { NotifyDetail, OpenNotificationForm } from "store/slices/notificationSlice";
+import { NotifyDetail, NotifyDetailListViewApi, NotifyDetailUpdateApi, OpenNotificationForm } from "store/slices/notificationSlice";
 import NotificationForm from "../Form/NotificaitonForm";
 
 const ClientNotification = () => {
@@ -11,12 +11,11 @@ const ClientNotification = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const isOpenNotificationForm = useSelector((state) => state.notification.isOpenNotificationForm);
+  const isNotifyDetailListView = useSelector((state) => state.notification.isNotifyDetailListView);
 
   const notifyobjectData = [
     {
-      icon: config.imagepath + "email-send.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "email-send.png",
       nofify: "Email",
       title: t("New Appointment"),
       type: "NewAppointment",
@@ -27,9 +26,7 @@ const ClientNotification = () => {
       is_active: 1,
     },
     {
-      icon: config.imagepath + "email-send.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "email-send.png",
       nofify: "Email",
       title: t("Appointment Reminder"),
       type: "AppointmentReminder",
@@ -40,9 +37,7 @@ const ClientNotification = () => {
       is_active: 1,
     },
     {
-      icon: config.imagepath + "email-send.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "email-send.png",
       nofify: "Email",
       title: t("Cancelled Appointment"),
       type: "CancelledAppointment",
@@ -53,9 +48,7 @@ const ClientNotification = () => {
       is_active: 1,
     },
     {
-      icon: config.imagepath + "email-send.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "email-send.png",
       nofify: "Email",
       title: t("No-Show"),
       type: "NoShow",
@@ -66,9 +59,7 @@ const ClientNotification = () => {
       is_active: 1,
     },
     {
-      icon: config.imagepath + "msg-gray.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "msg-gray.png",
       nofify: "SMS",
       title: t("Appointment Reminder"),
       type: "AppointmentReminder",
@@ -79,9 +70,7 @@ const ClientNotification = () => {
       is_active: 1,
     },
     {
-      icon: config.imagepath + "msg-gray.png",
-      salon_id: currentUser.salon_id,
-      user_id: currentUser.id,
+      icon: "msg-gray.png",
       nofify: "SMS",
       title: t("Reply 'Yes' to Confirm"),
       type: "ReplyYesToConfirm",
@@ -92,6 +81,11 @@ const ClientNotification = () => {
       is_active: 1,
     },
   ];
+
+  useEffect(() => {
+    dispatch(NotifyDetailListViewApi({ notifydata: notifyobjectData }));
+  }, []);
+
   return (
     <>
       <div className="mb-md-5 mb-4 pb-xxl-1">
@@ -99,14 +93,15 @@ const ClientNotification = () => {
         <h6>{t("Send appointment reminders to avoid no-shows and keep your clients coming back with follow-up messages with these automated client notifications!")}</h6>
       </div>
       <div className="row">
-        {notifyobjectData &&
-          Object.keys(notifyobjectData).map((item, i) => {
-            let icon = notifyobjectData[item].icon;
-            let nofify = notifyobjectData[item].nofify;
-            let title = notifyobjectData[item].title;
-            let type = notifyobjectData[item].type;
-            let short_description = notifyobjectData[item].short_description;
-            let is_active = notifyobjectData[item].is_active;
+        {isNotifyDetailListView &&
+          Object.keys(isNotifyDetailListView).map((item, i) => {
+            let id = isNotifyDetailListView[item].id;
+            let icon = isNotifyDetailListView[item].icon;
+            let nofify = isNotifyDetailListView[item].nofify;
+            let title = isNotifyDetailListView[item].title;
+            let type = isNotifyDetailListView[item].type;
+            let short_description = isNotifyDetailListView[item].short_description;
+            let is_active = isNotifyDetailListView[item].is_active;
             return (
               <div className="col-xl-10 mx-auto" key={i}>
                 <div className="box-image-cover w-100 mx-0 p-md-4 p-3 mb-md-4 mb-3 text-start">
@@ -114,7 +109,7 @@ const ClientNotification = () => {
                     <div className="col-xxl-9 col-md-8 mb-md-0 mb-2">
                       <div className="d-flex align-items-center">
                         <div className="text-center">
-                          <img src={icon} alt="" />
+                          <img src={config.imagepath + icon} alt="" />
                           <span className="d-block mt-1">{t(nofify)}</span>
                         </div>
                         <div className="ps-3">
@@ -125,14 +120,31 @@ const ClientNotification = () => {
                     </div>
                     <div className="col-xxl-3 col-md-4 ps-md-0 d-flex justify-content-between align-items-center">
                       <div className="form-check form-switch mb-0">
-                        <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="flexSwitchCheckDefault"
+                          name="is_active"
+                          defaultChecked={is_active === 1 ? true : false}
+                          onChange={(e) => {
+                            if (e.currentTarget.checked) {
+                              setTimeout(() => {
+                                dispatch(NotifyDetailUpdateApi({ ...isNotifyDetailListView[item], is_active: 1 }));
+                              }, 100);
+                            } else {
+                              setTimeout(() => {
+                                dispatch(NotifyDetailUpdateApi({ ...isNotifyDetailListView[item], is_active: 0 }));
+                              }, 100);
+                            }
+                          }}
+                        />
                         <span className="color-default">{t("Enabled")}</span>
                       </div>
                       <a
                         className="edit me-1 cursor-pointer"
                         onClick={() => {
                           dispatch(OpenNotificationForm("open"));
-                          dispatch(NotifyDetail(notifyobjectData[item]));
+                          dispatch(NotifyDetail(isNotifyDetailListView[item]));
                         }}
                       >
                         {t("Edit")}

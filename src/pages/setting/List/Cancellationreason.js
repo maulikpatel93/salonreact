@@ -21,7 +21,6 @@ const Cancellationreason = () => {
   const isOpenedAddForm = useSelector((state) => state.cancellationreason.isOpenedAddForm);
   const isOpenedEditForm = useSelector((state) => state.cancellationreason.isOpenedEditForm);
 
-  console.log(isListView);
   useEffect(() => {
     dispatch(CancellationreasonListViewApi());
   }, []);

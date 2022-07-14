@@ -47,9 +47,13 @@ const Integration = () => {
               <img src={config.imagepath + "mailchimp.png"} alt="" />
             </div>
             <p>{t("Connect your mailchimp account to unlock the email marketing features of Beauti.")}</p>
-            <a className="btn btn-primary cursor-pointer" onClick={() => dispatch(OpenMailchimpForm("open"))}>
-              {t("Set Up")}
-            </a>
+            {currentUser.mailchimp_subscribe_id ? (
+              <a className="fs-4">{t("Has already setup")}</a>
+            ) : (
+              <a className="btn btn-primary cursor-pointer" onClick={() => dispatch(OpenMailchimpForm("open"))}>
+                {t("Set Up")}
+              </a>
+            )}
           </div>
         </div>
       </div>

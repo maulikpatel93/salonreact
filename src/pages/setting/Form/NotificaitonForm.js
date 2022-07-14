@@ -8,7 +8,7 @@ import yupconfig from "../../../yupconfig";
 import { InputField, TextareaField } from "../../../component/form/Field";
 import { sweatalert } from "../../../component/Sweatalert2";
 import useScriptRef from "../../../hooks/useScriptRef";
-import { NotifcationUpdateApi, OpenNotificationForm, reset, SetNotifyPreview } from "store/slices/notificationSlice";
+import { NotifyDetailUpdateApi, OpenNotificationForm, reset, SetNotifyPreview } from "store/slices/notificationSlice";
 import NotifyPreview from "../List/NotifyPreview";
 
 const NotificationForm = () => {
@@ -41,9 +41,9 @@ const NotificationForm = () => {
   yupconfig();
 
   const handleNotifySubmit = (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-    setLoading(true);
+    setLoading(false);
     try {
-      dispatch(NotifcationUpdateApi(values)).then((action) => {
+      dispatch(NotifyDetailUpdateApi(values)).then((action) => {
         if (action.meta.requestStatus === "fulfilled") {
           reset();
           dispatch(OpenNotificationForm(""));
@@ -71,12 +71,20 @@ const NotificationForm = () => {
       setLoading(false);
     }
   };
-
+  console.log(isNotifyDetail);
   return (
     <>
       <React.Fragment>
         <Formik enableReinitialize={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleNotifySubmit}>
           {(formik) => {
+            useEffect(() => {
+              if (isNotifyDetail) {
+                const fields = ["id", "title", "nofify", "type", "short_description", "appointment_times_description", "cancellation_description"];
+                fields.forEach((field) => {
+                  formik.setFieldValue(field, isNotifyDetail[field] ? isNotifyDetail[field] : "", false);
+                });
+              }
+            }, [isNotifyDetail]);
             getformValues(formik.values);
             return (
               <div className={"full-screen-drawer p-0 addnotification-drawer " + rightDrawerOpened} id="addnotification-drawer">
