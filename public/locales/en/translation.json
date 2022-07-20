@@ -752,5 +752,13 @@
     "Appointment Times": "Appointment Times",
     "The information that will appear under Appointment Times": "The information that will appear under Appointment Times",
     "Cancellations": "Cancellations",
-    "The information that will appear under Cancellations": "The information that will appear under Cancellations"
+    "The information that will appear under Cancellations": "The information that will appear under Cancellations",
+    "Please note that the cost of the mesage will depend on it’s length.": "Please note that the cost of the mesage will depend on it’s length.",
+    "Up to 81 characters: 1 SMS credit": "Up to 81 characters: 1 SMS credit",
+    "Up to 227 characters: 2 SMS credits": "Up to 227 characters: 2 SMS credits",
+    "Up to 380 characters: 3 SMS credits": "Up to 380 characters: 3 SMS credits",
+    "Consultation Form": "Consultation Form",
+    "If you would you like to attach an online consultation form to this message, please select it here.": "If you would you like to attach an online consultation form to this message, please select it here.",
+    "Choose Consultation Form": "Choose Consultation Form",
+    "Create your message here using the placeholders below to personalise the message.": "Create your message here using the placeholders below to personalise the message."
 }

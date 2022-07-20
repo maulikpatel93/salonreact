@@ -71,7 +71,6 @@ const NotificationForm = () => {
       setLoading(false);
     }
   };
-  console.log(isNotifyDetail);
   return (
     <>
       <React.Fragment>

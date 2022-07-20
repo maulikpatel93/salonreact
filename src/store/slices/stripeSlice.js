@@ -30,9 +30,23 @@ export const StripeCardPaymentApi = createAsyncThunk("stripe/cardpayment", async
   }
 });
 
+export const StripeOauthApi = createAsyncThunk("stripe/Oauth", async (formValues, thunkAPI) => {
+  try {
+    const resposedata = await stripeApiController
+      .oauth(formValues, thunkAPI)
+      .then((response) => HandleResponse(thunkAPI, response, "Oauth"))
+      .catch((error) => HandleError(thunkAPI, error, "Oauth"));
+    return resposedata;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   isOpenedAddForm: "",
   isStripePaymentStatus: "",
+  isStripeOauth: "",
 };
 
 const stripeSlice = createSlice({
@@ -54,6 +68,11 @@ const stripeSlice = createSlice({
     [StripeSetupApi.pending]: () => {},
     [StripeSetupApi.fulfilled]: () => {},
     [StripeSetupApi.rejected]: () => {},
+    [StripeOauthApi.pending]: () => {},
+    [StripeOauthApi.fulfilled]: (state, action) => {
+      state.isStripeOauth = action.payload;
+    },
+    [StripeOauthApi.rejected]: () => {},
   },
 });
 

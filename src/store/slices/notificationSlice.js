@@ -32,8 +32,10 @@ export const NotifyDetailUpdateApi = createAsyncThunk("notification/update", asy
 
 const initialState = {
   isOpenNotificationForm: "",
+  isOpenNotificaitonSmsForm: "",
   isNotifyDetail: "",
   isNotifyPreview: "",
+  isNotifySmsPreview: "",
   isNotifyDetailListView: "",
 };
 
@@ -45,11 +47,17 @@ const notificationSlice = createSlice({
     OpenNotificationForm: (state, action) => {
       state.isOpenNotificationForm = action.payload;
     },
+    OpenNotificaitonSmsForm: (state, action) => {
+      state.isOpenNotificaitonSmsForm = action.payload;
+    },
     NotifyDetail: (state, action) => {
       state.isNotifyDetail = action.payload;
     },
     SetNotifyPreview: (state, action) => {
       state.isNotifyPreview = action.payload;
+    },
+    SetNotifySmsPreview: (state, action) => {
+      state.isNotifySmsPreview = action.payload;
     },
   },
   extraReducers: {
@@ -77,5 +85,5 @@ const notificationSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { reset, OpenNotificationForm, NotifyDetail, SetNotifyPreview } = notificationSlice.actions;
+export const { reset, OpenNotificationForm, OpenNotificaitonSmsForm, NotifyDetail, SetNotifyPreview, SetNotifySmsPreview } = notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
-import { NotifyDetail, NotifyDetailListViewApi, NotifyDetailUpdateApi, OpenNotificationForm } from "store/slices/notificationSlice";
+import { NotifyDetail, NotifyDetailListViewApi, NotifyDetailUpdateApi, OpenNotificationForm, OpenNotificaitonSmsForm } from "store/slices/notificationSlice";
 import NotificationForm from "../Form/NotificaitonForm";
+import NotificaitonSmsForm from "../Form/NotificaitonSmsForm";
 
 const ClientNotification = () => {
   const { t } = useTranslation();
@@ -11,6 +12,7 @@ const ClientNotification = () => {
   const auth = useSelector((state) => state.auth);
   const currentUser = auth.user;
   const isOpenNotificationForm = useSelector((state) => state.notification.isOpenNotificationForm);
+  const isOpenNotificaitonSmsForm = useSelector((state) => state.notification.isOpenNotificaitonSmsForm);
   const isNotifyDetailListView = useSelector((state) => state.notification.isNotifyDetailListView);
 
   const notifyobjectData = [
@@ -143,7 +145,11 @@ const ClientNotification = () => {
                       <a
                         className="edit me-1 cursor-pointer"
                         onClick={() => {
-                          dispatch(OpenNotificationForm("open"));
+                          if (type === "AppointmentReminder" || type === "ReplyYesToConfirm") {
+                            dispatch(OpenNotificaitonSmsForm("open"));
+                          } else {
+                            dispatch(OpenNotificationForm("open"));
+                          }
                           dispatch(NotifyDetail(isNotifyDetailListView[item]));
                         }}
                       >
@@ -157,6 +163,7 @@ const ClientNotification = () => {
           })}
       </div>
       {isOpenNotificationForm && <NotificationForm />}
+      {isOpenNotificaitonSmsForm && <NotificaitonSmsForm />}
     </>
   );
 };

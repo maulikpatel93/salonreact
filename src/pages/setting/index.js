@@ -17,16 +17,30 @@ import SMSUsage from "./List/SMSUsage";
 import Permissions from "./List/Permissions";
 import Analytics from "./List/Analytics";
 import { SendEmailVoucher } from "store/slices/saleSlice";
+import { useLocation } from "react-router";
 
 const Setting = () => {
   SalonModule();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const location = useLocation();
   const tabview = useSelector((state) => state.setting.isTabView);
   const isOpenedStripeAddForm = useSelector((state) => state.stripe.isOpenedAddForm);
   useEffect(() => {
     dispatch(SettingTabGridView(""));
-  }, []);
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.has("tab")) {
+      const tab = searchParams.get("tab");
+      const arraytab = ["businessdetails", "ClosedDates", "ClientNotifications", "CancellationReasons", "Permissions", "SMSUsage", "Integrations", "ConsultationForms", "BookingButtons", "Analytics"];
+      if (arraytab.includes(tab)) {
+        dispatch(SettingTabGridView(tab));
+      }else{
+        dispatch(SettingTabGridView(""));
+      }
+    } else {
+      dispatch(SettingTabGridView(""));
+    }
+  }, [location]);
   return (
     <>
       <div className="page-content ac-setup-page" id={"page-content-" + tabview}>

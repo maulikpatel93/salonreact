@@ -133,6 +133,7 @@ const initialState = {
   isOpenedEditHandleForm: "",
   isFormElementTypeListView: "",
   isFormElementDelete: [],
+  isFormOption: [],
 };
 
 const formSlice = createSlice({
@@ -319,6 +320,13 @@ const formSlice = createSlice({
       }
     },
     [UpdateHandleFormDataApi.rejected]: () => {},
+    [FormOptions.pending]: () => {},
+    [FormOptions.fulfilled]: (state, action) => {
+      state.isFormOption = action.payload;
+    },
+    [FormOptions.rejected]: (state) => {
+      state.isFormOption = [];
+    },
   },
 });
 // Action creators are generated for each case reducer function
