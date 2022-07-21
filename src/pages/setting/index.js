@@ -78,9 +78,9 @@ const Setting = () => {
             </button>
           </div>
           <div className="acsetup-right">
-            <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white cursor-pointer" onClick={() => dispatch(SendEmailVoucher({ code: "dsd", client_id: 22 }))}>
+            {/* <a href="#" className="me-xxl-3 me-1 btn-voucher mt-2 text-white cursor-pointer" onClick={() => dispatch(SendEmailVoucher({ code: "dsd", client_id: 22 }))}>
               {t("Email Voucher To Customer")}
-            </a>
+            </a> */}
             {!tabview && (
               <div className="alltab-box">
                 <div className="row">

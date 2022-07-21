@@ -42,10 +42,10 @@ const Integration = () => {
             </div>
             <p>{t("Connect your Stripe account to accept online bookings and payments.")}</p>
             {currentUser.stripe_account_id ? (
-              // <a className="fs-4">{t("Has already setup")}</a>
-              <a className="btn btn-primary cursor-pointer" onClick={() => dispatch(StripeOauthApi())}>
-                {t("Set Up")}
-              </a>
+              <a className="fs-4">{t("Has already setup")}</a>
+              // <a className="btn btn-primary cursor-pointer" onClick={() => dispatch(StripeOauthApi())}>
+              //   {t("Set Up")}
+              // </a>
             ) : (
               <a className="btn btn-primary cursor-pointer" onClick={() => dispatch(OpenAddStripeForm())}>
                 {t("Set Up")}
